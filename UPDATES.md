@@ -1,8 +1,8 @@
-## This is a daily update sheet of the progression of the project
+## Daily update sheet of the progression of the project
 
 > I'll try to update this a frequently as possible for you to keep an eye on what I'm working on.
 >
-> -- <cite>William CLOT</cite>
+> -- William CLOT
 
 
 **03/07/18:**

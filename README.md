@@ -1,5 +1,6 @@
 # 3D Customizer tool with MyMiniFactory
 
+
 To install please just use npm like so:
 
 ```bash
@@ -8,4 +9,6 @@ $ npm install
 $ npm start
 ```
 
+
+*William CLOT* | Summer 2018
 
