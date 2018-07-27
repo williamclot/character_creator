@@ -17,8 +17,8 @@ var loadedMeshes = {
     rotation: {x: 0, y: 0, z: 0}
   },
   Head: {
-    name: "big_head",
-    rotation: {x: -0.3, y: 0, z: 0}
+    name: "iron_bubble_head",
+    rotation: {x: 0, y: 3.14, z: 0}
   },
   ArmR: {
     name: "thin_arm_R",
@@ -37,12 +37,12 @@ var loadedMeshes = {
     rotation: {x: 0, y: 1.57, z: 0}
   },
   FootR: {
-    name: "buckled_foot_R",
-    rotation: {x: 0.2, y: 0, z: 0}
+    name: "default_foot_R",
+    rotation: {x: 0, y: 0, z: 0}
   },
   FootL: {
-    name: "buckled_foot_L",
-    rotation: {x: 0.2, y: 0, z: 0}
+    name: "default_foot_L",
+    rotation: {x: 0, y: 0, z: 0}
   }
 };
 
@@ -303,8 +303,6 @@ function init() {
 
   function replaceMesh(MeshType) {
     scene.remove(scene.getObjectByName(MeshType));
-    console.log(MeshType)
-    console.log(loadedMeshes[MeshType].name);
     placeMesh(
       loadedMeshes[MeshType].name,
       meshStaticInfo[MeshType].bodyPart,
@@ -357,6 +355,11 @@ function init() {
         file = (isLeft) ? part.file[0] : part.file[1];
         rotation = (isLeft) ? part.rotation[0] : part.rotation[1];
         break;
+      case "foot":
+        meshType = (isLeft) ?  "FootL" : "FootR";
+        file = (isLeft) ? part.file[0] : part.file[1];
+        rotation = (isLeft) ? part.rotation[0] : part.rotation[1];
+        break;
       default:
         meshType = undefined;
     }
@@ -404,6 +407,11 @@ function init() {
     scene.getObjectByName("ArmR_UpperArm_R").rotation.z = 0.4;
     scene.getObjectByName("ArmR_LowerArm_R").rotation.x = 0.5;
   };
+
+  window.export = function() {
+    var exporter = new THREE.STLExporter();
+    console.log("exporter loaded...")
+  }
 }
 
 function onWindowResize() {

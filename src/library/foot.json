@@ -1,7 +1,7 @@
 [
     {
       "name": "Default Foot",
-      "img": "open_hand.png",
+      "img": "default_foot.png",
       "file": ["default_foot_L", "default_foot_R"],
       "author": "William CLOT",
       "description": "Default Foot",
@@ -20,19 +20,38 @@
     },
     {
       "name": "Buckled Shoe",
-      "img": "closed_hand.png",
-      "file": ["closed_hand_L", "closed_hand_R"],
+      "img": "buckled_foot.png",
+      "file":  ["buckled_foot_L", "buckled_foot_R"],
       "author": "William CLOT",
-      "description": "Closed hands",
+      "description": "",
       "rotation": [
         {
-        "x": 0,
-        "y": 1.57,
+        "x": 0.2,
+        "y": 0,
         "z": 0
         },
         {
-        "x": 0,
-        "y": -1.57,
+        "x": 0.2,
+        "y": 0,
+        "z": 0
+        }],
+      "scale": 1
+    },
+    {
+      "name": "Boots",
+      "img": "boot.png",
+      "file":  ["boots_L", "boots_R"],
+      "author": "William CLOT",
+      "description": "",
+      "rotation": [
+        {
+        "x": 0.2,
+        "y": 0,
+        "z": 0
+        },
+        {
+        "x": 0.2,
+        "y": 0,
         "z": 0
         }],
       "scale": 1

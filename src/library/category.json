@@ -19,11 +19,7 @@
 		"imgfile": "hand.svg"
 	},
 	{
-		"name": "weapon",
-		"imgfile": "sword.svg"
-	},
-	{
-		"name": "stand",
-		"imgfile": "stand.svg"
+		"name": "foot",
+		"imgfile": "foot2.svg"
 	}
 ]

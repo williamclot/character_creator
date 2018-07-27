@@ -5,7 +5,9 @@ class Buttons extends Component {
   render() {
     return (
       <div>
-        <div className="abs buttons" id="download">
+        <div className="abs buttons" id="download" onClick={() => {
+          window.export();
+        }}>
           Download
         </div>
         <div className="abs buttons" id="publish">

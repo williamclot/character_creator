@@ -4,6 +4,7 @@ import headElements from "../library/heads.json";
 import handElements from "../library/hands.json";
 import armElements from "../library/arm.json";
 import torsoElements from "../library/torso.json";
+import footElements from "../library/foot.json";
 
 class Selector extends Component {
   render() {
@@ -29,6 +30,10 @@ class Selector extends Component {
       case "torso":
         library = torsoElements;
         sideIdencator = false;
+        break;
+      case "foot":
+        library = footElements;
+        sideIdencator = true;
         break;
       default:
         library = headElements;

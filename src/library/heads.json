@@ -82,7 +82,7 @@
 		"img": "dobby.png",
     "file": "dobby",
     "author": "Scan The World",
-    "description": "Jon from MyMiniFactory",
+    "description": "Dobby from Harry Potter",
 		"rotation": {
 			"x":0,
 			"y":3.1415,
@@ -94,11 +94,37 @@
 		"name": "Hellion Rams",
 		"img": "hellion_rams.png",
     "file": "hellion_rams",
-    "author": "MyMiniFactoru",
+    "author": "MyMiniFactory",
     "description": "",
 		"rotation": {
 			"x":0,
 			"y":3.1415,
+			"z":0
+		},
+		"scale": 1
+  },
+  {
+		"name": "Flexi Dead Head",
+		"img": "flexi_dead_head.png",
+    "file": "flexi_dead_head",
+    "author": "William CLOT",
+    "description": "",
+		"rotation": {
+			"x":0,
+			"y":0,
+			"z":0
+		},
+		"scale": 1
+  },
+  {
+		"name": "Iron Bubble Head",
+		"img": "iron_bubble_head.png",
+    "file": "iron_bubble_head",
+    "author": "William CLOT",
+    "description": "",
+		"rotation": {
+			"x":0,
+			"y":3.14,
 			"z":0
 		},
 		"scale": 1
