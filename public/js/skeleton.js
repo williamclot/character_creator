@@ -411,6 +411,8 @@ function init() {
   window.export = function() {
     var exporter = new THREE.STLExporter();
     console.log("exporter loaded...")
+    var data = exporter.parse( scene, { binary: true } );
+    console.log(data);
   }
 }
 
