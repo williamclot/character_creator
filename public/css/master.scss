@@ -1,0 +1,156 @@
+$padding:30px;
+$inter-padding:20px;
+
+$primary-color:rgba(0, 0, 0, 0.8);
+$accent-color:rgba(0, 55, 39, 0.31);
+$selected-color:rgba(34, 94, 71, 0.71);
+
+body{
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Open Sans', sans-serif;
+}
+
+canvas{
+  z-index: -1;
+  position: absolute;
+  left: -20%;
+}
+
+///////////////////////////////////////
+// General classes for speedy coding //
+///////////////////////////////////////
+
+.abs{ position: absolute; }
+.top{ top: 0; }
+.bottom{ bottom: 0; }
+.left{ left: 0; }
+.right{ right: 0; }
+
+
+.name{
+  padding: $padding;
+  text-transform: uppercase;
+  font-size: 60px;
+  font-weight: 600;
+}
+[contenteditable]:focus {
+    outline: 0px solid transparent;
+}
+
+.logo{
+  padding: $padding;
+  max-width: 80px;
+}
+.logo img{
+  width: 100%;
+}
+
+
+.panel{
+  width: 25%;
+  height: calc(100% - #{$padding});
+  padding: $padding;
+}
+
+.right-side{
+  width: 80%;
+  height: 100%;
+}
+
+.left-side{
+  width: 20%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.category{
+  width: 100%;
+  margin-bottom: $inter-padding;
+  background-color: $primary-color;
+  border-radius: 100%;
+  border: none;
+  padding-top: 100%;
+  box-shadow: 0px 0px 10px #000000;
+  transition: background-color .2;
+  transform: translateX(- $padding);
+}
+
+// .category:first-child{
+//   transform: translateX(-150px);
+// }
+// .category:nth-child(2){
+//   transform: translateX(-90px);
+// }
+// .category:nth-child(3){
+//   transform: translateX(-50px);
+// }
+// .category:nth-last-child(1){
+//   transform: translateX(-150px);
+// }
+// .category:nth-last-child(2){
+//   transform: translateX(-90px);
+// }
+// .category:nth-last-child(3){
+//   transform: translateX(-50px);
+// }
+
+.selected-category{
+  background-color: $selected-color;
+}
+
+.category:hover{
+  background-color: $accent-color;
+}
+.category img{
+  position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+  fill: white;
+}
+
+.selector{
+  background-color: $primary-color;
+  box-shadow: 0px 0px 20px #000000;
+  width: calc(100% - #{$padding});
+  margin-top: $padding;
+  height: calc(100% - #{$padding});
+  border-radius: 20px;
+  padding: $inter-padding;
+  overflow: scroll;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.el{
+  background: tomato;
+  width: auto;
+  border: 1px solid black;
+  display:inline-grid;
+  float:left;
+}
+
+
+.buttons{
+  background-color: rgba(136, 11, 224, 0.35);
+  width: 100%;
+  top: calc(100% - 90px);
+  height: 90px;
+}
+
+
+// .editor{
+//   z-index: 1
+//   margin: 20px
+//   position: absolutes
+//     top:0
+//     right:0
+//     width: calc(25% - 20px)
+//     height: calc(100% - 40px)
+//   background-color: rgba(99, 99, 99, 0.6)
+// }

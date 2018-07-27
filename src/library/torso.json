@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Default Torso",
+    "img": "default_torso.png",
+    "file": "default_torso",
+    "author": "William CLOT",
+    "description": "Default torso.",
+    "scale": 1
+  },
+  {
+    "name": "Turtle Torso",
+    "img": "turtle_torso.png",
+    "file": "turtle_torso",
+    "author": "William CLOT",
+    "description": "Default man head.",
+    "scale": 1
+  }
+]

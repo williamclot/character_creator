@@ -1,0 +1,33 @@
+.abs {
+  position: absolute; }
+
+.top {
+  top: 0; }
+
+.bottom {
+  bottom: 0; }
+
+.left {
+  left: 0; }
+
+.right {
+  right: 0; }
+
+.panel {
+  width: 25%;
+  height: calc(100% - 30px);
+  padding: 30px; }
+
+.right-side {
+  width: 80%;
+  height: 100%;
+  overflow: visible;
+}
+
+.left-side {
+  width: 20%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column; }

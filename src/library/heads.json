@@ -1,0 +1,106 @@
+[
+  {
+    "name": "Default Head",
+    "img": "default.png",
+    "file": "default_head",
+    "author": "William CLOT",
+    "description": "Default man head.",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1
+  },
+  {
+    "name": "Default Man Head",
+    "img": "default_man_head.png",
+    "file": "default_man_head",
+    "author": "William CLOT",
+    "description": "Default man head.",
+    "rotation": {
+      "x": 0,
+      "y": 3.1415,
+      "z": 0
+    },
+    "scale": 1
+  },
+  {
+    "name": "Groot Head",
+    "img": "groot.png",
+    "file": "groot",
+    "author": "William CLOT",
+    "description": "Default man head.",
+    "rotation": {
+      "x": 0,
+      "y": 3.1415,
+      "z": 0
+    },
+    "scale": 1
+  },
+  {
+    "name": "Big Head",
+    "img": "big_head.png",
+    "file": "big_head",
+    "author": "William CLOT",
+    "description": "Big stalion head.",
+    "rotation": {
+      "x": -0.3,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1
+  },
+  {
+    "name": "Dragon Head",
+    "img": "dragon_head.png",
+    "file": "dragon_head",
+    "author": "William CLOT",
+    "description": "Dragon head.",
+    "rotation": {
+      "x": 0,
+      "y": 3.1415,
+      "z": 0
+    },
+    "scale": 1
+  },
+  {
+		"name": "Stormtrooper",
+		"img": "stormtrooper.png",
+    "file": "stormtrooper",
+    "author": "William CLOT",
+    "description": "Stoormtrooper mask.",
+		"rotation": {
+			"x":0,
+			"y":3.1415,
+			"z":0
+		},
+		"scale": 1
+  },
+  {
+		"name": "Dobby",
+		"img": "dobby.png",
+    "file": "dobby",
+    "author": "Scan The World",
+    "description": "Jon from MyMiniFactory",
+		"rotation": {
+			"x":0,
+			"y":3.1415,
+			"z":0
+		},
+		"scale": 1
+  },
+  {
+		"name": "Hellion Rams",
+		"img": "hellion_rams.png",
+    "file": "hellion_rams",
+    "author": "MyMiniFactoru",
+    "description": "",
+		"rotation": {
+			"x":0,
+			"y":3.1415,
+			"z":0
+		},
+		"scale": 1
+  }
+]

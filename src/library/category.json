@@ -1,0 +1,29 @@
+[{
+		"name": "head",
+		"imgfile": "head.svg"
+	},
+	{
+		"name": "torso",
+		"imgfile": "torso.svg"
+	},
+	{
+		"name": "leg",
+		"imgfile": "leg.svg"
+	},
+	{
+		"name": "arm",
+		"imgfile": "arm.svg"
+	},
+	{
+		"name": "hand",
+		"imgfile": "hand.svg"
+	},
+	{
+		"name": "weapon",
+		"imgfile": "sword.svg"
+	},
+	{
+		"name": "stand",
+		"imgfile": "stand.svg"
+	}
+]

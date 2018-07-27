@@ -1,0 +1,78 @@
+[
+  {
+    "name": "Open Hand",
+    "img": "open_hand.png",
+    "file": ["open_hand_L", "open_hand_R"],
+    "author": "William CLOT",
+    "description": "Open hands",
+    "rotation": [
+      {
+      "x": 0,
+      "y": 1.57,
+      "z": 0
+      },
+      {
+      "x": 0,
+      "y": -1.57,
+      "z": 0
+      }],
+    "scale": 1
+  },
+  {
+    "name": "Closed Hand",
+    "img": "closed_hand.png",
+    "file": ["closed_hand_L", "closed_hand_R"],
+    "author": "William CLOT",
+    "description": "Closed hands",
+    "rotation": [
+      {
+      "x": 0,
+      "y": 1.57,
+      "z": 0
+      },
+      {
+      "x": 0,
+      "y": -1.57,
+      "z": 0
+      }],
+    "scale": 1
+  },
+  {
+    "name": "Hook Hand",
+    "img": "hook.png",
+    "file": ["hook_L", "hook_R"],
+    "author": "William CLOT",
+    "description": "Open hands",
+    "rotation": [
+      {
+      "x": 0,
+      "y": 1.57,
+      "z": 0
+      },
+      {
+      "x": 0,
+      "y": -1.57,
+      "z": 0
+      }],
+    "scale": 1
+  },
+  {
+    "name": "Robot Hand",
+    "img": "robot_hand.png",
+    "file": ["robot_hand_L", "robot_hand_R"],
+    "author": "William CLOT",
+    "description": "Robot Hands",
+    "rotation": [
+      {
+      "x": 0,
+      "y": 1.57,
+      "z": 0
+      },
+      {
+      "x": 0,
+      "y": -1.57,
+      "z": 0
+      }],
+    "scale": 1
+  }
+]

@@ -1,0 +1,41 @@
+[
+    {
+      "name": "Default Foot",
+      "img": "open_hand.png",
+      "file": ["default_foot_L", "default_foot_R"],
+      "author": "William CLOT",
+      "description": "Default Foot",
+      "rotation": [
+        {
+        "x": 0,
+        "y": 0,
+        "z": 0
+        },
+        {
+        "x": 0,
+        "y": 0,
+        "z": 0
+        }],
+      "scale": 1
+    },
+    {
+      "name": "Buckled Shoe",
+      "img": "closed_hand.png",
+      "file": ["closed_hand_L", "closed_hand_R"],
+      "author": "William CLOT",
+      "description": "Closed hands",
+      "rotation": [
+        {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+        },
+        {
+        "x": 0,
+        "y": -1.57,
+        "z": 0
+        }],
+      "scale": 1
+    }
+  ]
+  
