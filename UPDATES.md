@@ -64,3 +64,16 @@ Tasks and directions were discussed, the bigger axes of the project are for the 
 
 - Rebuild entirely the threejs code with a recursive function that update automatically the children of a mesh. Works really well which is good, feels like this is the best implementation of the mesh replacement algorithm.
 - Added the implementation for torsos.
+
+**27/07/18**:
+
+- Finished the recursive function with all the body parts, a modification of:
+    - torso calls his children (ArmR, ArmL, Head, LegR, LegL)
+    - ArmR and ArmL calls respectively HandR and HandL
+    - LegR and LegL calls respectively FootR and FootL
+- Adding some items in the library, a lot of blender stuff to finish
+- TODO next week:
+    - Finish the coloring system for quick mesh identification in the interface. 
+    - Add elements in the library (objective is to have a scrolling bar in each category)
+    - Backend implementation with the MMF API
+    - Look at the STL exporter

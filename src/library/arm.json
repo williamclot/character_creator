@@ -58,19 +58,19 @@
   },
   {
     "name": "Robot Arm",
-    "img": "closed_hand.png",
+    "img": "robot_arm.png",
     "file": ["robot_arm_L", "robot_arm_R"],
     "author": "William CLOT",
     "description": "Closed hands",
     "rotation": [
       {
         "x": 0,
-        "y": 3,
+        "y": 0,
         "z": 0
         },
         {
         "x": 0,
-        "y": 3,
+        "y": 0,
         "z": 0
         }],
     "scale": 1
