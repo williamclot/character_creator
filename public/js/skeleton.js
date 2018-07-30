@@ -2,6 +2,11 @@
 var camera, scene, renderer;
 var controls, loader;
 
+var selected = "Head";
+var color = {r:0.555,g:0.48,b:0.49};
+
+var group = new THREE.Group();
+
 //This keeps track of every mesh on the viewport
 var loadedMeshes = {
   Torso: {
@@ -17,19 +22,19 @@ var loadedMeshes = {
     rotation: {x: 0, y: 0, z: 0}
   },
   Head: {
-    name: "iron_bubble_head",
-    rotation: {x: 0, y: 3.14, z: 0}
+    name: "default_head",
+    rotation: {x: 0, y: 0, z: 0}
   },
   ArmR: {
-    name: "thin_arm_R",
-    rotation: {x: 0, y: 3, z: 0}
+    name: "default_arm_R",
+    rotation: {x: 0, y: 0, z: 0}
   },
   ArmL: {
-    name: "thin_arm_L",
-    rotation: {x: 0, y: -3, z: 0}
+    name: "default_arm_L",
+    rotation: {x: 0, y: 0, z: 0}
   },
   HandR: {
-    name: "closed_hand_R",
+    name: "open_hand_R",
     rotation: {x: 0, y: -1.57, z: 0}
   },
   HandL: {
@@ -122,7 +127,7 @@ function init() {
   buildRenderer();
   buildControls();
   buildLights();
-  buildFloor();
+  // buildFloor();
   loadDefaultMeshes();
 
   function buildCamera() {
@@ -237,7 +242,8 @@ function init() {
     parentAttachment,
     childAttachment,
     rotation,
-    replaceChildren
+    firstLoad,
+    highLight
   ) {
     // bodyPartClass : {arm, head, hand}
     // MeshType : {ArmR, ArmL, Head, HandR, HandL}
@@ -248,12 +254,10 @@ function init() {
         root.castShadow = true;
         scene.add(root);
 
+        root.updateMatrixWorld(true);
+
         loadedMeshes[MeshType].name = meshName;
         loadedMeshes[MeshType].rotation = rotation;
-
-        // console.log("Placing Mesh:", meshName);
-        // console.log("Parent Attachement: ", parentAttachment);
-        // console.log("Child Attachement: ", childAttachment);
 
         //Default color to all the meshes
         for (let i=0; i < root.children.length; i++){
@@ -261,6 +265,15 @@ function init() {
             root.children[i].material.color = { r: 0.5, g: 0.5, b: 0.5 };
           }
         }
+
+        if (MeshType === 'Head' && firstLoad){
+          changeColor("Head",color)
+        }
+
+        if (highLight) {
+          changeColor(MeshType, color);
+        }
+
         if(typeof parentAttachment !== "undefined" && typeof childAttachment !== "undefined"){
           let targetBone = scene.getObjectByName(parentAttachment);
           let object = scene.getObjectByName(childAttachment);
@@ -271,14 +284,12 @@ function init() {
 
           targetBone.add(object);
         }
-        
-        if (replaceChildren) {
-          //Going to look for all children of current mesh
-          let children = childrenList[MeshType];
-          if (children){
-            for (let i=0; i < children.length; i++){
-              replaceMesh(children[i]);
-            }
+
+        //Going to look for all children of current mesh
+        let children = childrenList[MeshType];
+        if (children) {
+          for (let i = 0; i < children.length; i++) {
+            replaceMesh(children[i], firstLoad);
           }
         }
       },
@@ -297,11 +308,12 @@ function init() {
       undefined,
       undefined,
       undefined,
-      true
+      true,
+      false
     );
   }
 
-  function replaceMesh(MeshType) {
+  function replaceMesh(MeshType, firstLoad) {
     scene.remove(scene.getObjectByName(MeshType));
     placeMesh(
       loadedMeshes[MeshType].name,
@@ -310,24 +322,28 @@ function init() {
       meshStaticInfo[MeshType].parentAttachment,
       meshStaticInfo[MeshType].childAttachment,
       loadedMeshes[MeshType].rotation,
-      true
+      firstLoad
     );
   }
 
-  // window.selectedMesh = function(item, bool) {
-  //   let highLight = {r:0.1,g:0.4,b:0.3};
-  //   let normal = {r:0.5, g: 0.5, b:0.5};
+  function changeColor(item, color){
+    var mesh = scene.getObjectByName(item);
+    if (mesh.children[0].material){
+      mesh.children[0].material.color.r = color.r;
+      mesh.children[0].material.color.g = color.g;
+      mesh.children[0].material.color.b = color.b;
+    }
+  }
 
-  //   let rootItem = scene.getObjectByName(item);
+  window.selectedMesh = function (MeshType) {
+    // console.log(MeshType);
+    let normal = { r: 0.5, g: 0.5, b: 0.5 };
+    
+    changeColor(MeshType, color);      
+    changeColor(selected, normal)
 
-  //   if (rootItem.children[0].material) {
-  //     if (bool){
-  //       rootItem.children[0].material.color = highLight;
-  //     } else {
-  //       rootItem.children[0].material.color = normal;
-  //     }
-  //   }
-  // }
+    selected = MeshType;
+  }
 
   window.changeMesh = function(bodyPart, part, isLeft) {
     var meshType;
@@ -336,14 +352,14 @@ function init() {
 
     switch (bodyPart) {
       case "torso":
-        meshType = "Torso";
         file = part.file;
         rotation = undefined;
+        meshType = "Torso";
         break;
       case "head":
-        meshType = "Head";
         file = part.file;
         rotation = part.rotation;
+        meshType = "Head";
         break;
       case "hand":
         meshType = (isLeft) ? "HandL" : "HandR";
@@ -357,6 +373,11 @@ function init() {
         break;
       case "foot":
         meshType = (isLeft) ?  "FootL" : "FootR";
+        file = (isLeft) ? part.file[0] : part.file[1];
+        rotation = (isLeft) ? part.rotation[0] : part.rotation[1];
+        break;
+      case "leg":
+        meshType = (isLeft) ?  "LegL" : "LegR";
         file = (isLeft) ? part.file[0] : part.file[1];
         rotation = (isLeft) ? part.rotation[0] : part.rotation[1];
         break;
@@ -388,6 +409,7 @@ function init() {
         parentAttachment,
         childAttachment,
         rotation,
+        false,
         true
       );
     }
@@ -409,12 +431,32 @@ function init() {
   };
 
   window.export = function() {
-    var exporter = new THREE.STLExporter();
-    console.log("exporter loaded...")
-    var data = exporter.parse( scene, { binary: true } );
-    console.log(data);
+    
+    // Instantiate a exporter
+    var exporter = new THREE.GLTFExporter();
+
+    // Parse the input and generate the glTF output
+    exporter.parse(scene, function (gltf) {
+      console.log(gltf);
+      downloadJSON(gltf);
+    }, true);
   }
 }
+
+// function recursiveChildren(item){
+//   if (item.children.length > 1){
+//     for (let i=0; i < item.children.length; i++){
+//       recursiveChildren(item.children[i])
+//     }
+//   } else {
+//     console.log("End of tree")
+//     // console.log(item)
+//     if (item.isMesh) {
+//       // group.add(item.children);
+//       console.log("Adding something")
+//     }
+//   }
+// }
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -431,6 +473,23 @@ function animate() {
 function render() {
   camera.lookAt(new THREE.Vector3(0, 1, 0));
   renderer.render(scene, camera);
+}
+
+var link = document.createElement( 'a' );
+link.style.display = 'none';
+document.body.appendChild( link ); // Firefox workaround, see #6594
+
+function save( blob, filename ) {
+
+  link.href = URL.createObjectURL( blob );
+  link.download = filename || 'data.json';
+  link.click();
+
+  // URL.revokeObjectURL( url ); breaks Firefox...
+}
+
+function saveString( text, filename ) {
+  save( new Blob( [ text ], { type: 'text/plain' } ), filename );
 }
 
 document.body.onresize = function() {

@@ -77,3 +77,9 @@ Tasks and directions were discussed, the bigger axes of the project are for the 
     - Add elements in the library (objective is to have a scrolling bar in each category)
     - Backend implementation with the MMF API
     - Look at the STL exporter
+
+**30/07/18**:
+
+- Created a colouring system that enables the user to quickly understand which mesh is being replaced.
+- Added a few new elements to the blender library
+- Looked at the STL exporter (doesn't work, all the meshes are at the middle of the scene...)

@@ -8,13 +8,13 @@ class Category extends Component {
     this.state = {
       isLeft: true
     };
-    this.updateLeft = this.updateLeft;
   }
 
   // Update the state of parent App from child Component
   updateLeft = (isLeft) => {this.setState({isLeft})};
 
   render() {
+    
     // Passing throught the state from the properties
     const category = this.props.category;
     const current = this.props.currentCategory;
@@ -38,6 +38,33 @@ class Category extends Component {
             key={i}
             onClick={() => {
               this.props.updateCategory(name);
+                        
+              var MeshType = undefined;
+
+              switch (name) {
+                case "head":
+                  MeshType = "Head";
+                  break;
+                case "hand":
+                  MeshType = (this.state.isLeft) ? "HandL" : "HandR";
+                  break;
+                case "arm":
+                  MeshType = (this.state.isLeft) ? "ArmL" : "ArmR";
+                  break;
+                case "torso":
+                  MeshType = "Torso";
+                  break;
+                case "foot":
+                  MeshType = (this.state.isLeft) ? "FootL" : "FootR";
+                  break;
+                case "leg":
+                  MeshType = (this.state.isLeft) ? "LegL" : "LegR";
+                  break;
+                default:
+                  MeshType = "Hand";
+              }
+
+              window.selectedMesh(MeshType);
             }}
           >
             <img src={"img/graphics_creation/" + file} alt={name} />

@@ -5,6 +5,7 @@ import handElements from "../library/hands.json";
 import armElements from "../library/arm.json";
 import torsoElements from "../library/torso.json";
 import footElements from "../library/foot.json";
+import legElements from "../library/leg.json";
 
 class Selector extends Component {
   render() {
@@ -35,6 +36,10 @@ class Selector extends Component {
         library = footElements;
         sideIdencator = true;
         break;
+      case "leg":
+        library = legElements;
+        sideIdencator = true;
+        break;
       default:
         library = headElements;
         sideIdencator = false;
@@ -59,9 +64,6 @@ class Selector extends Component {
             />
           </div>
           <div className="el-name">{library[i].name}</div>
-          {/* <div className="reference">
-            <div className="popup">Author: {library[i].author}</div>
-          </div> */}
         </div>
       );
     }
@@ -69,22 +71,68 @@ class Selector extends Component {
     const buttons = (
       <div className="abs switch">
         <div
-          className={
-            "abs left side L " + (isLeft ? "side-selected" : "")
-          }
+          className={"abs left side L " + (isLeft ? "side-selected" : "")}
           onClick={() => {
             this.props.updateLeft(true);
+            var MeshType;
+
+              switch (category) {
+                case "head":
+                  MeshType = "Head";
+                  break;
+                case "hand":
+                  MeshType = "HandL";
+                  break;
+                case "arm":
+                  MeshType = "ArmL";
+                  break;
+                case "torso":
+                  MeshType = "Torso";
+                  break;
+                case "foot":
+                  MeshType = "FootL";
+                  break;
+                case "leg":
+                  MeshType = "LegL";
+                  break;
+                default:
+                  MeshType = undefined;
+              }
+              window.selectedMesh(MeshType);
           }}
         >
           Left
         </div>
         <div
-          className={
-            "abs right side R " + (isLeft ? "" : "side-selected")
-          }
+          className={"abs right side R " + (isLeft ? "" : "side-selected")}
           onClick={() => {
-            this.props.updateLeft(false)
-          }}
+            this.props.updateLeft(false);
+            var MeshType;
+
+            switch (category) {
+              case "head":
+                MeshType = "Head";
+                break;
+              case "hand":
+                MeshType = "HandR";
+                break;
+              case "arm":
+                MeshType = "ArmR";
+                break;
+              case "torso":
+                MeshType = "Torso";
+                break;
+              case "foot":
+                MeshType = "FootR";
+                break;
+              case "leg":
+                MeshType = "LegR";
+                break;
+              default:
+                MeshType = undefined;
+            }
+            window.selectedMesh(MeshType);
+        }}
         >
           Right
         </div>

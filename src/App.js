@@ -25,7 +25,8 @@ class App extends Component {
   }
 
   // Update the state of parent App from child Component
-  updateCategory = (currentCategory) => {this.setState({currentCategory})}
+  updateCategory = (currentCategory) => {this.setState({currentCategory})
+  }
   updateCharacterName = (characterName) => {this.setState({characterName})}
 
   render() {

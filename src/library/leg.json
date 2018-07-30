@@ -1,0 +1,40 @@
+[
+  {
+    "name": "Default Leg",
+    "img": "default_leg.png",
+    "file": ["default_leg_L", "default_leg_R"],
+    "author": "William CLOT",
+    "description": "Default Legs",
+    "rotation": [
+      {
+      "x": 0,
+      "y": 0,
+      "z": 0
+      },
+      {
+      "x": 0,
+      "y": 0,
+      "z": 0
+      }],
+    "scale": 1
+  },
+  {
+    "name": "Robot Leg",
+    "img": "robot_leg.png",
+    "file": ["robot_leg_L", "robot_leg_R"],
+    "author": "William CLOT",
+    "description": "Robot Legs",
+    "rotation": [
+      {
+      "x": 0,
+      "y": 0,
+      "z": 0
+      },
+      {
+      "x": 0,
+      "y": 0,
+      "z": 0
+      }],
+    "scale": 1
+  }
+]
