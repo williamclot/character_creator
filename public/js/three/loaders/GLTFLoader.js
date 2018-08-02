@@ -2666,6 +2666,8 @@ THREE.GLTFLoader = ( function () {
 
 				for ( var i = 0, il = meshes.length; i < il; i ++ ) {
 
+					
+
 					group.add( meshes[ i ] );
 
 				}

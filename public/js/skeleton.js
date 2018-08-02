@@ -1,11 +1,17 @@
+/**
+ * MMF CUSTOMIZER
+ * 
+ * Based on https://github.com/mrdoob/three.js/
+ * Tested on r95
+ * @author williamclot / https://github.com/williamclot
+ */
+
 //Threejs important variables
 var camera, scene, renderer;
 var controls, loader;
 
 var selected = "Head";
 var color = {r:0.555,g:0.48,b:0.49};
-
-var group = new THREE.Group();
 
 //This keeps track of every mesh on the viewport
 var loadedMeshes = {
@@ -117,6 +123,8 @@ var childrenList = {
 init();
 animate();
 
+// Init Function which will create all the 
+// Threejs environment and load the default meshes
 function init() {
   "use strict";
 
@@ -127,8 +135,8 @@ function init() {
   buildRenderer();
   buildControls();
   buildLights();
-  // buildFloor();
   loadDefaultMeshes();
+  // buildFloor();
 
   function buildCamera() {
     camera = new THREE.PerspectiveCamera(
@@ -186,10 +194,10 @@ function init() {
     scene.add(light);
 
     //Set up shadow properties for the light
-    light.shadow.mapSize.width = 2048; // default
-    light.shadow.mapSize.height = 2048; // default
-    light.shadow.camera.near = 0.5; // default
-    light.shadow.camera.far = 500; // default
+    // light.shadow.mapSize.width = 2048; // default
+    // light.shadow.mapSize.height = 2048; // default
+    // light.shadow.camera.near = 0.5; // default
+    // light.shadow.camera.far = 500; // default
   }
   function buildFloor() {
     //Create a plane that receives shadows (but does not cast them)
@@ -218,88 +226,6 @@ function init() {
     sphere.position.z = pos.z;
     scene.add(sphere);
   }
-  function clearPosition(item) {
-    item.position.x = 0;
-    item.position.y = 0;
-    item.position.z = 0;
-  }
-  function rotateElement(item, clearRotation, rotation) {
-    if (clearRotation === true) {
-      item.rotation.x = 0;
-      item.rotation.y = 0;
-      item.rotation.z = 0;
-    } else {
-      item.rotation.x = rotation.x;
-      item.rotation.y = rotation.y;
-      item.rotation.z = rotation.z;
-    }
-  }
-
-  function placeMesh(
-    meshName,
-    bodyPartClass,
-    MeshType,
-    parentAttachment,
-    childAttachment,
-    rotation,
-    firstLoad,
-    highLight
-  ) {
-    // bodyPartClass : {arm, head, hand}
-    // MeshType : {ArmR, ArmL, Head, HandR, HandL}
-    loader.load(
-      "../models/" + bodyPartClass + "/" + meshName + ".glb",
-      gltf => {
-        var root = gltf.scene.children[0];
-        root.castShadow = true;
-        scene.add(root);
-
-        root.updateMatrixWorld(true);
-
-        loadedMeshes[MeshType].name = meshName;
-        loadedMeshes[MeshType].rotation = rotation;
-
-        //Default color to all the meshes
-        for (let i=0; i < root.children.length; i++){
-          if (root.children[i].material){
-            root.children[i].material.color = { r: 0.5, g: 0.5, b: 0.5 };
-          }
-        }
-
-        if (MeshType === 'Head' && firstLoad){
-          changeColor("Head",color)
-        }
-
-        if (highLight) {
-          changeColor(MeshType, color);
-        }
-
-        if(typeof parentAttachment !== "undefined" && typeof childAttachment !== "undefined"){
-          let targetBone = scene.getObjectByName(parentAttachment);
-          let object = scene.getObjectByName(childAttachment);
-
-          clearPosition(object);
-          rotateElement(object, true);
-          rotateElement(object, false, rotation);
-
-          targetBone.add(object);
-        }
-
-        //Going to look for all children of current mesh
-        let children = childrenList[MeshType];
-        if (children) {
-          for (let i = 0; i < children.length; i++) {
-            replaceMesh(children[i], firstLoad);
-          }
-        }
-      },
-      null,
-      function ( error ) {
-        console.log(error);
-      }
-    );
-  }
-
   function loadDefaultMeshes() {
     placeMesh(
       loadedMeshes["Torso"].name,
@@ -312,168 +238,237 @@ function init() {
       false
     );
   }
+}
 
-  function replaceMesh(MeshType, firstLoad) {
-    scene.remove(scene.getObjectByName(MeshType));
-    placeMesh(
-      loadedMeshes[MeshType].name,
-      meshStaticInfo[MeshType].bodyPart,
-      MeshType,
-      meshStaticInfo[MeshType].parentAttachment,
-      meshStaticInfo[MeshType].childAttachment,
-      loadedMeshes[MeshType].rotation,
-      firstLoad
-    );
+function clearPosition(item) {
+  item.position.x = 0;
+  item.position.y = 0;
+  item.position.z = 0;
+}
+function rotateElement(item, clearRotation, rotation) {
+  if (clearRotation === true) {
+    item.rotation.x = 0;
+    item.rotation.y = 0;
+    item.rotation.z = 0;
+  } else {
+    item.rotation.x = rotation.x;
+    item.rotation.y = rotation.y;
+    item.rotation.z = rotation.z;
   }
-
-  function changeColor(item, color){
-    var mesh = scene.getObjectByName(item);
-    if (mesh.children[0].material){
-      mesh.children[0].material.color.r = color.r;
-      mesh.children[0].material.color.g = color.g;
-      mesh.children[0].material.color.b = color.b;
-    }
+}
+function replaceMesh(MeshType, firstLoad) {
+  scene.remove(scene.getObjectByName(MeshType));
+  placeMesh(
+    loadedMeshes[MeshType].name,
+    meshStaticInfo[MeshType].bodyPart,
+    MeshType,
+    meshStaticInfo[MeshType].parentAttachment,
+    meshStaticInfo[MeshType].childAttachment,
+    loadedMeshes[MeshType].rotation,
+    firstLoad
+  );
+}
+function changeColor(item, color){
+  var mesh = scene.getObjectByName(item);
+  if (mesh.children[0].material){
+    mesh.children[0].material.color.r = color.r;
+    mesh.children[0].material.color.g = color.g;
+    mesh.children[0].material.color.b = color.b;
   }
+}
+function placeMesh(
+  meshName,
+  bodyPartClass,
+  MeshType,
+  parentAttachment,
+  childAttachment,
+  rotation,
+  firstLoad,
+  highLight
+) {
+  // bodyPartClass : {arm, head, hand, torso, leg, foot}
+  // MeshType : {ArmR, ArmL, Head, HandR, HandL, LegR, LegL, FootR, FootL, Torso}
+  loader.load(
+    "../models/" + bodyPartClass + "/" + meshName + ".glb",
+    gltf => {
+      var root = gltf.scene.children[0];
+      // root.castShadow = true;
 
-  window.selectedMesh = function (MeshType) {
-    // console.log(MeshType);
-    let normal = { r: 0.5, g: 0.5, b: 0.5 };
-    
-    changeColor(MeshType, color);      
-    changeColor(selected, normal)
+      scene.add(root);
 
-    selected = MeshType;
-  }
+      scene.updateMatrixWorld(true);
 
-  window.changeMesh = function(bodyPart, part, isLeft) {
-    var meshType;
-    var file;
-    var rotation;
+      loadedMeshes[MeshType].name = meshName;
+      loadedMeshes[MeshType].rotation = rotation;
 
-    switch (bodyPart) {
-      case "torso":
-        file = part.file;
-        rotation = undefined;
-        meshType = "Torso";
-        break;
-      case "head":
-        file = part.file;
-        rotation = part.rotation;
-        meshType = "Head";
-        break;
-      case "hand":
-        meshType = (isLeft) ? "HandL" : "HandR";
-        file = (isLeft) ? part.file[0] : part.file[1];
-        rotation = (isLeft) ? part.rotation[0] : part.rotation[1];
-        break;
-      case "arm":
-        meshType = (isLeft) ? "ArmL" : "ArmR";
-        file = (isLeft) ? part.file[0] : part.file[1];
-        rotation = (isLeft) ? part.rotation[0] : part.rotation[1];
-        break;
-      case "foot":
-        meshType = (isLeft) ?  "FootL" : "FootR";
-        file = (isLeft) ? part.file[0] : part.file[1];
-        rotation = (isLeft) ? part.rotation[0] : part.rotation[1];
-        break;
-      case "leg":
-        meshType = (isLeft) ?  "LegL" : "LegR";
-        file = (isLeft) ? part.file[0] : part.file[1];
-        rotation = (isLeft) ? part.rotation[0] : part.rotation[1];
-        break;
-      default:
-        meshType = undefined;
-    }
-
-    if (meshType) {
-      let parentAttachment = meshStaticInfo[meshType].parentAttachment;
-      let childAttachment = meshStaticInfo[meshType].childAttachment;
-      let currentMesh = scene.getObjectByName(meshType);
-      let bonesToDelete = (meshType === "Torso") ? scene.getObjectByName("Torso_Hip") : scene.getObjectByName(parentAttachment);
-
-      if (currentMesh) {
-        scene.remove(currentMesh);
-        if (bonesToDelete.children) {
-          for (let i=0; i < bonesToDelete.children.length; i++) {
-            if (bonesToDelete.children[i] instanceof THREE.Bone){
-              bonesToDelete.remove(bonesToDelete.children[i]);
-            }
-          }
+      //Default color to all the meshes
+      for (let i=0; i < root.children.length; i++){
+        if (root.children[i].material){
+          root.children[i].material.color = { r: 0.5, g: 0.5, b: 0.5 };
         }
       }
 
-      placeMesh(
-        file,
-        bodyPart,
-        meshType,
-        parentAttachment,
-        childAttachment,
-        rotation,
-        false,
-        true
-      );
+      if (MeshType === 'Head' && firstLoad){
+        changeColor("Head",color)
+      }
+
+      if (highLight) {
+        changeColor(MeshType, color);
+      }
+
+      if(typeof parentAttachment !== "undefined" && typeof childAttachment !== "undefined"){
+        let targetBone = scene.getObjectByName(parentAttachment);
+        let object = scene.getObjectByName(childAttachment);
+
+        clearPosition(object);
+        rotateElement(object, true);
+        rotateElement(object, false, rotation);
+
+        targetBone.add(object);
+      }
+
+      //Going to look for all children of current mesh
+      let children = childrenList[MeshType];
+      if (children) {
+        for (let i = 0; i < children.length; i++) {
+          replaceMesh(children[i], firstLoad);
+        }
+      }
+    },
+    null,
+    function ( error ) {
+      console.log(error);
     }
-  };
-
-  window.dab = function() {
-    scene.getObjectByName("Torso_Neck").rotation.z = 0.5;
-    scene.getObjectByName("Torso_Neck").rotation.x = 0.5;
-
-    scene.getObjectByName("Torso_Spine").rotation.x = 0.2;
-    scene.getObjectByName("Torso_Spine").rotation.x = 0.2;
-
-    scene.getObjectByName("ArmL_UpperArm_L").rotation.z = -2;
-    scene.getObjectByName("ArmL_UpperArm_L").position.x += 0.1;
-    scene.getObjectByName("ArmL_LowerArm_L").rotation.x = 3;
-
-    scene.getObjectByName("ArmR_UpperArm_R").rotation.z = 0.4;
-    scene.getObjectByName("ArmR_LowerArm_R").rotation.x = 0.5;
-  };
-
-  window.export = function() {
-    
-    // Instantiate a exporter
-    var exporter = new THREE.GLTFExporter();
-
-    // Parse the input and generate the glTF output
-    exporter.parse(scene, function (gltf) {
-      console.log(gltf);
-      downloadJSON(gltf);
-    }, true);
-  }
+  );
 }
 
-// function recursiveChildren(item){
-//   if (item.children.length > 1){
-//     for (let i=0; i < item.children.length; i++){
-//       recursiveChildren(item.children[i])
-//     }
-//   } else {
-//     console.log("End of tree")
-//     // console.log(item)
-//     if (item.isMesh) {
-//       // group.add(item.children);
-//       console.log("Adding something")
-//     }
-//   }
-// }
+window.changeMesh = function(bodyPart, part, isLeft) {
+  var meshType;
+  var file;
+  var rotation;
+
+  switch (bodyPart) {
+    case "torso":
+      file = part.file;
+      rotation = undefined;
+      meshType = "Torso";
+      break;
+    case "head":
+      file = part.file;
+      rotation = part.rotation;
+      meshType = "Head";
+      break;
+    case "hand":
+      meshType = (isLeft) ? "HandL" : "HandR";
+      file = (isLeft) ? part.file[0] : part.file[1];
+      rotation = (isLeft) ? part.rotation[0] : part.rotation[1];
+      break;
+    case "arm":
+      meshType = (isLeft) ? "ArmL" : "ArmR";
+      file = (isLeft) ? part.file[0] : part.file[1];
+      rotation = (isLeft) ? part.rotation[0] : part.rotation[1];
+      break;
+    case "foot":
+      meshType = (isLeft) ?  "FootL" : "FootR";
+      file = (isLeft) ? part.file[0] : part.file[1];
+      rotation = (isLeft) ? part.rotation[0] : part.rotation[1];
+      break;
+    case "leg":
+      meshType = (isLeft) ?  "LegL" : "LegR";
+      file = (isLeft) ? part.file[0] : part.file[1];
+      rotation = (isLeft) ? part.rotation[0] : part.rotation[1];
+      break;
+    default:
+      meshType = undefined;
+  }
+
+  if (meshType) {
+    let parentAttachment = meshStaticInfo[meshType].parentAttachment;
+    let childAttachment = meshStaticInfo[meshType].childAttachment;
+    let currentMesh = scene.getObjectByName(meshType);
+    let bonesToDelete = (meshType === "Torso") ? scene.getObjectByName("Torso_Hip") : scene.getObjectByName(parentAttachment);
+
+    if (currentMesh) {
+      scene.remove(currentMesh);
+      if (bonesToDelete.children) {
+        for (let i=0; i < bonesToDelete.children.length; i++) {
+          if (bonesToDelete.children[i] instanceof THREE.Bone){
+            bonesToDelete.remove(bonesToDelete.children[i]);
+          }
+        }
+      }
+    }
+
+    placeMesh(
+      file,
+      bodyPart,
+      meshType,
+      parentAttachment,
+      childAttachment,
+      rotation,
+      false,
+      true
+    );
+  }
+}
+window.selectedMesh = function (MeshType) {
+  // console.log(MeshType);
+  let normal = { r: 0.5, g: 0.5, b: 0.5 };
+  
+  changeColor(MeshType, color);      
+  changeColor(selected, normal)
+
+  selected = MeshType;
+}
+window.changeRotation = function(bone_name, value, axis){
+  var bone = scene.getObjectByName(bone_name);
+  if (bone instanceof THREE.Bone){
+    switch(axis){
+      case "x":
+        bone.rotation.x = value;
+        break;
+      case "y":
+        bone.rotation.y = value;
+        break;
+      case "z":
+        bone.rotation.z = value;
+        break;
+      default:
+    }
+    
+  }
+}
+window.getRotation = function(bone_name){
+  var bone = scene.getObjectByName(bone_name);
+  if (bone instanceof THREE.Bone){
+    return ({x:bone.rotation.x, y:bone.rotation.y, z:bone.rotation.z})
+  }
+}
+window.export = function() {
+  var exporter = new THREE.STLExporter();
+  saveString( exporter.parse( scene ), 'model.stl' );
+}
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
-
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
   render();
 }
-
 function render() {
   camera.lookAt(new THREE.Vector3(0, 1, 0));
   renderer.render(scene, camera);
 }
+document.body.onresize = function() {
+  renderer.setSize((6 / 5) * window.innerWidth, window.innerHeight); //size of viewport
+  camera.aspect = ((6 / 5) * window.innerWidth) / window.innerHeight; //aspect ratio update
+  camera.updateProjectionMatrix();
+  renderer.domElement.style.position = -(1 / 5) * window.innerWidth;
+};
 
 var link = document.createElement( 'a' );
 link.style.display = 'none';
@@ -485,16 +480,19 @@ function save( blob, filename ) {
   link.download = filename || 'data.json';
   link.click();
 
-  // URL.revokeObjectURL( url ); breaks Firefox...
+
+}
+
+function saveArrayBuffer( buffer, filename ) {
+
+  save( new Blob( [ buffer ], { type: 'application/octet-stream' } ), filename );
+
 }
 
 function saveString( text, filename ) {
+
   save( new Blob( [ text ], { type: 'text/plain' } ), filename );
+
 }
 
-document.body.onresize = function() {
-  renderer.setSize((6 / 5) * window.innerWidth, window.innerHeight); //size of viewport
-  camera.aspect = ((6 / 5) * window.innerWidth) / window.innerHeight; //aspect ratio update
-  camera.updateProjectionMatrix();
-  renderer.domElement.style.position = -(1 / 5) * window.innerWidth;
-};
+

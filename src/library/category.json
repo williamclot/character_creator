@@ -21,5 +21,9 @@
 	{
 		"name": "foot",
 		"imgfile": "foot2.svg"
+	},
+	{
+		"name": "pose",
+		"imgfile": "stand.svg"
 	}
 ]

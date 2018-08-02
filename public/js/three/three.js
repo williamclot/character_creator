@@ -9250,6 +9250,9 @@
 			var colors = attributes.color !== undefined ? attributes.color.array : undefined;
 			var uvs = attributes.uv !== undefined ? attributes.uv.array : undefined;
 			var uvs2 = attributes.uv2 !== undefined ? attributes.uv2.array : undefined;
+			var skinIndices = attributes.skinIndex !== undefined ? attributes.skinIndex.array : undefined;
+			var skinWeights = attributes.skinWeight !== undefined ? attributes.skinWeight.array : undefined;
+
 
 			if ( uvs2 !== undefined ) this.faceVertexUvs[ 1 ] = [];
 
@@ -9257,7 +9260,7 @@
 			var tempUVs = [];
 			var tempUVs2 = [];
 
-			for ( var i = 0, j = 0; i < positions.length; i += 3, j += 2 ) {
+			for ( var i = 0, j = 0, k=0; i < positions.length; i += 3, j += 2, k+=4 ) {
 
 				scope.vertices.push( new Vector3( positions[ i ], positions[ i + 1 ], positions[ i + 2 ] ) );
 
@@ -9283,6 +9286,18 @@
 
 					tempUVs2.push( new Vector2( uvs2[ j ], uvs2[ j + 1 ] ) );
 
+				}
+
+				if ( skinIndices !== undefined ) {
+
+					scope.skinIndices.push( new Vector4( skinIndices[ k ], skinIndices[ k + 1 ], skinIndices[ k + 2 ], skinIndices[ k + 3 ] ) );
+		
+				}
+		
+				if ( skinWeights !== undefined ) {
+		
+					scope.skinWeights.push( new Vector4( skinWeights[ k ], skinWeights[ k + 1 ], skinWeights[ k + 2 ], skinWeights[ k + 3 ] ) );
+		
 				}
 
 			}

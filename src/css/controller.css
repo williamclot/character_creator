@@ -1,0 +1,15 @@
+.flexcontainer{
+    display: flex;
+    flex-wrap: nowrap;
+}
+.react-numeric-input{
+    width: 33%;
+    color: white;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+input{
+    width: 100%;
+    background-color: rgba(66, 66, 66, 0.3);
+    border: solid 1px rgba(50, 50, 50, 0.2);
+}

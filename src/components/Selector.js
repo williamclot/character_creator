@@ -1,5 +1,8 @@
 import React, { Component } from "react";
+import Controller from "./Controller";
+
 import "../css/selector.css";
+
 import headElements from "../library/heads.json";
 import handElements from "../library/hands.json";
 import armElements from "../library/arm.json";
@@ -8,6 +11,13 @@ import footElements from "../library/foot.json";
 import legElements from "../library/leg.json";
 
 class Selector extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      value : 1,
+    }
+  }
+
   render() {
     // Passing throught the state from the properties
     const category = this.props.currentCategory;
@@ -39,6 +49,10 @@ class Selector extends Component {
       case "leg":
         library = legElements;
         sideIdencator = true;
+        break;
+      case "pose":
+        library = [];
+        sideIdencator = false;
         break;
       default:
         library = headElements;
@@ -75,7 +89,6 @@ class Selector extends Component {
           onClick={() => {
             this.props.updateLeft(true);
             var MeshType;
-
               switch (category) {
                 case "head":
                   MeshType = "Head";
@@ -108,7 +121,6 @@ class Selector extends Component {
           onClick={() => {
             this.props.updateLeft(false);
             var MeshType;
-
             switch (category) {
               case "head":
                 MeshType = "Head";
@@ -138,16 +150,20 @@ class Selector extends Component {
         </div>
       </div>
     );
+      
 
     return (
       <div className="abs top right right-side">
         <div className="box">{sideIdencator ? buttons : ""}</div>
         <div
           className={
-            "abs top left selector " + (sideIdencator ? "selector-full" : "")
+            "abs top left " + ((category === "pose")? "controls" : "selector") + (sideIdencator ? " selector-full" : "")
           }
         >
-          {elementDiv}
+          { (category === "pose") ?
+            <Controller /> :
+            elementDiv
+          }
         </div>
       </div>
     );

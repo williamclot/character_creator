@@ -61,10 +61,11 @@ class Category extends Component {
                   MeshType = (this.state.isLeft) ? "LegL" : "LegR";
                   break;
                 default:
-                  MeshType = "Hand";
+                  MeshType = undefined;
               }
-
-              window.selectedMesh(MeshType);
+              if(MeshType){
+                window.selectedMesh(MeshType);
+              }
             }}
           >
             <img src={"img/graphics_creation/" + file} alt={name} />

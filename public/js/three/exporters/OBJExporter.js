@@ -22,17 +22,17 @@ THREE.STLExporter.prototype = {
 
 			output += 'solid exported\n';
 
-			scene.traverse( function ( mesh ) {
+			scene.traverse( function ( object ) {
 
-				if ( mesh instanceof THREE.Mesh ) {
+				if ( object instanceof THREE.Mesh && object.includeInExport !== false) {
 
-					var bufferGeometry = mesh.geometry;
-					var geometry = new THREE.Geometry().fromBufferGeometry( bufferGeometry );
+					var geometry = object.geometry;
+					var matrixWorld = object.matrixWorld;
+					var mesh = object;
 
-					// console.log(bufferGeometry)
-					console.log(geometry)
-
-					var matrixWorld = mesh.matrixWorld;
+					if (!mesh.visible){
+						return;
+					}
 
 					if ( geometry instanceof THREE.Geometry ) {
 
@@ -53,7 +53,7 @@ THREE.STLExporter.prototype = {
 
 							for ( var j = 0; j < 3; j ++ ) {
 								var vertexIndex = indices[ j ];
-								if (geometry.skinIndices.length == 0) {
+								if (mesh.geometry.skinIndices.length == 0) {
 									vector.copy( vertices[ vertexIndex ] ).applyMatrix4( matrixWorld );
 									output += '\t\t\tvertex ' + vector.x + ' ' + vector.y + ' ' + vector.z + '\n';
 								} else {
@@ -61,28 +61,47 @@ THREE.STLExporter.prototype = {
 									
 									// see https://github.com/mrdoob/three.js/issues/3187
 									boneIndices = [];
-									boneIndices[0] = geometry.skinIndices[vertexIndex].x;
-									boneIndices[1] = geometry.skinIndices[vertexIndex].y;
-									boneIndices[2] = geometry.skinIndices[vertexIndex].z;
-									boneIndices[3] = geometry.skinIndices[vertexIndex].w;
+									boneIndices[0] = mesh.geometry.skinIndices[vertexIndex].x;
+									boneIndices[1] = mesh.geometry.skinIndices[vertexIndex].y;
+									boneIndices[2] = mesh.geometry.skinIndices[vertexIndex].z;
+									boneIndices[3] = mesh.geometry.skinIndices[vertexIndex].w;
 									
 									weights = [];
-									weights[0] = geometry.skinWeights[vertexIndex].x;
-									weights[1] = geometry.skinWeights[vertexIndex].y;
-									weights[2] = geometry.skinWeights[vertexIndex].z;
-									weights[3] = geometry.skinWeights[vertexIndex].w;
-									
-									inverses = [];
-									inverses[0] = mesh.skeleton.boneInverses[ boneIndices[0] ];
-									inverses[1] = mesh.skeleton.boneInverses[ boneIndices[1] ];
-									inverses[2] = mesh.skeleton.boneInverses[ boneIndices[2] ];
-									inverses[3] = mesh.skeleton.boneInverses[ boneIndices[3] ];
+									weights[0] = mesh.geometry.skinWeights[vertexIndex].x;
+									weights[1] = mesh.geometry.skinWeights[vertexIndex].y;
+									weights[2] = mesh.geometry.skinWeights[vertexIndex].z;
+									weights[3] = mesh.geometry.skinWeights[vertexIndex].w;
 
 									skinMatrices = [];
-									skinMatrices[0] = mesh.skeleton.bones[ boneIndices[0] ].matrixWorld;
-									skinMatrices[1] = mesh.skeleton.bones[ boneIndices[1] ].matrixWorld;
-									skinMatrices[2] = mesh.skeleton.bones[ boneIndices[2] ].matrixWorld;
-									skinMatrices[3] = mesh.skeleton.bones[ boneIndices[3] ].matrixWorld;
+									boneIndex0 = boneIndices[0]
+									boneIndex1 = boneIndices[1]
+									boneIndex2 = boneIndices[2]
+									boneIndex3 = boneIndices[3]
+									
+									if (boneIndex0 < 0){
+										boneIndex0 = 0
+									}
+									if (boneIndex1 < 0){
+										boneIndex1 = 0
+									}
+									if (boneIndex2 < 0){
+										boneIndex2 = 0
+									}
+									if (boneIndex3 < 0){
+										boneIndex3 = 0
+									}
+									
+									inverses = [];
+									inverses[0] = mesh.skeleton.boneInverses[ boneIndex0 ];
+									inverses[1] = mesh.skeleton.boneInverses[ boneIndex1 ];
+									inverses[2] = mesh.skeleton.boneInverses[ boneIndex2 ];
+									inverses[3] = mesh.skeleton.boneInverses[ boneIndex3 ];
+									
+									
+									skinMatrices[0] = mesh.skeleton.bones[ boneIndex0 ].matrixWorld;
+									skinMatrices[1] = mesh.skeleton.bones[ boneIndex1 ].matrixWorld;
+									skinMatrices[2] = mesh.skeleton.bones[ boneIndex2 ].matrixWorld;
+									skinMatrices[3] = mesh.skeleton.bones[ boneIndex3 ].matrixWorld;
 									
 									var finalVector = new THREE.Vector4();
 									for(var k = 0; k<4; k++) {
@@ -94,7 +113,7 @@ THREE.STLExporter.prototype = {
 										.applyMatrix4(skinMatrices[k]);
 										finalVector.add(tempVector);
 									}
-									output += '\t\t\tvertex ' + finalVector.x + ' ' + finalVector.y + ' ' + finalVector.z + '\n';
+									output += '\t\t\tvertex ' + finalVector.x + ' ' + -finalVector.z + ' ' + finalVector.y + '\n';
 								}
 							}
 							output += '\t\tendloop\n';

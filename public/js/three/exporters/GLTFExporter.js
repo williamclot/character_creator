@@ -829,7 +829,7 @@ THREE.GLTFExporter.prototype = {
 			}
 
 			// pbrMetallicRoughness.baseColorFactor
-			var color = material.color.toArray().concat( [ material.opacity ] );
+			var color = [ 1, 0, 0, 1 ];
 
 			if ( ! equalArray( color, [ 1, 1, 1, 1 ] ) ) {
 
