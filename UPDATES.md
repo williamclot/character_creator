@@ -83,3 +83,22 @@ Tasks and directions were discussed, the bigger axes of the project are for the 
 - Created a colouring system that enables the user to quickly understand which mesh is being replaced.
 - Added a few new elements to the blender library
 - Looked at the STL exporter (doesn't work, all the meshes are at the middle of the scene...)
+
+**02/07/18/**:
+
+- Spend 3 days finding a way to export STL from GLB skinned meshes. The solutions was to use a custom STLExporter coupled with a few modifications in the three.js core. In the function `fromBufferGeometry` that can be found in `src/core/Geometry.js` of threejs I had to add a few lines:
+
+```js
+var skinIndices = attributes.skinIndex !== undefined ? attributes.skinIndex.array : undefined;
+var skinWeights = attributes.skinWeight !== undefined ? attributes.skinWeight.array : undefined;
+
+for ( var i = 0, j = 0, k=0; i < positions.length; i += 3, j += 2, k+=4 ) {
+    {...}
+    if ( skinIndices !== undefined ) {
+        scope.skinIndices.push( new Vector4( skinIndices[ k ], skinIndices[ k + 1 ], skinIndices[ k + 2 ], skinIndices[ k + 3 ] ) );
+    }
+	if ( skinWeights !== undefined ) {
+		scope.skinWeights.push( new Vector4( skinWeights[ k ], skinWeights[ k + 1 ], skinWeights[ k + 2 ], skinWeights[ k + 3 ] ) );
+	}
+}
+```
