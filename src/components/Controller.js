@@ -47,7 +47,13 @@ class Controller extends Component {
 
   render() {
 
-    
+    function exportPose(){
+      for (let i=0; i<bones.length; i++){
+        let bone = bones[i].bone;
+        // window.getRotation(bone);
+        this.setState({[bone]: window.getRotation(bone)})
+      }
+    }
 
     //JSX element to display the HTML
     const controls = [];
@@ -59,8 +65,8 @@ class Controller extends Component {
           <p>{bones[i].name}</p>
           <div className="flexcontainer">
             <NumericInput 
-              min={-1} 
-              max={1} 
+              min={-3.1} 
+              max={3.1} 
               step={0.1} 
               value={this.state[bone].x} 
               onChange={ value => {
@@ -68,8 +74,8 @@ class Controller extends Component {
                 window.changeRotation(bone, value, "x")
               }}/>
               <NumericInput 
-              min={-1} 
-              max={1} 
+              min={-3.1} 
+              max={3.1} 
               step={0.1} 
               value={this.state[bone].y} 
               onChange={ value => {
@@ -77,11 +83,10 @@ class Controller extends Component {
                 window.changeRotation(bone, value, "y")
               }}/>
               <NumericInput 
-              min={-1} 
-              max={1} 
+              min={-3.1} 
+              max={3.1} 
               step={0.1} 
               value={this.state[bone].z}
-              precision={0.2}
               onChange={ value => {
                 this.setState({ [bone]: {x:this.state[bone].x, y:this.state[bone].y, z:value }})
                 window.changeRotation(bone, value, "z")
@@ -95,6 +100,7 @@ class Controller extends Component {
 
     return (
       <div>
+        <div className="button">Export</div>  
           {controls}
       </div>
     );

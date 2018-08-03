@@ -1,9 +1,10 @@
 /**
  * Based on https://github.com/mrdoob/three.js/blob/a72347515fa34e892f7a9bfa66a34fdc0df55954/examples/js/exporters/STLExporter.js
- * Tested on r68 and r70
+ * Tested on r95
  * @author kjlubick / https://github.com/kjlubick
  * @author kovacsv / http://kovacsv.hu/
  * @author mrdoob / http://mrdoob.com/
+ * @author williamclot / https://github.com/williamclot
  */
 THREE.STLExporter = function () {};
 
@@ -29,6 +30,24 @@ THREE.STLExporter.prototype = {
 					var bufferGeometry = mesh.geometry;
 					var geometry = new THREE.Geometry().fromBufferGeometry( bufferGeometry );
 
+					// console.log(bufferGeometry.attributes)
+					// // Buffered Geometry Attributes
+					// var skinIndices = bufferGeometry.attributes.skinIndex !== undefined ? bufferGeometry.attributes.skinIndex.array : undefined;
+					// var skinWeights = bufferGeometry.attributes.skinWeight !== undefined ? bufferGeometry.attributes.skinWeight.array : undefined;
+					
+					// // Geometry attributes
+					// var skinIndices = [];
+					// var skinWeights = [];
+
+					// for ( var i = 0, k = 0; i < bufferGeometry.attributes.position.length; i += 3, k += 4) {
+					// 	if ( skinIndices !== undefined ) {
+					// 		skinIndices.push( new THREE.Vector4( skinIndices[ k ], skinIndices[ k + 1 ], skinIndices[ k + 2 ], skinIndices[ k + 3 ] ) );
+					// 	}
+				
+					// 	if ( skinWeights !== undefined ) {
+					// 		skinWeights.push( new THREE.Vector4( skinWeights[ k ], skinWeights[ k + 1 ], skinWeights[ k + 2 ], skinWeights[ k + 3 ] ) );
+					// 	}
+					// }
 					// console.log(bufferGeometry)
 					console.log(geometry)
 

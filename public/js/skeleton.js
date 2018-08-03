@@ -482,17 +482,11 @@ function save( blob, filename ) {
 
 
 }
-
 function saveArrayBuffer( buffer, filename ) {
-
   save( new Blob( [ buffer ], { type: 'application/octet-stream' } ), filename );
-
 }
-
 function saveString( text, filename ) {
-
   save( new Blob( [ text ], { type: 'text/plain' } ), filename );
-
 }
 
 
