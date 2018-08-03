@@ -1,97 +1,23 @@
-[   
-    {
-        "name": "Hip",
-        "bone": "Torso_Hip"
-    },
-    {
-        "name": "Spine",
-        "bone": "Torso_Spine"
-    },
-    {
-        "name": "Chest",
-        "bone": "Torso_Chest"
-    },
-    {   
-        "name": "Neck",
-        "bone": "Head_Neck"
-    },
-    {
-        "name": "Head",
-        "bone": "Head_Head"
-    },
-    {
-        "name": "Left Shoulder",
-        "bone": "Torso_Sholder_L"
-    },
-    {
-        "name": "Left Upper Arm",
-        "bone": "ArmL_UpperArm_L"
-    },
-    {
-        "name": "Left Lower Arm",
-        "bone": "ArmL_LowerArm_L"
-    },
-    {
-        "name": "Left Hand",
-        "bone": "HandL_Hand_L"
-    },
-    {
-        "name": "Right Shoulder",
-        "bone": "Torso_Sholder_R"
-    },
-    {
-        "name": "Right Upper Arm",
-        "bone": "ArmR_UpperArm_R",
-        "rotation":{"x":0,"y":0,"z":0}
-    },
-    {
-        "name": "Right Lower Arm",
-        "bone": "ArmR_LowerArm_R",
-        "rotation":{"x":0,"y":0,"z":0}
-    },
-    {
-        "name": "Right Hand",
-        "bone": "HandR_Hand_R",
-        "rotation":{"x":0,"y":0,"z":0}
-    },
-    {
-        "name": "Left Upper Leg",
-        "bone": "LegL_UpperLeg_L",
-        "rotation":{"x":0,"y":0,"z":0}
-    },
-    {
-        "name": "Left Lower Leg",
-        "bone": "LegL_LowerLeg_L",
-        "rotation":{"x":0,"y":0,"z":0}
-    },
-    {
-        "name": "Left Foot",
-        "bone": "FootL_Foot_L",
-        "rotation":{"x":0,"y":0,"z":0}
-    },
-    {
-        "name": "Left Toes",
-        "bone": "FootL_Toes_L",
-        "rotation":{"x":0,"y":0,"z":0}
-    },
-    {
-        "name": "Right Upper Leg",
-        "bone": "LegR_UpperLeg_R",
-        "rotation":{"x":0,"y":0,"z":0}
-    },
-    {
-        "name": "Right Lower Leg",
-        "bone": "LegR_LowerLeg_R",
-        "rotation":{"x":0,"y":0,"z":0}
-    },
-    {
-        "name": "Right Foot",
-        "bone": "FootR_Foot_R",
-        "rotation":{"x":0,"y":0,"z":0}
-    },
-    {
-        "name": "Right Toes",
-        "bone": "FootR_Toes_R",
-        "rotation":{"x":0,"y":0,"z":0}
-    }
-]
+{
+    "Torso_Hip" : {"x":0, "y":0, "z":0},
+    "Torso_Spine" : {"x":0, "y":0, "z":0},
+    "Torso_Chest" : {"x":0, "y":0, "z":0},
+    "Head_Neck" : {"x":0, "y":0, "z":0},
+    "Head_Head" : {"x":0, "y":0, "z":0},
+    "Torso_Sholder_L" : {"x":0, "y":0, "z":0},
+    "ArmL_UpperArm_L" : {"x":0, "y":0, "z":0},
+    "ArmL_LowerArm_L" : {"x":0, "y":0, "z":0},
+    "HandL_Hand_L" : {"x":0, "y":0, "z":0},
+    "Torso_Sholder_R" : {"x":0, "y":0, "z":0},
+    "ArmR_UpperArm_R" : {"x":0, "y":0, "z":0},
+    "ArmR_LowerArm_R" : {"x":0, "y":0, "z":0},
+    "HandR_Hand_R" : {"x":0, "y":0, "z":0},
+    "LegL_UpperLeg_L" : {"x":0, "y":0, "z":0},
+    "LegL_LowerLeg_L" : {"x":0, "y":0, "z":0},
+    "FootL_Foot_L" : {"x":0, "y":0, "z":0},
+    "FootL_Toes_L" : {"x":0, "y":0, "z":0},
+    "LegR_UpperLeg_R" : {"x":0, "y":0, "z":0},
+    "LegR_LowerLeg_R" : {"x":0, "y":0, "z":0},
+    "FootR_Foot_R" : {"x":0, "y":0, "z":0},
+    "FootR_Toes_R" : {"x":0, "y":0, "z":0}
+}

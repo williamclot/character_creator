@@ -4,7 +4,7 @@ import NumericInput from 'react-numeric-input';
 import "../css/controller.css"
 
 import bones from "../library/bones.json"
-
+import pose from "../library/poses/default.json"
 
 class Controller extends Component {
   constructor(props){
@@ -32,6 +32,7 @@ class Controller extends Component {
       FootR_Foot_R : {x:0, y:0, z:0},
       FootR_Toes_R : {x:0, y:0, z:0}
     }
+    this.exportPose = this.exportPose;
   }
   
   componentDidMount() {
@@ -43,17 +44,24 @@ class Controller extends Component {
   }
 
 
-  
+  exportPose(){
+    for (let i=0; i<bones.length; i++){
+      let bone = bones[i].bone;
+      pose[bone] = this.state[bone];
+    }
+    var jsonse = JSON.stringify(pose);
+    var element = document.createElement("a");
+    var file = new Blob([jsonse], {type: "application/json"});
+    element.href = URL.createObjectURL(file);
+    element.download = "pose.json";
+    element.click();
+  }
+
+  applyPose(){
+    
+  }
 
   render() {
-
-    function exportPose(){
-      for (let i=0; i<bones.length; i++){
-        let bone = bones[i].bone;
-        // window.getRotation(bone);
-        this.setState({[bone]: window.getRotation(bone)})
-      }
-    }
 
     //JSX element to display the HTML
     const controls = [];
@@ -100,7 +108,7 @@ class Controller extends Component {
 
     return (
       <div>
-        <div className="button">Export</div>  
+        <div className="export" onClick={this.exportPose.bind(this)}>Export</div>  
           {controls}
       </div>
     );
