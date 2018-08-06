@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Controller from "./Controller";
+import axios from "axios";
 
 import "../css/selector.css";
 
@@ -10,6 +11,7 @@ import torsoElements from "../library/torso.json";
 import footElements from "../library/foot.json";
 import legElements from "../library/leg.json";
 import poseElements from "../library/poses.json";
+import bones from "../library/bones.json"
 
 class Selector extends Component {
   constructor(props) {
@@ -17,6 +19,21 @@ class Selector extends Component {
     this.state = {
       editor: false,
     }
+  }
+
+  applyPose(file){
+    let poseData;
+    //Ajax in react
+    axios.get('/models/poses/'+file+'.json')
+      .then(res => {
+        poseData = res.data
+        for (let i=0; i<bones.length; i++){
+          let bone = bones[i].bone;
+          window.changeRotation(bone, poseData[bone].x, "x")
+          window.changeRotation(bone, poseData[bone].y, "y")
+          window.changeRotation(bone, poseData[bone].z, "z")
+        }
+      });
   }
 
   render() {
@@ -70,7 +87,7 @@ class Selector extends Component {
           key={i}
           onClick={() => {
             if (category==="pose"){
-              console.log("this is a pose...")
+              this.applyPose(library[i].file);
             } else {
               window.changeMesh(category, library[i], isLeft);
             }

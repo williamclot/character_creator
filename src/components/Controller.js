@@ -13,23 +13,21 @@ class Controller extends Component {
       Torso_Hip : {x:0, y:0, z:0},
       Torso_Spine : {x:0, y:0, z:0},
       Torso_Chest : {x:0, y:0, z:0},
-      Head_Neck : {x:0, y:0, z:0},
-      Head_Head : {x:0, y:0, z:0},
+      Torso_Neck : {x:0, y:0, z:0},
       Torso_Sholder_L : {x:0, y:0, z:0},
-      ArmL_UpperArm_L : {x:0, y:0, z:0},
+      Torso_UpperArm_L : {x:0, y:0, z:0},
       ArmL_LowerArm_L : {x:0, y:0, z:0},
-      HandL_Hand_L : {x:0, y:0, z:0},
+      ArmL_Hand_L : {x:0, y:0, z:0},
       Torso_Sholder_R : {x:0, y:0, z:0},
-      ArmR_UpperArm_R : {x:0, y:0, z:0},
+      Torso_UpperArm_R : {x:0, y:0, z:0},
       ArmR_LowerArm_R : {x:0, y:0, z:0},
-      HandR_Hand_R : {x:0, y:0, z:0},
-      LegL_UpperLeg_L : {x:0, y:0, z:0},
+      ArmR_Hand_R : {x:0, y:0, z:0},
+      Torso_UpperLeg_L : {x:0, y:0, z:0},
       LegL_LowerLeg_L : {x:0, y:0, z:0},
-      FootL_Foot_L : {x:0, y:0, z:0},
-      FootL_Toes_L : {x:0, y:0, z:0},
-      LegR_UpperLeg_R : {x:0, y:0, z:0},
+      LegL_Foot_L : {x:0, y:0, z:0},
+      Torso_UpperLeg_R : {x:0, y:0, z:0},
       LegR_LowerLeg_R : {x:0, y:0, z:0},
-      FootR_Foot_R : {x:0, y:0, z:0},
+      LegR_Foot_R : {x:0, y:0, z:0},
       FootR_Toes_R : {x:0, y:0, z:0}
     }
     this.exportPose = this.exportPose;
@@ -55,10 +53,6 @@ class Controller extends Component {
     element.href = URL.createObjectURL(file);
     element.download = "pose.json";
     element.click();
-  }
-
-  applyPose(){
-    
   }
 
   render() {

@@ -475,12 +475,9 @@ link.style.display = 'none';
 document.body.appendChild( link ); // Firefox workaround, see #6594
 
 function save( blob, filename ) {
-
   link.href = URL.createObjectURL( blob );
   link.download = filename || 'data.json';
   link.click();
-
-
 }
 function saveArrayBuffer( buffer, filename ) {
   save( new Blob( [ buffer ], { type: 'application/octet-stream' } ), filename );

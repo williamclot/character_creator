@@ -1,19 +1,24 @@
 [
     {
-      "name": "Default Torso",
-      "img": "default_torso.png",
-      "file": "default_torso",
+      "name": "Default",
+      "img": "pose.svg",
+      "file": "default",
       "author": "William CLOT",
-      "description": "Default torso.",
-      "scale": 1
+      "description": "Default torso."
     },
     {
-      "name": "Turtle Torso",
-      "img": "turtle_torso.png",
-      "file": "turtle_torso",
+      "name": "Sad",
+      "img": "pose.svg",
+      "file": "sad",
       "author": "William CLOT",
-      "description": "Default man head.",
-      "scale": 1
+      "description": "Default man head."
+    },
+    {
+      "name": "Arms Spread",
+      "img": "pose.svg",
+      "file": "arms_spread",
+      "author": "William CLOT",
+      "description": "Default man head."
     }
   ]
   
