@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import "../css/buttons.css";
 
 class Buttons extends Component {
+  
+
   render() {
     return (
       <div>
