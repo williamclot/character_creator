@@ -4,7 +4,7 @@ import NumericInput from 'react-numeric-input';
 import "../css/controller.css"
 
 import bones from "../library/bones.json"
-import pose from "../library/poses/default.json"
+import model from "../library/poses/model.json"
 
 class Controller extends Component {
   constructor(props){
@@ -47,9 +47,9 @@ class Controller extends Component {
   exportPose(){
     for (let i=0; i<bones.length; i++){
       let bone = bones[i].bone;
-      pose[bone] = this.state[bone];
+      model[bone] = this.state[bone];
     }
-    var jsonse = JSON.stringify(pose);
+    var jsonse = JSON.stringify(model);
     var element = document.createElement("a");
     var file = new Blob([jsonse], {type: "application/json"});
     element.href = URL.createObjectURL(file);
@@ -107,9 +107,9 @@ class Controller extends Component {
       
 
     return (
-      <div>
-        <div className="export" onClick={this.exportPose.bind(this)}>Export</div>  
+      <div className="controls">
           {controls}
+          <div className="export" onClick={this.exportPose.bind(this)}>Export</div>  
       </div>
     );
   }

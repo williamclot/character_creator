@@ -66,28 +66,6 @@
   height: calc(100% - 90px);
 }
 
-.controls{
-  height: calc(100% - 70px);
-  top: 50px;
-  left: 2px;
-  width: calc(100% - 30px);
-  display: block;
-  overflow-x: hidden;
-  overflow-y: scroll;
-
-  padding: 10px;
-  color: black;
-  font-size: 12px;
-}
-.bone-control{
-  margin-bottom: 20px;
-  display: block;
-}
-.bone-control p{
-  margin-bottom: 0;
-  color: white;
-}
-
 @media (min-width: 1130px) {
   .selector {
     grid-template-columns: 1fr 1fr;
@@ -137,43 +115,4 @@
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   font-size: 10px;
-}
-
-.reference {
-  position: relative;
-  width: 0;
-  height: 0;
-}
-
-.popup {
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-
-  /* Position the tooltip text - see examples below! */
-  position: absolute;
-  top: 10px;
-  left: 0;
-  /* transform: translate(-100%,-100%); */
-  /* margin-left: -60px; */
-  z-index: 100;
-  overflow-x: visible;
-}
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.el:hover .popup {
-  visibility: visible;
-}
-.popup::after {
-  content: " ";
-  position: absolute;
-  bottom: 100%; /* At the top of the tooltip */
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent transparent black transparent;
 }

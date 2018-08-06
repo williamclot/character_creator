@@ -9,12 +9,13 @@ import armElements from "../library/arm.json";
 import torsoElements from "../library/torso.json";
 import footElements from "../library/foot.json";
 import legElements from "../library/leg.json";
+import poseElements from "../library/poses.json";
 
 class Selector extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      value : 1,
+      editor: false,
     }
   }
 
@@ -51,7 +52,7 @@ class Selector extends Component {
         sideIdencator = true;
         break;
       case "pose":
-        library = [];
+        library = poseElements;
         sideIdencator = false;
         break;
       default:
@@ -68,7 +69,11 @@ class Selector extends Component {
           className="el"
           key={i}
           onClick={() => {
-            window.changeMesh(category, library[i], isLeft);
+            if (category==="pose"){
+              console.log("this is a pose...")
+            } else {
+              window.changeMesh(category, library[i], isLeft);
+            }
           }}
         >
           <div className="img">
@@ -89,29 +94,31 @@ class Selector extends Component {
           onClick={() => {
             this.props.updateLeft(true);
             var MeshType;
-              switch (category) {
-                case "head":
-                  MeshType = "Head";
-                  break;
-                case "hand":
-                  MeshType = "HandL";
-                  break;
-                case "arm":
-                  MeshType = "ArmL";
-                  break;
-                case "torso":
-                  MeshType = "Torso";
-                  break;
-                case "foot":
-                  MeshType = "FootL";
-                  break;
-                case "leg":
-                  MeshType = "LegL";
-                  break;
-                default:
-                  MeshType = undefined;
-              }
+            switch (category) {
+              case "head":
+                MeshType = "Head";
+                break;
+              case "hand":
+                MeshType = "HandL";
+                break;
+              case "arm":
+                MeshType = "ArmL";
+                break;
+              case "torso":
+                MeshType = "Torso";
+                break;
+              case "foot":
+                MeshType = "FootL";
+                break;
+              case "leg":
+                MeshType = "LegL";
+                break;
+              default:
+                MeshType = undefined;
+            }
+            if (MeshType) {
               window.selectedMesh(MeshType);
+            }
           }}
         >
           Left
@@ -143,27 +150,44 @@ class Selector extends Component {
               default:
                 MeshType = undefined;
             }
-            window.selectedMesh(MeshType);
-        }}
+            if (MeshType) {
+              window.selectedMesh(MeshType);
+            }
+          }}
         >
           Right
         </div>
       </div>
     );
-      
+
+    const editorButtons = (
+      <div className="abs switch">
+        <div 
+          className={"abs left side L " + (this.state.editor ? "" : "side-selected")}
+          onClick={() => {this.setState({editor: false})}}
+          >Poses</div>
+        <div 
+          className={"abs right side R " + (this.state.editor ? "side-selected" : "")}
+          onClick={() => {this.setState({editor: true})}}
+          >Editor</div>
+      </div>
+    );
+
 
     return (
       <div className="abs top right right-side">
-        <div className="box">{sideIdencator ? buttons : ""}</div>
+        <div className="box">
+          {sideIdencator ? buttons : ""}
+          {(category === 'pose') ? editorButtons : ""}
+        </div>
         <div
           className={
-            "abs top left " + ((category === "pose")? "controls" : "selector") + (sideIdencator ? " selector-full" : "")
+            "abs top left " +
+            ((category === "pose" && this.state.editor) ? " selector-full" : "selector") +
+            ((sideIdencator || category === 'pose') ? " selector-full" : "")
           }
         >
-          { (category === "pose") ?
-            <Controller /> :
-            elementDiv
-          }
+          {(category === "pose" && this.state.editor) ? <Controller /> : elementDiv}
         </div>
       </div>
     );
