@@ -84,7 +84,7 @@ Tasks and directions were discussed, the bigger axes of the project are for the 
 - Added a few new elements to the blender library
 - Looked at the STL exporter (doesn't work, all the meshes are at the middle of the scene...)
 
-**03/07/18/**:
+**03/08/18/**:
 
 - Spend 3 days finding a way to export STL from GLB skinned meshes. The solutions was to use a custom STLExporter coupled with a few modifications in the three.js core. In the function `fromBufferGeometry` that can be found in `src/core/Geometry.js` of threejs I had to add a few lines:
 
@@ -103,7 +103,12 @@ for ( var i = 0, j = 0, k=0; i < positions.length; i += 3, j += 2, k+=4 ) {
 }
 ```
 
-**06/07/18**:
+**06/08/18**:
 
 - Implemented a first approach of the pose selector. The UI is working okay, I have two tabs a first tab for selecting within a list of poses and the second one for editing and twinking an existing pose. 
 - Have to work a bit more on this.. Take into consideration the original position of the mesh.
+
+
+**07/08/18**:
+
+- Updated and corrected some meshes: the arms all have a default rotation of {0;0;0} so that the pose implementation will work without a inverse rotation of certain body parts.
