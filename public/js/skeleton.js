@@ -213,19 +213,6 @@ function init() {
     plane.receiveShadow = true;
     scene.add(plane);
   }
-  function createReferenceSphere(pos) {
-    //Create a plane that receives shadows (but does not cast them)
-    var sphereGeometry = new THREE.SphereBufferGeometry(0.1, 0.1, 10);
-    var sphereMaterial = new THREE.MeshStandardMaterial({
-      color: 0xff1f00
-    });
-    var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-    sphere.name = "sphere";
-    sphere.position.x = pos.x;
-    sphere.position.y = pos.y;
-    sphere.position.z = pos.z;
-    scene.add(sphere);
-  }
   function loadDefaultMeshes() {
     placeMesh(
       loadedMeshes["Torso"].name,
