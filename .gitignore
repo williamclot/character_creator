@@ -6,6 +6,7 @@
 
 # production
 /build
+/.vscode
 
 # misc
 .DS_Store
@@ -14,6 +15,7 @@
 .env.test.local
 .env.production.local
 .blend1
+
 
 npm-debug.log*
 yarn-debug.log*
