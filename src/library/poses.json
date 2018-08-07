@@ -7,16 +7,9 @@
       "description": "Default torso."
     },
     {
-      "name": "Sad",
+      "name": "Egypt",
       "img": "pose.svg",
-      "file": "sad",
-      "author": "William CLOT",
-      "description": "Default man head."
-    },
-    {
-      "name": "Arms Spread",
-      "img": "pose.svg",
-      "file": "arms_spread",
+      "file": "egypt",
       "author": "William CLOT",
       "description": "Default man head."
     }
