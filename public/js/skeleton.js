@@ -12,6 +12,8 @@ var controls, loader;
 
 var selected = "Head";
 var color = {r:0.555,g:0.48,b:0.49};
+var group = new THREE.Group();
+var boundingBox;
 
 //This keeps track of every mesh on the viewport
 var loadedMeshes = {
@@ -53,6 +55,10 @@ var loadedMeshes = {
   },
   FootL: {
     name: "default_foot_L",
+    rotation: {x: 0, y: 0, z: 0}
+  }, 
+  Stand: {
+    name: "default",
     rotation: {x: 0, y: 0, z: 0}
   }
 };
@@ -130,6 +136,10 @@ function init() {
 
   scene = new THREE.Scene();
   loader = new THREE.GLTFLoader();
+  
+  scene.add(group);
+  // boundingBox = new THREE.BoundingBoxHelper(group, 0xff0000);
+  // scene.add(boundingBox);
 
   buildCamera();
   buildRenderer();
@@ -214,6 +224,26 @@ function init() {
     scene.add(plane);
   }
   function loadDefaultMeshes() {
+    loader.load(
+      "../models/stand/hexagone.glb",
+      gltf => {
+        var root = gltf.scene.children[0];
+        // root.castShadow = true;
+  
+        group.add(root);
+  
+        //Default color to all the meshes
+        for (let i=0; i < root.children.length; i++){
+          if (root.children[i].material){
+            root.children[i].material.color = { r: 0.5, g: 0.5, b: 0.5 };
+          }
+        }
+      },
+      null,
+      function ( error ) {
+        console.log(error);
+      }
+    );
     placeMesh(
       loadedMeshes["Torso"].name,
       meshStaticInfo["Torso"].bodyPart,
@@ -244,7 +274,7 @@ function rotateElement(item, clearRotation, rotation) {
   }
 }
 function replaceMesh(MeshType, firstLoad) {
-  scene.remove(scene.getObjectByName(MeshType));
+  group.remove(group.getObjectByName(MeshType));
   placeMesh(
     loadedMeshes[MeshType].name,
     meshStaticInfo[MeshType].bodyPart,
@@ -281,7 +311,8 @@ function placeMesh(
       var root = gltf.scene.children[0];
       // root.castShadow = true;
 
-      scene.add(root);
+      group.add(root);
+      boundingBox = new THREE.Box3().setFromObject(group);
 
       scene.updateMatrixWorld(true);
 
@@ -297,6 +328,11 @@ function placeMesh(
 
       if (MeshType === 'Head' && firstLoad){
         changeColor("Head",color)
+      }
+      if (MeshType === 'FootR'){
+        group.getObjectByName("FootR")
+        boundingBox = new THREE.BoundingBoxHelper(group.getObjectByName("FootR"), 0xff0000);
+        scene.add(boundingBox);
       }
 
       if (highLight) {
@@ -372,11 +408,11 @@ window.changeMesh = function(bodyPart, part, isLeft) {
   if (meshType) {
     let parentAttachment = meshStaticInfo[meshType].parentAttachment;
     let childAttachment = meshStaticInfo[meshType].childAttachment;
-    let currentMesh = scene.getObjectByName(meshType);
-    let bonesToDelete = (meshType === "Torso") ? scene.getObjectByName("Torso_Hip") : scene.getObjectByName(parentAttachment);
+    let currentMesh = group.getObjectByName(meshType);
+    let bonesToDelete = (meshType === "Torso") ? scene.getObjectByName("Torso_Hip") : group.getObjectByName(parentAttachment);
 
     if (currentMesh) {
-      scene.remove(currentMesh);
+      group.remove(currentMesh);
       if (bonesToDelete.children) {
         for (let i=0; i < bonesToDelete.children.length; i++) {
           if (bonesToDelete.children[i] instanceof THREE.Bone){
@@ -422,7 +458,6 @@ window.changeRotation = function(bone_name, value, axis){
         break;
       default:
     }
-    
   }
 }
 window.getRotation = function(bone_name){
@@ -472,5 +507,3 @@ function saveArrayBuffer( buffer, filename ) {
 function saveString( text, filename ) {
   save( new Blob( [ text ], { type: 'text/plain' } ), filename );
 }
-
-

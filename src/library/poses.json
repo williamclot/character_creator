@@ -12,6 +12,13 @@
       "file": "egypt",
       "author": "William CLOT",
       "description": "Default man head."
+    },
+    {
+      "name": "King Kong",
+      "img": "pose.svg",
+      "file": "king_kong",
+      "author": "William CLOT",
+      "description": "Default man head."
     }
   ]
   

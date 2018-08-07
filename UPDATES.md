@@ -112,3 +112,5 @@ for ( var i = 0, j = 0, k=0; i < positions.length; i += 3, j += 2, k+=4 ) {
 **07/08/18**:
 
 - Updated and corrected some meshes: the arms all have a default rotation of {0;0;0} so that the pose implementation will work without a inverse rotation of certain body parts.
+- Added a couple poses in the library (Need to add new legs and torso to really check what i'm doing)
+- Worked on the base (Just the beggining lots of work still to do, working on bounding boxes of the two foots, one needs to be on the floor or translated)
