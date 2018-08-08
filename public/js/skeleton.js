@@ -13,6 +13,7 @@ var controls, loader;
 var selected = "Head";
 var color = {r:0.555,g:0.48,b:0.49};
 var group = new THREE.Group();
+var bBoxStand, bBoxFootL, bBoxFootR;
 
 //This keeps track of every mesh on the viewport
 var loadedMeshes = {
@@ -221,6 +222,7 @@ function init() {
     scene.add(plane);
   }
   function loadDefaultMeshes() {
+    placeStand()
     placeMesh(
       loadedMeshes["Torso"].name,
       meshStaticInfo["Torso"].bodyPart,
@@ -306,6 +308,15 @@ function placeMesh(
         changeColor("Head",color)
       }
 
+      if (MeshType === "FootR"){
+        bBoxFootR = new THREE.BoxHelper(root, 0xff0000)
+        scene.add(bBoxFootR)
+      }
+      else if (MeshType === "FootL"){
+        bBoxFootL = new THREE.BoxHelper(root, 0x0000ff)
+        scene.add(bBoxFootL)
+      }
+
       if (highLight) {
         changeColor(MeshType, color);
       }
@@ -328,6 +339,32 @@ function placeMesh(
           replaceMesh(children[i], firstLoad);
         }
       }
+    },
+    null,
+    function ( error ) {
+      console.log(error);
+    }
+  );
+}
+
+function placeStand(){
+  loader.load(
+    "../models/stand/hexagone.glb",
+    gltf => {
+      var root = gltf.scene;
+      // root.castShadow = true;
+
+      bBoxStand = new THREE.BoxHelper(root, 0x00ff00)
+      scene.add(bBoxStand)
+
+      //Default color to all the meshes
+      for (let i=0; i < root.children.length; i++){
+        if (root.children[i].material){
+          root.children[i].material.color = { r: 0.4, g: 0.4, b: 0.4 };
+        }
+      }
+
+      scene.add(root);
     },
     null,
     function ( error ) {
