@@ -23,10 +23,6 @@
 		"imgfile": "foot2.svg"
 	},
 	{
-		"name": "stand",
-		"imgfile": "stand.svg"
-	},
-	{
 		"name": "pose",
 		"imgfile": "pose.svg"
 	}

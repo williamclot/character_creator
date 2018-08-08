@@ -12,9 +12,9 @@ class Buttons extends Component {
         }}>
           Download
         </div>
-        <div className="abs buttons" id="publish">
+        {/* <div className="abs buttons" id="publish">
           Publish
-        </div>
+        </div> */}
       </div>
     );
   }
