@@ -296,7 +296,9 @@ function placeMesh(
   childAttachment,
   rotation,
   firstLoad,
-  highLight
+  highLight, 
+  bones,
+  poseData
 ) {
   // bodyPartClass : {arm, head, hand, torso, leg, foot}
   // MeshType : {ArmR, ArmL, Head, HandR, HandL, LegR, LegL, FootR, FootL, Torso}
@@ -342,7 +344,8 @@ function placeMesh(
       if (MeshType === "FootR"){
         if (bBoxFootL){
           //Call function for the stand
-          // placeStand()
+          placeStand()
+          window.loadPose(poseData, bones);
         }
         floorR = scene.getObjectByName("FootR_Toes_R")
         scene.updateMatrixWorld(true);
@@ -354,6 +357,7 @@ function placeMesh(
         if (bBoxFootR){
           //Call function for the stand
           placeStand()
+          window.loadPose(poseData, bones);
         }
         // bBoxFootL = new THREE.BoxHelper(scene.getObjectByName("FootL_Foot_L"), 0x0000ff)
         // bBoxFootL.name = "bBoxFootL"
@@ -512,6 +516,16 @@ window.getRotation = function(bone_name){
   if (bone instanceof THREE.Bone){
     return ({x:bone.rotation.x, y:bone.rotation.y, z:bone.rotation.z})
   }
+}
+
+window.loadPose = function(poseData, bones){
+  for (let i=0; i<bones.length; i++){
+    let bone = bones[i].bone;
+    window.changeRotation(bone, poseData[bone].x, "x")
+    window.changeRotation(bone, poseData[bone].y, "y")
+    window.changeRotation(bone, poseData[bone].z, "z")
+  }
+
 }
 window.export = function() {
   var exporter = new THREE.STLExporter();

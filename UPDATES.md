@@ -114,3 +114,9 @@ for ( var i = 0, j = 0, k=0; i < positions.length; i += 3, j += 2, k+=4 ) {
 - Updated and corrected some meshes: the arms all have a default rotation of {0;0;0} so that the pose implementation will work without a inverse rotation of certain body parts.
 - Added a couple poses in the library (Need to add new legs and torso to really check what i'm doing)
 - Worked on the base (Just the beggining lots of work still to do, working on bounding boxes of the two foots, one needs to be on the floor or translated)
+
+**08/08/18**:
+
+- Worked again on the stand implementation. 
+- It's more difficult than planned, the bounding box stays where the mesh was loaded but not were the mesh has been mooved with the bones... Same problem as the STL export function. 
+- Two possibilities, either I add bones to find the place in space where the foot ends or I remodify a core threejs file and see how it goes. Will look at this tomorrow.

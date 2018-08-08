@@ -27,12 +27,7 @@ class Selector extends Component {
     axios.get('/models/poses/'+file+'.json')
       .then(res => {
         poseData = res.data
-        for (let i=0; i<bones.length; i++){
-          let bone = bones[i].bone;
-          window.changeRotation(bone, poseData[bone].x, "x")
-          window.changeRotation(bone, poseData[bone].y, "y")
-          window.changeRotation(bone, poseData[bone].z, "z")
-        }
+        window.loadPose(poseData, bones)
       });
   }
 
