@@ -13,12 +13,15 @@ var controls, loader;
 var selected = "Head";
 var color = {r:0.555,g:0.48,b:0.49};
 var group = new THREE.Group();
-var bBoxStand, bBoxFootL, bBoxFootR;
+var bBoxStand;
+var bBoxFootL = undefined;
+var bBoxFootR = undefined;
+var box3 = new THREE.Box3();
 
 //This keeps track of every mesh on the viewport
 var loadedMeshes = {
   Torso: {
-    name: "default_torso",
+    name: "turtle_torso",
     rotation: {x:0, y:0, z:0}
   },
   LegR: {
@@ -222,7 +225,6 @@ function init() {
     scene.add(plane);
   }
   function loadDefaultMeshes() {
-    placeStand()
     placeMesh(
       loadedMeshes["Torso"].name,
       meshStaticInfo["Torso"].bodyPart,
@@ -234,6 +236,20 @@ function init() {
       false
     );
   }
+}
+
+function createReferenceSphere(pos) {
+  //Create a plane that receives shadows (but does not cast them)
+  var sphereGeometry = new THREE.SphereBufferGeometry(0.05, 0.05, 10);
+  var sphereMaterial = new THREE.MeshStandardMaterial({
+    color: 0xff1f00
+  });
+  var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+  sphere.name = "sphere";
+  sphere.position.x = pos.x;
+  sphere.position.y = pos.y;
+  sphere.position.z = pos.z;
+  scene.add(sphere);
 }
 
 function clearPosition(item) {
@@ -308,15 +324,6 @@ function placeMesh(
         changeColor("Head",color)
       }
 
-      if (MeshType === "FootR"){
-        bBoxFootR = new THREE.BoxHelper(root, 0xff0000)
-        scene.add(bBoxFootR)
-      }
-      else if (MeshType === "FootL"){
-        bBoxFootL = new THREE.BoxHelper(root, 0x0000ff)
-        scene.add(bBoxFootL)
-      }
-
       if (highLight) {
         changeColor(MeshType, color);
       }
@@ -330,6 +337,28 @@ function placeMesh(
         rotateElement(object, false, rotation);
 
         targetBone.add(object);
+      }
+
+      if (MeshType === "FootR"){
+        if (bBoxFootL){
+          //Call function for the stand
+          // placeStand()
+        }
+        floorR = scene.getObjectByName("FootR_Toes_R")
+        scene.updateMatrixWorld(true);
+        bBoxFootR = new THREE.Vector3();
+        floorR.getWorldPosition(bBoxFootR);
+        console.log("red", bBoxFootR)
+      }
+      else if (MeshType === "FootL"){
+        if (bBoxFootR){
+          //Call function for the stand
+          placeStand()
+        }
+        // bBoxFootL = new THREE.BoxHelper(scene.getObjectByName("FootL_Foot_L"), 0x0000ff)
+        // bBoxFootL.name = "bBoxFootL"
+        // // console.log(bBoxFootL)
+        // scene.add(bBoxFootL)
       }
 
       //Going to look for all children of current mesh
@@ -348,29 +377,39 @@ function placeMesh(
 }
 
 function placeStand(){
+  var topStand;
+  if (scene.getObjectByName("Stand")){
+    scene.remove(scene.getObjectByName("Stand"))
+  }
   loader.load(
     "../models/stand/hexagone.glb",
     gltf => {
-      var root = gltf.scene;
+      var root = gltf.scene.children[0];
+      console.log(root)
       // root.castShadow = true;
 
-      bBoxStand = new THREE.BoxHelper(root, 0x00ff00)
-      scene.add(bBoxStand)
+      bBoxStand = new THREE.Box3().setFromObject(root);
+      topStand = bBoxStand.max.y;
+
+      console.log(topStand, bBoxFootR.y)
+
+
 
       //Default color to all the meshes
-      for (let i=0; i < root.children.length; i++){
-        if (root.children[i].material){
-          root.children[i].material.color = { r: 0.4, g: 0.4, b: 0.4 };
-        }
+      if (root.material){
+        root.material.color = { r: 0.4, g: 0.4, b: 0.4 };
       }
 
       scene.add(root);
+      scene.getObjectByName("Stand").position.y = bBoxFootR.y-0.04;
+
     },
     null,
     function ( error ) {
       console.log(error);
     }
   );
+
 }
 
 window.changeMesh = function(bodyPart, part, isLeft) {
