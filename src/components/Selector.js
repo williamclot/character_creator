@@ -4,6 +4,8 @@ import axios from "axios";
 
 import "../css/selector.css";
 
+import defaultMeshes from '../library/defaultMeshes.json';
+
 import headElements from "../library/heads.json";
 import handElements from "../library/hands.json";
 import armElements from "../library/arm.json";
@@ -22,6 +24,17 @@ class Selector extends Component {
     }
   }
 
+  componentDidMount(){
+    // Load the base model with defaultMeshes and defaultPose
+    axios.get('../models/poses/default.json')
+      .then(res => {
+        this.setState({currentPose: res.data})
+        this.props.updatePose(res.data)
+        window.loadDefaultMeshes(defaultMeshes, bones, res.data)
+        // window.loadPose(res.data, bones)
+      });
+  }
+
   applyPose(file){
     let poseData;
     //Ajax in react
@@ -32,7 +45,7 @@ class Selector extends Component {
         this.props.updatePose(poseData)
         window.loadPose(poseData, bones)
       });
-  }
+    }
 
   render() {
     // Passing throught the state from the properties

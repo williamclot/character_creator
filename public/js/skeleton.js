@@ -294,7 +294,7 @@ function placeMesh(
     gltf => {
       var root = gltf.scene.children[0];
       // root.castShadow = true;
-      console.log("This is a category :", MeshType)
+      // console.log("This is a category :", MeshType)
       group.add(root);
 
       scene.updateMatrixWorld(true);
@@ -341,25 +341,6 @@ function placeMesh(
         targetBone.add(object);
       }
 
-      if (MeshType === "FootR"){
-        if (scene.getObjectByName("FootL_Toes_L")){
-          //Call function for the stand
-          placeStand()
-          if(poseData !== undefined){
-            // window.loadPose(poseData, bones);
-          }
-        }
-      }
-      else if (MeshType === "FootL"){
-        if (scene.getObjectByName("FootR_Toes_R")){
-          //Call function for the stand
-          if(poseData !== undefined){
-            // window.loadPose(poseData, bones);
-          }
-          placeStand()
-        }
-      }
-
       //Going to look for all children of current mesh
       let children = childrenList[MeshType];
       if (children) {
@@ -367,6 +348,19 @@ function placeMesh(
           replaceMesh(children[i], firstLoad, bones, poseData);
         }
       }
+
+      // if (MeshType === "FootR"){
+      //   if (scene.getObjectByName("FootL_Toes_L")){
+      //     //Call function for the stand
+      //     placeStand()
+      //   }
+      // }
+      // else if (MeshType === "FootL"){
+      //   if (scene.getObjectByName("FootR_Toes_R")){
+      //     //Call function for the stand
+      //     placeStand()
+      //   }
+      // }
     },
     null,
     function ( error ) {
@@ -384,6 +378,7 @@ function placeStand(){
     var resultR = minFinder.parse(scene.getObjectByName("FootR"))
     var resultL = minFinder.parse(scene.getObjectByName("FootL"))
     var result = (resultL > resultR) ? resultR : resultL;
+    console.log(result);
 
 
     // bBoxStand = new THREE.Box3().setFromObject(root);
@@ -400,12 +395,12 @@ function placeStand(){
         var resultR = minFinder.parse(scene.getObjectByName("FootR"))
         var resultL = minFinder.parse(scene.getObjectByName("FootL"))
         var result = (resultL > resultR) ? resultR : resultL;
-        
   
         //Default color to all the meshes
         if (root.material){
           root.material.color = { r: 0.4, g: 0.4, b: 0.4 };
         }
+
         scene.add(root);
         scene.getObjectByName("Stand").position.y = result;
       },
@@ -536,23 +531,29 @@ window.getRotation = function(bone_name){
 }
 
 window.loadPose = function(poseData, bones){
-  var L, R;
+  var L, R = false;
   for (let i=0; i<bones.length; i++){
     let bone = bones[i].bone;
     window.changeRotation(bone, poseData[bone].x, "x")
     window.changeRotation(bone, poseData[bone].y, "y")
     window.changeRotation(bone, poseData[bone].z, "z")
+    
+    scene.updateMatrixWorld();
 
     if (bone === "LegL_Foot_L"){
       L = true;
+      if (L && R){
+        placeStand();
+      }
     }
     if (bone === "LegR_Foot_R"){
       R = true;
+      if (L && R){
+        placeStand();
+      }
     }
   }
-  if (L && R){
-    placeStand();
-  }
+  
 }
 window.export = function() {
   var exporter = new THREE.STLExporter();
