@@ -349,18 +349,20 @@ function placeMesh(
         }
       }
 
-      // if (MeshType === "FootR"){
-      //   if (scene.getObjectByName("FootL_Toes_L")){
-      //     //Call function for the stand
-      //     placeStand()
-      //   }
-      // }
-      // else if (MeshType === "FootL"){
-      //   if (scene.getObjectByName("FootR_Toes_R")){
-      //     //Call function for the stand
-      //     placeStand()
-      //   }
-      // }
+      if (MeshType === "FootR"){
+        if (scene.getObjectByName("FootL_Toes_L")){
+          //Call function for the stand
+          scene.updateMatrixWorld()
+          placeStand()
+        }
+      }
+      else if (MeshType === "FootL"){
+        if (scene.getObjectByName("FootR_Toes_R")){
+          //Call function for the stand
+          scene.updateMatrixWorld()
+          placeStand()
+        }
+      }
     },
     null,
     function ( error ) {
@@ -537,7 +539,7 @@ window.loadPose = function(poseData, bones){
     window.changeRotation(bone, poseData[bone].x, "x")
     window.changeRotation(bone, poseData[bone].y, "y")
     window.changeRotation(bone, poseData[bone].z, "z")
-    
+
     scene.updateMatrixWorld();
 
     if (bone === "LegL_Foot_L"){
