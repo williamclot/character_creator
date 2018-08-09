@@ -14,9 +14,6 @@ var selected = "Head";
 var color = {r:0.555,g:0.48,b:0.49};
 var group = new THREE.Group();
 var bBoxStand;
-var bBoxFootL = undefined;
-var bBoxFootR = undefined;
-var box3 = new THREE.Box3();
 
 //This keeps track of every mesh on the viewport
 var loadedMeshes = {
@@ -146,7 +143,6 @@ function init() {
   buildRenderer();
   buildControls();
   buildLights();
-  loadDefaultMeshes();
   // buildFloor();
 
   function buildCamera() {
@@ -224,18 +220,6 @@ function init() {
     plane.receiveShadow = true;
     scene.add(plane);
   }
-  function loadDefaultMeshes() {
-    placeMesh(
-      loadedMeshes["Torso"].name,
-      meshStaticInfo["Torso"].bodyPart,
-      "Torso",
-      undefined,
-      undefined,
-      undefined,
-      true,
-      false
-    );
-  }
 }
 
 function createReferenceSphere(pos) {
@@ -268,7 +252,7 @@ function rotateElement(item, clearRotation, rotation) {
     item.rotation.z = rotation.z;
   }
 }
-function replaceMesh(MeshType, firstLoad) {
+function replaceMesh(MeshType, firstLoad, bones, poseData) {
   group.remove(group.getObjectByName(MeshType));
   placeMesh(
     loadedMeshes[MeshType].name,
@@ -277,7 +261,10 @@ function replaceMesh(MeshType, firstLoad) {
     meshStaticInfo[MeshType].parentAttachment,
     meshStaticInfo[MeshType].childAttachment,
     loadedMeshes[MeshType].rotation,
-    firstLoad
+    firstLoad, 
+    false,
+    bones,
+    poseData
   );
 }
 function changeColor(item, color){
@@ -307,7 +294,7 @@ function placeMesh(
     gltf => {
       var root = gltf.scene.children[0];
       // root.castShadow = true;
-
+      console.log("This is a category :", MeshType)
       group.add(root);
 
       scene.updateMatrixWorld(true);
@@ -330,6 +317,19 @@ function placeMesh(
         changeColor(MeshType, color);
       }
 
+      // Putting the new mesh in the pose configuration if any pose as been selected
+      if(poseData){
+        root.traverse(function(child){
+          if (child instanceof THREE.Bone){
+            if (poseData[child.name]){
+              window.changeRotation(child.name, poseData[child.name].x, "x")
+              window.changeRotation(child.name, poseData[child.name].y, "y")
+              window.changeRotation(child.name, poseData[child.name].z, "z")
+            }
+          }
+        })
+      }
+
       if(typeof parentAttachment !== "undefined" && typeof childAttachment !== "undefined"){
         let targetBone = scene.getObjectByName(parentAttachment);
         let object = scene.getObjectByName(childAttachment);
@@ -342,34 +342,29 @@ function placeMesh(
       }
 
       if (MeshType === "FootR"){
-        if (bBoxFootL){
+        if (scene.getObjectByName("FootL_Toes_L")){
           //Call function for the stand
           placeStand()
-          window.loadPose(poseData, bones);
+          if(poseData !== undefined){
+            // window.loadPose(poseData, bones);
+          }
         }
-        floorR = scene.getObjectByName("FootR_Toes_R")
-        scene.updateMatrixWorld(true);
-        bBoxFootR = new THREE.Vector3();
-        floorR.getWorldPosition(bBoxFootR);
-        console.log("red", bBoxFootR)
       }
       else if (MeshType === "FootL"){
-        if (bBoxFootR){
+        if (scene.getObjectByName("FootR_Toes_R")){
           //Call function for the stand
+          if(poseData !== undefined){
+            // window.loadPose(poseData, bones);
+          }
           placeStand()
-          window.loadPose(poseData, bones);
         }
-        // bBoxFootL = new THREE.BoxHelper(scene.getObjectByName("FootL_Foot_L"), 0x0000ff)
-        // bBoxFootL.name = "bBoxFootL"
-        // // console.log(bBoxFootL)
-        // scene.add(bBoxFootL)
       }
 
       //Going to look for all children of current mesh
       let children = childrenList[MeshType];
       if (children) {
         for (let i = 0; i < children.length; i++) {
-          replaceMesh(children[i], firstLoad);
+          replaceMesh(children[i], firstLoad, bones, poseData);
         }
       }
     },
@@ -381,42 +376,63 @@ function placeMesh(
 }
 
 function placeStand(){
-  var topStand;
+  // var topStand;
+  var minFinder = new THREE.FindMinGeometry();
+
   if (scene.getObjectByName("Stand")){
-    scene.remove(scene.getObjectByName("Stand"))
-  }
-  loader.load(
-    "../models/stand/hexagone.glb",
-    gltf => {
-      var root = gltf.scene.children[0];
-      console.log(root)
-      // root.castShadow = true;
 
-      bBoxStand = new THREE.Box3().setFromObject(root);
-      topStand = bBoxStand.max.y;
-
-      console.log(topStand, bBoxFootR.y)
+    var resultR = minFinder.parse(scene.getObjectByName("FootR"))
+    var resultL = minFinder.parse(scene.getObjectByName("FootL"))
+    var result = (resultL > resultR) ? resultR : resultL;
 
 
+    // bBoxStand = new THREE.Box3().setFromObject(root);
+    // topStand = bBoxStand.max.y;
+    scene.getObjectByName("Stand").position.y = result;
 
-      //Default color to all the meshes
-      if (root.material){
-        root.material.color = { r: 0.4, g: 0.4, b: 0.4 };
+    
+  } else{
+    loader.load(
+      "../models/stand/hexagone.glb",
+      gltf => {
+        var root = gltf.scene.children[0];
+        
+        var resultR = minFinder.parse(scene.getObjectByName("FootR"))
+        var resultL = minFinder.parse(scene.getObjectByName("FootL"))
+        var result = (resultL > resultR) ? resultR : resultL;
+        
+  
+        //Default color to all the meshes
+        if (root.material){
+          root.material.color = { r: 0.4, g: 0.4, b: 0.4 };
+        }
+        scene.add(root);
+        scene.getObjectByName("Stand").position.y = result;
+      },
+      null,
+      function ( error ) {
+        console.log(error);
       }
+    );
 
-      scene.add(root);
-      scene.getObjectByName("Stand").position.y = bBoxFootR.y-0.04;
-
-    },
-    null,
-    function ( error ) {
-      console.log(error);
-    }
-  );
-
+  }
 }
 
-window.changeMesh = function(bodyPart, part, isLeft) {
+window.loadDefaultMeshes = function(loadedMeshes) {
+  placeMesh(
+    loadedMeshes["Torso"].name,
+    meshStaticInfo["Torso"].bodyPart,
+    "Torso",
+    undefined,
+    undefined,
+    undefined,
+    true,
+    false,
+    undefined,
+    undefined
+  );
+}
+window.changeMesh = function(bodyPart, part, isLeft, bones, poseData) {
   var meshType;
   var file;
   var rotation;
@@ -472,7 +488,6 @@ window.changeMesh = function(bodyPart, part, isLeft) {
         }
       }
     }
-
     placeMesh(
       file,
       bodyPart,
@@ -481,7 +496,9 @@ window.changeMesh = function(bodyPart, part, isLeft) {
       childAttachment,
       rotation,
       false,
-      true
+      true,
+      bones,
+      poseData
     );
   }
 }
@@ -519,13 +536,23 @@ window.getRotation = function(bone_name){
 }
 
 window.loadPose = function(poseData, bones){
+  var L, R;
   for (let i=0; i<bones.length; i++){
     let bone = bones[i].bone;
     window.changeRotation(bone, poseData[bone].x, "x")
     window.changeRotation(bone, poseData[bone].y, "y")
     window.changeRotation(bone, poseData[bone].z, "z")
-  }
 
+    if (bone === "LegL_Foot_L"){
+      L = true;
+    }
+    if (bone === "LegR_Foot_R"){
+      R = true;
+    }
+  }
+  if (L && R){
+    placeStand();
+  }
 }
 window.export = function() {
   var exporter = new THREE.STLExporter();

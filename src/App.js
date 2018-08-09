@@ -3,6 +3,7 @@ import './css/master.css'
 
 // Loading the data this way for now
 import data from './library/category.json';
+import defaultMeshes from './library/defaultMeshes.json'
 
 // Loading the different components
 import Name from './components/Name';
@@ -18,16 +19,24 @@ class App extends Component {
       category: data,
       currentCategory: "head",
       characterName: "give it a name",
+      currentPose: undefined,
       UIDisplayed: true
     }
     this.updateCategory = this.updateCategory
     this.updateCharacterName = this.updateCharacterName
+    this.updatePose = this.updatePose
   }
 
   // Update the state of parent App from child Component
-  updateCategory = (currentCategory) => {this.setState({currentCategory})
-  }
+  updateCategory = (currentCategory) => {this.setState({currentCategory})}
   updateCharacterName = (characterName) => {this.setState({characterName})}
+  updatePose = (currentPose) => {this.setState({currentPose})}
+
+
+  componentDidMount(){
+    // Load the base model
+    window.loadDefaultMeshes(defaultMeshes)
+  }
 
   render() {
     return (
@@ -44,6 +53,8 @@ class App extends Component {
             category = {this.state.category}
             currentCategory = {this.state.currentCategory}
             updateCategory = {this.updateCategory}
+            currentPose = {this.state.currentPose}
+            updatePose = {this.updatePose}
             UIDisplayed = {this.state.UIDisplayed}
           />
         </div>

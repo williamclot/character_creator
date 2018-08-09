@@ -18,6 +18,7 @@ class Selector extends Component {
     super(props);
     this.state = {
       editor: false,
+      pose: undefined
     }
   }
 
@@ -27,7 +28,9 @@ class Selector extends Component {
     axios.get('/models/poses/'+file+'.json')
       .then(res => {
         poseData = res.data
-        window.loadPose(poseData, bones)
+        this.setState({pose: poseData})
+        this.props.updatePose(poseData)
+        window.loadPose(poseData, bones, window.placeStand())
       });
   }
 
@@ -84,7 +87,7 @@ class Selector extends Component {
             if (category==="pose"){
               this.applyPose(library[i].file);
             } else {
-              window.changeMesh(category, library[i], isLeft);
+              window.changeMesh(category, library[i], isLeft, bones, this.state.pose);
             }
           }}
         >

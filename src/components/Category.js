@@ -11,10 +11,11 @@ class Category extends Component {
   }
 
   // Update the state of parent App from child Component
-  updateLeft = (isLeft) => {this.setState({isLeft})};
+  updateLeft = isLeft => {
+    this.setState({ isLeft });
+  };
 
   render() {
-    
     // Passing throught the state from the properties
     const category = this.props.category;
     const current = this.props.currentCategory;
@@ -38,7 +39,7 @@ class Category extends Component {
             key={i}
             onClick={() => {
               this.props.updateCategory(name);
-                        
+
               var MeshType = undefined;
 
               switch (name) {
@@ -46,24 +47,24 @@ class Category extends Component {
                   MeshType = "Head";
                   break;
                 case "hand":
-                  MeshType = (this.state.isLeft) ? "HandL" : "HandR";
+                  MeshType = this.state.isLeft ? "HandL" : "HandR";
                   break;
                 case "arm":
-                  MeshType = (this.state.isLeft) ? "ArmL" : "ArmR";
+                  MeshType = this.state.isLeft ? "ArmL" : "ArmR";
                   break;
                 case "torso":
                   MeshType = "Torso";
                   break;
                 case "foot":
-                  MeshType = (this.state.isLeft) ? "FootL" : "FootR";
+                  MeshType = this.state.isLeft ? "FootL" : "FootR";
                   break;
                 case "leg":
-                  MeshType = (this.state.isLeft) ? "LegL" : "LegR";
+                  MeshType = this.state.isLeft ? "LegL" : "LegR";
                   break;
                 default:
                   MeshType = undefined;
               }
-              if(MeshType){
+              if (MeshType) {
                 window.selectedMesh(MeshType);
               }
             }}
@@ -78,7 +79,12 @@ class Category extends Component {
       return (
         <div>
           <div className="abs top left left-side">{categoryDiv}</div>
-          <Selector currentCategory={this.props.currentCategory} isLeft={this.state.isLeft} updateLeft={this.updateLeft}/>
+          <Selector
+            currentCategory={this.props.currentCategory}
+            isLeft={this.state.isLeft}
+            updateLeft={this.updateLeft}
+            updatePose={this.props.updatePose}
+          />
         </div>
       );
     } else {
