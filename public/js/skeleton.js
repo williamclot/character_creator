@@ -490,7 +490,7 @@ window.changeMesh = function(bodyPart, part, isLeft, bones, poseData) {
 window.selectedMesh = function (MeshType) {
   // console.log(MeshType);
   let normal = { r: 0.5, g: 0.5, b: 0.5 };
-  
+
   changeColor(selected, normal);
   changeColor(MeshType, color); 
   
@@ -498,7 +498,7 @@ window.selectedMesh = function (MeshType) {
   selected = MeshType;
 }
 function changeColor(item, color){
-  var mesh = (item === 'pose') ? scene : scene.getObjectByName(item);
+  var mesh = (item === 'pose') ? group : scene.getObjectByName(item);
   mesh.traverse(function(child){
     if (child instanceof THREE.Mesh){
       if(child.material){

@@ -120,3 +120,13 @@ for ( var i = 0, j = 0, k=0; i < positions.length; i += 3, j += 2, k+=4 ) {
 - Worked again on the stand implementation. 
 - It's more difficult than planned, the bounding box stays where the mesh was loaded but not were the mesh has been mooved with the bones... Same problem as the STL export function. 
 - Two possibilities, either I add bones to find the place in space where the foot ends or I remodify a core threejs file and see how it goes. Will look at this tomorrow.
+
+**09/08/18**:
+
+- Did loads of things today. Happy with the progression made, I worked on correcting the stand position alignment. I opted for computing the GPU calculations of the position of the mesh geometry and looked for the minimal value along the y axis. This code is added in the FindMinGeometry.js file.
+- Finished working on the pose implementation and with the stand (foot position will change so the stand as to move as well)
+- Corrected the colouring scheme for pose selection.
+- Things left to do:
+    - Clear up the code (maybe slice the categories into react components)
+    - Add the UI for stand selection + threejs implementation
+    - Add a mention of the author in the UI
