@@ -267,14 +267,6 @@ function replaceMesh(MeshType, firstLoad, bones, poseData) {
     poseData
   );
 }
-function changeColor(item, color){
-  var mesh = scene.getObjectByName(item);
-  if (mesh.children[0].material){
-    mesh.children[0].material.color.r = color.r;
-    mesh.children[0].material.color.g = color.g;
-    mesh.children[0].material.color.b = color.b;
-  }
-}
 function placeMesh(
   meshName,
   bodyPartClass,
@@ -333,11 +325,9 @@ function placeMesh(
       if(typeof parentAttachment !== "undefined" && typeof childAttachment !== "undefined"){
         let targetBone = scene.getObjectByName(parentAttachment);
         let object = scene.getObjectByName(childAttachment);
-
         clearPosition(object);
         rotateElement(object, true);
         rotateElement(object, false, rotation);
-
         targetBone.add(object);
       }
 
@@ -351,14 +341,12 @@ function placeMesh(
 
       if (MeshType === "FootR"){
         if (scene.getObjectByName("FootL_Toes_L")){
-          //Call function for the stand
           scene.updateMatrixWorld()
           placeStand()
         }
       }
       else if (MeshType === "FootL"){
         if (scene.getObjectByName("FootR_Toes_R")){
-          //Call function for the stand
           scene.updateMatrixWorld()
           placeStand()
         }
@@ -503,10 +491,23 @@ window.selectedMesh = function (MeshType) {
   // console.log(MeshType);
   let normal = { r: 0.5, g: 0.5, b: 0.5 };
   
-  changeColor(MeshType, color);      
-  changeColor(selected, normal)
+  changeColor(selected, normal);
+  changeColor(MeshType, color); 
+  
 
   selected = MeshType;
+}
+function changeColor(item, color){
+  var mesh = (item === 'pose') ? scene : scene.getObjectByName(item);
+  mesh.traverse(function(child){
+    if (child instanceof THREE.Mesh){
+      if(child.material){
+        child.material.color.r = color.r;
+        child.material.color.g = color.g;
+        child.material.color.b = color.b;
+      }
+    }
+  });
 }
 window.changeRotation = function(bone_name, value, axis){
   var bone = scene.getObjectByName(bone_name);

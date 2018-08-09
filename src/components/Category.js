@@ -61,6 +61,9 @@ class Category extends Component {
                 case "leg":
                   MeshType = this.state.isLeft ? "LegL" : "LegR";
                   break;
+                case "pose":
+                  MeshType = "pose";
+                  break;
                 default:
                   MeshType = undefined;
               }
