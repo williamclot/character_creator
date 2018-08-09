@@ -418,7 +418,7 @@ function placeStand(){
   }
 }
 
-window.loadDefaultMeshes = function(loadedMeshes) {
+window.loadDefaultMeshes = function(loadedMeshes, bones, poseData) {
   placeMesh(
     loadedMeshes["Torso"].name,
     meshStaticInfo["Torso"].bodyPart,
@@ -428,8 +428,8 @@ window.loadDefaultMeshes = function(loadedMeshes) {
     undefined,
     true,
     false,
-    undefined,
-    undefined
+    bones,
+    poseData
   );
 }
 window.changeMesh = function(bodyPart, part, isLeft, bones, poseData) {

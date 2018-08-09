@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import axios from "axios";
+
 import './css/master.css'
 
 // Loading the data this way for now
 import data from './library/category.json';
-import defaultMeshes from './library/defaultMeshes.json'
+import defaultMeshes from './library/defaultMeshes.json';
+import bones from './library/bones.json'
 
 // Loading the different components
 import Name from './components/Name';
@@ -34,8 +37,11 @@ class App extends Component {
 
 
   componentDidMount(){
-    // Load the base model
-    window.loadDefaultMeshes(defaultMeshes)
+    // Load the base model with defaultMeshes and defaultPose
+    axios.get('/models/poses/default.json')
+      .then(res => {
+        window.loadDefaultMeshes(defaultMeshes, bones, res.data)
+      });
   }
 
   render() {

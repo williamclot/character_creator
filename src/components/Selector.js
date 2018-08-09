@@ -30,7 +30,7 @@ class Selector extends Component {
         poseData = res.data
         this.setState({pose: poseData})
         this.props.updatePose(poseData)
-        window.loadPose(poseData, bones, window.placeStand())
+        window.loadPose(poseData, bones)
       });
   }
 
