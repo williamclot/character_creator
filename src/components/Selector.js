@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Controller from "./Controller";
+import Editor from "./Editor";
 import axios from "axios";
 
 import "../css/selector.css";
@@ -215,7 +215,7 @@ class Selector extends Component {
             ((sideIdencator || category === 'pose') ? " selector-full" : "")
           }
         >
-          {(category === "pose" && this.state.editor) ? <Controller /> : elementDiv}
+          {(category === "pose" && this.state.editor) ? <Editor /> : elementDiv}
         </div>
       </div>
     );

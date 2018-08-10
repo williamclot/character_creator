@@ -6,7 +6,7 @@ import "../css/controller.css"
 import bones from "../library/bones.json"
 import model from "../library/poses/model.json"
 
-class Controller extends Component {
+class Editor extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -28,7 +28,6 @@ class Controller extends Component {
       Torso_UpperLeg_R : {x:0, y:0, z:0},
       LegR_LowerLeg_R : {x:0, y:0, z:0},
       LegR_Foot_R : {x:0, y:0, z:0},
-      FootR_Toes_R : {x:0, y:0, z:0}
     }
     this.exportPose = this.exportPose;
   }
@@ -109,4 +108,4 @@ class Controller extends Component {
   }
 }
 
-export default Controller;
+export default Editor;
