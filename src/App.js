@@ -43,7 +43,9 @@ class App extends Component {
           updateCharacterName = {this.updateCharacterName}
         />
         <Logo />
-        <Buttons />
+        <Buttons
+          characterName = {this.state.characterName} 
+        />
 
         <div className="abs top right panel">
           <Category

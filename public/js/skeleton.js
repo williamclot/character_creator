@@ -558,9 +558,9 @@ window.loadPose = function(poseData, bones){
   }
   
 }
-window.export = function() {
+window.export = function(name) {
   var exporter = new THREE.STLExporter();
-  saveString( exporter.parse( scene ), 'model.stl' );
+  saveString( exporter.parse( scene ), name+'_export.stl' );
 }
 
 function onWindowResize() {

@@ -19,6 +19,20 @@
       "file": "king_kong",
       "author": "William CLOT",
       "description": "Default man head."
+    },
+    {
+      "name": "Running",
+      "img": "pose.svg",
+      "file": "running",
+      "author": "William CLOT",
+      "description": "Default man head."
+    },
+    {
+      "name": "Gedan Baraï",
+      "img": "pose.svg",
+      "file": "gedan_barai",
+      "author": "William CLOT",
+      "description": "Default man head."
     }
   ]
   

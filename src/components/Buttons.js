@@ -8,7 +8,7 @@ class Buttons extends Component {
     return (
       <div>
         <div className="abs buttons" id="download" onClick={() => {
-          window.export();
+          window.export(this.props.characterName);
         }}>
           Download
         </div>
