@@ -130,3 +130,16 @@ for ( var i = 0, j = 0, k=0; i < positions.length; i += 3, j += 2, k+=4 ) {
     - Clear up the code (maybe slice the categories into react components)
     - Add the UI for stand selection + threejs implementation
     - Add a mention of the author in the UI
+
+**10/08/18**:
+
+- Corrected the STL Exporter Size
+- Corrected a few problems with the pose implementation
+- Added the export STL name to the "give it a name" value
+- TODO next week: 
+    - I still have to clean up the code
+    - Add option to change stand and size
+    - Copyright + link to MMF
+    - Add library items with Antoine & Loïc
+
+
