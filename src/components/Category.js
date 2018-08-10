@@ -16,23 +16,6 @@ class Category extends Component {
     this.setState({ isLeft });
   };
 
-  // Render Switch
-  renderSwitch(category) {
-    switch (category) {
-      case "head":
-        return (
-        <Head updatePose={this.props.updatePose} />);
-      default:
-        return(
-        <Selector
-          currentCategory={this.props.currentCategory}
-          isLeft={this.state.isLeft}
-          updateLeft={this.updateLeft}
-          updatePose={this.props.updatePose}
-        />);
-    }
-  }
-
   render() {
     // Passing throught the state from the properties
     const category = this.props.category;
@@ -98,7 +81,12 @@ class Category extends Component {
       return (
         <div>
           <div className="abs top left left-side">{categoryDiv}</div>
-          {this.renderSwitch(this.props.currentCategory)}
+          <Selector 
+            currentCategory={this.props.currentCategory}
+            isLeft={this.state.isLeft}
+            updateLeft={this.updateLeft}
+            updatePose={this.props.updatePose}
+          />
         </div>
       );
     } else {
