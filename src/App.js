@@ -32,9 +32,7 @@ class App extends Component {
   updateCharacterName = (characterName) => {this.setState({characterName})}
   updatePose = (currentPose) => {this.setState({currentPose})}
 
-
-
-
+ 
   render() {
     return (
       <div>

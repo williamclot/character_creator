@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "../css/category.css";
 import Selector from "./Selector";
+import Head from "./Selector/Head";
 
 class Category extends Component {
   constructor(props) {
@@ -14,6 +15,23 @@ class Category extends Component {
   updateLeft = isLeft => {
     this.setState({ isLeft });
   };
+
+  // Render Switch
+  renderSwitch(category) {
+    switch (category) {
+      case "head":
+        return (
+        <Head updatePose={this.props.updatePose} />);
+      default:
+        return(
+        <Selector
+          currentCategory={this.props.currentCategory}
+          isLeft={this.state.isLeft}
+          updateLeft={this.updateLeft}
+          updatePose={this.props.updatePose}
+        />);
+    }
+  }
 
   render() {
     // Passing throught the state from the properties
@@ -39,9 +57,7 @@ class Category extends Component {
             key={i}
             onClick={() => {
               this.props.updateCategory(name);
-
               var MeshType = undefined;
-
               switch (name) {
                 case "head":
                   MeshType = "Head";
@@ -82,12 +98,7 @@ class Category extends Component {
       return (
         <div>
           <div className="abs top left left-side">{categoryDiv}</div>
-          <Selector
-            currentCategory={this.props.currentCategory}
-            isLeft={this.state.isLeft}
-            updateLeft={this.updateLeft}
-            updatePose={this.props.updatePose}
-          />
+          {this.renderSwitch(this.props.currentCategory)}
         </div>
       );
     } else {
