@@ -128,5 +128,18 @@
 			"z":0
 		},
 		"scale": 1
+  },
+  {
+    "name": "Muscled Man Head",
+    "img": "muscled_man.png",
+    "file": "muscled_man",
+    "author": "Loic Rouviere",
+    "description": "Default man head.",
+    "rotation": {
+      "x": 0,
+      "y": 3.14,
+      "z": 0
+    },
+    "scale": 1
   }
 ]
