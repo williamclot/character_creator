@@ -200,8 +200,8 @@ function init() {
     light.penumbra = 1;
 
     //Set up shadow properties for the light
-    light.shadow.mapSize.width = 4096; // default
-    light.shadow.mapSize.height = 4096; // default
+    light.shadow.mapSize.width = 2048; // default
+    light.shadow.mapSize.height = 2048; // default
     light.shadow.camera.near = 1; // default
     light.shadow.camera.far = 30; // default
     // light.shadowDarkness = 0.5;
