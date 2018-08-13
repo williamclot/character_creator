@@ -13,7 +13,6 @@ var controls, loader;
 var selected = "Head";
 var color = {r:0.555,g:0.48,b:0.49};
 var group = new THREE.Group();
-var exported_group = new THREE.Group();
 var bBoxStand;
 
 //This keeps track of every mesh on the viewport
@@ -137,6 +136,11 @@ function init() {
 
   scene = new THREE.Scene();
   loader = new THREE.GLTFLoader();
+  // fogColor = new THREE.Color(0xffffff);
+ 
+  scene.background = new THREE.Color( 0xeeeeee );
+  scene.fog = new THREE.Fog( 0xeeeeee, 1, 20 );
+
   
   scene.add(group);
 
@@ -163,24 +167,17 @@ function init() {
     // Create a renderer with Antialiasing
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+
     renderer.setSize((6 / 5) * window.innerWidth, window.innerHeight); // Configure renderer size
     // Append Renderer to DOM
     document.body.appendChild(renderer.domElement);
 
-    var path = "/img/library/textures/fantasy-";
-    var format = ".jpg";
-    var urls = [
-      path + "px" + format,
-      path + "nx" + format,
-      path + "py" + format,
-      path + "ny" + format,
-      path + "pz" + format,
-      path + "nz" + format
-    ];
+    var size = 50;
+    var divisions = 50;
 
-    var reflectionCube = new THREE.CubeTextureLoader().load(urls);
-    reflectionCube.format = THREE.RGBFormat;
-    scene.background = reflectionCube;
+    var gridHelper = new THREE.GridHelper( size, divisions);
+    scene.add( gridHelper );
   }
   function buildControls() {
     controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -199,21 +196,27 @@ function init() {
     //Create a PointLight and turn on shadows for the light
     var light = new THREE.PointLight(0xffffff, 1, 100);
     light.position.set(0, 10, 10);
-    scene.add(light);
+    light.castShadow = true; 
 
     //Set up shadow properties for the light
-    // light.shadow.mapSize.width = 2048; // default
-    // light.shadow.mapSize.height = 2048; // default
-    // light.shadow.camera.near = 0.5; // default
-    // light.shadow.camera.far = 500; // default
+    light.shadow.mapSize.width = 4096; // default
+    light.shadow.mapSize.height = 4096; // default
+    light.shadow.camera.near = 1; // default
+    light.shadow.camera.far = 30; // default
+    // light.shadowDarkness = 0.5;
+    light.decay = 1;
+
+    scene.add(light);
+
   }
   function buildFloor() {
     //Create a plane that receives shadows (but does not cast them)
-    var color = new THREE.Color("rgb(213, 212, 218)");
-    var planeGeometry = new THREE.PlaneBufferGeometry(10, 10, 1, 1);
-    var planeMaterial = new THREE.MeshBasicMaterial({
-      color: color
-    });
+    var planeGeometry = new THREE.PlaneGeometry( 2000, 2000 );
+    // planeGeometry.rotateX( - Math.PI / 2 );
+
+    var planeMaterial = new THREE.ShadowMaterial();
+    planeMaterial.opacity = 0.2;
+
     var plane = new THREE.Mesh(planeGeometry, planeMaterial);
     plane.name = "plane";
     plane.rotation.x = -Math.PI / 2;
@@ -283,10 +286,14 @@ function placeMesh(
   // bodyPartClass : {arm, head, hand, torso, leg, foot}
   // MeshType : {ArmR, ArmL, Head, HandR, HandL, LegR, LegL, FootR, FootL, Torso}
   loader.load(
-    "/models/" + bodyPartClass + "/" + meshName + ".glb",
+    "models/" + bodyPartClass + "/" + meshName + ".glb",
     gltf => {
       var root = gltf.scene.children[0];
-      // root.castShadow = true;
+      root.traverse( function(child){
+        if (child instanceof THREE.Mesh){
+          child.castShadow = true;
+        }
+      })
       // console.log("This is a category :", MeshType)
       group.add(root);
 
@@ -379,9 +386,16 @@ function placeStand(){
     
   } else{
     loader.load(
-      "/models/stand/hexagone.glb",
+      "models/stand/hexagone.glb",
       gltf => {
         var root = gltf.scene.children[0];
+
+        root.traverse( function(child){
+          if (child instanceof THREE.Mesh){
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+        })
         
         var resultR = minFinder.parse(scene.getObjectByName("FootR"))
         var resultL = minFinder.parse(scene.getObjectByName("FootL"))
