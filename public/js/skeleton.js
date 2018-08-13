@@ -183,7 +183,7 @@ function init() {
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     // controls.target.set(-1,0,0);
     controls.minDistance = 2; //Controling max and min for ease of use
-    controls.maxDistance = 15;
+    controls.maxDistance = 7;
     controls.minPolarAngle = 0;
     controls.maxPolarAngle = Math.PI / 2 - 0.1;
     controls.enablePan = false;
@@ -194,9 +194,10 @@ function init() {
     scene.add(hemi);
 
     //Create a PointLight and turn on shadows for the light
-    var light = new THREE.PointLight(0xffffff, 1, 100);
-    light.position.set(0, 10, 10);
+    var light = new THREE.PointLight(0xffffef, 1, 100);
+    light.position.set(3, 10, 10);
     light.castShadow = true; 
+    light.penumbra = 1;
 
     //Set up shadow properties for the light
     light.shadow.mapSize.width = 4096; // default
@@ -381,7 +382,7 @@ function placeStand(){
 
     // bBoxStand = new THREE.Box3().setFromObject(root);
     // topStand = bBoxStand.max.y;
-    scene.getObjectByName("Stand").position.y = result;
+    scene.getObjectByName("Torso_Hip").position.y -= result;
 
     
   } else{
@@ -407,7 +408,7 @@ function placeStand(){
         }
 
         group.add(root);
-        scene.getObjectByName("Stand").position.y = result;
+        scene.getObjectByName("Torso_Hip").position.y -= result;
       },
       null,
       function ( error ) {
