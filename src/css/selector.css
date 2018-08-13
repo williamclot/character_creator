@@ -53,13 +53,14 @@
   padding: 4px 10px 10px 10px;
 
   display: grid;
-  column-gap: 10px;
-  row-gap: 10px;
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
   grid-template-columns: 1fr;
   grid-template-rows: repeat(auto-fill, minmax(103px, 103px));
   overflow-x: hidden;
   overflow-y: scroll;
 }
+
 
 .selector-full {
   top: 90px;

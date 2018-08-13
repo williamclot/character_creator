@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "../css/category.css";
 import Selector from "./Selector";
-import Head from "./Selector/Head";
+// import Head from "./Selector/Head";
 
 class Category extends Component {
   constructor(props) {

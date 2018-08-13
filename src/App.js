@@ -59,7 +59,9 @@ class App extends Component {
         </div>
         </BrowserView>
         <MobileView>
-          <div className="error">Sorry, this content is unavailable on mobile</div>
+          <div className="abs top left smartphone">
+            <div className="fullScreenMessage">Sorry, this content is currently unavailable on mobile...</div>
+          </div>
         </MobileView>
       </div>
     );
