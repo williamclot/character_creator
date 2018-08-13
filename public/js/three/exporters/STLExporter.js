@@ -74,7 +74,7 @@ THREE.STLExporter.prototype = {
 								var vertexIndex = indices[ j ];
 								if (geometry.skinIndices.length == 0) {
 									vector.copy( vertices[ vertexIndex ] ).applyMatrix4( matrixWorld );
-									output += '\t\t\tvertex ' + vector.x + ' ' + vector.y + ' ' + vector.z + '\n';
+									output += '\t\t\tvertex ' + vector.x*35 + ' ' + vector.y*35 + ' ' + vector.z*35 + '\n';
 								} else {
 									vector.copy( vertices[ vertexIndex ] ); //.applyMatrix4( matrixWorld );
 									

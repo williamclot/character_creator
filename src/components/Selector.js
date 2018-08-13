@@ -31,7 +31,6 @@ class Selector extends Component {
         this.setState({currentPose: res.data})
         this.props.updatePose(res.data)
         window.loadDefaultMeshes(defaultMeshes, bones, res.data)
-        // window.loadPose(res.data, bones)
       });
   }
 

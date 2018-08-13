@@ -65,7 +65,6 @@ class App extends Component {
         <MobileView>
           <div className="abs top left smartphone">
             <img src={logo} alt="company logo" />
-
             <div className="fullScreenMessage">
               <Typed
                 strings={[

@@ -13,6 +13,7 @@ var controls, loader;
 var selected = "Head";
 var color = {r:0.555,g:0.48,b:0.49};
 var group = new THREE.Group();
+var exported_group = new THREE.Group();
 var bBoxStand;
 
 //This keeps track of every mesh on the viewport
@@ -143,7 +144,7 @@ function init() {
   buildRenderer();
   buildControls();
   buildLights();
-  // buildFloor();
+  buildFloor();
 
   function buildCamera() {
     camera = new THREE.PerspectiveCamera(
@@ -391,7 +392,7 @@ function placeStand(){
           root.material.color = { r: 0.4, g: 0.4, b: 0.4 };
         }
 
-        scene.add(root);
+        group.add(root);
         scene.getObjectByName("Stand").position.y = result;
       },
       null,
@@ -560,7 +561,7 @@ window.loadPose = function(poseData, bones){
 }
 window.export = function(name) {
   var exporter = new THREE.STLExporter();
-  saveString( exporter.parse( scene ), name+'_export.stl' );
+  saveString( exporter.parse( group ), name+'_export.stl' );
 }
 
 function onWindowResize() {
