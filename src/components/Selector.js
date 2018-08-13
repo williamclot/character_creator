@@ -26,7 +26,7 @@ class Selector extends Component {
 
   componentDidMount(){
     // Load the base model with defaultMeshes and defaultPose
-    axios.get('models/poses/default.json')
+    axios.get('mmf-hero/models/poses/default.json')
       .then(res => {
         this.setState({currentPose: res.data})
         this.props.updatePose(res.data)
@@ -37,7 +37,7 @@ class Selector extends Component {
   applyPose(file){
     let poseData;
     //Ajax in react
-    axios.get('models/poses/'+file+'.json')
+    axios.get('mmf-hero/models/poses/'+file+'.json')
       .then(res => {
         poseData = res.data
         this.setState({pose: poseData})
