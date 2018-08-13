@@ -37,7 +37,7 @@ class Selector extends Component {
   applyPose(file){
     let poseData;
     //Ajax in react
-    axios.get('mmf-hero/models/poses/'+file+'.json')
+    axios.get('models/poses/'+file+'.json')
       .then(res => {
         poseData = res.data
         this.setState({pose: poseData})
