@@ -166,7 +166,7 @@ function init() {
     // Append Renderer to DOM
     document.body.appendChild(renderer.domElement);
 
-    var path = "../img/library/textures/fantasy-";
+    var path = "/img/library/textures/fantasy-";
     var format = ".jpg";
     var urls = [
       path + "px" + format,
@@ -282,7 +282,7 @@ function placeMesh(
   // bodyPartClass : {arm, head, hand, torso, leg, foot}
   // MeshType : {ArmR, ArmL, Head, HandR, HandL, LegR, LegL, FootR, FootL, Torso}
   loader.load(
-    "../models/" + bodyPartClass + "/" + meshName + ".glb",
+    "/models/" + bodyPartClass + "/" + meshName + ".glb",
     gltf => {
       var root = gltf.scene.children[0];
       // root.castShadow = true;
@@ -378,7 +378,7 @@ function placeStand(){
     
   } else{
     loader.load(
-      "../models/stand/hexagone.glb",
+      "/models/stand/hexagone.glb",
       gltf => {
         var root = gltf.scene.children[0];
         

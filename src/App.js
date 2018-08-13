@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {BrowserView, MobileView} from "react-device-detect";
 
 import './css/master.css'
 
@@ -36,6 +37,7 @@ class App extends Component {
   render() {
     return (
       <div>
+        <BrowserView>
         <Name
           characterName = {this.state.characterName}
           updateCharacterName = {this.updateCharacterName}
@@ -55,6 +57,10 @@ class App extends Component {
             UIDisplayed = {this.state.UIDisplayed}
           />
         </div>
+        </BrowserView>
+        <MobileView>
+          <div className="error">Sorry, this content is unavailable on mobile</div>
+        </MobileView>
       </div>
     );
   }
