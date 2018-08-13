@@ -147,6 +147,12 @@ for ( var i = 0, j = 0, k=0; i < positions.length; i += 3, j += 2, k+=4 ) {
 
 - Fix Firefox weird display of the category images
 - Fix CSS grid on safari
+- Changed the theme of the customizer to look not look like hero forge
+- Fixed the height of the stand by moving the body and not the stand itself
+- Still todo:
+    - Google Analytics
+    - Add a pay 4.99 button
+    - ...
 
 
 
