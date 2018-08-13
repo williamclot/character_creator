@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Editor from "./Editor";
 import axios from "axios";
 
-import 'react-perfect-scrollbar/dist/css/styles.css';
 import "../css/selector.css";
 
 import defaultMeshes from '../library/defaultMeshes.json';
