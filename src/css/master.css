@@ -40,11 +40,19 @@
 }
 .fullScreenMessage {
   position: absolute;
-  top: 50%;
+  top: 60%;
   left: 50%;
   text-align: center;
   width: 100%;
   transform: translate(-50%, -50%);
   font-size: 20px;
   padding: 20px;
+}
+
+.smartphone img{
+  width: 100px;
+  position: absolute;
+    top : 36%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

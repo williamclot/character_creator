@@ -10,7 +10,7 @@ canvas {
   left: -20%;
 }
 
-::-webkit-scrollbar-track {
+/* ::-webkit-scrollbar-track {
   background: none;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -23,4 +23,4 @@ canvas {
 ::-webkit-scrollbar-thumb {
   -webkit-border-radius: 10px;
   background: #2e2e2e;
-}
+} */

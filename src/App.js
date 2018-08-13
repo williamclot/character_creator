@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import {BrowserView, MobileView} from "react-device-detect";
+import Typed from 'react-typed';
 
+// Loading assets
 import './css/master.css'
+import logo from "./graphic_assets/mmf_logo.png";
+
 
 // Loading the data this way for now
 import data from './library/category.json';
@@ -60,7 +64,18 @@ class App extends Component {
         </BrowserView>
         <MobileView>
           <div className="abs top left smartphone">
-            <div className="fullScreenMessage">Sorry, this content is currently unavailable on mobile...</div>
+            <img src={logo} alt="company logo" />
+
+            <div className="fullScreenMessage">
+              <Typed
+                strings={[
+                  'Sorry, this content is currently unavailable on mobile... ^2000', 
+                  'Come back soon for updates!'
+                  ]}
+                typeSpeed={40}
+                showCursor={false}
+              />
+            </div>
           </div>
         </MobileView>
       </div>

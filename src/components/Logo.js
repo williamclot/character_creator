@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../css/logo.css";
-import logo from "../graphic_assets/myminifactory_logo.png";
+import logo from "../graphic_assets/mmf_logo.png";
 
 class Logo extends Component {
   render() {

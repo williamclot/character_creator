@@ -143,3 +143,10 @@ for ( var i = 0, j = 0, k=0; i < positions.length; i += 3, j += 2, k+=4 ) {
     - Add library items with Antoine & Loïc
 
 
+**13/08/18**:
+
+- Fix Firefox weird display of the category images
+- Fix CSS grid on safari
+
+
+
