@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import "../css/category.css";
+
+// Loading Assets (SubComponents & CSS)
 import Selector from "./Selector";
-// import Head from "./Selector/Head";
+import "../css/category.css";
 
 class Category extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -69,6 +71,7 @@ class Category extends Component {
               if (MeshType) {
                 window.selectedMesh(MeshType);
               }
+
             }}
           >
             <img src={"img/graphics_creation/" + file} alt={name} />

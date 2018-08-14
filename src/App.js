@@ -41,7 +41,7 @@ class App extends Component {
   updatePose = (currentPose) => {this.setState({currentPose})}
 
   componentDidMount(){
-    // Google Analytics startup
+    // Google Analytics for the page
     ReactGA.initialize('UA-41837285-1');
     ReactGA.pageview('/mmf-hero');
   }

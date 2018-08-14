@@ -12,11 +12,9 @@ class Name extends Component {
     const characterName = this.props.characterName;
 
     return (
-        <ContentEditable
-          className="name abs top left"
-          html={characterName}
-          onChange={this.handleChange}
-        />
+        <div className="name abs top left">
+          Character Creator
+        </div>
     );
   }
 }
