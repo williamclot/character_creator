@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import {BrowserView, MobileView} from "react-device-detect";
 import Typed from 'react-typed';
 
+// Google Analytics
+import ReactGA from 'react-ga';
+ReactGA.initialize('UA-41837285-1');
+ReactGA.pageview('/mmf-hero');
+
+
 // Loading assets
 import './css/master.css'
 import logo from "./graphic_assets/mmf_logo.png";
