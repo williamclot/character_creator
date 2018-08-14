@@ -20,7 +20,8 @@ class Selector extends Component {
     super(props);
     this.state = {
       editor: false,
-      pose: undefined
+      pose: undefined, 
+      isChanging: false
     }
   }
 
@@ -99,7 +100,14 @@ class Selector extends Component {
             if (category==="pose"){
               this.applyPose(library[i].file);
             } else {
-              window.changeMesh(category, library[i], isLeft, bones, this.state.pose);
+              if (this.state.isChanging === false){
+                this.setState({isChanging: true})
+                let res = window.changeMesh(category, library[i], isLeft, bones, this.state.pose);
+                if (res === true){
+                  this.setState({isChanging: false})
+                }
+              }
+              
             }
           }}
         >

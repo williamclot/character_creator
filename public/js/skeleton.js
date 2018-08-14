@@ -240,7 +240,6 @@ function createReferenceSphere(pos) {
   sphere.position.z = pos.z;
   scene.add(sphere);
 }
-
 function clearPosition(item) {
   item.position.x = 0;
   item.position.y = 0;
@@ -502,6 +501,7 @@ window.changeMesh = function(bodyPart, part, isLeft, bones, poseData) {
       poseData
     );
   }
+  return true;
 }
 window.selectedMesh = function (MeshType) {
   // console.log(MeshType);
