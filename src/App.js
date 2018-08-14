@@ -4,9 +4,6 @@ import Typed from 'react-typed';
 
 // Google Analytics
 import ReactGA from 'react-ga';
-ReactGA.initialize('UA-41837285-1');
-ReactGA.pageview('/mmf-hero');
-
 
 // Loading assets
 import './css/master.css'
@@ -43,6 +40,11 @@ class App extends Component {
   updateCharacterName = (characterName) => {this.setState({characterName})}
   updatePose = (currentPose) => {this.setState({currentPose})}
 
+  componentDidMount(){
+    // Google Analytics startup
+    ReactGA.initialize('UA-41837285-1');
+    ReactGA.pageview('/mmf-hero');
+  }
  
   render() {
     return (
