@@ -1,74 +1,94 @@
-import React, { Component } from 'react';
-import {BrowserView, MobileView} from "react-device-detect";
-import Typed from 'react-typed';
+import React, { Component } from "react";
+import { BrowserView, MobileView } from "react-device-detect";
+import Typed from "react-typed";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
 // Google Analytics
-import ReactGA from 'react-ga';
+import ReactGA from "react-ga";
 
 // Loading assets
-import './css/master.css'
+import "./css/master.css";
 import logo from "./graphic_assets/mmf_logo.png";
 
-
 // Loading the data this way for now
-import data from './library/category.json';
+import data from "./library/category.json";
 
 // Loading the different components
-import Name from './components/Name';
-import Logo from './components/Logo';
-import Category from './components/Category';
-import Buttons from './components/Buttons';
+import Name from "./components/Name";
+import Logo from "./components/Logo";
+import Category from "./components/Category";
+import Buttons from "./components/Buttons";
+import Popup from "./components/Popup";
+
+library.add(faTimesCircle);
 
 class App extends Component {
-
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       category: data,
       currentCategory: "head",
-      characterName: "give it a name",
+      characterName: "myCharacter",
       currentPose: undefined,
-      UIDisplayed: true
-    }
-    this.updateCategory = this.updateCategory
-    this.updateCharacterName = this.updateCharacterName
-    this.updatePose = this.updatePose
+      UIDisplayed: true,
+      popup: false
+    };
+    this.updateCategory = this.updateCategory;
+    this.updateCharacterName = this.updateCharacterName;
+    this.updatePose = this.updatePose;
+    this.updatePopup = this.updatePopup;
   }
 
   // Update the state of parent App from child Component
-  updateCategory = (currentCategory) => {this.setState({currentCategory})}
-  updateCharacterName = (characterName) => {this.setState({characterName})}
-  updatePose = (currentPose) => {this.setState({currentPose})}
+  updateCategory = currentCategory => {
+    this.setState({ currentCategory });
+  };
+  updateCharacterName = characterName => {
+    this.setState({ characterName });
+  };
+  updatePose = currentPose => {
+    this.setState({ currentPose });
+  };
+  updatePopup = popup => {
+    this.setState({ popup });
+  };
 
-  componentDidMount(){
+  componentDidMount() {
     // Google Analytics for the page
-    ReactGA.initialize('UA-41837285-1');
-    ReactGA.pageview('/mmf-hero');
+    ReactGA.initialize("UA-41837285-1");
+    ReactGA.pageview("/mmf-hero");
   }
- 
+
   render() {
     return (
       <div>
         <BrowserView>
-        <Name
-          characterName = {this.state.characterName}
-          updateCharacterName = {this.updateCharacterName}
-        />
-        <Logo />
-        <Buttons
-          characterName = {this.state.characterName} 
-        />
-
-        <div className="abs top right panel">
-          <Category
-            category = {this.state.category}
-            currentCategory = {this.state.currentCategory}
-            updateCategory = {this.updateCategory}
-            currentPose = {this.state.currentPose}
-            updatePose = {this.updatePose}
-            UIDisplayed = {this.state.UIDisplayed}
+          <Name
+            characterName={this.state.characterName}
+            updateCharacterName={this.updateCharacterName}
           />
-        </div>
+          <Logo />
+          <Buttons 
+            characterName={this.state.characterName}
+            updatePopup={this.updatePopup}
+          />
+          <Popup
+            popupDisplayed={this.state.popup}
+            updatePopup={this.updatePopup}
+          />
+
+          <div className="abs top right panel">
+            <Category
+              category={this.state.category}
+              currentCategory={this.state.currentCategory}
+              updateCategory={this.updateCategory}
+              currentPose={this.state.currentPose}
+              updatePose={this.updatePose}
+              UIDisplayed={this.state.UIDisplayed}
+            />
+          </div>
         </BrowserView>
         <MobileView>
           <div className="abs top left smartphone">
@@ -76,9 +96,9 @@ class App extends Component {
             <div className="fullScreenMessage">
               <Typed
                 strings={[
-                  'Sorry, this content is currently unavailable on mobile... ^2000', 
-                  'Come back soon for updates!'
-                  ]}
+                  "Sorry, this content is currently unavailable on mobile... ^2000",
+                  "Come back soon for updates!"
+                ]}
                 typeSpeed={40}
                 showCursor={false}
               />

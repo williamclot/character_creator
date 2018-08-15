@@ -1,0 +1,40 @@
+.screen{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+.popup{
+    height: 250px;
+    width: 500px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    box-shadow: 0px 0px 50px #07070760;
+}
+.message{
+    bottom: 70px;
+    font-size: 15px;
+    font-weight: 700;
+    width: 100%;
+    text-align: center;
+}
+
+.popup img{
+    width: 60px;
+    top: 60px;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.cross{
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.cross:hover{
+    color: rgb(48, 184, 161);
+}

@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.0-14",
+    "@fortawesome/free-solid-svg-icons": "^5.1.0-11",
+    "@fortawesome/react-fontawesome": "0.1.0-11",
     "all": "0.0.0",
+    "i": "^0.3.6",
+    "npm": "^6.3.0",
     "react": "^15.6.1",
-    "react-contenteditable": "^2.1.0",
     "react-device-detect": "^1.5.9",
     "react-dom": "^15.6.1",
     "react-ga": "^2.5.3",
@@ -13,7 +17,8 @@
     "react-numeric-input": "^2.2.3",
     "react-perfect-scrollbar": "^1.2.0",
     "react-scripts": "1.1.4",
-    "react-typed": "^1.0.9"
+    "react-typed": "^1.0.9",
+    "typist": "^0.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,20 +1,15 @@
 import React, { Component } from "react";
-import ContentEditable from "react-contenteditable";
+
+// Loading Assets (SubComponents & CSS)
 import "../css/name.css";
 
 class Name extends Component {
-  handleChange = evt => {
-    this.props.updateCharacterName(evt.target.value);
-  };
-
   render() {
-    // Passing throught the name state from the properties
-    const characterName = this.props.characterName;
-
     return (
-        <div className="name abs top left">
-          Character Creator
-        </div>
+      <div className="name abs top left">
+        Character Creator
+        <span className="beta">(Beta)</span>
+      </div>
     );
   }
 }

@@ -5,7 +5,6 @@ import ReactGA from "react-ga";
 import "../css/buttons.css";
 
 class Buttons extends Component {
-  
   componentDidMount() {
     // Google Analytics for the page
     ReactGA.initialize("UA-41837285-1");
@@ -25,19 +24,33 @@ class Buttons extends Component {
             });
           }}
         >
-          Download
+          Download STL file
         </div>
         <div
           className="abs buttons"
-          id="publish"
+          id="buy"
           onClick={() => {
             ReactGA.event({
               category: "MMF-Hero",
               action: "Print for £4.99"
             });
+            this.props.updatePopup(true)
           }}
         >
-          Print for £4.99
+          Get it printed for 5.99$
+        </div>
+        <div
+          className="abs buttons"
+          id="share"
+          onClick={() => {
+            ReactGA.event({
+              category: "MMF-Hero",
+              action: "Share on MyMiniFactory.com"
+            });
+            this.props.updatePopup(true)
+          }}
+        >
+          Share on MyMiniFactory.com
         </div>
       </div>
     );

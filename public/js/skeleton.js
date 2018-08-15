@@ -414,7 +414,6 @@ function placeStand(){
         console.log(error);
       }
     );
-
   }
 }
 
@@ -487,19 +486,19 @@ window.changeMesh = function(bodyPart, part, isLeft, bones, poseData) {
           }
         }
       }
+      placeMesh(
+        file,
+        bodyPart,
+        meshType,
+        parentAttachment,
+        childAttachment,
+        rotation,
+        false,
+        true,
+        bones,
+        poseData
+      );
     }
-    placeMesh(
-      file,
-      bodyPart,
-      meshType,
-      parentAttachment,
-      childAttachment,
-      rotation,
-      false,
-      true,
-      bones,
-      poseData
-    );
   }
   return true;
 }

@@ -2,26 +2,29 @@
   background-color: rgba(0, 0, 0, 0.8);
   box-shadow: 0px 0px 10px #000000;
   transition: background-color 0.2;
-  top: 110px;
-  width: 120px;
-  height: 35px;
+  height: 25px;
+  padding: 0px 8px 0px 8px;
   text-align: center;
   border-radius: 0.5em;
   font-weight: bold;
   color: white;
-  /* text-transform: uppercase; */
   cursor: pointer;
   user-select: none;
   vertical-align: middle;
-  line-height: 35px;
-  font-size: 16px;
+  line-height: 25px;
+  font-size: 11px;
+  left: 30px;
+  bottom: 30px;
 }
 .buttons:hover {
   background-color: rgba(0, 55, 39, 0.51);
 }
-#download {
-  left: 30px;
+
+#buy{
+  bottom: 70px;
 }
-#publish {
-  left: 180px;
+
+#download{
+  bottom: 110px;
 }
+

@@ -4,5 +4,8 @@
   font-size: 40px;
   font-weight: 600; }
 
-[contenteditable]:focus {
-  outline: 0px solid transparent; }
+.beta{
+  margin-left: 5px;
+  text-transform: lowercase;
+  font-size: 12px;
+}
