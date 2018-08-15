@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { BrowserView, MobileView } from "react-device-detect";
 import Typed from "react-typed";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
 // Google Analytics
@@ -17,7 +16,7 @@ import data from "./library/category.json";
 
 // Loading the different components
 import Name from "./components/Name";
-import Logo from "./components/Logo";
+import Footer from "./components/Footer";
 import Category from "./components/Category";
 import Buttons from "./components/Buttons";
 import Popup from "./components/Popup";
@@ -69,7 +68,7 @@ class App extends Component {
             characterName={this.state.characterName}
             updateCharacterName={this.updateCharacterName}
           />
-          <Logo />
+          <Footer />
           <Buttons 
             characterName={this.state.characterName}
             updatePopup={this.updatePopup}
