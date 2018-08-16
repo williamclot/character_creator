@@ -1,0 +1,15 @@
+.logo{
+    top: 120px;
+    left: 35px;
+}
+
+.logo a {
+    color: black;
+}
+
+.logo span{
+    top: -25px;
+}
+.logo img {
+    width: 200px;
+}

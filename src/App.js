@@ -20,6 +20,7 @@ import Footer from "./components/Footer";
 import Category from "./components/Category";
 import Buttons from "./components/Buttons";
 import Popup from "./components/Popup";
+import Logo from "./components/Logo";
 
 library.add(faTimesCircle);
 
@@ -64,6 +65,7 @@ class App extends Component {
     return (
       <div>
         <BrowserView>
+          <Logo />
           <Name
             characterName={this.state.characterName}
             updateCharacterName={this.updateCharacterName}
