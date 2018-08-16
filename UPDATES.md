@@ -162,5 +162,13 @@ for ( var i = 0, j = 0, k=0; i < positions.length; i += 3, j += 2, k+=4 ) {
     - Download as STL
     - Cliked on Head
 
+**15/08/18**:
+
+- Did all the modifications that Romain Kidd wanted me to do:
+    - Change a few buttons names and position
+    - Change name of website
+    - Add licensing information and other stuff
+- Corrected the old bug of simultanous loads by modifying slightly skeleton.js
+- Added the UI and the functions to load and change new terrains and stands
 
 
