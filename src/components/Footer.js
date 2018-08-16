@@ -5,7 +5,7 @@ class Footer extends Component {
   render() {
     return (
       <div className="licence abs bottom">
-        <a href="licence">Licence</a> | <a href="https://myminifactory.com"> MyMiniFactory</a> © | <a href='mailto:contact@myminifactory.com'>Want to create you're own customizer?</a>
+        <a href="https://www.myminifactory.com/pages/object-licensing">Licence</a> | <a href="https://myminifactory.com"> MyMiniFactory</a> © | <a href='mailto:contact@myminifactory.com'>Want to create you're own customizer?</a>
       </div>
     );
   }
