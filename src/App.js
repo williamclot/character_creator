@@ -75,6 +75,7 @@ class App extends Component {
           />
           <Popup
             popupDisplayed={this.state.popup}
+            message={"Sorry this feature is still in development..."}
             updatePopup={this.updatePopup}
           />
 
