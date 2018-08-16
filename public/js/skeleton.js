@@ -386,7 +386,7 @@ function placeStand(){
     
   } else{
     loader.load(
-      "models/stand/hexagone.glb",
+      "models/stand/circle.glb",
       gltf => {
         var root = gltf.scene.children[0];
 
@@ -403,7 +403,7 @@ function placeStand(){
   
         //Default color to all the meshes
         if (root.material){
-          root.material.color = { r: 0.4, g: 0.4, b: 0.4 };
+          root.material.color = { r: 0.5, g: 0.5, b: 0.5 };
         }
 
         group.add(root);
@@ -439,7 +439,7 @@ window.changeStand = function(stand) {
   
         //Default color to all the meshes
         if (root.material){
-          root.material.color = { r: 0.4, g: 0.4, b: 0.4 };
+          root.material.color = color;
         }
 
         group.add(root);
