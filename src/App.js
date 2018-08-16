@@ -33,7 +33,20 @@ class App extends Component {
       characterName: "myCharacter",
       currentPose: undefined,
       UIDisplayed: true,
-      popup: false
+      popup: false, 
+      loadedMeshes: {
+        Torso: "turtle_torso",
+        LegR: "default_leg_R",
+        LegL: "default_leg_L",
+        Head: "default_head",
+        ArmR: "default_arm_R",
+        ArmL: "default_arm_L",
+        HandR: "open_hand_R",
+        HandL: "open_hand_L",
+        FootR: "default_foot_R",
+        FootL: "default_foot_L",
+        Stand: "default"
+      }
     };
     this.updateCategory = this.updateCategory;
     this.updateCharacterName = this.updateCharacterName;
