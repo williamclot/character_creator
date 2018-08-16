@@ -12,7 +12,7 @@
 
 .left-side {
   width: 20%;
-  max-width: 70px;
+  max-width: 60px;
   height: calc(100% + 60px);
   display: flex;
   align-items: center;

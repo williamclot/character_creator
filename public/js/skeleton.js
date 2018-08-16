@@ -417,6 +417,42 @@ function placeStand(){
   }
 }
 
+window.changeStand = function(stand) {
+  var minFinder = new THREE.FindMinGeometry();
+  if (scene.getObjectByName("Stand")){
+    group.remove(scene.getObjectByName("Stand"))
+    loader.load(
+      "models/stand/"+stand+".glb",
+      gltf => {
+        var root = gltf.scene.children[0];
+
+        root.traverse( function(child){
+          if (child instanceof THREE.Mesh){
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+        })
+        
+        var resultR = minFinder.parse(scene.getObjectByName("FootR"))
+        var resultL = minFinder.parse(scene.getObjectByName("FootL"))
+        var result = (resultL > resultR) ? resultR : resultL;
+  
+        //Default color to all the meshes
+        if (root.material){
+          root.material.color = { r: 0.4, g: 0.4, b: 0.4 };
+        }
+
+        group.add(root);
+        scene.getObjectByName("Torso_Hip").position.y -= result;
+      },
+      null,
+      function ( error ) {
+        console.log(error);
+      }
+    );
+  }
+}
+
 window.loadDefaultMeshes = function(loadedMeshes, bones, poseData) {
   placeMesh(
     loadedMeshes["Torso"].name,

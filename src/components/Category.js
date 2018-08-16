@@ -65,6 +65,9 @@ class Category extends Component {
                 case "pose":
                   MeshType = "pose";
                   break;
+                case "stand":
+                  MeshType = "Stand";
+                  break;
                 default:
                   MeshType = undefined;
               }
@@ -83,7 +86,7 @@ class Category extends Component {
     if (this.props.UIDisplayed) {
       return (
         <div>
-          <div className="abs top left left-side">{categoryDiv}</div>
+          <div className="abs top left left-side unselectable">{categoryDiv}</div>
           <Selector 
             currentCategory={this.props.currentCategory}
             isLeft={this.state.isLeft}

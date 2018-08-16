@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import NumericInput from 'react-numeric-input';
 
-import "../css/controller.css"
+import "../css/editor.css"
 
 import bones from "../library/bones.json"
 import model from "../library/poses/model.json"
@@ -62,7 +62,7 @@ class Editor extends Component {
     for (let i=0; i<bones.length; i++){
       let bone = bones[i].bone;
       controls.push(  
-        <div className="bone-control" key={i}>
+        <div className="bone-control unselectable" key={i}>
           <p>{bones[i].name}</p>
           <div className="flexcontainer">
             <NumericInput 
@@ -101,6 +101,7 @@ class Editor extends Component {
 
     return (
       <div className="controls">
+          <span className="unselectable">This is a beta feature only used to create new poses</span>
           {controls}
           <div className="export" onClick={this.exportPose.bind(this)}>Export</div>  
       </div>

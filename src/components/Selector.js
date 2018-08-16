@@ -12,6 +12,7 @@ import armElements from "../library/arm.json";
 import torsoElements from "../library/torso.json";
 import footElements from "../library/foot.json";
 import legElements from "../library/leg.json";
+import standElements from "../library/stands.json";
 import poseElements from "../library/poses.json";
 import bones from "../library/bones.json"
 
@@ -20,8 +21,7 @@ class Selector extends Component {
     super(props);
     this.state = {
       editor: false,
-      pose: undefined, 
-      isChanging: false
+      pose: undefined
     }
   }
 
@@ -83,6 +83,10 @@ class Selector extends Component {
         library = poseElements;
         sideIdencator = false;
         break;
+      case "stand":
+        library = standElements;
+        sideIdencator = false;
+        break;
       default:
         library = headElements;
         sideIdencator = false;
@@ -99,15 +103,10 @@ class Selector extends Component {
           onClick={() => {
             if (category==="pose"){
               this.applyPose(library[i].file);
+            } else if (category === "stand"){
+              window.changeStand("circle");
             } else {
-              if (this.state.isChanging === false){
-                this.setState({isChanging: true})
-                let res = window.changeMesh(category, library[i], isLeft, bones, this.state.pose);
-                if (res === true){
-                  this.setState({isChanging: false})
-                }
-              }
-              
+                window.changeMesh(category, library[i], isLeft, bones, this.state.pose);
             }
           }}
         >
@@ -117,7 +116,7 @@ class Selector extends Component {
               alt={library[i].img}
             />
           </div>
-          <div className="el-name">{library[i].name}</div>
+          <div className="unselectable el-name">{library[i].name}</div>
         </div>
       );
     }
@@ -125,7 +124,7 @@ class Selector extends Component {
     const buttons = (
       <div className="abs switch">
         <div
-          className={"abs left side L " + (isLeft ? "side-selected" : "")}
+          className={"unselectable abs left side L " + (isLeft ? "side-selected" : "")}
           onClick={() => {
             this.props.updateLeft(true);
             var MeshType;
@@ -159,7 +158,7 @@ class Selector extends Component {
           Left
         </div>
         <div
-          className={"abs right side R " + (isLeft ? "" : "side-selected")}
+          className={"unselectable abs right side R " + (isLeft ? "" : "side-selected")}
           onClick={() => {
             this.props.updateLeft(false);
             var MeshType;
@@ -198,11 +197,11 @@ class Selector extends Component {
     const editorButtons = (
       <div className="abs switch">
         <div 
-          className={"abs left side L " + (this.state.editor ? "" : "side-selected")}
+          className={"unselectable abs left side L " + (this.state.editor ? "" : "side-selected")}
           onClick={() => {this.setState({editor: false})}}
           >Poses</div>
         <div 
-          className={"abs right side R " + (this.state.editor ? "side-selected" : "")}
+          className={"unselectable abs right side R " + (this.state.editor ? "side-selected" : "")}
           onClick={() => {this.setState({editor: true})}}
           >Editor</div>
       </div>
