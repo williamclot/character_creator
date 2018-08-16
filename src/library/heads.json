@@ -10,7 +10,8 @@
       "y": 0,
       "z": 0
     },
-    "scale": 1
+    "scale": 1, 
+    "link": ""
   },
   {
     "name": "Default Man Head",
@@ -23,7 +24,8 @@
       "y": 3.1415,
       "z": 0
     },
-    "scale": 1
+    "scale": 1,
+    "link": ""
   },
   {
     "name": "Groot Head",
@@ -36,7 +38,8 @@
       "y": 3.1415,
       "z": 0
     },
-    "scale": 1
+    "scale": 1,
+    "link": "https://www.myminifactory.com/object/3d-print-baby-groot-26802"
   },
   {
     "name": "Big Head",
@@ -49,7 +52,8 @@
       "y": 0,
       "z": 0
     },
-    "scale": 1
+    "scale": 1,
+    "link": ""
   },
   {
     "name": "Dragon Head",
@@ -62,7 +66,8 @@
       "y": 3.1415,
       "z": 0
     },
-    "scale": 1
+    "scale": 1,
+    "link": ""
   },
   {
 		"name": "Stormtrooper",
@@ -75,7 +80,8 @@
 			"y":3.1415,
 			"z":0
 		},
-		"scale": 1
+    "scale": 1,
+    "link": "https://www.myminifactory.com/object/3d-print-stormtrooper-helmet-65368"
   },
   {
 		"name": "Dobby",
@@ -88,7 +94,8 @@
 			"y":3.1415,
 			"z":0
 		},
-		"scale": 1
+    "scale": 1,
+    "link": "https://www.myminifactory.com/object/3d-print-dobby-from-harry-potter-full-model-3294"
   },
   {
 		"name": "Hellion Rams",
@@ -101,7 +108,8 @@
 			"y":3.1415,
 			"z":0
 		},
-		"scale": 1
+    "scale": 1,
+    "link": "https://www.myminifactory.com/object/3d-print-hellion-rams-head-546"
   },
   {
 		"name": "Flexi Dead Head",
@@ -114,7 +122,8 @@
 			"y":0,
 			"z":0
 		},
-		"scale": 1
+    "scale": 1,
+    "link": "https://www.myminifactory.com/object/3d-print-dead-head-2426"
   },
   {
 		"name": "Iron Bubble Head",
@@ -127,7 +136,8 @@
 			"y":3.14,
 			"z":0
 		},
-		"scale": 1
+    "scale": 1,
+    "link": "https://www.myminifactory.com/object/3d-print-stormtrooper-helmet-65368"
   },
   {
     "name": "Muscled Man Head",
@@ -140,6 +150,7 @@
       "y": 3.14,
       "z": 0
     },
-    "scale": 1
+    "scale": 1,
+    "link": ""
   }
 ]

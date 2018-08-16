@@ -104,7 +104,7 @@ class Selector extends Component {
             if (category==="pose"){
               this.applyPose(library[i].file);
             } else if (category === "stand"){
-              window.changeStand("circle");
+              window.changeStand(library[i].file);
             } else {
                 window.changeMesh(category, library[i], isLeft, bones, this.state.pose);
             }
