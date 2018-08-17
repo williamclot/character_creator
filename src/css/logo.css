@@ -1,6 +1,7 @@
 .logo{
-    top: 120px;
-    left: 35px;
+    top: 100px;
+    left: 360px;
+    cursor: pointer;
 }
 
 .logo a {
@@ -8,8 +9,9 @@
 }
 
 .logo span{
-    top: -25px;
+    top: -15px;
+    font-size: 11px;
 }
 .logo img {
-    width: 200px;
+    width: 120px;
 }
