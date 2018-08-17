@@ -22,6 +22,17 @@ class Buttons extends Component {
               category: "MMF-Hero",
               action: "Download as STL"
             });
+            for (var key in this.props.loadedMeshes) {
+              // check if the property/key is defined in the object itself, not in parent
+              if (this.props.loadedMeshes.hasOwnProperty(key)) {           
+                  // console.log(key, this.props.loadedMeshes[key]);
+                  ReactGA.event({
+                    category: "CharacterCustomizer_Meshes",
+                    action: key,
+                    value: this.props.loadedMeshes[key]
+                  });
+              }
+          }
           }}
         >
           Download STL file
@@ -32,7 +43,7 @@ class Buttons extends Component {
           onClick={() => {
             ReactGA.event({
               category: "MMF-Hero",
-              action: "Get it printed for $4.99"
+              action: "Get it printed for £4.99!"  
             });
             this.props.updatePopup(true)
           }}

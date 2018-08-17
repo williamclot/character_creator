@@ -45,13 +45,14 @@ class App extends Component {
         HandL: "open_hand_L",
         FootR: "default_foot_R",
         FootL: "default_foot_L",
-        Stand: "default"
+        Stand: "circle"
       }
     };
     this.updateCategory = this.updateCategory;
     this.updateCharacterName = this.updateCharacterName;
     this.updatePose = this.updatePose;
     this.updatePopup = this.updatePopup;
+    this.updateMeshes = this.updateMeshes;
   }
 
   // Update the state of parent App from child Component
@@ -66,6 +67,9 @@ class App extends Component {
   };
   updatePopup = popup => {
     this.setState({ popup });
+  };
+  updateMeshes = loadedMeshes => {
+    this.setState({ loadedMeshes });
   };
 
   componentDidMount() {
@@ -87,6 +91,7 @@ class App extends Component {
           <Buttons 
             characterName={this.state.characterName}
             updatePopup={this.updatePopup}
+            loadedMeshes={this.state.loadedMeshes}
           />
           <Popup
             popupDisplayed={this.state.popup}
@@ -102,6 +107,8 @@ class App extends Component {
               currentPose={this.state.currentPose}
               updatePose={this.updatePose}
               UIDisplayed={this.state.UIDisplayed}
+              loadedMeshes={this.state.loadedMeshes}
+              updateMeshes={this.updateMeshes}
             />
           </div>
         </BrowserView>

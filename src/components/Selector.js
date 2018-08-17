@@ -25,27 +25,27 @@ class Selector extends Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     // Load the base model with defaultMeshes and defaultPose
     axios.get('models/poses/default.json')
       .then(res => {
-        this.setState({currentPose: res.data})
+        this.setState({ currentPose: res.data })
         this.props.updatePose(res.data)
         window.loadDefaultMeshes(defaultMeshes, bones, res.data)
       });
   }
 
-  applyPose(file){
+  applyPose(file) {
     let poseData;
     //Ajax in react
-    axios.get('models/poses/'+file+'.json')
+    axios.get('models/poses/' + file + '.json')
       .then(res => {
         poseData = res.data
-        this.setState({pose: poseData})
+        this.setState({ pose: poseData })
         this.props.updatePose(poseData)
         window.loadPose(poseData, bones)
       });
-    }
+  }
 
   render() {
     // Passing throught the state from the properties
@@ -101,12 +101,38 @@ class Selector extends Component {
           className="el"
           key={i}
           onClick={() => {
-            if (category==="pose"){
+            let meshType;
+            switch (category) {
+              case "torso":
+                meshType = "Torso";
+                break;
+              case "head":
+                meshType = "Head";
+                break;
+              case "hand":
+                meshType = (isLeft) ? "HandL" : "HandR";
+                break;
+              case "arm":
+                meshType = (isLeft) ? "ArmL" : "ArmR";
+                break;
+              case "foot":
+                meshType = (isLeft) ?  "FootL" : "FootR";
+                break;
+              case "leg":
+                meshType = (isLeft) ?  "LegL" : "LegR";
+                break;
+              default:
+                meshType = undefined;
+            }
+            if (category === "pose") {
               this.applyPose(library[i].file);
-            } else if (category === "stand"){
+            } else if (category === "stand") {
               window.changeStand(library[i].file);
             } else {
-                window.changeMesh(category, library[i], isLeft, bones, this.state.pose);
+              window.changeMesh(category, library[i], isLeft, bones, this.state.pose);
+              let loadedMeshes = this.props.loadedMeshes;
+              loadedMeshes[meshType] = library[i].file;
+              this.props.updateMeshes(loadedMeshes);
             }
           }}
         >
@@ -196,14 +222,14 @@ class Selector extends Component {
 
     const editorButtons = (
       <div className="abs switch">
-        <div 
+        <div
           className={"unselectable abs left side L " + (this.state.editor ? "" : "side-selected")}
-          onClick={() => {this.setState({editor: false})}}
-          >Poses</div>
-        <div 
+          onClick={() => { this.setState({ editor: false }) }}
+        >Poses</div>
+        <div
           className={"unselectable abs right side R " + (this.state.editor ? "side-selected" : "")}
-          onClick={() => {this.setState({editor: true})}}
-          >Editor</div>
+          onClick={() => { this.setState({ editor: true }) }}
+        >Editor</div>
       </div>
     );
 

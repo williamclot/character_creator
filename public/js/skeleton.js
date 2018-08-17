@@ -542,7 +542,6 @@ function changeColor(item, choosenColor){
   mesh.traverse(function(child){
     if (child instanceof THREE.Mesh){
       if(child.material){
-        console.log("changing color", choosenColor)
         child.material.color.r = choosenColor.r;
         child.material.color.g = choosenColor.g;
         child.material.color.b = choosenColor.b;

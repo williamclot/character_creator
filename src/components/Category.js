@@ -92,6 +92,8 @@ class Category extends Component {
             isLeft={this.state.isLeft}
             updateLeft={this.updateLeft}
             updatePose={this.props.updatePose}
+            loadedMeshes={this.props.loadedMeshes}
+              updateMeshes={this.props.updateMeshes}
           />
         </div>
       );
