@@ -29,7 +29,7 @@ class Buttons extends Component {
                   ReactGA.event({
                     category: "MMF-Hero",
                     action: key,
-                    value: this.props.loadedMeshes[key]
+                    label: this.props.loadedMeshes[key]
                   });
               }
           }
