@@ -146,6 +146,24 @@ class Selector extends Component {
         </div>
       );
     }
+    elementDiv.push(
+      <div
+        className="el"
+        key="add"
+        onClick={() => {
+          this.props.updatePopup(true)
+        }}
+      >
+        <div className="img" >
+          <img
+            className="plus"
+            src="img/library/plus.svg"
+            alt="plus sign"
+          />
+        </div>
+        <div className="unselectable el-name">Add your designs</div>
+      </div>
+    );
 
     const buttons = (
       <div className="abs switch">

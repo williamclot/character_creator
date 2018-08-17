@@ -109,6 +109,7 @@ class App extends Component {
               UIDisplayed={this.state.UIDisplayed}
               loadedMeshes={this.state.loadedMeshes}
               updateMeshes={this.updateMeshes}
+              updatePopup={this.updatePopup}
             />
           </div>
         </BrowserView>
