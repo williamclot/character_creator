@@ -9,8 +9,8 @@ class Logo extends Component {
     return (
       <div className="abs logo">
         <a href="https://myminifactory.com">
-            <span className="abs">Powered by: </span>
-            <img src={logo} alt="logo" />
+          <span className="abs">Powered by: </span>
+          <img src={logo} alt="logo" />
         </a>
       </div>
     );
