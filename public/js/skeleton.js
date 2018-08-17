@@ -292,9 +292,10 @@ function placeMesh(
       root.traverse( function(child){
         if (child instanceof THREE.Mesh){
           child.castShadow = true;
+          child.material.color = {r:0.5,g:0.5,b:0.5};
         }
       })
-      // console.log("This is a category :", MeshType)
+
       group.add(root);
 
       scene.updateMatrixWorld(true);
@@ -302,15 +303,8 @@ function placeMesh(
       loadedMeshes[MeshType].name = meshName;
       loadedMeshes[MeshType].rotation = rotation;
 
-      //Default color to all the meshes
-      for (let i=0; i < root.children.length; i++){
-        if (root.children[i].material){
-          root.children[i].material.color = { r: 0.5, g: 0.5, b: 0.5 };
-        }
-      }
-
       if (MeshType === 'Head' && firstLoad){
-        changeColor("Head",color)
+        changeColor("Head", color)
       }
 
       if (highLight) {
@@ -448,7 +442,6 @@ window.changeStand = function(stand) {
     );
   }
 }
-
 window.loadDefaultMeshes = function(loadedMeshes, bones, poseData) {
   placeMesh(
     loadedMeshes["Torso"].name,

@@ -32,12 +32,12 @@ class Buttons extends Component {
           onClick={() => {
             ReactGA.event({
               category: "MMF-Hero",
-              action: "Print for £4.99"
+              action: "Get it printed for $4.99"
             });
             this.props.updatePopup(true)
           }}
         >
-          Get it printed for 5.99$
+          Get it printed for $4.99
         </div>
         <div
           className="abs buttons"
