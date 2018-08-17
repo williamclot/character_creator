@@ -93,7 +93,8 @@ class Category extends Component {
             updateLeft={this.updateLeft}
             updatePose={this.props.updatePose}
             loadedMeshes={this.props.loadedMeshes}
-              updateMeshes={this.props.updateMeshes}
+            updateMeshes={this.props.updateMeshes}
+            updatePopup={this.props.updatePopup}
           />
         </div>
       );

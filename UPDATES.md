@@ -171,4 +171,9 @@ for ( var i = 0, j = 0, k=0; i < positions.length; i += 3, j += 2, k+=4 ) {
 - Corrected the old bug of simultanous loads by modifying slightly skeleton.js
 - Added the UI and the functions to load and change new terrains and stands
 
+**16/08/18**:
 
+- Modified Google Analytics so that for each STL export we have the information of which part were used.
+- Created two custom reports on the google analytics platform
+- Fixed color implementation with the stands
+- Changed the URL to https://myminifactory.com/character_creator/

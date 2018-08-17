@@ -99,11 +99,16 @@
 .img {
   padding: 2px;
 }
+
 .img img {
   display: block;
   margin: auto;
   max-width: 80px;
   max-height: 80px;
+}
+.plus{
+  padding: 10px;
+  height: 70%;
 }
 .el-name {
   position: relative;
