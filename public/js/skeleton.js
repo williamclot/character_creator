@@ -430,17 +430,13 @@ window.changeStand = function(stand) {
           if (child instanceof THREE.Mesh){
             child.castShadow = true;
             child.receiveShadow = true;
+            child.material.color = {r:0.555,g:0.48,b:0.49};
           }
         })
         
         var resultR = minFinder.parse(scene.getObjectByName("FootR"))
         var resultL = minFinder.parse(scene.getObjectByName("FootL"))
         var result = (resultL > resultR) ? resultR : resultL;
-  
-        //Default color to all the meshes
-        if (root.material){
-          root.material.color = color;
-        }
 
         group.add(root);
         scene.getObjectByName("Torso_Hip").position.y -= result;
@@ -539,7 +535,7 @@ window.changeMesh = function(bodyPart, part, isLeft, bones, poseData) {
   return true;
 }
 window.selectedMesh = function (MeshType) {
-  // console.log(MeshType);
+  console.log(MeshType, selected);
   let normal = { r: 0.5, g: 0.5, b: 0.5 };
 
   changeColor(selected, normal);
@@ -548,14 +544,15 @@ window.selectedMesh = function (MeshType) {
 
   selected = MeshType;
 }
-function changeColor(item, color){
+function changeColor(item, choosenColor){
   var mesh = (item === 'pose') ? group : scene.getObjectByName(item);
   mesh.traverse(function(child){
     if (child instanceof THREE.Mesh){
       if(child.material){
-        child.material.color.r = color.r;
-        child.material.color.g = color.g;
-        child.material.color.b = color.b;
+        console.log("changing color", choosenColor)
+        child.material.color.r = choosenColor.r;
+        child.material.color.g = choosenColor.g;
+        child.material.color.b = choosenColor.b;
       }
     }
   });
