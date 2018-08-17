@@ -2,6 +2,7 @@
     top: 100px;
     left: 360px;
     cursor: pointer;
+    z-index: 150;
 }
 
 .logo a {

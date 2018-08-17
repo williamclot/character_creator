@@ -177,3 +177,4 @@ for ( var i = 0, j = 0, k=0; i < positions.length; i += 3, j += 2, k+=4 ) {
 - Created two custom reports on the google analytics platform
 - Fixed color implementation with the stands
 - Changed the URL to https://myminifactory.com/character_creator/
+- Added the "Add your designs" button
