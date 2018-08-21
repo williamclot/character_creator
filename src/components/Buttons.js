@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import ReactGA from "react-ga";
 
+import MyMiniFactoryLogin from 'myminifactory-login';
+
 // Loading Assets (SubComponents & CSS)
 import "../css/buttons.css";
 
@@ -10,7 +12,13 @@ class Buttons extends Component {
     ReactGA.initialize("UA-41837285-1");
   }
 
+
   render() {
+
+    const onSuccess = response => console.log(response);
+    const onFailure = response => console.error(response);
+
+
     return (
       <div>
         <div
@@ -50,19 +58,13 @@ class Buttons extends Component {
         >
           Get it printed for $4.99
         </div>
-        <div
+        <MyMiniFactoryLogin
           className="abs buttons"
-          id="share"
-          onClick={() => {
-            ReactGA.event({
-              category: "MMF-Hero",
-              action: "Share on MyMiniFactory.com"
-            });
-            this.props.updatePopup(true)
-          }}
-        >
-          Share on MyMiniFactory.com
-        </div>
+          clientKey="character-creator"
+          redirectUri="http://localhost:3000"
+          onSuccess={onSuccess}
+          onFailure={onFailure}
+        />
       </div>
     );
   }

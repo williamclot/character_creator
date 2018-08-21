@@ -94,7 +94,6 @@ class Selector extends Component {
 
     //JSX element to display the HTML
     const elementDiv = [];
-    const settingsDiv = [];
 
     for (let i = 0; i < library.length; i++) {
       elementDiv.push(
