@@ -33,6 +33,13 @@
       "file": "gedan_barai",
       "author": "William CLOT",
       "description": "Default man head."
+    },
+    {
+      "name": "Dab",
+      "img": "pose.svg",
+      "file": "dab",
+      "author": "William CLOT",
+      "description": "Default man head."
     }
-  ]
+]
   

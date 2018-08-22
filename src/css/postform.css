@@ -3,4 +3,27 @@
     left:50%;
 
     transform: translate(-50%,-50%);
+    width: 500px;
+    z-index: 5000;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0px 0px 30px black;
+}
+.form-title{
+    padding-top: 20px;
+}
+
+.form label{
+    width: 100%;
+}
+
+.title h2{
+    text-align: center;
+}
+.submit-container{
+    padding-top: 20px;
+    width: 30%;
+}
+.submit-button{
+    text-align: center;
 }

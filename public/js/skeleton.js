@@ -600,7 +600,12 @@ window.loadPose = function(poseData, bones){
 }
 window.export = function(name) {
   var exporter = new THREE.STLExporter();
-  saveString( exporter.parse( group ), name+'_export.stl' );
+  if(name){
+    saveString( exporter.parse( group ), name+'_export.stl' );
+  } else {
+    return exporter.parse(group);
+  }
+  
 }
 
 function onWindowResize() {

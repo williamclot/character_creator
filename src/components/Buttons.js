@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ReactGA from "react-ga";
-// import axios from "axios";
+import axios from "axios";
+import PostForm from './PostForm';
 
 import MyMiniFactoryLogin from 'myminifactory-login';
 
@@ -8,6 +9,15 @@ import MyMiniFactoryLogin from 'myminifactory-login';
 import "../css/buttons.css";
 
 class Buttons extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      formVisible: false,
+      accesstoken: ''
+    }
+  }
+
+
   componentDidMount() {
     // Google Analytics for the page
     ReactGA.initialize("UA-41837285-1");
@@ -17,18 +27,18 @@ class Buttons extends Component {
   render() {
 
     const onSuccess = response => {
-      // axios({
-      //   method:'get',
-      //   url:'https://www.myminifactory.com/api/v2/user',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': 'Bearer '+response.access_token
-      //   },
-      // })
-      //   .then(function(response) {
-      //     console.log(response.data);
-      // });
-      console.log(response)
+      this.setState({formVisible: true, accesstoken:response.access_token})
+      axios({
+        method:'get',
+        url:'https://www.myminifactory.com/api/v2/user',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+response.access_token
+        },
+      })
+        .then(function(response) {
+          console.log(response.data);
+      });
     }
     const onFailure = response => console.error(response);
 
@@ -44,17 +54,17 @@ class Buttons extends Component {
               category: "MMF-Hero",
               action: "Download as STL"
             });
-            for (var key in this.props.loadedMeshes) {
-              // check if the property/key is defined in the object itself, not in parent
-              if (this.props.loadedMeshes.hasOwnProperty(key)) {           
-                  // console.log(key, this.props.loadedMeshes[key]);
-                  ReactGA.event({
-                    category: "MMF-Hero",
-                    action: key,
-                    label: this.props.loadedMeshes[key]
-                  });
-              }
-          }
+            // for (var key in this.props.loadedMeshes) {
+            //   // check if the property/key is defined in the object itself, not in parent
+            //   if (this.props.loadedMeshes.hasOwnProperty(key)) {           
+            //       // console.log(key, this.props.loadedMeshes[key]);
+            //       ReactGA.event({
+            //         category: "MMF-Hero",
+            //         action: key,
+            //         label: this.props.loadedMeshes[key]
+            //       });
+            //   }
+            // }
           }}
         >
           Download STL file
@@ -76,9 +86,14 @@ class Buttons extends Component {
           className="abs buttons"
           clientKey="character-creator"
           redirectUri="http://localhost:3000"
+          buttonText="Share on MyMiniFactory.com"
           onSuccess={onSuccess}
           onFailure={onFailure}
         />
+        <PostForm
+          visible={this.state.formVisible}
+          accesstoken={this.state.accesstoken}
+         />
       </div>
     );
   }

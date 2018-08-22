@@ -8,7 +8,7 @@ import logo from "../graphic_assets/mmf_logo.png";
 class Popup extends Component {
     
   render() {
-    if (this.props.popupDisplayed){
+   if (this.props.popupDisplayed){ 
         return (
             <div className="screen abs top left">
                 <div className="popup abs">

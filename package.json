@@ -18,6 +18,7 @@
     "react-numeric-input": "^2.2.3",
     "react-perfect-scrollbar": "^1.2.0",
     "react-scripts": "1.1.4",
+    "react-tag-input": "^5.1.2",
     "react-typed": "^1.0.9",
     "typist": "^0.1.0"
   },
