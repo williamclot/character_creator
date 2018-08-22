@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import { BrowserView, MobileView } from "react-device-detect";
 import Typed from "react-typed";
 import { library } from "@fortawesome/fontawesome-svg-core";
+
+// fontawesome imports
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faDollarSign } from "@fortawesome/free-solid-svg-icons";
+import { faLink } from "@fortawesome/free-solid-svg-icons";
 
 // Google Analytics
 import ReactGA from "react-ga";
@@ -23,6 +27,8 @@ import Popup from "./components/Popup";
 import Logo from "./components/Logo";
 
 library.add(faTimesCircle);
+library.add(faDollarSign);
+library.add(faLink);
 
 class App extends Component {
   constructor(props) {

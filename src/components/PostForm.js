@@ -47,6 +47,9 @@ class PostForm extends Component {
                     },
                     data: stlData
                 })
+                .then(function(response) {
+                    console.log(response)
+                })
             });
     }
 

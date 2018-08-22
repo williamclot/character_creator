@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Editor from "./Editor";
 import axios from "axios";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import "../css/selector.css";
 
@@ -45,6 +46,26 @@ class Selector extends Component {
         this.props.updatePose(poseData)
         window.loadPose(poseData, bones)
       });
+  }
+
+  RenderPremium(item){
+    if (item.premium){
+      return (
+        <div className="abs premium">
+          <FontAwesomeIcon className="abs icon" icon="dollar-sign" />
+        </div>
+      )
+    }
+  }
+
+  RenderLink(item){
+    if (item.link){
+      return (
+        <a className="abs link" href={item.link}>
+          <FontAwesomeIcon className="abs icon" icon="link" />
+        </a>
+      )
+    }
   }
 
   render() {
@@ -116,10 +137,10 @@ class Selector extends Component {
                 meshType = (isLeft) ? "ArmL" : "ArmR";
                 break;
               case "foot":
-                meshType = (isLeft) ?  "FootL" : "FootR";
+                meshType = (isLeft) ? "FootL" : "FootR";
                 break;
               case "leg":
-                meshType = (isLeft) ?  "LegL" : "LegR";
+                meshType = (isLeft) ? "LegL" : "LegR";
                 break;
               default:
                 meshType = undefined;
@@ -143,6 +164,9 @@ class Selector extends Component {
             />
           </div>
           <div className="unselectable el-name">{library[i].name}</div>
+          {  this.RenderPremium(library[i]) }
+          {  this.RenderLink(library[i]) }
+
         </div>
       );
     }
