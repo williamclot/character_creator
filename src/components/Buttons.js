@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ReactGA from "react-ga";
+// import axios from "axios";
 
 import MyMiniFactoryLogin from 'myminifactory-login';
 
@@ -15,7 +16,20 @@ class Buttons extends Component {
 
   render() {
 
-    const onSuccess = response => console.log(response);
+    const onSuccess = response => {
+      // axios({
+      //   method:'get',
+      //   url:'https://www.myminifactory.com/api/v2/user',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': 'Bearer '+response.access_token
+      //   },
+      // })
+      //   .then(function(response) {
+      //     console.log(response.data);
+      // });
+      console.log(response)
+    }
     const onFailure = response => console.error(response);
 
 
