@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { BrowserView, MobileView } from "react-device-detect";
 import Typed from "react-typed";
+
 import { library } from "@fortawesome/fontawesome-svg-core";
 
 // fontawesome imports
@@ -25,6 +26,7 @@ import Category from "./components/Category";
 import Buttons from "./components/Buttons";
 import Popup from "./components/Popup";
 import Logo from "./components/Logo";
+import Loader from './components/Loader';
 
 library.add(faTimesCircle);
 library.add(faDollarSign);
@@ -59,6 +61,8 @@ class App extends Component {
     this.updatePose = this.updatePose;
     this.updatePopup = this.updatePopup;
     this.updateMeshes = this.updateMeshes;
+
+    this.handleLoad = this.handleLoad.bind(this);
   }
 
   // Update the state of parent App from child Component
@@ -84,10 +88,15 @@ class App extends Component {
     ReactGA.pageview("/mmf-hero");
   }
 
+  handleLoad() {
+    console.log("loaded")
+   }
+
   render() {
     return (
       <div>
         <BrowserView>
+          <Loader />
           <Logo />
           <Name
             characterName={this.state.characterName}

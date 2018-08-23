@@ -14,6 +14,7 @@ var selected = "Head";
 var color = {r:0.555,g:0.48,b:0.49};
 var group = new THREE.Group();
 var bBoxStand;
+window.loaded = false;
 
 //This keeps track of every mesh on the viewport
 var loadedMeshes = {
@@ -402,6 +403,7 @@ function placeStand(){
 
         group.add(root);
         scene.getObjectByName("Torso_Hip").position.y -= result;
+        window.loaded = true;
       },
       null,
       function ( error ) {
