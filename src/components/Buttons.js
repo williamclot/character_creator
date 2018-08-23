@@ -15,8 +15,12 @@ class Buttons extends Component {
       formVisible: false,
       accesstoken: ''
     }
+    this.updateVisible = this.updateVisible;
   }
 
+  updateVisible = formVisible => {
+    this.setState({ formVisible });
+  };
 
   componentDidMount() {
     // Google Analytics for the page
@@ -92,6 +96,7 @@ class Buttons extends Component {
         />
         <PostForm
           visible={this.state.formVisible}
+          updateVisible={this.updateVisible}
           accesstoken={this.state.accesstoken}
          />
       </div>

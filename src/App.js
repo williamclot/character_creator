@@ -26,7 +26,7 @@ import Category from "./components/Category";
 import Buttons from "./components/Buttons";
 import Popup from "./components/Popup";
 import Logo from "./components/Logo";
-import Loader from './components/Loader';
+import PageLoader from './components/PageLoader';
 
 library.add(faTimesCircle);
 library.add(faDollarSign);
@@ -96,7 +96,7 @@ class App extends Component {
     return (
       <div>
         <BrowserView>
-          <Loader />
+          <PageLoader />
           <Logo />
           <Name
             characterName={this.state.characterName}
