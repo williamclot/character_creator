@@ -602,6 +602,8 @@ window.loadPose = function(poseData, bones){
 }
 window.export = function(name) {
   var exporter = new THREE.STLExporter();
+  var arrayExporter = new THREE.STLExporterArray();
+  var STLLoader = new THREE.STLLoader();
   if(name){
     saveString( exporter.parse( group ), name+'_export.stl' );
   } else {

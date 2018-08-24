@@ -44,12 +44,12 @@ THREE.STLLoader.prototype = {
 
 		var scope = this;
 
-		var loader = new THREE.FileLoader( scope.manager );
+		var loader = new THREE.VariableLoader( scope.manager );
 		loader.setResponseType( 'arraybuffer' );
 		loader.load( url, function ( text ) {
 
 			try {
-
+				console.log("this :", text)
 				onLoad( scope.parse( text ) );
 
 			} catch ( exception ) {

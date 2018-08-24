@@ -6,11 +6,12 @@
  * @author mrdoob / http://mrdoob.com/
  * @author williamclot / https://github.com/williamclot
  */
-THREE.STLExporter = function () {};
 
-THREE.STLExporter.prototype = {
+THREE.STLExporterArray = function () {};
 
-	constructor: THREE.STLExporter,
+THREE.STLExporterArray.prototype = {
+
+	constructor: THREE.STLExporterArray,
 
 	parse: ( function () {
 
@@ -19,20 +20,19 @@ THREE.STLExporter.prototype = {
 
 		return function ( scene ) {
 
-			var output = '';
-
-			// output += 'solid exported\n';
+			var mergeGeometry = new THREE.Geometry();
 
 			scene.traverse( function ( mesh ) {
 
 				if ( mesh instanceof THREE.Mesh ) {
 
-					output += 'solid\n';
+					//Geometry with skeleton displacement
+					var outputGeometry = new THREE.Geometry(); 
 
 					var bufferGeometry = mesh.geometry;
 					var geometry = new THREE.Geometry().fromBufferGeometry( bufferGeometry );
 
-					console.log(geometry)
+					// console.log(geometry)
 
 					var matrixWorld = mesh.matrixWorld;
 
@@ -48,16 +48,23 @@ THREE.STLExporter.prototype = {
 
 							vector.copy( face.normal ).applyMatrix3( normalMatrixWorld ).normalize();
 
-							output += '\tfacet normal ' + vector.x + ' ' + vector.y + ' ' + vector.z + '\n';
-							output += '\t\touter loop\n';
+							//output += '\tfacet normal ' + vector.x + ' ' + vector.y + ' ' + vector.z + '\n';
+							//output += '\t\touter loop\n';
 
 							var indices = [ face.a, face.b, face.c ];
+
+							outputGeometry.faces.push(new THREE.Face3( face.a, face.b, face.c ));
 
 							for ( var j = 0; j < 3; j ++ ) {
 								var vertexIndex = indices[ j ];
 								if (geometry.skinIndices.length == 0) {
 									vector.copy( vertices[ vertexIndex ] ).applyMatrix4( matrixWorld );
-									output += '\t\t\tvertex ' + vector.x*35 + ' ' + vector.y*35 + ' ' + vector.z*35 + '\n';
+
+									outputGeometry.vertices.push(
+										new THREE.Vector3(vector.x, vector.y, vector.z)
+									);
+
+									// output += '\t\t\tvertex ' + vector.x*35 + ' ' + vector.y*35 + ' ' + vector.z*35 + '\n';
 								} else {
 									vector.copy( vertices[ vertexIndex ] ); //.applyMatrix4( matrixWorld );
 									
@@ -96,21 +103,51 @@ THREE.STLExporter.prototype = {
 										.applyMatrix4(skinMatrices[k]);
 										finalVector.add(tempVector);
 									}
-									output += '\t\t\tvertex ' + finalVector.x*35 + ' ' + finalVector.y*35 + ' ' + finalVector.z*35 + '\n';
+									outputGeometry.vertices.push(
+										new THREE.Vector3(finalVector.x, finalVector.y, finalVector.z)
+									);
 								}
 							}
-							output += '\t\tendloop\n';
-							output += '\tendfacet\n';
+
+							// output += '\tendfacet\n';
 						}
 					}
+					// End of mesh
+					// output += 'endsolid exported\n';
+					outputGeometry.computeBoundingSphere();
+					outputGeometry.computeFaceNormals();
+					mergeGeometry.merge(outputGeometry)
 				}
-
-				output += 'endsolid\n';
-
 			} );
+			mergeGeometry.computeBoundingSphere();
 
-			// output += 'endsolid exported\n';
+			var output = '';
+			output += 'solid exported\n';
 
+			var vertices = mergeGeometry.vertices;
+			var faces = mergeGeometry.faces;
+
+
+			for ( var i = 0, l = faces.length; i < l; i ++ ) {
+				var face = faces[ i ];
+
+				vector.copy( face.normal )
+
+				output += '\tfacet normal ' + vector.x + ' ' + vector.y + ' ' + vector.z + '\n';
+				output += '\t\touter loop\n';
+
+				var indices = [ face.a, face.b, face.c ];
+
+				for ( var j = 0; j < 3; j ++ ) {
+					var vertexIndex = indices[ j ];
+					vector.copy( vertices[ vertexIndex ] );
+					output += '\t\t\tvertex ' + vector.x*35 + ' ' + vector.y*35 + ' ' + vector.z*35 + '\n';
+					
+				}
+				output += '\t\tendloop\n';
+				output += '\tendfacet\n';
+			}
+			output += 'endsolid exported\n';
 			return output;
 		};
 	}() )
