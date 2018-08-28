@@ -55,7 +55,7 @@ class App extends Component {
         FootL: "default_foot_L",
         Stand: "circle"
       },
-      seeEditor: false
+      editor: false
     };
     this.updateCategory = this.updateCategory;
     this.updateCharacterName = this.updateCharacterName;
@@ -126,6 +126,7 @@ class App extends Component {
               loadedMeshes={this.state.loadedMeshes}
               updateMeshes={this.updateMeshes}
               updatePopup={this.updatePopup}
+              editor={this.state.editor}
             />
           </div>
         </BrowserView>

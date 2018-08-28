@@ -280,16 +280,16 @@ class Selector extends Component {
       <div className="abs top right right-side">
         <div className="box">
           {sideIdencator ? buttons : ""}
-          {(category === 'pose') ? editorButtons : ""}
+          {(category === 'pose' && this.props.editor) ? editorButtons : ""}
         </div>
         <div
           className={
             "abs top left " +
             ((category === "pose" && this.state.editor) ? " selector-full" : "selector") +
-            ((sideIdencator || category === 'pose') ? " selector-full" : "")
+            ((sideIdencator || (category === 'pose' && this.props.editor)) ? " selector-full" : "")
           }
         >
-          {(category === "pose" && this.state.editor) ? <Editor /> : elementDiv}
+          {(category === "pose" && this.state.editor && this.props.editor) ? <Editor /> : elementDiv}
         </div>
       </div>
     );

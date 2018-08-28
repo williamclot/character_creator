@@ -3,6 +3,7 @@ import React, { Component } from "react";
 // Loading Assets (SubComponents & CSS)
 import Selector from "./Selector";
 import "../css/category.css";
+import { throws } from "assert";
 
 class Category extends Component {
 
@@ -95,6 +96,7 @@ class Category extends Component {
             loadedMeshes={this.props.loadedMeshes}
             updateMeshes={this.props.updateMeshes}
             updatePopup={this.props.updatePopup}
+            editor={this.props.editor}
           />
         </div>
       );
