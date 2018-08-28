@@ -88,7 +88,7 @@ class Buttons extends Component {
         <MyMiniFactoryLogin
           className="abs buttons"
           clientKey="character-creator"
-          redirectUri="http://localhost:3000"
+          redirectUri="https://www.myminifactory.com/character-creator/"
           buttonText="Share on MyMiniFactory.com"
           onSuccess={onSuccess}
           onFailure={onFailure}
