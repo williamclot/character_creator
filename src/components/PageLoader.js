@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import $ from "jquery";
 
 import logo from './../graphic_assets/logo.jpg';
 import '../css/loader.css'
@@ -13,6 +14,7 @@ class PageLoader extends Component {
     }
 
     componentDidMount() {
+        $('.graybackground').css('visibility', 'hidden')
         this.check = setInterval(() => {
             if (window.loaded) {
                 clearInterval(this.check)

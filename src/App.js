@@ -54,7 +54,8 @@ class App extends Component {
         FootR: "default_foot_R",
         FootL: "default_foot_L",
         Stand: "circle"
-      }
+      },
+      seeEditor: false
     };
     this.updateCategory = this.updateCategory;
     this.updateCharacterName = this.updateCharacterName;
