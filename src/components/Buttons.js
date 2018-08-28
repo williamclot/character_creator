@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import ReactGA from "react-ga";
-// import axios from "axios";
-// import PostForm from './PostForm';
+import PostForm from './PostForm';
 
-// import MyMiniFactoryLogin from 'myminifactory-login';
+import MyMiniFactoryLogin from 'myminifactory-login';
 
 // Loading Assets (SubComponents & CSS)
 import "../css/buttons.css";
@@ -30,21 +29,11 @@ class Buttons extends Component {
 
   render() {
 
-    // const onSuccess = response => {
-    //   this.setState({formVisible: true, accesstoken:response.access_token})
-    //   axios({
-    //     method:'get',
-    //     url:'https://www.myminifactory.com/api/v2/user',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': 'Bearer '+response.access_token
-    //     },
-    //   })
-    //     .then(function(response) {
-    //       console.log(response.data);
-    //   });
-    // }
-    // const onFailure = response => console.error(response);
+    const onSuccess = response => {
+      this.setState({formVisible: true})
+      this.setState({accesstoken: response.access_token})
+    }
+    const onFailure = response => console.error(response);
 
 
     return (
@@ -87,7 +76,7 @@ class Buttons extends Component {
         >
           Get it printed for $4.99
         </div>
-        <div
+        {/* <div
           className="abs buttons"
           onClick={() => {
             this.props.updatePopup(true)
@@ -95,8 +84,8 @@ class Buttons extends Component {
           }}
         >
           Share on MyMiniFactory.com
-        </div>
-        {/* <MyMiniFactoryLogin
+        </div> */}
+        <MyMiniFactoryLogin
           className="abs buttons"
           clientKey="character-creator"
           redirectUri="http://localhost:3000"
@@ -108,7 +97,7 @@ class Buttons extends Component {
           visible={this.state.formVisible}
           updateVisible={this.updateVisible}
           accesstoken={this.state.accesstoken}
-         /> */}
+         />
       </div>
     );
   }

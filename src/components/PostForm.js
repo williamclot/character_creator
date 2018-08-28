@@ -17,7 +17,7 @@ class PostForm extends Component {
     }
 
     handleSubmit() {
-        // this.props.updateVisible(false);
+        this.props.updateVisible(false);
         this.setState({ loader: true })
         const accesstoken = this.props.accesstoken
         const stlData = window.export();
@@ -40,7 +40,7 @@ class PostForm extends Component {
                 ]
             }
         })
-            .then(function (response) {
+            .then((response) => {
                 const uploadID = response.data.files[0].upload_id;
                 // console.log(uploadID)
                 axios({
@@ -51,14 +51,10 @@ class PostForm extends Component {
                     },
                     data: stlData
                 })
-                    .then(function (response) {
-                        console.log(response)
-                        // this.callback();
+                    .then((response) => {
+                        this.setState({loader: false})
                     })
             });
-    }
-    callback = () => {
-        this.setState({loader: false})
     }
 
     handleInputChange(event) {
@@ -72,7 +68,6 @@ class PostForm extends Component {
             return (
                 <div className="screen abs top left">
                     <div className='abs form'>
-                        <form>
                             <div className="title"><h2>Upload to MyMiniFactory</h2></div>
                             <label>
                                 Name:
@@ -83,10 +78,7 @@ class PostForm extends Component {
                                     onChange={this.handleInputChange}
                                 />
                             </label>
-                            <div className="submit-container">
-                                <input className="submit-button" type="button" value="Submit" onClick={this.handleSubmit()} />
-                            </div>
-                        </form>
+                            <div className="buttons" value="Submit" onClick={this.handleSubmit}>Submit</div>
                     </div>
                 </div>
             )
