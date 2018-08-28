@@ -3,7 +3,6 @@ import React, { Component } from "react";
 // Loading Assets (SubComponents & CSS)
 import Selector from "./Selector";
 import "../css/category.css";
-import { throws } from "assert";
 
 class Category extends Component {
 
