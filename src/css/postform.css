@@ -7,7 +7,8 @@
     z-index: 5000;
     background-color: white;
     padding: 20px;
-    box-shadow: 0px 0px 30px black;
+    margin-bottom: 50px;
+    box-shadow: 0px 0px 20px black;
 }
 .form-title{
     padding-top: 20px;
