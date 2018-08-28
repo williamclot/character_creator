@@ -22,7 +22,7 @@ class Selector extends Component {
     super(props);
     this.state = {
       editor: false,
-      pose: undefined
+      pose: undefined,
     }
   }
 
@@ -150,6 +150,7 @@ class Selector extends Component {
             } else if (category === "stand") {
               window.changeStand(library[i].file);
             } else {
+              this.props.updateLoading(true)
               window.changeMesh(category, library[i], isLeft, bones, this.state.pose);
               let loadedMeshes = this.props.loadedMeshes;
               loadedMeshes[meshType] = library[i].file;
@@ -277,19 +278,21 @@ class Selector extends Component {
 
 
     return (
-      <div className="abs top right right-side">
-        <div className="box">
-          {sideIdencator ? buttons : ""}
-          {(category === 'pose' && this.props.editor) ? editorButtons : ""}
-        </div>
-        <div
-          className={
-            "abs top left " +
-            ((category === "pose" && this.state.editor) ? " selector-full" : "selector") +
-            ((sideIdencator || (category === 'pose' && this.props.editor)) ? " selector-full" : "")
-          }
-        >
-          {(category === "pose" && this.state.editor && this.props.editor) ? <Editor /> : elementDiv}
+      <div>
+        <div className="abs top right right-side">
+          <div className="box">
+            {sideIdencator ? buttons : ""}
+            {(category === 'pose' && this.props.editor) ? editorButtons : ""}
+          </div>
+          <div
+            className={
+              "abs top left " +
+              ((category === "pose" && this.state.editor) ? " selector-full" : "selector") +
+              ((sideIdencator || (category === 'pose' && this.props.editor)) ? " selector-full" : "")
+            }
+          >
+            {(category === "pose" && this.state.editor && this.props.editor) ? <Editor /> : elementDiv}
+          </div>
         </div>
       </div>
     );

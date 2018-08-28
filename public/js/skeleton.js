@@ -15,6 +15,7 @@ var color = {r:0.555,g:0.48,b:0.49};
 var group = new THREE.Group();
 var bBoxStand;
 window.loaded = false;
+window.partloaded = false;
 
 //This keeps track of every mesh on the viewport
 var loadedMeshes = {
@@ -354,6 +355,7 @@ function placeMesh(
           placeStand()
         }
       }
+      window.partloaded = true;
     },
     null,
     function ( error ) {
@@ -459,6 +461,7 @@ window.loadDefaultMeshes = function(loadedMeshes, bones, poseData) {
   );
 }
 window.changeMesh = function(bodyPart, part, isLeft, bones, poseData) {
+  window.partloaded = false;
   var meshType;
   var file;
   var rotation;

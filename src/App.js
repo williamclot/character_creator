@@ -26,7 +26,9 @@ import Category from "./components/Category";
 import Buttons from "./components/Buttons";
 import Popup from "./components/Popup";
 import Logo from "./components/Logo";
-import PageLoader from './components/PageLoader';
+import PageLoader from "./components/PageLoader";
+import PartLoader from "./components/PartLoader";
+
 
 library.add(faTimesCircle);
 library.add(faDollarSign);
@@ -41,7 +43,7 @@ class App extends Component {
       characterName: "myCharacter",
       currentPose: undefined,
       UIDisplayed: true,
-      popup: false, 
+      popup: false,
       loadedMeshes: {
         Torso: "turtle_torso",
         LegR: "default_leg_R",
@@ -55,13 +57,15 @@ class App extends Component {
         FootL: "default_foot_L",
         Stand: "circle"
       },
-      editor: false
+      editor: false,
+      partloading: false
     };
     this.updateCategory = this.updateCategory;
     this.updateCharacterName = this.updateCharacterName;
     this.updatePose = this.updatePose;
     this.updatePopup = this.updatePopup;
     this.updateMeshes = this.updateMeshes;
+    this.updateLoading = this.updateLoading
 
     this.handleLoad = this.handleLoad.bind(this);
   }
@@ -82,6 +86,9 @@ class App extends Component {
   updateMeshes = loadedMeshes => {
     this.setState({ loadedMeshes });
   };
+  updateLoading = partloading => {
+    this.setState({ partloading });
+  };
 
   componentDidMount() {
     // Google Analytics for the page
@@ -90,8 +97,8 @@ class App extends Component {
   }
 
   handleLoad() {
-    console.log("loaded")
-   }
+    console.log("loaded");
+  }
 
   render() {
     return (
@@ -104,7 +111,7 @@ class App extends Component {
             updateCharacterName={this.updateCharacterName}
           />
           <Footer />
-          <Buttons 
+          <Buttons
             characterName={this.state.characterName}
             updatePopup={this.updatePopup}
             loadedMeshes={this.state.loadedMeshes}
@@ -115,20 +122,23 @@ class App extends Component {
             updatePopup={this.updatePopup}
           />
 
-          <div className="abs top right panel">
-            <Category
-              category={this.state.category}
-              currentCategory={this.state.currentCategory}
-              updateCategory={this.updateCategory}
-              currentPose={this.state.currentPose}
-              updatePose={this.updatePose}
-              UIDisplayed={this.state.UIDisplayed}
-              loadedMeshes={this.state.loadedMeshes}
-              updateMeshes={this.updateMeshes}
-              updatePopup={this.updatePopup}
-              editor={this.state.editor}
-            />
-          </div>
+          <Category
+            category={this.state.category}
+            currentCategory={this.state.currentCategory}
+            updateCategory={this.updateCategory}
+            currentPose={this.state.currentPose}
+            updatePose={this.updatePose}
+            UIDisplayed={this.state.UIDisplayed}
+            loadedMeshes={this.state.loadedMeshes}
+            updateMeshes={this.updateMeshes}
+            updatePopup={this.updatePopup}
+            editor={this.state.editor}
+            updateLoading={this.updateLoading}
+          />
+          <PartLoader 
+            loading={this.state.partloading}
+            updateLoading={this.updateLoading}
+          />
         </BrowserView>
         <MobileView>
           <div className="abs top left smartphone">

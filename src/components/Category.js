@@ -85,7 +85,7 @@ class Category extends Component {
 
     if (this.props.UIDisplayed) {
       return (
-        <div>
+        <div className="abs top right panel">
           <div className="abs top left left-side unselectable">{categoryDiv}</div>
           <Selector 
             currentCategory={this.props.currentCategory}
@@ -96,6 +96,7 @@ class Category extends Component {
             updateMeshes={this.props.updateMeshes}
             updatePopup={this.props.updatePopup}
             editor={this.props.editor}
+            updateLoading={this.props.updateLoading}
           />
         </div>
       );
