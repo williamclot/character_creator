@@ -82,6 +82,7 @@ class Buttons extends Component {
               action: "Get it printed for £4.99!"  
             });
             this.props.updatePopup(true)
+            this.props.updatePopupMessage("Sorry this feature is still in development...")
           }}
         >
           Get it printed for $4.99
@@ -90,6 +91,7 @@ class Buttons extends Component {
           className="abs buttons"
           onClick={() => {
             this.props.updatePopup(true)
+            this.props.updatePopupMessage("Sorry this feature is still in development...")
           }}
         >
           Share on MyMiniFactory.com

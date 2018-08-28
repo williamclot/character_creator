@@ -95,6 +95,7 @@ class Category extends Component {
             loadedMeshes={this.props.loadedMeshes}
             updateMeshes={this.props.updateMeshes}
             updatePopup={this.props.updatePopup}
+            updatePopupMessage={this.props.updatePopupMessage}
             editor={this.props.editor}
             updateLoading={this.props.updateLoading}
           />

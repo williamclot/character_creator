@@ -58,7 +58,8 @@ class App extends Component {
         Stand: "circle"
       },
       editor: false,
-      partloading: false
+      partloading: false,
+      message:"Sorry this feature is still in development..."
     };
     this.updateCategory = this.updateCategory;
     this.updateCharacterName = this.updateCharacterName;
@@ -66,6 +67,7 @@ class App extends Component {
     this.updatePopup = this.updatePopup;
     this.updateMeshes = this.updateMeshes;
     this.updateLoading = this.updateLoading
+    this.updatePopupMessage = this.updatePopupMessage;
 
     this.handleLoad = this.handleLoad.bind(this);
   }
@@ -88,6 +90,9 @@ class App extends Component {
   };
   updateLoading = partloading => {
     this.setState({ partloading });
+  };
+  updatePopupMessage = message => {
+    this.setState({ message });
   };
 
   componentDidMount() {
@@ -114,14 +119,14 @@ class App extends Component {
           <Buttons
             characterName={this.state.characterName}
             updatePopup={this.updatePopup}
+            updatePopupMessage={this.updatePopupMessage}
             loadedMeshes={this.state.loadedMeshes}
           />
           <Popup
             popupDisplayed={this.state.popup}
-            message={"Sorry this feature is still in development..."}
+            message={this.state.message}
             updatePopup={this.updatePopup}
           />
-
           <Category
             category={this.state.category}
             currentCategory={this.state.currentCategory}
@@ -132,6 +137,7 @@ class App extends Component {
             loadedMeshes={this.state.loadedMeshes}
             updateMeshes={this.updateMeshes}
             updatePopup={this.updatePopup}
+            updatePopupMessage={this.updatePopupMessage}
             editor={this.state.editor}
             updateLoading={this.updateLoading}
           />

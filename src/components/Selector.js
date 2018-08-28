@@ -52,7 +52,7 @@ class Selector extends Component {
     if (item.premium){
       return (
         <div className="abs premium">
-          <FontAwesomeIcon className="abs icon" icon="dollar-sign" />
+          <FontAwesomeIcon className="abs icon big-icon" icon="dollar-sign" />
         </div>
       )
     }
@@ -145,16 +145,21 @@ class Selector extends Component {
               default:
                 meshType = undefined;
             }
-            if (category === "pose") {
-              this.applyPose(library[i].file);
-            } else if (category === "stand") {
-              window.changeStand(library[i].file);
+            if (library[i].premium) {
+              this.props.updatePopupMessage("Sorry this is a premium object, this feature is still in development...")
+              this.props.updatePopup(true)
             } else {
-              this.props.updateLoading(true)
-              window.changeMesh(category, library[i], isLeft, bones, this.state.pose);
-              let loadedMeshes = this.props.loadedMeshes;
-              loadedMeshes[meshType] = library[i].file;
-              this.props.updateMeshes(loadedMeshes);
+              if (category === "pose") {
+                this.applyPose(library[i].file);
+              } else if (category === "stand") {
+                window.changeStand(library[i].file);
+              } else {
+                this.props.updateLoading(true)
+                window.changeMesh(category, library[i], isLeft, bones, this.state.pose);
+                let loadedMeshes = this.props.loadedMeshes;
+                loadedMeshes[meshType] = library[i].file;
+                this.props.updateMeshes(loadedMeshes);
+              }
             }
           }}
         >
@@ -177,6 +182,7 @@ class Selector extends Component {
         key="add"
         onClick={() => {
           this.props.updatePopup(true)
+          this.props.updatePopupMessage("Sorry this feature is still in development...")
         }}
       >
         <div className="img" >

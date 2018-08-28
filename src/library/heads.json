@@ -109,8 +109,7 @@
 			"z":0
 		},
     "scale": 1,
-    "link": "https://www.myminifactory.com/object/3d-print-hellion-rams-head-546",
-    "premium": true
+    "link": "https://www.myminifactory.com/object/3d-print-hellion-rams-head-546"
   },
   {
 		"name": "Flexi Dead Head",
@@ -152,6 +151,7 @@
       "z": 0
     },
     "scale": 1,
-    "link": ""
+    "link": "",
+    "premium": true
   }
 ]
