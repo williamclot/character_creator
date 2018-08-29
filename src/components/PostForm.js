@@ -38,6 +38,9 @@ class PostForm extends Component {
           {
             filename: "mytest.stl",
             size: 0
+            // customizer_metadata: {
+              
+            //}
           }
         ]
       }

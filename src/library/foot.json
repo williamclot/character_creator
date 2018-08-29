@@ -55,6 +55,63 @@
         "z": 0
         }],
       "scale": 1
+    },
+    {
+      "name": "Barbarian",
+      "img": "barbarian.png",
+      "file":  ["barbarian_L", "barbarian_R"],
+      "author": "William CLOT",
+      "description": "",
+      "rotation": [
+        {
+        "x": 0,
+        "y": 0,
+        "z": 0
+        },
+        {
+        "x": 0,
+        "y": 0,
+        "z": 0
+        }],
+      "scale": 1
+    },
+    {
+      "name": "Futurama",
+      "img": "futurama.png",
+      "file":  ["futurama_L", "futurama_R"],
+      "author": "William CLOT",
+      "description": "",
+      "rotation": [
+        {
+        "x": 0,
+        "y": 0,
+        "z": 0
+        },
+        {
+        "x": 0,
+        "y": 0,
+        "z": 0
+        }],
+      "scale": 1
+    },
+    {
+      "name": "Timberland",
+      "img": "timberland.png",
+      "file":  ["timberland_L", "timberland_R"],
+      "author": "William CLOT",
+      "description": "",
+      "rotation": [
+        {
+        "x": 0,
+        "y": 0,
+        "z": 0
+        },
+        {
+        "x": 0,
+        "y": 0,
+        "z": 0
+        }],
+      "scale": 1
     }
   ]
   

@@ -20,7 +20,7 @@ window.partloaded = false;
 //This keeps track of every mesh on the viewport
 var loadedMeshes = {
   Torso: {
-    name: "turtle_torso",
+    name: "blender",
     rotation: {x:0, y:0, z:0}
   },
   LegR: {
@@ -32,8 +32,8 @@ var loadedMeshes = {
     rotation: {x: 0, y: 0, z: 0}
   },
   Head: {
-    name: "default_head",
-    rotation: {x: 0, y: 0, z: 0}
+    name: "barbarian",
+    rotation: {x: 0, y: 3.14, z: 0}
   },
   ArmR: {
     name: "default_arm_R",
@@ -44,19 +44,19 @@ var loadedMeshes = {
     rotation: {x: 0, y: 0, z: 0}
   },
   HandR: {
-    name: "open_hand_R",
+    name: "blender_R",
     rotation: {x: 0, y: -1.57, z: 0}
   },
   HandL: {
-    name: "open_hand_L",
+    name: "blender_L",
     rotation: {x: 0, y: 1.57, z: 0}
   },
   FootR: {
-    name: "default_foot_R",
+    name: "timberland_R",
     rotation: {x: 0, y: 0, z: 0}
   },
   FootL: {
-    name: "default_foot_L",
+    name: "timberland_L",
     rotation: {x: 0, y: 0, z: 0}
   }, 
   Stand: {
