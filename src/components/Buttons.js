@@ -12,7 +12,8 @@ class Buttons extends Component {
     super(props);
     this.state = {
       formVisible: false,
-      accesstoken: ''
+      accesstoken: '', 
+      dev: false
     }
     this.updateVisible = this.updateVisible;
   }
@@ -26,8 +27,13 @@ class Buttons extends Component {
     ReactGA.initialize("UA-41837285-1");
   }
 
+  
+
 
   render() {
+
+    const redirectUri = (this.state.dev) ? 'http://localhost:3000' : 'https://www.myminifactory.com/character-creator/';
+    const clientKey = (this.state.dev) ? 'customizerDev' : 'character-creator';
 
     const onSuccess = response => {
       this.setState({formVisible: true})
@@ -87,8 +93,8 @@ class Buttons extends Component {
         </div> */}
         <MyMiniFactoryLogin
           className="abs buttons"
-          clientKey="character-creator"
-          redirectUri="https://www.myminifactory.com/character-creator/"
+          clientKey={clientKey}
+          redirectUri={redirectUri}
           buttonText="Share on MyMiniFactory.com"
           onSuccess={onSuccess}
           onFailure={onFailure}

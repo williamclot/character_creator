@@ -14,5 +14,13 @@
     "author": "William CLOT",
     "description": "Default man head.",
     "scale": 1
+  },
+  {
+    "name": "Blender Torso",
+    "img": "blender_torso.png",
+    "file": "blender",
+    "author": "William CLOT",
+    "description": "Default man head.",
+    "scale": 1
   }
 ]
