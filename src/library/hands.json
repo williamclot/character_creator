@@ -77,7 +77,7 @@
   },
   {
     "name": "Barbarian",
-    "img": "Barbarian.png",
+    "img": "barbarian.png",
     "file": ["barbarian_L", "barbarian_R"],
     "author": "William CLOT",
     "description": "",
