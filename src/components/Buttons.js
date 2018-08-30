@@ -13,7 +13,7 @@ class Buttons extends Component {
     this.state = {
       formVisible: false,
       accesstoken: '', 
-      dev: false
+      dev: true
     }
     this.updateVisible = this.updateVisible;
   }

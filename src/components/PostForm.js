@@ -5,13 +5,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // Loading Assets (SubComponents & CSS)
 import "../css/postform.css";
 import Loader from "./Loader";
+import Response from './Response';
+
 
 class PostForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       name: "My Character",
-      loader: false
+      loader: false,
+      response: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -56,6 +59,12 @@ class PostForm extends Component {
         data: stlData
       }).then(response => {
         this.setState({ loader: false });
+        if (response.status === 201){
+          this.setState({response: true})
+          setTimeout(() => {
+            this.setState({response: false})
+          }, 1500);
+        }
       });
     });
   }
@@ -110,6 +119,7 @@ class PostForm extends Component {
       <div>
         {this.renderForm()}
         <Loader visible={this.state.loader} />
+        <Response visible={this.state.response} />
       </div>
     );
   }
