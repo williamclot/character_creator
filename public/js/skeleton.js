@@ -168,12 +168,13 @@ function init() {
   function buildRenderer() {
     // Create a renderer with Antialiasing
     renderer = new THREE.WebGLRenderer({ antialias: true });
+    var container = document.getElementById('canvas');
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
     renderer.setSize((6 / 5) * window.innerWidth, window.innerHeight); // Configure renderer size
     // Append Renderer to DOM
-    document.body.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
 
     var size = 50;
     var divisions = 50;
@@ -583,7 +584,6 @@ window.getRotation = function(bone_name){
     return ({x:bone.rotation.x, y:bone.rotation.y, z:bone.rotation.z})
   }
 }
-
 window.loadPose = function(poseData, bones){
   var L, R = false;
   for (let i=0; i<bones.length; i++){
