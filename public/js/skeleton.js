@@ -20,7 +20,7 @@ window.partloaded = false;
 //This keeps track of every mesh on the viewport
 var loadedMeshes = {
   Torso: {
-    name: "blender",
+    name: "barbarian",
     rotation: {x:0, y:0, z:0}
   },
   LegR: {
@@ -52,11 +52,11 @@ var loadedMeshes = {
     rotation: {x: 0, y: 1.57, z: 0}
   },
   FootR: {
-    name: "timberland_R",
+    name: "boots_R",
     rotation: {x: 0, y: 0, z: 0}
   },
   FootL: {
-    name: "timberland_L",
+    name: "boots_L",
     rotation: {x: 0, y: 0, z: 0}
   }, 
   Stand: {
@@ -196,7 +196,7 @@ function init() {
     scene.add(hemi);
 
     //Create a PointLight and turn on shadows for the light
-    var light = new THREE.PointLight(0xffffef, 1, 100);
+    var light = new THREE.PointLight(0xC1C1C1, 1, 100);
     light.position.set(3, 10, 10);
     light.castShadow = true; 
     light.penumbra = 1;
@@ -208,8 +208,14 @@ function init() {
     light.shadow.camera.far = 30; // default
     // light.shadowDarkness = 0.5;
     light.decay = 1;
-
     scene.add(light);
+
+    var backlight = new THREE.PointLight(0xC4B0AC, 1, 100);
+    backlight.position.set(0, 2, -20);
+    backlight.castShadow = false; 
+    backlight.penumbra = 2;
+
+    scene.add(backlight);
 
   }
   function buildFloor() {
