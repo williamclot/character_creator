@@ -35,5 +35,5 @@
   "devDependencies": {
     "axios": "^0.18.0"
   },
-  "homepage": "http://localhost:3000"
+  "homepage": "https://myminifactory.com/character-creator/"
 }
