@@ -5,8 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import "../css/selector.css";
 
-import defaultMeshes from '../library/defaultMeshes.json';
-
 import headElements from "../library/heads.json";
 import handElements from "../library/hands.json";
 import armElements from "../library/arm.json";
@@ -32,7 +30,7 @@ class Selector extends Component {
       .then(res => {
         this.setState({ currentPose: res.data })
         this.props.updatePose(res.data)
-        window.loadDefaultMeshes(defaultMeshes, bones, res.data)
+        window.loadDefaultMeshes(bones, res.data)
       });
   }
 

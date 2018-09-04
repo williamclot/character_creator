@@ -36,7 +36,7 @@ var loadedMeshes = {
     rotation: {x: 0, y: 3.14, z: 0}
   },
   ArmR: {
-    name: "default_arm_R",
+    name: "spyro_arm_R",
     rotation: {x: 0, y: 0, z: 0}
   },
   ArmL: {
@@ -142,7 +142,6 @@ function init() {
  
   scene.background = new THREE.Color( 0xeeeeee );
   scene.fog = new THREE.Fog( 0xeeeeee, 1, 20 );
-
   
   scene.add(group);
 
@@ -236,19 +235,6 @@ function init() {
   }
 }
 
-function createReferenceSphere(pos) {
-  //Create a plane that receives shadows (but does not cast them)
-  var sphereGeometry = new THREE.SphereBufferGeometry(0.05, 0.05, 10);
-  var sphereMaterial = new THREE.MeshStandardMaterial({
-    color: 0xff1f00
-  });
-  var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-  sphere.name = "sphere";
-  sphere.position.x = pos.x;
-  sphere.position.y = pos.y;
-  sphere.position.z = pos.z;
-  scene.add(sphere);
-}
 function clearPosition(item) {
   item.position.x = 0;
   item.position.y = 0;
@@ -453,7 +439,7 @@ window.changeStand = function(stand) {
     );
   }
 }
-window.loadDefaultMeshes = function(loadedMeshes, bones, poseData) {
+window.loadDefaultMeshes = function(bones, poseData) {
   placeMesh(
     loadedMeshes["Torso"].name,
     meshStaticInfo["Torso"].bodyPart,
