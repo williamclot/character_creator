@@ -284,6 +284,7 @@ function placeMesh(
     "models/" + bodyPartClass + "/" + meshName + ".glb",
     gltf => {
       var root = gltf.scene.children[0];
+      console.log(root)
       root.traverse( function(child){
         if (child instanceof THREE.Mesh){
           child.castShadow = true;
@@ -547,6 +548,7 @@ function changeColor(item, choosenColor){
     }
   });
 }
+
 window.changeRotation = function(bone_name, value, axis){
   var bone = scene.getObjectByName(bone_name);
   if (bone instanceof THREE.Bone){
