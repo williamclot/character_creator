@@ -48,7 +48,7 @@ THREE.STLExporter.prototype = {
 
 							vector.copy( face.normal ).applyMatrix3( normalMatrixWorld ).normalize();
 
-							output += '\tfacet normal ' + vector.x + ' ' + vector.z + ' ' + vector.y + '\n';
+							output += '\tfacet normal ' + vector.x + ' ' + vector.y + ' ' + vector.z + '\n';
 							output += '\t\touter loop\n';
 
 							var indices = [ face.a, face.b, face.c ];
@@ -57,7 +57,7 @@ THREE.STLExporter.prototype = {
 								var vertexIndex = indices[ j ];
 								if (geometry.skinIndices.length == 0) {
 									vector.copy( vertices[ vertexIndex ] ).applyMatrix4( matrixWorld );
-									output += '\t\t\tvertex ' + vector.x*35 + ' ' + vector.z*35 + ' ' + vector.y*35 + '\n';
+									output += '\t\t\tvertex ' + vector.x*35 + ' ' + vector.y*35 + ' ' + vector.z*35 + '\n';
 								} else {
 									vector.copy( vertices[ vertexIndex ] ); //.applyMatrix4( matrixWorld );
 									
@@ -96,7 +96,7 @@ THREE.STLExporter.prototype = {
 										.applyMatrix4(skinMatrices[k]);
 										finalVector.add(tempVector);
 									}
-									output += '\t\t\tvertex ' + finalVector.x*35 + ' ' + finalVector.z*35 + ' ' + finalVector.y*35 + '\n';
+									output += '\t\t\tvertex ' + finalVector.x*35 + ' ' + finalVector.y*35 + ' ' + finalVector.z*35 + '\n';
 								}
 							}
 							output += '\t\tendloop\n';

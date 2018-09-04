@@ -74,5 +74,24 @@
         "z": 0
         }],
     "scale": 1
+  },
+  {
+    "name": "Spyro Arm",
+    "img": "spyro.png",
+    "file": ["spyro_arm_L", "spyro_arm_R"],
+    "author": "William CLOT",
+    "description": "Wings",
+    "rotation": [
+      {
+        "x": 0,
+        "y": 0,
+        "z": 0
+        },
+        {
+        "x": 0,
+        "y": 0,
+        "z": 0
+        }],
+    "scale": 1
   }
 ]

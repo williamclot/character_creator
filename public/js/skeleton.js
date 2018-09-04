@@ -36,19 +36,19 @@ var loadedMeshes = {
     rotation: {x: 0, y: 3.14, z: 0}
   },
   ArmR: {
-    name: "spyro_arm_R",
+    name: "thin_arm_R",
     rotation: {x: 0, y: 0, z: 0}
   },
   ArmL: {
-    name: "default_arm_L",
+    name: "thin_arm_L",
     rotation: {x: 0, y: 0, z: 0}
   },
   HandR: {
-    name: "blender_R",
+    name: "open_hand_R",
     rotation: {x: 0, y: -1.57, z: 0}
   },
   HandL: {
-    name: "blender_L",
+    name: "open_hand_L",
     rotation: {x: 0, y: 1.57, z: 0}
   },
   FootR: {
