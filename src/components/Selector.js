@@ -301,10 +301,17 @@ class Selector extends Component {
       </div>
     );
 
+    const searchBar = (
+      <div className="abs searchContainer">
+        <div className="abs searchBar">Search</div>
+      </div>
+    )
+
     return (
       <div>
         <div className="abs top right right-side">
           <div className="box">
+            {searchBar}
             {sideIdencator ? buttons : ""}
             {category === "pose" && this.props.editor ? editorButtons : ""}
           </div>

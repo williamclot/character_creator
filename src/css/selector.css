@@ -44,11 +44,18 @@
   border-radius: 10px 0px 0px 10px;
 }
 
+.searchContainer{
+  background-color: rgb(236,236,236);
+  width: calc(100% - 20px);
+  height: 40px;
+  border-radius: 10px;
+}
+
 .selector {
-  top: 40px;
+  top: 90px;
   left: 0;
   width: calc(100% - 30px);
-  height: calc(100% - 40px);
+  height: calc(100% - 90px);
   border-radius: 0px 0px 20px 20px;
   padding: 4px 10px 10px 10px;
 
@@ -66,6 +73,7 @@
   top: 90px;
   height: calc(100% - 90px);
 }
+
 
 @media (min-width: 1130px) {
   .selector {
