@@ -624,7 +624,7 @@ window.export = function(name) {
           }
         });
       }
-      console.log(exportedMeshes)
+      // console.log(exportedMeshes)
       return exportedMeshes
   }
 };
