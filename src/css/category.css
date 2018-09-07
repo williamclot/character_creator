@@ -1,8 +1,8 @@
 .panel {
   background-color: rgba(255, 255, 255, 0);
   width: 25%;
-  height: calc(100% - 30px);
-  padding: 30px;
+  height: 100%;
+  /* padding: 30px; */
 }
 
 .right-side {
@@ -13,7 +13,7 @@
 .left-side {
   width: 20%;
   max-width: 60px;
-  height: calc(100% + 60px);
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;

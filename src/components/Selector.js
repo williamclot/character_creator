@@ -27,17 +27,17 @@ class Selector extends Component {
 		this.updateSearchValue = this.updateSearchValue;
 	}
 
-	updateSearchValue = (search) => {
+	updateSearchValue = search => {
 		this.setState({ search });
 	};
 
 	componentDidMount() {
 		// Load the base model with defaultMeshes and defaultPose
-		axios.get("models/poses/default.json").then(res => {
-			this.setState({ currentPose: res.data });
-			this.props.updatePose(res.data);
-			window.loadDefaultMeshes(bones, res.data);
-		});
+		// axios.get("models/poses/default.json").then(res => {
+		// 	this.setState({ currentPose: res.data });
+		// 	this.props.updatePose(res.data);
+		// 	window.loadDefaultMeshes(bones, res.data);
+		// });
 	}
 
 	applyPose(file) {
@@ -328,33 +328,31 @@ class Selector extends Component {
 			<div>
 				<div className="abs top right right-side">
 					<div className="box">
-						<SearchBar 
-							updateSearchValue = {this.updateSearchValue}
-						/>
+						<SearchBar updateSearchValue={this.updateSearchValue} />
 						{sideIdencator ? buttons : ""}
-						{category === "pose" && this.props.editor
-							? editorButtons
-							: ""}
-					</div>
-					<div
-						className={
-							"abs top left " +
-							(category === "pose" && this.state.editor
-								? " selector-full"
-								: "selector") +
-							(sideIdencator ||
-							(category === "pose" && this.props.editor)
-								? " selector-full"
-								: "")
-						}
-					>
-						{category === "pose" &&
-						this.state.editor &&
-						this.props.editor ? (
-							<Editor />
-						) : (
-							elementDiv
-						)}
+						{category === "pose" && this.props.editor ? editorButtons : ""}
+						<div
+							className={
+								"abs top left " +
+								(category === "pose" && this.state.editor
+									? " selector-full"
+									: "selector") +
+								(sideIdencator ||
+								(category === "pose" && this.props.editor)
+									? " selector-full"
+									: "")
+							}
+						>
+							<div className="abs top left selector-nopadding">
+								{category === "pose" &&
+								this.state.editor &&
+								this.props.editor ? (
+									<Editor />
+								) : (
+									elementDiv
+								)}
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
