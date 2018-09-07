@@ -4,8 +4,6 @@
   text-align: center;
   font-size: 10px;
 }
-
-.licence a {
-  color: black;
-  cursor: pointer;
+.a-licence > a{
+  margin-left: 4px;
 }

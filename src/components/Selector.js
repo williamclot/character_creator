@@ -209,7 +209,6 @@ class Selector extends Component {
 			>
 				<div className="img">
 					<img
-						className="plus"
 						src="img/library/plus.svg"
 						alt="plus sign"
 					/>
