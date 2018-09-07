@@ -48,7 +48,7 @@ class Selector extends Component {
     if (item.premium) {
       return (
         <div className="abs premium">
-          <FontAwesomeIcon className="abs icon big-icon" icon="dollar-sign" />
+          <FontAwesomeIcon className="abs centered white big-icon" icon="dollar-sign" />
         </div>
       );
     }
@@ -58,7 +58,7 @@ class Selector extends Component {
     if (item.link) {
       return (
         <a className="abs link" href={item.link}>
-          <FontAwesomeIcon className="abs icon" icon="link" />
+          <FontAwesomeIcon className="abs centered white icon" icon="link" />
         </a>
       );
     }
@@ -305,7 +305,7 @@ class Selector extends Component {
       <div className="abs searchContainer">
         <div className="abs searchText">Search</div>
         <div className="abs searchButton">
-          <FontAwesomeIcon className="abs icon" icon="search" />
+          <FontAwesomeIcon className="abs centered" icon="search" />
         </div>
       </div>
     )

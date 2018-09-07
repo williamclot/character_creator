@@ -1,3 +1,22 @@
+/* --------------------------------------------------------
+Style Sheet for the Selector.js component
+
+last modified: 07.09.2018
+author: William Clot
+email: contact@williamclot.com
+website: https://github.com/williamclot
+
+CONTENTS:
+- Selector
+- Side Indicator
+- Search Bar
+- Elements
+- Corner vignette
+----------------------------------------------------------*/
+
+/* Box div for Selector */
+/* -------------------- */
+
  .box {
   background-color: rgba(0, 0, 0, 0.4);
   box-shadow: 0px 0px 20px #000000;
@@ -9,6 +28,10 @@
   border-radius: 20px;
   padding: 10px;
 }
+
+/* Side indicator style */
+/* -------------------- */
+
 .switch {
   top: 12px;
   height: 40px;
@@ -17,8 +40,6 @@
   background-color: rgba(144, 144, 144, 0.2);
   border: 1px #a8a8a8 solid;
 }
-
-/* Side indicator style */
 
 .side {
   width: 50%;
@@ -47,6 +68,7 @@
 }
 
 /* Search Bar */
+/* ---------- */
 
 .searchContainer{
   background-color: #00000059;
@@ -104,10 +126,8 @@
   }
 }
 
-.el:hover {
-  background-color: #121c1f59;
-  box-shadow: 0px 0px 5px #353535;
-}
+/* Element in the selector styling */
+/* ------------------------------- */
 
 .el {
   width: 100%;
@@ -121,6 +141,10 @@
   cursor: pointer;
   overflow: hidden;
   position: relative;
+}
+.el:hover {
+  background-color: #121c1f59;
+  box-shadow: 0px 0px 5px #353535;
 }
 
 .img {
@@ -150,6 +174,9 @@
   font-size: 10px;
 }
 
+/* Small top corner vignettes for links and premium information */
+/* ------------------------------------------------------------ */
+
 .premium{
   top:0px;
   left:0px;
@@ -173,13 +200,10 @@
 }
 
 .icon{
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  /* color:white; */
   font-size: 11px;
 }
 
 .big-icon{
+  /* Premium icon is bigger */
   font-size: 13px;
 }
