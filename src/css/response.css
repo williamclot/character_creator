@@ -1,3 +1,14 @@
+/* --------------------------------------------------------
+Style Sheet for the Response.js component
+
+last modified: 07.09.2018
+author: William Clot
+email: contact@williamclot.com
+website: https://github.com/williamclot
+
+Need to do the error case
+----------------------------------------------------------*/
+
 .check_mark {
     top: 50%;
     left:50%;
@@ -13,6 +24,8 @@
   display: none;
 }
 
+/* Icon of success - CSS animation */
+/* ------------------------------- */
 .sa-icon {
   width: 80px;
   height: 80px;
@@ -31,20 +44,6 @@
 .sa-icon.sa-success {
   border-color: #4caf50;
 }
-
-/* .sa-icon.sa-success::before,
-.sa-icon.sa-success::after {
-  content: "";
-  -webkit-border-radius: 40px;
-  border-radius: 40px;
-  border-radius: 50%;
-  position: absolute;
-  width: 60px;
-  height: 120px;
-  background: white;
-  -webkit-transform: rotate(45deg);
-  transform: rotate(45deg);
-} */
 
 .sa-icon.sa-success::before {
   -webkit-border-radius: 120px 0 0 120px;
