@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Popup from './Popup';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 import "../css/footer.css";
 
@@ -28,10 +30,10 @@ class Footer extends Component {
         />
         <div className="licence abs bottom">
           <a onClick={ () => {
-            const content = <span>Licensing associated with files download from Character Creator (beta): 
-              <a href="https://www.myminifactory.com/pages/object-licensing"> Credit Designer</a>,
-              <a href="https://www.myminifactory.com/pages/object-licensing"> Remixing Allowed</a>,
-              <a href="https://www.myminifactory.com/pages/object-licensing"> Commercial Use Not Allowed</a></span>
+            const content = <span className="a-licence">Licensing associated with files download from Character Creator (beta):
+              <a href="https://www.myminifactory.com/pages/object-licensing">Credit Designer</a>,
+              <a href="https://www.myminifactory.com/pages/object-licensing">Remixing Allowed</a>,
+              <a href="https://www.myminifactory.com/pages/object-licensing">Commercial Use Not Allowed</a></span>
             this.setState({popup: true, message: content});
           }}>Licence Information</a> | 
           <a onClick={() => {

@@ -14,7 +14,6 @@ class PageLoader extends Component {
     }
 
     componentDidMount() {
-        $('.graybackground').css('visibility', 'hidden')
         this.check = setInterval(() => {
             if (window.loaded) {
                 clearInterval(this.check)

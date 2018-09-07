@@ -15,11 +15,26 @@
 }
 .message{
     top: 120px;
+    left: 10px;
     font-size: 15px;
     font-weight: 700;
-    width: 100%;
+    width: calc(100% - 20px);
+    height: 100px;
     text-align: center;
-    padding: 10px;
+    vertical-align: center;
+}
+
+.message p{
+    width: 100%;
+    margin: 0;
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+}
+
+.message p a{
+    color: rgb(49, 184, 161);
 }
 
 .popup img{

@@ -16,8 +16,8 @@ canvas {
   margin-bottom: 20px;
 }
 ::-webkit-scrollbar {
-  width: 4px;
-  position: absolute;
+  width: 5px;
+  background: none;
 }
 
 ::-webkit-scrollbar-thumb {

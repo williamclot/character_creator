@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Loading Assets (SubComponents & CSS)
 import "../css/postform.css";
 import Loader from "./Loader";
-import Response from './Response';
-
+import Response from "./Response";
 
 class PostForm extends Component {
   constructor(props) {
@@ -25,6 +24,7 @@ class PostForm extends Component {
     this.setState({ loader: true });
     const accesstoken = this.props.accesstoken;
     const stlData = window.export();
+
     axios({
       method: "post",
       url: "https://www.myminifactory.com/api/v2/object",
@@ -39,33 +39,70 @@ class PostForm extends Component {
         tags: "customizer",
         files: [
           {
-            filename: "mytest.stl",
-            size: 0
+            filename: "Stand.stl"
             // customizer_metadata: {
-              
             //}
+          },
+          {
+            filename: "Mesh_Torso.stl"
+          },
+          {
+            filename: "Mesh_Arm_L.stl"
+          },
+          {
+            filename: "Mesh_Arm_R.stl"
+          },
+          {
+            filename: "Mesh_Foot_L.stl"
+          },
+          {
+            filename: "Mesh_Foot_R.stl"
+          },
+          {
+            filename: "Mesh_Hand_L.stl"
+          },
+          {
+            filename: "Mesh_Hand_R.stl"
+          },
+          {
+            filename: "Mesh_Head.stl"
+          },
+          {
+            filename: "Mesh_Leg_L.stl"
+          },
+          {
+            filename: "Mesh_Leg_R.stl"
+          },
+          {
+            filename: "Mesh_Neck.stl"
           }
         ]
       }
     }).then(response => {
-      const uploadID = response.data.files[0].upload_id;
-      // console.log(uploadID)
-      axios({
-        method: "post",
-        url: "https://www.myminifactory.com/api/v2/file?upload_id=" + uploadID,
-        headers: {
-          Authorization: "Bearer " + accesstoken
-        },
-        data: stlData
-      }).then(response => {
-        this.setState({ loader: false });
-        if (response.status === 201){
-          this.setState({response: true})
-          setTimeout(() => {
-            this.setState({response: false})
-          }, 1500);
-        }
-      });
+      const files = response.data.files;
+      for (var i = 0; i < files.length; i++) {
+        var uploadID = files[i].upload_id;
+        console.log(uploadID);
+        axios({
+          method: "post",
+          url:
+            "https://www.myminifactory.com/api/v2/file?upload_id=" + uploadID,
+          headers: {
+            Authorization: "Bearer " + accesstoken
+          },
+          data: stlData[i]
+        }).then(response => {
+          if (i === files.length) {
+            this.setState({ loader: false });
+            if (response.status === 201) {
+              this.setState({ response: true });
+              setTimeout(() => {
+                this.setState({ response: false });
+              }, 1500);
+            }
+          }
+        });
+      }
     });
   }
 
