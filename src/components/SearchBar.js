@@ -13,12 +13,12 @@ class SearchBar extends Component {
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-    handleChange(event) {
+    handleChange= (event) => {
         this.setState({search: event.target.value});
     }
     handleSubmit = (event) => {
-        alert("sent");
         event.preventDefault();
+        this.props.updateSearchValue(this.state.search);
     }
 
     render() {
