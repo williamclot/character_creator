@@ -28,7 +28,7 @@ class Selector extends Component {
 
   componentDidMount() {
     // Load the base model with defaultMeshes and defaultPose
-    axios.get('models/poses/default.json')
+    axios.get(process.env.PUBLIC_URL + '/models/poses/default.json')
       .then(res => {
         this.setState({ currentPose: res.data })
         this.props.updatePose(res.data)
@@ -39,7 +39,7 @@ class Selector extends Component {
   applyPose(file) {
     let poseData;
     //Ajax in react
-    axios.get('models/poses/' + file + '.json')
+    axios.get(process.env.PUBLIC_URL + '/models/poses/' + file + '.json')
       .then(res => {
         poseData = res.data
         this.setState({ pose: poseData })
@@ -165,7 +165,7 @@ class Selector extends Component {
         >
           <div className="img">
             <img
-              src={"img/library/" + category + "/" + library[i].img}
+              src={process.env.PUBLIC_URL + "/img/library/" + category + "/" + library[i].img}
               alt={library[i].img}
             />
           </div>
@@ -188,7 +188,7 @@ class Selector extends Component {
         <div className="img" >
           <img
             className="plus"
-            src="img/library/plus.svg"
+            src={process.env.PUBLIC_URL + "/img/library/plus.svg"}
             alt="plus sign"
           />
         </div>

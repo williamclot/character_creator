@@ -32,7 +32,7 @@ class Category extends Component {
       if (name === current) {
         categoryDiv.push(
           <div className="category selected-category" key={i}>
-            <img src={"img/graphics_creation/" + file} alt={name} />
+            <img src={process.env.PUBLIC_URL+"/img/graphics_creation/" + file} alt={name} />
           </div>
         );
       } else {
@@ -77,7 +77,7 @@ class Category extends Component {
 
             }}
           >
-            <img src={"img/graphics_creation/" + file} alt={name} />
+            <img src={process.env.PUBLIC_URL + "/img/graphics_creation/" + file} alt={name} />
           </div>
         );
       }

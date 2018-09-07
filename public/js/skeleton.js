@@ -288,7 +288,7 @@ function placeMesh(
   // bodyPartClass : {arm, head, hand, torso, leg, foot}
   // MeshType : {ArmR, ArmL, Head, HandR, HandL, LegR, LegL, FootR, FootL, Torso}
   loader.load(
-    "models/" + bodyPartClass + "/" + meshName + ".glb",
+    publicUrl + "/models/" + bodyPartClass + "/" + meshName + ".glb",
     gltf => {
       var root = gltf.scene.children[0];
       root.traverse( function(child){
@@ -383,7 +383,7 @@ function placeStand(){
     
   } else{
     loader.load(
-      "models/stand/circle.glb",
+      publicUrl + "/models/stand/circle.glb",
       gltf => {
         var root = gltf.scene.children[0];
 
@@ -420,7 +420,7 @@ window.changeStand = function(stand) {
   if (scene.getObjectByName("Stand")){
     group.remove(scene.getObjectByName("Stand"))
     loader.load(
-      "models/stand/"+stand+".glb",
+      publicUrl + "/models/stand/"+stand+".glb",
       gltf => {
         var root = gltf.scene.children[0];
 
