@@ -110,7 +110,7 @@ class App extends Component {
     return (
       <div>
         <BrowserView>
-          {/* <PageLoader /> */}
+          <PageLoader />
           <Logo />
           <Name
             characterName={this.state.characterName}

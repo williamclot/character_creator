@@ -28,7 +28,7 @@
   bottom: 110px;
 }
 
-#customizerUI button {
+button {
   background: none;
   color: inherit;
   border: none;
