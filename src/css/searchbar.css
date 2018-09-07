@@ -22,6 +22,7 @@ CONTENTS:
 }
 
 .searchText {
+	font: inherit;
 	background-color: transparent;
 	color: inherit;
 	width: calc(100% - 40px);
