@@ -28,12 +28,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "make PUBLIC_URL='http://mmf.local/character-creator/' && react-scripts build",
+    "build": "make PUBLIC_URL='https://myminifactory.com/character-creator/' && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
     "axios": "^0.18.0"
   },
-  "homepage": "http://mmf.local/character-creator/"
+  "homepage": "https://myminifactory.com/character-creator/"
 }

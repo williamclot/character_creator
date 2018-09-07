@@ -22,5 +22,21 @@
     "author": "William CLOT",
     "description": "Default man head.",
     "scale": 1
+  },
+  {
+    "name": "Barbarian Torso",
+    "img": "barbarian.png",
+    "file": "barbarian",
+    "author": "William CLOT",
+    "description": "Default man head.",
+    "scale": 1
+  },
+  {
+    "name": "Man Torso",
+    "img": "man_torso.png",
+    "file": "man_torso",
+    "author": "William CLOT",
+    "description": "Default man head.",
+    "scale": 1
   }
 ]

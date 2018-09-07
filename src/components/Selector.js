@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import Editor from "./Editor";
 import axios from "axios";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "../css/selector.css";
-
-import defaultMeshes from '../library/defaultMeshes.json';
 
 import headElements from "../library/heads.json";
 import handElements from "../library/hands.json";
@@ -15,56 +13,54 @@ import footElements from "../library/foot.json";
 import legElements from "../library/leg.json";
 import standElements from "../library/stands.json";
 import poseElements from "../library/poses.json";
-import bones from "../library/bones.json"
+import bones from "../library/bones.json";
 
 class Selector extends Component {
   constructor(props) {
     super(props);
     this.state = {
       editor: false,
-      pose: undefined,
-    }
+      pose: undefined
+    };
   }
 
   componentDidMount() {
     // Load the base model with defaultMeshes and defaultPose
-    axios.get(process.env.PUBLIC_URL + '/models/poses/default.json')
-      .then(res => {
-        this.setState({ currentPose: res.data })
-        this.props.updatePose(res.data)
-        window.loadDefaultMeshes(defaultMeshes, bones, res.data)
-      });
+    axios.get(process.env.PUBLIC_URL + "/models/poses/default.json").then(res => {
+      this.setState({ currentPose: res.data });
+      this.props.updatePose(res.data);
+      window.loadDefaultMeshes(bones, res.data);
+    });
   }
 
   applyPose(file) {
     let poseData;
     //Ajax in react
-    axios.get(process.env.PUBLIC_URL + '/models/poses/' + file + '.json')
-      .then(res => {
-        poseData = res.data
-        this.setState({ pose: poseData })
-        this.props.updatePose(poseData)
-        window.loadPose(poseData, bones)
-      });
+    axios.get(process.env.PUBLIC_URL + "/models/poses/" + file + ".json").then(res => {
+      poseData = res.data;
+      this.setState({ pose: poseData });
+      this.props.updatePose(poseData);
+      window.loadPose(poseData, bones);
+    });
   }
 
-  RenderPremium(item){
-    if (item.premium){
+  RenderPremium(item) {
+    if (item.premium) {
       return (
         <div className="abs premium">
           <FontAwesomeIcon className="abs icon big-icon" icon="dollar-sign" />
         </div>
-      )
+      );
     }
   }
 
-  RenderLink(item){
-    if (item.link){
+  RenderLink(item) {
+    if (item.link) {
       return (
         <a className="abs link" href={item.link}>
           <FontAwesomeIcon className="abs icon" icon="link" />
         </a>
-      )
+      );
     }
   }
 
@@ -131,31 +127,39 @@ class Selector extends Component {
                 meshType = "Head";
                 break;
               case "hand":
-                meshType = (isLeft) ? "HandL" : "HandR";
+                meshType = isLeft ? "HandL" : "HandR";
                 break;
               case "arm":
-                meshType = (isLeft) ? "ArmL" : "ArmR";
+                meshType = isLeft ? "ArmL" : "ArmR";
                 break;
               case "foot":
-                meshType = (isLeft) ? "FootL" : "FootR";
+                meshType = isLeft ? "FootL" : "FootR";
                 break;
               case "leg":
-                meshType = (isLeft) ? "LegL" : "LegR";
+                meshType = isLeft ? "LegL" : "LegR";
                 break;
               default:
                 meshType = undefined;
             }
             if (library[i].premium) {
-              this.props.updatePopupMessage("Sorry this is a premium object, this feature is still in development...")
-              this.props.updatePopup(true)
+              this.props.updatePopupMessage(
+                "Sorry this is a premium object, this feature is still in development..."
+              );
+              this.props.updatePopup(true);
             } else {
               if (category === "pose") {
                 this.applyPose(library[i].file);
               } else if (category === "stand") {
                 window.changeStand(library[i].file);
               } else {
-                this.props.updateLoading(true)
-                window.changeMesh(category, library[i], isLeft, bones, this.state.pose);
+                this.props.updateLoading(true);
+                window.changeMesh(
+                  category,
+                  library[i],
+                  isLeft,
+                  bones,
+                  this.state.pose
+                );
                 let loadedMeshes = this.props.loadedMeshes;
                 loadedMeshes[meshType] = library[i].file;
                 this.props.updateMeshes(loadedMeshes);
@@ -170,9 +174,8 @@ class Selector extends Component {
             />
           </div>
           <div className="unselectable el-name">{library[i].name}</div>
-          {  this.RenderPremium(library[i]) }
-          {  this.RenderLink(library[i]) }
-
+          {this.RenderPremium(library[i])}
+          {this.RenderLink(library[i])}
         </div>
       );
     }
@@ -181,16 +184,14 @@ class Selector extends Component {
         className="el"
         key="add"
         onClick={() => {
-          this.props.updatePopup(true)
-          this.props.updatePopupMessage("Sorry this feature is still in development...")
+          this.props.updatePopup(true);
+          this.props.updatePopupMessage(
+            "Sorry this feature is still in development..."
+          );
         }}
       >
-        <div className="img" >
-          <img
-            className="plus"
-            src={process.env.PUBLIC_URL + "/img/library/plus.svg"}
-            alt="plus sign"
-          />
+        <div className="img">
+          <img className="plus" src={process.env.PUBLIC_URL + "/img/library/plus.svg" } alt="plus sign" />
         </div>
         <div className="unselectable el-name">Add your designs</div>
       </div>
@@ -199,7 +200,9 @@ class Selector extends Component {
     const buttons = (
       <div className="abs switch">
         <div
-          className={"unselectable abs left side L " + (isLeft ? "side-selected" : "")}
+          className={
+            "unselectable abs left side L " + (isLeft ? "side-selected" : "")
+          }
           onClick={() => {
             this.props.updateLeft(true);
             var MeshType;
@@ -233,7 +236,9 @@ class Selector extends Component {
           Left
         </div>
         <div
-          className={"unselectable abs right side R " + (isLeft ? "" : "side-selected")}
+          className={
+            "unselectable abs right side R " + (isLeft ? "" : "side-selected")
+          }
           onClick={() => {
             this.props.updateLeft(false);
             var MeshType;
@@ -272,32 +277,53 @@ class Selector extends Component {
     const editorButtons = (
       <div className="abs switch">
         <div
-          className={"unselectable abs left side L " + (this.state.editor ? "" : "side-selected")}
-          onClick={() => { this.setState({ editor: false }) }}
-        >Poses</div>
+          className={
+            "unselectable abs left side L " +
+            (this.state.editor ? "" : "side-selected")
+          }
+          onClick={() => {
+            this.setState({ editor: false });
+          }}
+        >
+          Poses
+        </div>
         <div
-          className={"unselectable abs right side R " + (this.state.editor ? "side-selected" : "")}
-          onClick={() => { this.setState({ editor: true }) }}
-        >Editor</div>
+          className={
+            "unselectable abs right side R " +
+            (this.state.editor ? "side-selected" : "")
+          }
+          onClick={() => {
+            this.setState({ editor: true });
+          }}
+        >
+          Editor
+        </div>
       </div>
     );
-
 
     return (
       <div>
         <div className="abs top right right-side">
           <div className="box">
             {sideIdencator ? buttons : ""}
-            {(category === 'pose' && this.props.editor) ? editorButtons : ""}
+            {category === "pose" && this.props.editor ? editorButtons : ""}
           </div>
           <div
             className={
               "abs top left " +
-              ((category === "pose" && this.state.editor) ? " selector-full" : "selector") +
-              ((sideIdencator || (category === 'pose' && this.props.editor)) ? " selector-full" : "")
+              (category === "pose" && this.state.editor
+                ? " selector-full"
+                : "selector") +
+              (sideIdencator || (category === "pose" && this.props.editor)
+                ? " selector-full"
+                : "")
             }
           >
-            {(category === "pose" && this.state.editor && this.props.editor) ? <Editor /> : elementDiv}
+            {category === "pose" && this.state.editor && this.props.editor ? (
+              <Editor />
+            ) : (
+              elementDiv
+            )}
           </div>
         </div>
       </div>

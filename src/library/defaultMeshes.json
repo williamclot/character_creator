@@ -2,45 +2,5 @@
     "Torso": {
       "name": "turtle_torso",
       "rotation": {"x":0, "y":0, "z":0}
-    },
-    "LegR": {
-      "name": "default_leg_R",
-      "rotation": {"x": 0, "y": 0, "z": 0}
-    },
-    "LegL": {
-      "name": "default_leg_L",
-      "rotation": {"x": 0, "y": 0, "z": 0}
-    },
-    "Head": {
-      "name": "default_head",
-      "rotation": {"x": 0, "y": 0, "z": 0}
-    },
-    "ArmR": {
-      "name": "default_arm_R",
-      "rotation": {"x": 0, "y": 0, "z": 0}
-    },
-    "ArmL": {
-      "name": "default_arm_L",
-      "rotation": {"x": 0, "y": 0, "z": 0}
-    },
-    "HandR": {
-      "name": "open_hand_R",
-      "rotation": {"x": 0, "y": -1.57, "z": 0}
-    },
-    "HandL": {
-      "name": "open_hand_L",
-      "rotation": {"x": 0, "y": 1.57, "z": 0}
-    },
-    "FootR": {
-      "name": "default_foot_R",
-      "rotation": {"x": 0, "y": 0, "z": 0}
-    },
-    "FootL": {
-      "name": "default_foot_L",
-      "rotation": {"x": 0, "y": 0, "z": 0}
-    }, 
-    "Stand": {
-      "name": "default",
-      "rotation": {"x": 0, "y": 0, "z": 0}
     }
-  }
+}

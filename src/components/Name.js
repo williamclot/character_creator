@@ -7,7 +7,7 @@ class Name extends Component {
   render() {
     return (
       <div className="name unselectable abs top left">
-        Character Creator
+       <span className="my">My</span>MiniFactory
         <span className="beta">(Beta)</span>
       </div>
     );

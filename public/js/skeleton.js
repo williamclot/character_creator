@@ -20,7 +20,7 @@ window.partloaded = false;
 //This keeps track of every mesh on the viewport
 var loadedMeshes = {
   Torso: {
-    name: "blender",
+    name: "barbarian",
     rotation: {x:0, y:0, z:0}
   },
   LegR: {
@@ -36,27 +36,27 @@ var loadedMeshes = {
     rotation: {x: 0, y: 3.14, z: 0}
   },
   ArmR: {
-    name: "default_arm_R",
+    name: "thin_arm_R",
     rotation: {x: 0, y: 0, z: 0}
   },
   ArmL: {
-    name: "default_arm_L",
+    name: "thin_arm_L",
     rotation: {x: 0, y: 0, z: 0}
   },
   HandR: {
-    name: "blender_R",
+    name: "open_hand_R",
     rotation: {x: 0, y: -1.57, z: 0}
   },
   HandL: {
-    name: "blender_L",
+    name: "open_hand_L",
     rotation: {x: 0, y: 1.57, z: 0}
   },
   FootR: {
-    name: "timberland_R",
+    name: "boots_R",
     rotation: {x: 0, y: 0, z: 0}
   },
   FootL: {
-    name: "timberland_L",
+    name: "boots_L",
     rotation: {x: 0, y: 0, z: 0}
   }, 
   Stand: {
@@ -142,7 +142,6 @@ function init() {
  
   scene.background = new THREE.Color( 0xeeeeee );
   scene.fog = new THREE.Fog( 0xeeeeee, 1, 20 );
-
   
   scene.add(group);
 
@@ -168,12 +167,13 @@ function init() {
   function buildRenderer() {
     // Create a renderer with Antialiasing
     renderer = new THREE.WebGLRenderer({ antialias: true });
+    var container = document.getElementById('canvas');
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
     renderer.setSize((6 / 5) * window.innerWidth, window.innerHeight); // Configure renderer size
     // Append Renderer to DOM
-    document.body.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
 
     var size = 50;
     var divisions = 50;
@@ -196,7 +196,7 @@ function init() {
     scene.add(hemi);
 
     //Create a PointLight and turn on shadows for the light
-    var light = new THREE.PointLight(0xffffef, 1, 100);
+    var light = new THREE.PointLight(0xC1C1C1, 1, 100);
     light.position.set(3, 10, 10);
     light.castShadow = true; 
     light.penumbra = 1;
@@ -208,8 +208,14 @@ function init() {
     light.shadow.camera.far = 30; // default
     // light.shadowDarkness = 0.5;
     light.decay = 1;
-
     scene.add(light);
+
+    var backlight = new THREE.PointLight(0xC4B0AC, 1, 100);
+    backlight.position.set(0, 2, -20);
+    backlight.castShadow = false; 
+    backlight.penumbra = 2;
+
+    scene.add(backlight);
 
   }
   function buildFloor() {
@@ -229,19 +235,6 @@ function init() {
   }
 }
 
-function createReferenceSphere(pos) {
-  //Create a plane that receives shadows (but does not cast them)
-  var sphereGeometry = new THREE.SphereBufferGeometry(0.05, 0.05, 10);
-  var sphereMaterial = new THREE.MeshStandardMaterial({
-    color: 0xff1f00
-  });
-  var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-  sphere.name = "sphere";
-  sphere.position.x = pos.x;
-  sphere.position.y = pos.y;
-  sphere.position.z = pos.z;
-  scene.add(sphere);
-}
 function clearPosition(item) {
   item.position.x = 0;
   item.position.y = 0;
@@ -291,6 +284,7 @@ function placeMesh(
     publicUrl + "/models/" + bodyPartClass + "/" + meshName + ".glb",
     gltf => {
       var root = gltf.scene.children[0];
+      console.log(root)
       root.traverse( function(child){
         if (child instanceof THREE.Mesh){
           child.castShadow = true;
@@ -446,7 +440,7 @@ window.changeStand = function(stand) {
     );
   }
 }
-window.loadDefaultMeshes = function(loadedMeshes, bones, poseData) {
+window.loadDefaultMeshes = function(bones, poseData) {
   placeMesh(
     loadedMeshes["Torso"].name,
     meshStaticInfo["Torso"].bodyPart,
@@ -554,6 +548,7 @@ function changeColor(item, choosenColor){
     }
   });
 }
+
 window.changeRotation = function(bone_name, value, axis){
   var bone = scene.getObjectByName(bone_name);
   if (bone instanceof THREE.Bone){
@@ -577,7 +572,6 @@ window.getRotation = function(bone_name){
     return ({x:bone.rotation.x, y:bone.rotation.y, z:bone.rotation.z})
   }
 }
-
 window.loadPose = function(poseData, bones){
   var L, R = false;
   for (let i=0; i<bones.length; i++){
