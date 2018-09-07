@@ -8,7 +8,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { faDollarSign } from "@fortawesome/free-solid-svg-icons";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
-
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 // Google Analytics
 import ReactGA from "react-ga";
 
@@ -33,6 +33,7 @@ import PartLoader from "./components/PartLoader";
 library.add(faTimesCircle);
 library.add(faDollarSign);
 library.add(faLink);
+library.add(faSearch);
 
 class App extends Component {
   constructor(props) {

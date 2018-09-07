@@ -303,7 +303,10 @@ class Selector extends Component {
 
     const searchBar = (
       <div className="abs searchContainer">
-        <div className="abs searchBar">Search</div>
+        <div className="abs searchText">Search</div>
+        <div className="abs searchButton">
+          <FontAwesomeIcon className="abs icon" icon="search" />
+        </div>
       </div>
     )
 
