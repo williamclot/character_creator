@@ -1,0 +1,57 @@
+/* --------------------------------------------------------
+Style Sheet for the SearchBar.js component
+
+last modified: 07.09.2018
+author: William Clot
+email: contact@williamclot.com
+website: https://github.com/williamclot
+
+CONTENTS:
+- Search Bar
+----------------------------------------------------------*/
+
+/* Search Bar */
+/* ---------- */
+
+.searchContainer {
+	color: rgb(29, 29, 29);
+	background-color: #00000059;
+	width: calc(100% - 20px);
+	height: 40px;
+	border-radius: 10px;
+}
+
+.searchText {
+	background-color: transparent;
+	color: inherit;
+	width: calc(100% - 40px);
+	height: 100%;
+	border: 0px;
+	padding-left: 15px;
+}
+::-webkit-input-placeholder {
+	color: inherit;
+}
+::-moz-placeholder {
+	color: inherit;
+}
+:-ms-input-placeholder {
+	color: inherit;
+}
+::placeholder {
+	color: inherit;
+}
+
+.searchButton {
+	right: 0;
+	top: 0;
+	width: 40px;
+	background-color: rgba(0, 0, 0, 0.15);
+	height: 40px;
+	border-radius: 0px 10px 10px 0px;
+}
+.searchButton:hover {
+	cursor: pointer;
+	color: white;
+	background-color: rgba(31, 31, 31, 0.4);
+}

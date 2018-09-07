@@ -3,6 +3,7 @@ import Editor from "./Editor";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import SearchBar from "./SearchBar";
 import "../css/selector.css";
 
 import headElements from "../library/heads.json";
@@ -301,20 +302,11 @@ class Selector extends Component {
       </div>
     );
 
-    const searchBar = (
-      <div className="abs searchContainer">
-        <div className="abs searchText">Search</div>
-        <div className="abs searchButton">
-          <FontAwesomeIcon className="abs centered" icon="search" />
-        </div>
-      </div>
-    )
-
     return (
       <div>
         <div className="abs top right right-side">
           <div className="box">
-            {searchBar}
+            <SearchBar />
             {sideIdencator ? buttons : ""}
             {category === "pose" && this.props.editor ? editorButtons : ""}
           </div>

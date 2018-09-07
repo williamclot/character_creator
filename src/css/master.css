@@ -81,3 +81,5 @@
   background-color: rgb(100, 100, 100); 
   z-index: 5000;
 }
+
+textarea, select, input, button { outline: none; }

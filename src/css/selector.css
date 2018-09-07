@@ -9,7 +9,6 @@ website: https://github.com/williamclot
 CONTENTS:
 - Selector
 - Side Indicator
-- Search Bar
 - Elements
 - Corner vignette
 ----------------------------------------------------------*/
@@ -29,11 +28,45 @@ CONTENTS:
   padding: 10px;
 }
 
+.selector {
+  top: 90px;
+  left: 0;
+  width: calc(100% - 30px);
+  height: calc(100% - 90px);
+  border-radius: 0px 0px 20px 20px;
+  padding: 4px 10px 10px 10px;
+
+  display: grid;
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(auto-fill, minmax(103px, 103px));
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.selector-full {
+  top: 140px;
+  height: calc(100% - 90px);
+}
+
+/* Media queries for the number of columns in the selector */
+@media (min-width: 1130px) {
+  .selector {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (min-width: 1700px) {
+  .selector {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
 /* Side indicator style */
 /* -------------------- */
 
 .switch {
-  top: 12px;
+  top: 60px;
   height: 40px;
   width: calc(100% - 20px);
   border-radius: 10px;
@@ -65,65 +98,6 @@ CONTENTS:
 }
 .L {
   border-radius: 10px 0px 0px 10px;
-}
-
-/* Search Bar */
-/* ---------- */
-
-.searchContainer{
-  background-color: #00000059;
-  width: calc(100% - 20px);
-  height: 40px;
-  border-radius: 10px;
-}
-
-.searchButton{
-  right: 0;
-  top: 0;
-  width: 40px;
-  background-color: rgba(0, 0, 0, 0.15);
-  height: 40px;
-  border-radius: 0px 10px 10px 0px;
-}
-.searchButton:hover{
-  cursor: pointer;
-  color: black;
-  background-color: rgba(255, 255, 255, 0.4);
-}
-
-.selector {
-  top: 90px;
-  left: 0;
-  width: calc(100% - 30px);
-  height: calc(100% - 90px);
-  border-radius: 0px 0px 20px 20px;
-  padding: 4px 10px 10px 10px;
-
-  display: grid;
-  grid-column-gap: 10px;
-  grid-row-gap: 10px;
-  grid-template-columns: 1fr;
-  grid-template-rows: repeat(auto-fill, minmax(103px, 103px));
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
-
-
-.selector-full {
-  top: 90px;
-  height: calc(100% - 90px);
-}
-
-
-@media (min-width: 1130px) {
-  .selector {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-@media (min-width: 1700px) {
-  .selector {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
 }
 
 /* Element in the selector styling */
