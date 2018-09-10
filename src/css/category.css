@@ -34,7 +34,8 @@ CONTENTS:
 .category {
   z-index: 10;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-top:10px;
   background-color: rgba(0, 0, 0, 0.8);
   border-radius: 100%;
   border: none;

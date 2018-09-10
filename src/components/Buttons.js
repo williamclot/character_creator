@@ -36,6 +36,7 @@ class Buttons extends Component {
     const clientKey = (this.state.dev) ? 'customizerDev' : 'character-creator';
 
     const onSuccess = response => {
+      console.log(response.access_token)
       this.setState({formVisible: true})
       this.setState({accesstoken: response.access_token})
     }

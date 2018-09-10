@@ -122,10 +122,16 @@ class Selector extends Component {
 				sideIdencator = false;
 		}
 
+		let filteredlibrary = library.filter(
+			(element) => {
+				return element.name.toLowerCase().indexOf(this.state.search) !== -1;
+			}
+		);
+
 		//JSX element to display the HTML
 		const elementDiv = [];
 
-		for (let i = 0; i < library.length; i++) {
+		for (let i = 0; i < filteredlibrary.length; i++) {
 			elementDiv.push(
 				<div
 					className="el"
@@ -154,27 +160,27 @@ class Selector extends Component {
 							default:
 								meshType = undefined;
 						}
-						if (library[i].premium) {
+						if (filteredlibrary[i].premium) {
 							this.props.updatePopupMessage(
 								"Sorry this is a premium object, this feature is still in development..."
 							);
 							this.props.updatePopup(true);
 						} else {
 							if (category === "pose") {
-								this.applyPose(library[i].file);
+								this.applyPose(filteredlibrary[i].file);
 							} else if (category === "stand") {
-								window.changeStand(library[i].file);
+								window.changeStand(filteredlibrary[i].file);
 							} else {
 								this.props.updateLoading(true);
 								window.changeMesh(
 									category,
-									library[i],
+									filteredlibrary[i],
 									isLeft,
 									bones,
 									this.state.pose
 								);
 								let loadedMeshes = this.props.loadedMeshes;
-								loadedMeshes[meshType] = library[i].file;
+								loadedMeshes[meshType] = filteredlibrary[i].file;
 								this.props.updateMeshes(loadedMeshes);
 							}
 						}
@@ -183,16 +189,16 @@ class Selector extends Component {
 					<div className="img">
 						<img
 							src={
-								"img/library/" + category + "/" + library[i].img
+								"img/library/" + category + "/" + filteredlibrary[i].img
 							}
-							alt={library[i].img}
+							alt={filteredlibrary[i].img}
 						/>
 					</div>
 					<div className="unselectable el-name">
-						{library[i].name}
+						{filteredlibrary[i].name}
 					</div>
-					{this.RenderPremium(library[i])}
-					{this.RenderLink(library[i])}
+					{this.RenderPremium(filteredlibrary[i])}
+					{this.RenderLink(filteredlibrary[i])}
 				</div>
 			);
 		}

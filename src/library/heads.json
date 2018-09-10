@@ -56,20 +56,6 @@
     "link": ""
   },
   {
-    "name": "Dragon Head",
-    "img": "dragon_head.png",
-    "file": "dragon_head",
-    "author": "William CLOT",
-    "description": "Dragon head.",
-    "rotation": {
-      "x": 0,
-      "y": 3.1415,
-      "z": 0
-    },
-    "scale": 1,
-    "link": ""
-  },
-  {
 		"name": "Stormtrooper",
 		"img": "stormtrooper.png",
     "file": "stormtrooper",
