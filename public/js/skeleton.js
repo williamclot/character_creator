@@ -1,3 +1,8 @@
+var publicUrl = 'hello';
+
+
+
+
 /**
  * MMF CUSTOMIZER
  *

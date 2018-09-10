@@ -28,7 +28,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "make PUBLIC_URL='https://myminifactory.com/character-creator/' && react-scripts build",
+    "build": "react-scripts build; ./publicUrl.sh 'https://myminifactory.com/character-creator/'",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
