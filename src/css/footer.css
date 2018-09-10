@@ -19,3 +19,7 @@ CONTENTS:
 .a-licence > a{
   margin-left: 4px;
 }
+
+.licence a{
+  color:inherit;
+}

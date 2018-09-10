@@ -70,3 +70,6 @@ input[type="text"] {
   background-color: transparent;
   box-shadow: none;
 }
+input[type=text]:focus{
+  background-color: transparent;
+}
