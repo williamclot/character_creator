@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import $ from "jquery";
 
 import logo from './../graphic_assets/logo.jpg';
 import '../css/loader.css'
