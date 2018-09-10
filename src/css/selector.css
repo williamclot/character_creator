@@ -21,9 +21,9 @@ CONTENTS:
   box-shadow: 0px 0px 20px #000000;
 
   position: absolute;
-  width: calc(100% - 50px);
+  width: calc(100% - 20px);
   margin-top: 30px;
-  height: calc(100% - 80px);
+  height: calc(100% - 50px);
   border-radius: 20px;
   padding: 10px;
 }

@@ -64,3 +64,9 @@
 }
 
 textarea, select, input, button { outline: none; }
+
+input[type="text"] {
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+}

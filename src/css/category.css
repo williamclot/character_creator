@@ -1,4 +1,5 @@
 .panel {
+  border: none;
   background-color: rgba(255, 255, 255, 0);
   width: 25%;
   height: 100%;
