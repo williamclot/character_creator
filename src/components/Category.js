@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 
 // Loading Assets (SubComponents & CSS)
 import Selector from "./Selector";
@@ -41,21 +40,6 @@ class Category extends Component {
 						className="category"
 						key={i}
 						onClick={() => {
-
-              axios({
-                method: "get",
-                url: "https://www.myminifactory.com/api/v2/search",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: "Bearer " + "595fc254-2b52-47bc-8a4c-1038a61ba8c0"
-                },
-                params:{
-                  q: "CharacterCreator"
-                }
-              }).then(response => {
-                console.log(response)
-              });
-
 							this.props.updateCategory(name);
 							var MeshType = undefined;
 							switch (name) {

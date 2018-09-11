@@ -17,6 +17,7 @@ class PostForm extends Component {
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.finishUpload = this.finishUpload.bind(this);
   }
 
   handleSubmit() {
@@ -24,7 +25,7 @@ class PostForm extends Component {
     this.setState({ loader: true });
     const accesstoken = this.props.accesstoken;
     const stlData = window.export();
-
+    console.log("starting files")
     axios({
       method: "post",
       url: "https://www.myminifactory.com/api/v2/object",
@@ -75,11 +76,11 @@ class PostForm extends Component {
           }
         ]
       }
-    }).then(response => {
-      const files = response.data.files;
+    }).then(responseMetaData => {
+      const files = responseMetaData.data.files;
       for (var i = 0; i < files.length; i++) {
         var uploadID = files[i].upload_id;
-        console.log(uploadID);
+        // console.log(uploadID);
         axios({
           method: "post",
           url:
@@ -89,18 +90,23 @@ class PostForm extends Component {
           },
           data: stlData[i]
         }).then(response => {
-          if (i === files.length) {
-            this.setState({ loader: false });
-            if (response.status === 201) {
-              this.setState({ response: true });
-              setTimeout(() => {
-                this.setState({ response: false });
-              }, 1500);
-            }
-          }
+          this.finishUpload(response, i, files);
         });
       }
     });
+  }
+
+  finishUpload(response, i, files){
+    if (response.status === 201) {
+      console.log("there was an error")
+    }
+    if (i === files.length) {
+      this.setState({ loader: false }); // No more loader
+      this.setState({ response: true }); // Ok status for 1.5s
+      setTimeout(() => {
+        this.setState({ response: false });
+      }, 1500);
+    }
   }
 
   handleInputChange(event) {
