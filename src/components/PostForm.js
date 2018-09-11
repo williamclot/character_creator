@@ -72,9 +72,6 @@ class PostForm extends Component {
           },
           {
             filename: "Mesh_Leg_R.stl"
-          },
-          {
-            filename: "Mesh_Neck.stl"
           }
         ]
       }
