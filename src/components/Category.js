@@ -73,7 +73,7 @@ class Category extends Component {
 									MeshType = "pose";
 									break;
 								case "stand":
-									MeshType = "Stand";
+									MeshType = "mesh-stand";
 									break;
 								default:
 									MeshType = undefined;

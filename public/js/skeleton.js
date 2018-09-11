@@ -286,6 +286,7 @@ function placeMesh(
       console.log(root);
       root.traverse(function(child) {
         if (child instanceof THREE.Mesh) {
+          child.name = "mesh-"+MeshType.toLowerCase();
           child.castShadow = true;
           child.material.color = { r: 0.5, g: 0.5, b: 0.5 };
         }
@@ -363,7 +364,7 @@ function placeStand() {
   // var topStand;
   var minFinder = new THREE.FindMinGeometry();
 
-  if (scene.getObjectByName("Stand")) {
+  if (scene.getObjectByName("mesh-stand")) {
     var resultR = minFinder.parse(scene.getObjectByName("FootR"));
     var resultL = minFinder.parse(scene.getObjectByName("FootL"));
     var result = resultL > resultR ? resultR : resultL;
@@ -380,6 +381,7 @@ function placeStand() {
 
         root.traverse(function(child) {
           if (child instanceof THREE.Mesh) {
+            child.name = "mesh-stand"
             child.castShadow = true;
             child.receiveShadow = true;
           }
@@ -408,8 +410,8 @@ function placeStand() {
 
 window.changeStand = function(stand) {
   var minFinder = new THREE.FindMinGeometry();
-  if (scene.getObjectByName("Stand")) {
-    group.remove(scene.getObjectByName("Stand"));
+  if (scene.getObjectByName("mesh-stand")) {
+    group.remove(scene.getObjectByName("mesh-stand"));
     loader.load(
       "models/stand/" + stand + ".glb",
       gltf => {
@@ -417,6 +419,7 @@ window.changeStand = function(stand) {
 
         root.traverse(function(child) {
           if (child instanceof THREE.Mesh) {
+            child.name = "mesh-stand"
             child.castShadow = true;
             child.receiveShadow = true;
             child.material.color = { r: 0.555, g: 0.48, b: 0.49 };
@@ -600,32 +603,43 @@ window.export = function(name) {
   var exporter = new THREE.STLExporter();
 
   if (name) {
-    saveString(exporter.parse(group), name + ".stl");
-  } else {
-    var exportedMeshes = []
-      var Meshes = [
-        "Stand",
-        "Mesh_Torso",
-        "Mesh_Arm_L",
-        "Mesh_Arm_R",
-        "Mesh_Foot_L",
-        "Mesh_Foot_R",
-        "Mesh_Hand_L",
-        "Mesh_Hand_R",
-        "Mesh_Head",
-        "Mesh_Leg_L",
-        "Mesh_Leg_R",
-        "Mesh_Neck"
-      ];
-      for (var i=0; i<Meshes.length; i++){
-        scene.traverse(function(child) {
-          if (child.name === Meshes[i]) {
-            exportedMeshes.push(exporter.parse(child))
-          }
-        });
+    // saveString(exporter.parse(group), name + ".stl");
+    group.traverse(function(child){
+      if (child instanceof THREE.Mesh){
+        console.log(child.name)
       }
-      // console.log(exportedMeshes)
-      return exportedMeshes
+    })
+  } else {
+    var stlList = []
+    // I need to know in which order the files are exported...
+    var Meshes = [
+      "mesh-stand",
+      "mesh-torso",
+      "mesh-arml",
+      "mesh-armr",
+      "mesh-footl",
+      "mesh-footr",
+      "mesh-handl",
+      "mesh-handr",
+      "mesh-head",
+      "mesh-legl",
+      "mesh-legr",
+      "mesh-neck"
+    ];
+    for (var i = 0; i < Meshes.length; i++) {
+      group.traverse(function (child) {
+        if (child.name === Meshes[i]) {
+          stlList.push(exporter.parse(child))
+        }
+      });
+    }
+    return stlList
+
+    scene.traverse(function(child){
+      if (child instanceof THREE.Mesh){
+        console.log(child.name)
+      }
+    })
   }
 };
 
