@@ -25,7 +25,6 @@ class PostForm extends Component {
     this.setState({ loader: true });
     const accesstoken = this.props.accesstoken;
     const stlData = window.export();
-    console.log("starting files")
     axios({
       method: "post",
       url: "https://www.myminifactory.com/api/v2/object",
@@ -77,44 +76,32 @@ class PostForm extends Component {
         ]
       }
     }).then(responseMetaData => {
-      console.log(responseMetaData)
       const files = responseMetaData.data.files;
-
-      var statusCounter = 0;
-      var responseCounter = 0;
-
-      for (var i = 0; i < files.length; i++) {
-        var uploadID = files[i].upload_id;
-        axios({
-          method: "post",
-          url:
-            "https://www.myminifactory.com/api/v2/file?upload_id=" + uploadID,
-          headers: {
-            Authorization: "Bearer " + accesstoken
-          },
-          data: stlData[i]
-        }).then(response => {
-          // Counting the number of responses
-          responseCounter += 1;
-
-          // Counting the number of correct status
-          if (response.status === 201) {
-            statusCounter += 1;
-          }
-
-          if (responseCounter === files.length - 1) {
-            console.log("Finished", responseCounter)
-            if (statusCounter === files.length - 1) { // all good
-              this.setState({ loader: false, response: true }); // No more loader
-              setTimeout(() => {
-                this.setState({ response: false });
-              }, 1500);
-            } else { // Something went wrong
-              console.log("there was an error")
-            }
-          }
-        });
-      }
+      const promises = files.map((file, i) => axios({
+        method: "post",
+        url:
+          "https://www.myminifactory.com/api/v2/file?upload_id=" + file.upload_id,
+        headers: {
+          Authorization: "Bearer " + accesstoken
+        },
+        data: stlData[i]
+        }));
+      Promise.all(promises).then(responses => {
+        var statusCounter = responses.filter(response => response.status === 201).length;
+        if (statusCounter === responses.length){
+          // Everything okay
+          this.setState({loader: false, response: true, status: true});
+          setTimeout(() => {
+            this.setState({response: false})
+          }, 1500);
+        } else {
+          // Something went wrong
+          this.setState({loader: false, response: true, status: false});
+          setTimeout(() => {
+            this.setState({response: false})
+          }, 1500);
+        }
+      });
     });
   }
 
@@ -168,7 +155,7 @@ class PostForm extends Component {
       <div>
         {this.renderForm()}
         <Loader visible={this.state.loader} />
-        <Response visible={this.state.response}  />
+        <Response visible={this.state.response} status={this.state.status}  />
       </div>
     );
   }
