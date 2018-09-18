@@ -167,5 +167,19 @@
 		},
     "scale": 1,
     "link": ""
+  },
+  {
+		"name": "Box Head",
+		"img": "box_head.png",
+    "file": "test_head",
+    "author": "William CLOT",
+    "description": "",
+		"rotation": {
+			"x":0,
+			"y":0,
+			"z":0
+		},
+    "scale": 1,
+    "link": ""
   }
 ]

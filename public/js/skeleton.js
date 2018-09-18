@@ -12,7 +12,7 @@ var controls, loader;
 
 var selected = "Head";
 var color = { r: 0.555, g: 0.48, b: 0.49 };
-var group = new THREE.Group(); //this group will contain all the meshes but not the floor, the camera etc...
+var group = new THREE.Group(); //this group will contain all the meshes but not the floor, the lights etc...
 var bBoxStand;
 window.loaded = false;
 window.partloaded = false;
@@ -24,7 +24,7 @@ var loadedMeshes = {
     rotation: { x: 0, y: 0, z: 0 }
   },
   LegR: {
-    name: "default_leg_R",
+    name: "robot_leg_R",
     rotation: { x: 0, y: 0, z: 0 }
   },
   LegL: {
@@ -32,8 +32,8 @@ var loadedMeshes = {
     rotation: { x: 0, y: 0, z: 0 }
   },
   Head: {
-    name: "hellion_rams",
-    rotation: { x: 0, y: 3.14, z: 0 }
+    name: "default_head",
+    rotation: { x: 0, y: 0, z: 0 }
   },
   ArmR: {
     name: "thin_arm_R",
@@ -118,7 +118,6 @@ var meshStaticInfo = {
     childAttachment: "FootL_Foot_L"
   }
 };
-// hello
 // List of parent/child relations
 var childrenList = {
   ArmR: ["HandR"],
@@ -245,21 +244,6 @@ function rotateElement(item, clearRotation, rotation) {
     item.rotation.z = rotation.z;
   }
 }
-function replaceMesh(MeshType, firstLoad, bones, poseData) {
-  group.remove(group.getObjectByName(MeshType));
-  placeMesh(
-    loadedMeshes[MeshType].name,
-    meshStaticInfo[MeshType].bodyPart,
-    MeshType,
-    meshStaticInfo[MeshType].parentAttachment,
-    meshStaticInfo[MeshType].childAttachment,
-    loadedMeshes[MeshType].rotation,
-    firstLoad,
-    false,
-    bones,
-    poseData
-  );
-}
 function placeMesh(
   meshName,
   bodyPartClass,
@@ -278,19 +262,20 @@ function placeMesh(
     "models/" + bodyPartClass + "/" + meshName + ".glb",
     gltf => {
       var root = gltf.scene.children[0];
-      console.log(root);
       root.traverse(function(child) {
         if (child instanceof THREE.Mesh) {
+          // Gives a fixed name to the mesh and same gray color
           child.name = "mesh-"+MeshType.toLowerCase();
           child.castShadow = true;
           child.material.color = { r: 0.5, g: 0.5, b: 0.5 };
         }
       });
 
+      // group is one element with all the meshes and bones of the character
       group.add(root);
-
       scene.updateMatrixWorld(true);
 
+      // Updates the loadedMeshes variable (used for replacing children)
       loadedMeshes[MeshType].name = meshName;
       loadedMeshes[MeshType].rotation = rotation;
 
@@ -352,6 +337,22 @@ function placeMesh(
     function(error) {
       console.log(error);
     }
+  );
+}
+
+function replaceMesh(MeshType, firstLoad, bones, poseData) {
+  group.remove(group.getObjectByName(MeshType));
+  placeMesh(
+    loadedMeshes[MeshType].name,
+    meshStaticInfo[MeshType].bodyPart,
+    MeshType,
+    meshStaticInfo[MeshType].parentAttachment,
+    meshStaticInfo[MeshType].childAttachment,
+    loadedMeshes[MeshType].rotation,
+    firstLoad,
+    false,
+    bones,
+    poseData
   );
 }
 

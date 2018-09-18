@@ -104,7 +104,7 @@ class App extends Component {
       url: "https://www.myminifactory.com/api/v2/search",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer 595fc254-2b52-47bc-8a4c-1038a61ba8c0"
+        Authorization: "Bearer b43ab57d-15f3-4c76-928a-ffa7a5662f1b"
       },
       params:{
         q: "CharacterCreator"
