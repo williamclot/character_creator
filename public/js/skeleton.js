@@ -118,7 +118,7 @@ var meshStaticInfo = {
     childAttachment: "FootL_Foot_L"
   }
 };
-
+// hello
 // List of parent/child relations
 var childrenList = {
   ArmR: ["HandR"],
