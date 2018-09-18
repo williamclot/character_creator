@@ -11,7 +11,7 @@ import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 // Google Analytics
 import ReactGA from "react-ga";
-import axios from "axios";
+// import axios from "axios";
 
 // Loading assets
 import "./css/master.css";
@@ -99,19 +99,19 @@ class App extends Component {
     // Google Analytics for the page
     ReactGA.initialize("UA-41837285-1");
     ReactGA.pageview("/mmf-hero");
-    axios({
-      method: "get",
-      url: "https://www.myminifactory.com/api/v2/search",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer b43ab57d-15f3-4c76-928a-ffa7a5662f1b"
-      },
-      params:{
-        q: "CharacterCreator"
-      }
-    }).then(response => {
-      console.log(response)
-    });
+    // axios({
+    //   method: "get",
+    //   url: "https://www.myminifactory.com/api/v2/search",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: "Bearer b43ab57d-15f3-4c76-928a-ffa7a5662f1b"
+    //   },
+    //   params:{
+    //     q: "CharacterCreator"
+    //   }
+    // }).then(response => {
+    //   console.log(response)
+    // });
   }
 
   render() {

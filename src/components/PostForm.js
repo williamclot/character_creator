@@ -13,11 +13,11 @@ class PostForm extends Component {
     this.state = {
       name: "My Character",
       loader: false,
-      response: false
+      response: false,
+      status: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.finishUpload = this.finishUpload.bind(this);
   }
 
   handleSubmit() {
@@ -77,10 +77,14 @@ class PostForm extends Component {
         ]
       }
     }).then(responseMetaData => {
+      console.log(responseMetaData)
       const files = responseMetaData.data.files;
+
+      var statusCounter = 0;
+      var responseCounter = 0;
+
       for (var i = 0; i < files.length; i++) {
         var uploadID = files[i].upload_id;
-        // console.log(uploadID);
         axios({
           method: "post",
           url:
@@ -90,23 +94,28 @@ class PostForm extends Component {
           },
           data: stlData[i]
         }).then(response => {
-          this.finishUpload(response, i, files);
+          // Counting the number of responses
+          responseCounter += 1;
+
+          // Counting the number of correct status
+          if (response.status === 201) {
+            statusCounter += 1;
+          }
+
+          if (responseCounter === files.length - 1) {
+            console.log("Finished", responseCounter)
+            if (statusCounter === files.length - 1) { // all good
+              this.setState({ loader: false, response: true }); // No more loader
+              setTimeout(() => {
+                this.setState({ response: false });
+              }, 1500);
+            } else { // Something went wrong
+              console.log("there was an error")
+            }
+          }
         });
       }
     });
-  }
-
-  finishUpload(response, i, files){
-    if (response.status === 201) {
-      console.log("all good")
-    }
-    if (i === files.length) {
-      this.setState({ loader: false }); // No more loader
-      this.setState({ response: true }); // Ok status for 1.5s
-      setTimeout(() => {
-        this.setState({ response: false });
-      }, 1500);
-    }
   }
 
   handleInputChange(event) {
@@ -159,7 +168,7 @@ class PostForm extends Component {
       <div>
         {this.renderForm()}
         <Loader visible={this.state.loader} />
-        <Response visible={this.state.response} />
+        <Response visible={this.state.response}  />
       </div>
     );
   }
