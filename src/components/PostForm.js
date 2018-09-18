@@ -98,7 +98,7 @@ class PostForm extends Component {
 
   finishUpload(response, i, files){
     if (response.status === 201) {
-      console.log("there was an error")
+      console.log("all good")
     }
     if (i === files.length) {
       this.setState({ loader: false }); // No more loader

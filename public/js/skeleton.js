@@ -12,7 +12,7 @@ var controls, loader;
 
 var selected = "Head";
 var color = { r: 0.555, g: 0.48, b: 0.49 };
-var group = new THREE.Group();
+var group = new THREE.Group(); //this group will contain all the meshes but not the floor, the camera etc...
 var bBoxStand;
 window.loaded = false;
 window.partloaded = false;
@@ -176,7 +176,7 @@ function init() {
     container.appendChild(renderer.domElement);
 
     var size = 50;
-    var divisions = 50;
+    var divisions = 60;
 
     var gridHelper = new THREE.GridHelper(size, divisions);
     scene.add(gridHelper);
@@ -191,7 +191,7 @@ function init() {
     controls.enablePan = false;
   }
   function buildLights() {
-    //hemisphere light
+    //hemisphere light: like sun light but without any shadows
     var hemi = new THREE.HemisphereLight(0xffffff, 0xffffff);
     scene.add(hemi);
 
@@ -199,22 +199,16 @@ function init() {
     var light = new THREE.PointLight(0xc1c1c1, 1, 100);
     light.position.set(3, 10, 10);
     light.castShadow = true;
-    light.penumbra = 1;
-
     //Set up shadow properties for the light
     light.shadow.mapSize.width = 2048; // default
     light.shadow.mapSize.height = 2048; // default
-    light.shadow.camera.near = 1; // default
-    light.shadow.camera.far = 30; // default
-    // light.shadowDarkness = 0.5;
     light.decay = 1;
     scene.add(light);
 
+    // This light is here to show the details in the back (no shadows)
     var backlight = new THREE.PointLight(0xc4b0ac, 1, 100);
     backlight.position.set(0, 2, -20);
-    backlight.castShadow = false;
     backlight.penumbra = 2;
-
     scene.add(backlight);
   }
   function buildFloor() {
@@ -235,6 +229,7 @@ function init() {
 }
 
 function clearPosition(item) {
+  // This function is used to clear the position of an imported gltf file
   item.position.x = 0;
   item.position.y = 0;
   item.position.z = 0;
