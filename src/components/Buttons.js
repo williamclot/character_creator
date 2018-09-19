@@ -15,7 +15,6 @@ class Buttons extends Component {
       accesstoken: '', 
       dev: false
     }
-    this.updateVisible = this.updateVisible;
   }
 
   updateVisible = formVisible => {
@@ -83,15 +82,6 @@ class Buttons extends Component {
         >
           Get it printed for $4.99
         </div>
-        {/* <div
-          className="abs buttons"
-          onClick={() => {
-            this.props.updatePopup(true)
-            this.props.updatePopupMessage("Sorry this feature is still in development...")
-          }}
-        >
-          Share on MyMiniFactory.com
-        </div> */}
         <MyMiniFactoryLogin
           className="abs buttons"
           clientKey={clientKey}
