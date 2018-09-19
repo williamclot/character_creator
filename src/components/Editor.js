@@ -68,7 +68,6 @@ class Editor extends Component {
             <div className="control">
               <NumericInput
                 className="numeric-input"
-                style="boneinput"
                 min={-3.1}
                 max={3.1}
                 step={0.1}

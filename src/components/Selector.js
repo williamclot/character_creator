@@ -20,7 +20,7 @@ class Selector extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			editor: false,
+			editorSelected: false,
 			pose: undefined,
 			search: ""
 		};
@@ -306,10 +306,10 @@ class Selector extends Component {
 				<div
 					className={
 						"unselectable abs left side L " +
-						(this.state.editor ? "" : "side-selected")
+						(this.state.editorSelected ? "" : "side-selected")
 					}
 					onClick={() => {
-						this.setState({ editor: false });
+						this.setState({ editorSelected: false });
 					}}
 				>
 					Poses
@@ -317,10 +317,10 @@ class Selector extends Component {
 				<div
 					className={
 						"unselectable abs right side R " +
-						(this.state.editor ? "side-selected" : "")
+						(this.state.editorSelected ? "side-selected" : "")
 					}
 					onClick={() => {
-						this.setState({ editor: true });
+						this.setState({ editorSelected: true });
 					}}
 				>
 					Editor
@@ -338,7 +338,7 @@ class Selector extends Component {
 						<div
 							className={
 								"abs top left " +
-								(category === "pose" && this.state.editor
+								(category === "pose" && this.state.editorSelected
 									? " selector"
 									: " selector") +
 								(sideIdencator ||
@@ -348,7 +348,7 @@ class Selector extends Component {
 							}
 						>
 							{category === "pose" &&
-								this.state.editor &&
+								this.state.editorSelected &&
 								this.props.editor ? (
 									<Editor />
 								) : (
