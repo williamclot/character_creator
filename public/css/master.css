@@ -19,8 +19,8 @@ canvas {
   width: 5px;
   background: none;
 }
-
 ::-webkit-scrollbar-thumb {
+  border-radius: 10px;
   -webkit-border-radius: 10px;
   background: #2e2e2e;
 }

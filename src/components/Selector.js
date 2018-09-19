@@ -340,23 +340,24 @@ class Selector extends Component {
 							className={
 								"abs top left " +
 								(category === "pose" && this.state.editor
-									? " selector-full"
-									: "selector") +
+									? " selector"
+									: " selector") +
 								(sideIdencator ||
 								(category === "pose" && this.props.editor)
 									? " selector-full"
-									: "")
+									: " selector")
 							}
 						>
-							<div className="abs top left selector-nopadding">
-								{category === "pose" &&
+							{category === "pose" &&
 								this.state.editor &&
 								this.props.editor ? (
 									<Editor />
 								) : (
-									elementDiv
+									<div className="abs top left selector-nopadding">
+										{elementDiv}
+									</div>
 								)}
-							</div>
+							
 						</div>
 					</div>
 				</div>
