@@ -13,7 +13,9 @@ class Popup extends Component {
             <div className="screen abs top left">
                 <div className="popup abs">
                     <img className="abs" src={logo} alt="company logo" />   
-                    <div className="abs message">{this.props.message}</div>
+                    <div className="abs message">
+                        <p>{this.props.message}</p>
+                    </div>
                     <FontAwesomeIcon className="abs cross" icon="times-circle" onClick={() => {
                         this.props.updatePopup(false);
                     }}/>
