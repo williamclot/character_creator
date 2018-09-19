@@ -602,12 +602,7 @@ window.export = function(name) {
   var exporter = new THREE.STLExporter();
 
   if (name) {
-    // saveString(exporter.parse(group), name + ".stl");
-    group.traverse(function(child){
-      if (child instanceof THREE.Mesh){
-        console.log(child.name)
-      }
-    })
+    saveString(exporter.parse(group), name + ".stl");
   } else {
     var stlList = []
     // I need to know in which order the files are exported...
