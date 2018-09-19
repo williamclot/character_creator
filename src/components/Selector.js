@@ -33,8 +33,7 @@ class Selector extends Component {
 	componentDidMount() {
 		// Load the base model with defaultMeshes and defaultPose
 		axios.get("models/poses/default.json").then(res => {
-			// this.setState({ currentPose: res.data }); // TODO doesn't seem to affect anything
-			// this.props.updatePose(res.data);
+			this.setState({ pose: res.data });
 			window.loadDefaultMeshes(bones, res.data);
 		});
 	}
@@ -45,7 +44,6 @@ class Selector extends Component {
 		axios.get("models/poses/" + file + ".json").then(res => {
 			poseData = res.data;
 			this.setState({ pose: poseData });
-			// this.props.updatePose(poseData);
 			window.loadPose(poseData, bones);
 		});
 	}
