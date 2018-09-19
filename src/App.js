@@ -59,7 +59,7 @@ class App extends Component {
         FootL: "default_foot_L",
         Stand: "circle"
       },
-      editor: false,
+      editor: true,
       partloading: false,
       message:"Sorry this feature is still in development..."
     };

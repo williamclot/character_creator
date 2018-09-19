@@ -62,37 +62,47 @@ class Editor extends Component {
     for (let i=0; i<bones.length; i++){
       let bone = bones[i].bone;
       controls.push(  
-        <div className="bone-control unselectable" key={i}>
+        <div className="bone-control" key={i}>
           <p>{bones[i].name}</p>
           <div className="flexcontainer">
-            <NumericInput 
-              min={-3.1} 
-              max={3.1} 
-              step={0.1} 
-              value={this.state[bone].x} 
-              onChange={ value => {
-                this.setState({ [bone]: {x:value, y:this.state[bone].y, z:this.state[bone].z }})
-                window.changeRotation(bone, value, "x")
-              }}/>
-              <NumericInput 
-              min={-3.1} 
-              max={3.1} 
-              step={0.1} 
-              value={this.state[bone].y} 
-              onChange={ value => {
-                this.setState({ [bone]: {x:this.state[bone].x, y:value, z:this.state[bone].z }}) 
-                window.changeRotation(bone, value, "y")
-              }}/>
-              <NumericInput 
-              min={-3.1} 
-              max={3.1} 
-              step={0.1} 
-              value={this.state[bone].z}
-              onChange={ value => {
-                this.setState({ [bone]: {x:this.state[bone].x, y:this.state[bone].y, z:value }})
-                window.changeRotation(bone, value, "z")
+            <div className="control">
+              <NumericInput
+                className="numeric-input"
+                style="boneinput"
+                min={-3.1}
+                max={3.1}
+                step={0.1}
+                value={Number(this.state[bone].x).toFixed(2)}
+                onChange={value => {
+                  this.setState({ [bone]: { x: value, y: this.state[bone].y, z: this.state[bone].z } })
+                  window.changeRotation(bone, value, "x")
+                }} />
+            </div>
+            <div className="control">
+              <NumericInput
+                className="numeric-input"                            
+                min={-3.1}
+                max={3.1}
+                step={0.1}
+                value={Number(this.state[bone].y).toFixed(2)}
+                onChange={value => {
+                  this.setState({ [bone]: { x: this.state[bone].x, y: value, z: this.state[bone].z } })
+                  window.changeRotation(bone, value, "y")
+                }} />
+            </div>
+            <div className="control">
+              <NumericInput
+                className="numeric-input"
+                min={-3.1}
+                max={3.1}
+                step={0.1}
+                value={Number(this.state[bone].z).toFixed(2)}
+                onChange={value => {
+                  this.setState({ [bone]: { x: this.state[bone].x, y: this.state[bone].y, z: value } })
+                  window.changeRotation(bone, value, "z")
 
-              }}/>
+                }} />
+            </div>
           </div>
         </div>
       )
