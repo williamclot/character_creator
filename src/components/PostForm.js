@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import logo from './../graphic_assets/logo.jpg';
 
 // Loading Assets (SubComponents & CSS)
 import "../css/postform.css";
@@ -100,21 +101,24 @@ class PostForm extends Component {
                 this.props.updateVisible(false);
               }}
             />
+            <div className="logotopform">
+              <img src={logo} alt="logo"/>
+            </div>
             <div className="title">
               <h2>Upload to MyMiniFactory</h2>
             </div>
-            <form onSubmit={this.handleSubmit}>
-              <label>
-                Name:
-                <input
+            <form className="form" onSubmit={this.handleSubmit}>
+              <p>Give it a name:</p>
+              <input
+                className="nameinput"
                   type="text"
                   value={this.state.name}
                   onChange={this.handleInputChange}
                 />
-              </label>
               <div className="submit-container">
-                <input type="submit" value="Submit" />
+                <input className="buttons" type="submit" value="Submit" />
               </div>
+              
             </form>
           </div>
         </div>
