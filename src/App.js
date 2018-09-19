@@ -63,13 +63,6 @@ class App extends Component {
       partloading: false,
       message:"Sorry this feature is still in development..."
     };
-    this.updateCategory = this.updateCategory;
-    this.updateCharacterName = this.updateCharacterName;
-    this.updatePose = this.updatePose;
-    this.updatePopup = this.updatePopup;
-    this.updateMeshes = this.updateMeshes;
-    this.updateLoading = this.updateLoading
-    this.updatePopupMessage = this.updatePopupMessage;
   }
 
   // Update the state of parent App from child Component

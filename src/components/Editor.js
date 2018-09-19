@@ -29,7 +29,7 @@ class Editor extends Component {
       LegR_LowerLeg_R : {x:0, y:0, z:0},
       LegR_Foot_R : {x:0, y:0, z:0},
     }
-    this.exportPose = this.exportPose;
+    this.exportPose = this.exportPose.bind(this);
   }
   
   componentDidMount() {
@@ -103,7 +103,7 @@ class Editor extends Component {
       <div className="controls">
           <span className="unselectable">This is a beta feature only used to create new poses</span>
           {controls}
-          <div className="export" onClick={this.exportPose.bind(this)}>Export</div>  
+          <div className="export" onClick={this.exportPose}>Export</div>  
       </div>
     );
   }

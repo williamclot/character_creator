@@ -15,7 +15,6 @@ class Buttons extends Component {
       accesstoken: '', 
       dev: true
     }
-    this.updateVisible = this.updateVisible;
   }
 
   updateVisible = formVisible => {

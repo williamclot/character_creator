@@ -24,7 +24,6 @@ class Selector extends Component {
 			pose: undefined,
 			search: ""
 		};
-		this.updateSearchValue = this.updateSearchValue;
 	}
 
 	updateSearchValue = search => {

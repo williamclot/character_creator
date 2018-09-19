@@ -11,7 +11,6 @@ class Footer extends Component {
       message: "",
       popup: false
     };
-    this.updatePopup = this.updatePopup;
   }
 
   updatePopup = popup => {
