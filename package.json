@@ -24,16 +24,14 @@
     "react-typed": "^1.0.9",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
-    "typist": "^0.1.0"
+    "typist": "^0.1.0",
+    "axios": "^0.18.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  },
-  "devDependencies": {
-    "axios": "^0.18.0"
   },
   "homepage": "http://localhost:3000"
 }
