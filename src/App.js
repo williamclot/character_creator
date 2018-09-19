@@ -43,7 +43,6 @@ class App extends Component {
       category: data,
       currentCategory: "head",
       characterName: "myCharacter",
-      currentPose: undefined,
       UIDisplayed: true,
       popup: false,
       loadedMeshes: {
@@ -71,9 +70,6 @@ class App extends Component {
   };
   updateCharacterName = characterName => {
     this.setState({ characterName });
-  };
-  updatePose = currentPose => {
-    this.setState({ currentPose });
   };
   updatePopup = popup => {
     this.setState({ popup });
@@ -133,8 +129,6 @@ class App extends Component {
             category={this.state.category}
             currentCategory={this.state.currentCategory}
             updateCategory={this.updateCategory}
-            currentPose={this.state.currentPose}
-            updatePose={this.updatePose}
             UIDisplayed={this.state.UIDisplayed}
             loadedMeshes={this.state.loadedMeshes}
             updateMeshes={this.updateMeshes}
