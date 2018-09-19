@@ -11,7 +11,7 @@ class Buttons extends Component {
   constructor(props){
     super(props);
     this.state = {
-      formVisible: true,
+      formVisible: false,
       accesstoken: ''
     }
   }
