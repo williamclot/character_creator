@@ -10,6 +10,9 @@
 var camera, scene, renderer;
 var controls, loader;
 
+var raycaster = new THREE.Raycaster();
+var mouse = new THREE.Vector2();
+
 var selected = "Head";
 var color = { r: 0.555, g: 0.48, b: 0.49 };
 var group = new THREE.Group(); //this group will contain all the meshes but not the floor, the lights etc...
@@ -650,6 +653,13 @@ function animate() {
   render();
 }
 function render() {
+  // update the picking ray with the camera and mouse position
+  // raycaster.setFromCamera( mouse, camera );
+  // calculate objects intersecting the picking ray
+	// var intersects = raycaster.intersectObjects( group );
+	// for ( var i = 0; i < intersects.length; i++ ) {
+	// 	intersects[ i ].object.material.color.set( 0xff0000 );
+	// }
   camera.lookAt(new THREE.Vector3(0, 1, 0));
   renderer.render(scene, camera);
 }
@@ -675,6 +685,14 @@ function saveArrayBuffer(buffer, filename) {
 function saveString(text, filename) {
   save(new Blob([text], { type: "text/plain" }), filename);
 }
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+
+function onMouseClick( event ) {
+
+	// calculate mouse position in normalized device coordinates
+	// (-1 to +1) for both components
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
 }
+
+window.addEventListener( 'click', onMouseClick, false );
