@@ -54,7 +54,6 @@ class Buttons extends Component {
       return (<div
         className="abs buttons"
         onClick={() => {
-          console.log("Click")
           this.setState({ formVisible: true })
           this.setState({ accesstoken: this.mmfAccessToken })
         }}
