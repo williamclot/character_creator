@@ -85,26 +85,32 @@ class Selector extends Component {
 			case "head":
 				library = headElements;
 				sideIdencator = false;
+				meshType = "Head";
 				break;
 			case "hand":
 				library = handElements;
 				sideIdencator = true;
+				meshType = isLeft ? "HandL" : "HandR";
 				break;
 			case "arm":
 				library = armElements;
 				sideIdencator = true;
+				meshType = isLeft ? "ArmL" : "ArmR";
 				break;
 			case "torso":
 				library = torsoElements;
 				sideIdencator = false;
+				meshType = "Torso";
 				break;
 			case "foot":
 				library = footElements;
 				sideIdencator = true;
+				meshType = isLeft ? "FootL" : "FootR";
 				break;
 			case "leg":
 				library = legElements;
 				sideIdencator = true;
+				meshType = isLeft ? "LegL" : "LegR";
 				break;
 			case "pose":
 				library = poseElements;
