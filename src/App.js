@@ -26,7 +26,6 @@ import Footer from "./components/Footer";
 import Category from "./components/Category";
 import Buttons from "./components/Buttons";
 import Popup from "./components/Popup";
-import Logo from "./components/Logo";
 import PageLoader from "./components/PageLoader";
 import PartLoader from "./components/PartLoader";
 
@@ -108,7 +107,6 @@ class App extends Component {
       <div>
         <BrowserView>
           <PageLoader />
-          <Logo />
           <Name
             characterName={this.state.characterName}
             updateCharacterName={this.updateCharacterName}
