@@ -1,5 +1,5 @@
 /**
- * MMF CUSTOMIZER
+ * CHARACTER CREATOR
  *
  * Based on https://github.com/mrdoob/three.js/
  * Tested on r95
