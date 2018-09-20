@@ -43,7 +43,6 @@ class App extends Component {
       category: data,
       currentCategory: "head",
       characterName: "myCharacter",
-      currentPose: undefined,
       UIDisplayed: true,
       popup: false,
       loadedMeshes: {
@@ -59,17 +58,10 @@ class App extends Component {
         FootL: "default_foot_L",
         Stand: "circle"
       },
-      editor: false,
+      editor: true,
       partloading: false,
       message:"Sorry this feature is still in development..."
     };
-    this.updateCategory = this.updateCategory;
-    this.updateCharacterName = this.updateCharacterName;
-    this.updatePose = this.updatePose;
-    this.updatePopup = this.updatePopup;
-    this.updateMeshes = this.updateMeshes;
-    this.updateLoading = this.updateLoading
-    this.updatePopupMessage = this.updatePopupMessage;
   }
 
   // Update the state of parent App from child Component
@@ -78,9 +70,6 @@ class App extends Component {
   };
   updateCharacterName = characterName => {
     this.setState({ characterName });
-  };
-  updatePose = currentPose => {
-    this.setState({ currentPose });
   };
   updatePopup = popup => {
     this.setState({ popup });
@@ -140,7 +129,6 @@ class App extends Component {
             category={this.state.category}
             currentCategory={this.state.currentCategory}
             updateCategory={this.updateCategory}
-            currentPose={this.state.currentPose}
             updatePose={this.updatePose}
             UIDisplayed={this.state.UIDisplayed}
             loadedMeshes={this.state.loadedMeshes}

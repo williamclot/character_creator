@@ -20,11 +20,10 @@ class Selector extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			editor: false,
+			editorSelected: false,
 			pose: undefined,
 			search: ""
 		};
-		this.updateSearchValue = this.updateSearchValue;
 	}
 
 	updateSearchValue = search => {
@@ -33,9 +32,8 @@ class Selector extends Component {
 
 	componentDidMount() {
 		// Load the base model with defaultMeshes and defaultPose
-    axios.get(process.env.PUBLIC_URL + "/models/poses/default.json").then(res => {
-			this.setState({ currentPose: res.data });
-			this.props.updatePose(res.data);
+		axios.get(process.env.PUBLIC_URL + "/models/poses/default.json").then(res => {
+			this.setState({ pose: res.data });
 			window.loadDefaultMeshes(bones, res.data);
 		});
 	}
@@ -46,7 +44,6 @@ class Selector extends Component {
     axios.get(process.env.PUBLIC_URL + "/models/poses/" + file + ".json").then(res => {
 			poseData = res.data;
 			this.setState({ pose: poseData });
-			this.props.updatePose(poseData);
 			window.loadPose(poseData, bones);
 		});
 	}
@@ -83,31 +80,38 @@ class Selector extends Component {
 		const isLeft = this.props.isLeft;
 		var library;
 		var sideIdencator;
+		var meshType;
 
 		switch (category) {
 			case "head":
 				library = headElements;
 				sideIdencator = false;
+				meshType = "Head";
 				break;
 			case "hand":
 				library = handElements;
 				sideIdencator = true;
+				meshType = isLeft ? "HandL" : "HandR";
 				break;
 			case "arm":
 				library = armElements;
 				sideIdencator = true;
+				meshType = isLeft ? "ArmL" : "ArmR";
 				break;
 			case "torso":
 				library = torsoElements;
 				sideIdencator = false;
+				meshType = "Torso";
 				break;
 			case "foot":
 				library = footElements;
 				sideIdencator = true;
+				meshType = isLeft ? "FootL" : "FootR";
 				break;
 			case "leg":
 				library = legElements;
 				sideIdencator = true;
+				meshType = isLeft ? "LegL" : "LegR";
 				break;
 			case "pose":
 				library = poseElements;
@@ -307,10 +311,10 @@ class Selector extends Component {
 				<div
 					className={
 						"unselectable abs left side L " +
-						(this.state.editor ? "" : "side-selected")
+						(this.state.editorSelected ? "" : "side-selected")
 					}
 					onClick={() => {
-						this.setState({ editor: false });
+						this.setState({ editorSelected: false });
 					}}
 				>
 					Poses
@@ -318,10 +322,10 @@ class Selector extends Component {
 				<div
 					className={
 						"unselectable abs right side R " +
-						(this.state.editor ? "side-selected" : "")
+						(this.state.editorSelected ? "side-selected" : "")
 					}
 					onClick={() => {
-						this.setState({ editor: true });
+						this.setState({ editorSelected: true });
 					}}
 				>
 					Editor
@@ -339,24 +343,25 @@ class Selector extends Component {
 						<div
 							className={
 								"abs top left " +
-								(category === "pose" && this.state.editor
-									? " selector-full"
-									: "selector") +
+								(category === "pose" && this.state.editorSelected
+									? " selector"
+									: " selector") +
 								(sideIdencator ||
 								(category === "pose" && this.props.editor)
 									? " selector-full"
-									: "")
+									: " selector")
 							}
 						>
-							<div className="abs top left selector-nopadding">
-								{category === "pose" &&
-								this.state.editor &&
+							{category === "pose" &&
+								this.state.editorSelected &&
 								this.props.editor ? (
 									<Editor />
 								) : (
-									elementDiv
+									<div className="abs top left selector-nopadding">
+										{elementDiv}
+									</div>
 								)}
-							</div>
+							
 						</div>
 					</div>
 				</div>

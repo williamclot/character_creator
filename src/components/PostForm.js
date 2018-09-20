@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import logo from './../graphic_assets/logo.jpg';
 
 // Loading Assets (SubComponents & CSS)
 import "../css/postform.css";
@@ -11,7 +12,7 @@ class PostForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "My Character",
+      name: "MyCharacter",
       loader: false,
       response: false,
       status: false
@@ -20,7 +21,7 @@ class PostForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit() {
+  handleSubmit(event) {
     this.props.updateVisible(false);
     this.setState({ loader: true });
     const accesstoken = this.props.accesstoken;
@@ -79,11 +80,12 @@ class PostForm extends Component {
         }
       });
     });
+    event.preventDefault();
   }
 
   handleInputChange(event) {
     this.setState({
-      name: event.value
+      name: event.target.value
     });
   }
 
@@ -91,7 +93,7 @@ class PostForm extends Component {
     if (this.props.visible) {
       return (
         <div className="screen abs top left">
-          <div className="abs form">
+          <div className="abs popup">
             <FontAwesomeIcon
               className="abs cross"
               icon="times-circle"
@@ -99,32 +101,31 @@ class PostForm extends Component {
                 this.props.updateVisible(false);
               }}
             />
+            <div className="logotopform">
+              <img src={logo} alt="logo"/>
+            </div>
             <div className="title">
               <h2>Upload to MyMiniFactory</h2>
             </div>
-            <label>
-              Name:
+            <form className="form" onSubmit={this.handleSubmit}>
+              <p>Give it a name:</p>
               <input
-                name="name"
-                type="text"
-                value={this.state.name}
-                onChange={this.handleInputChange}
-              />
-            </label>
-            <div className="submit-container">
-              <div
-                className="buttons"
-                value="Submit"
-                onClick={this.handleSubmit}
-              >
-                Submit
+                className="nameinput"
+                  type="text"
+                  value={this.state.name}
+                  onChange={this.handleInputChange}
+                />
+              <div className="submit-container">
+                <input className="buttons" type="submit" value="Submit" />
               </div>
-            </div>
+              
+            </form>
           </div>
         </div>
       );
     }
   }
+  
 
   render() {
     return (

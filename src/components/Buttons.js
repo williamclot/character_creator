@@ -12,8 +12,7 @@ class Buttons extends Component {
     super(props);
     this.state = {
       formVisible: false,
-      accesstoken: '', 
-      dev: true
+      accesstoken: ''
     }
     this.updateVisible = this.updateVisible;
   }
@@ -38,8 +37,8 @@ class Buttons extends Component {
   
   
   renderAuthButton() {
-    this.redirectUri = (this.state.dev) ? 'http://localhost:3000' : 'https://www.myminifactory.com/character-creator/';
-    this.clientKey = (this.state.dev) ? 'customizerDev' : 'character-creator';
+    this.redirectUri = (process.env.NODE_ENV) ? 'http://localhost:3000' : 'https://www.myminifactory.com/character-creator/';
+    this.clientKey = (process.env.NODE_ENV) ? 'customizerDev' : 'character-creator';
     this.mmfAccessToken = window.accessToken; // Global initialized outside the project
     // this.mmfAccessToken = "test-token"; // Global initialized outside the project
     if (this.mmfAccessToken == null) {
