@@ -80,6 +80,7 @@ class Selector extends Component {
 		const isLeft = this.props.isLeft;
 		var library;
 		var sideIdencator;
+		var meshType;
 
 		switch (category) {
 			case "head":
