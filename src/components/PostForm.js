@@ -27,7 +27,7 @@ class PostForm extends Component {
 
     axios({
       method: "post",
-      url: "https://www.myminifactory.com/api/v2/object",
+      url: "http://mmf.local/dev.php/api/v2/object",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + accesstoken
@@ -86,7 +86,7 @@ class PostForm extends Component {
         axios({
           method: "post",
           url:
-            "https://www.myminifactory.com/api/v2/file?upload_id=" + uploadID,
+            "http://mmf.local/dev.php/api/v2/file?upload_id=" + uploadID,
           headers: {
             Authorization: "Bearer " + accesstoken
           },

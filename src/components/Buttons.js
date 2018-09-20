@@ -28,19 +28,44 @@ class Buttons extends Component {
   }
 
   
-
+  
+  onSuccess = response => {
+    this.setState({ formVisible: true })
+    this.setState({ accesstoken: response.access_token })
+  }
+  onFailure = response => console.error(response);
+  
+  
+  
+  renderAuthButton() {
+    this.redirectUri = (this.state.dev) ? 'http://localhost:3000' : 'https://www.myminifactory.com/character-creator/';
+    this.clientKey = (this.state.dev) ? 'customizerDev' : 'character-creator';
+    this.mmfAccessToken = accessToken; // Global initialized outside the project
+    // this.mmfAccessToken = "test-token"; // Global initialized outside the project
+    if (this.mmfAccessToken == null) {
+      return (<MyMiniFactoryLogin
+        className="abs buttons"
+        clientKey={this.clientKey}
+        redirectUri={this.redirectUri}
+        buttonText="Share on MyMiniFactory.com"
+        onSuccess={this.onSuccess}
+        onFailure={this.onFailure}
+      />);
+    } else {
+      return (<div
+        className="abs buttons"
+        id="buy"
+        onClick={() => {
+          console.log("Click")
+          this.setState({ formVisible: true })
+        }}
+      >
+        Get it printed for $4.99
+        </div>);
+    }
+  }
 
   render() {
-
-    const redirectUri = (this.state.dev) ? 'http://localhost:3000' : 'https://www.myminifactory.com/character-creator/';
-    const clientKey = (this.state.dev) ? 'customizerDev' : 'character-creator';
-
-    const onSuccess = response => {
-      this.setState({formVisible: true})
-      this.setState({accesstoken: response.access_token})
-    }
-    const onFailure = response => console.error(response);
-
 
     return (
       <div>
@@ -91,14 +116,15 @@ class Buttons extends Component {
         >
           Share on MyMiniFactory.com
         </div> */}
-        <MyMiniFactoryLogin
+        {/* <MyMiniFactoryLogin
           className="abs buttons"
           clientKey={clientKey}
           redirectUri={redirectUri}
           buttonText="Share on MyMiniFactory.com"
           onSuccess={onSuccess}
           onFailure={onFailure}
-        />
+        /> */}
+        { this.renderAuthButton() }
         <PostForm
           visible={this.state.formVisible}
           updateVisible={this.updateVisible}
