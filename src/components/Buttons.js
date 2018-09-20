@@ -40,7 +40,7 @@ class Buttons extends Component {
   renderAuthButton() {
     this.redirectUri = (this.state.dev) ? 'http://localhost:3000' : 'https://www.myminifactory.com/character-creator/';
     this.clientKey = (this.state.dev) ? 'customizerDev' : 'character-creator';
-    this.mmfAccessToken = accessToken; // Global initialized outside the project
+    this.mmfAccessToken = window.accessToken; // Global initialized outside the project
     // this.mmfAccessToken = "test-token"; // Global initialized outside the project
     if (this.mmfAccessToken == null) {
       return (<MyMiniFactoryLogin
@@ -54,13 +54,13 @@ class Buttons extends Component {
     } else {
       return (<div
         className="abs buttons"
-        id="buy"
         onClick={() => {
           console.log("Click")
           this.setState({ formVisible: true })
+          this.setState({ accesstoken: this.mmfAccessToken })
         }}
       >
-        Get it printed for $4.99
+        Upload to MyMiniFactory
         </div>);
     }
   }

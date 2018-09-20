@@ -12,9 +12,12 @@ var publicUrl = 'hello';
 var camera, scene, renderer;
 var controls, loader;
 
+var raycaster = new THREE.Raycaster();
+var mouse = new THREE.Vector2();
+
 var selected = "Head";
 var color = { r: 0.555, g: 0.48, b: 0.49 };
-var group = new THREE.Group();
+var group = new THREE.Group(); //this group will contain all the meshes but not the floor, the lights etc...
 var bBoxStand;
 window.loaded = false;
 window.partloaded = false;
@@ -26,7 +29,7 @@ var loadedMeshes = {
     rotation: { x: 0, y: 0, z: 0 }
   },
   LegR: {
-    name: "default_leg_R",
+    name: "robot_leg_R",
     rotation: { x: 0, y: 0, z: 0 }
   },
   LegL: {
@@ -34,8 +37,8 @@ var loadedMeshes = {
     rotation: { x: 0, y: 0, z: 0 }
   },
   Head: {
-    name: "hellion_rams",
-    rotation: { x: 0, y: 3.14, z: 0 }
+    name: "default_head",
+    rotation: { x: 0, y: 0, z: 0 }
   },
   ArmR: {
     name: "thin_arm_R",
@@ -120,7 +123,6 @@ var meshStaticInfo = {
     childAttachment: "FootL_Foot_L"
   }
 };
-
 // List of parent/child relations
 var childrenList = {
   ArmR: ["HandR"],
@@ -178,7 +180,7 @@ function init() {
     container.appendChild(renderer.domElement);
 
     var size = 50;
-    var divisions = 50;
+    var divisions = 60;
 
     var gridHelper = new THREE.GridHelper(size, divisions);
     scene.add(gridHelper);
@@ -193,7 +195,7 @@ function init() {
     controls.enablePan = false;
   }
   function buildLights() {
-    //hemisphere light
+    //hemisphere light: like sun light but without any shadows
     var hemi = new THREE.HemisphereLight(0xffffff, 0xffffff);
     scene.add(hemi);
 
@@ -201,22 +203,16 @@ function init() {
     var light = new THREE.PointLight(0xc1c1c1, 1, 100);
     light.position.set(3, 10, 10);
     light.castShadow = true;
-    light.penumbra = 1;
-
     //Set up shadow properties for the light
     light.shadow.mapSize.width = 2048; // default
     light.shadow.mapSize.height = 2048; // default
-    light.shadow.camera.near = 1; // default
-    light.shadow.camera.far = 30; // default
-    // light.shadowDarkness = 0.5;
     light.decay = 1;
     scene.add(light);
 
+    // This light is here to show the details in the back (no shadows)
     var backlight = new THREE.PointLight(0xc4b0ac, 1, 100);
     backlight.position.set(0, 2, -20);
-    backlight.castShadow = false;
     backlight.penumbra = 2;
-
     scene.add(backlight);
   }
   function buildFloor() {
@@ -237,6 +233,7 @@ function init() {
 }
 
 function clearPosition(item) {
+  // This function is used to clear the position of an imported gltf file
   item.position.x = 0;
   item.position.y = 0;
   item.position.z = 0;
@@ -251,21 +248,6 @@ function rotateElement(item, clearRotation, rotation) {
     item.rotation.y = rotation.y;
     item.rotation.z = rotation.z;
   }
-}
-function replaceMesh(MeshType, firstLoad, bones, poseData) {
-  group.remove(group.getObjectByName(MeshType));
-  placeMesh(
-    loadedMeshes[MeshType].name,
-    meshStaticInfo[MeshType].bodyPart,
-    MeshType,
-    meshStaticInfo[MeshType].parentAttachment,
-    meshStaticInfo[MeshType].childAttachment,
-    loadedMeshes[MeshType].rotation,
-    firstLoad,
-    false,
-    bones,
-    poseData
-  );
 }
 function placeMesh(
   meshName,
@@ -285,18 +267,20 @@ function placeMesh(
     publicUrl + "/models/" + bodyPartClass + "/" + meshName + ".glb",
     gltf => {
       var root = gltf.scene.children[0];
-      console.log(root);
       root.traverse(function(child) {
         if (child instanceof THREE.Mesh) {
+          // Gives a fixed name to the mesh and same gray color
+          child.name = "mesh-"+MeshType.toLowerCase();
           child.castShadow = true;
           child.material.color = { r: 0.5, g: 0.5, b: 0.5 };
         }
       });
 
+      // group is one element with all the meshes and bones of the character
       group.add(root);
-
       scene.updateMatrixWorld(true);
 
+      // Updates the loadedMeshes variable (used for replacing children)
       loadedMeshes[MeshType].name = meshName;
       loadedMeshes[MeshType].rotation = rotation;
 
@@ -361,11 +345,27 @@ function placeMesh(
   );
 }
 
+function replaceMesh(MeshType, firstLoad, bones, poseData) {
+  group.remove(group.getObjectByName(MeshType));
+  placeMesh(
+    loadedMeshes[MeshType].name,
+    meshStaticInfo[MeshType].bodyPart,
+    MeshType,
+    meshStaticInfo[MeshType].parentAttachment,
+    meshStaticInfo[MeshType].childAttachment,
+    loadedMeshes[MeshType].rotation,
+    firstLoad,
+    false,
+    bones,
+    poseData
+  );
+}
+
 function placeStand() {
   // var topStand;
   var minFinder = new THREE.FindMinGeometry();
 
-  if (scene.getObjectByName("Stand")) {
+  if (scene.getObjectByName("mesh-stand")) {
     var resultR = minFinder.parse(scene.getObjectByName("FootR"));
     var resultL = minFinder.parse(scene.getObjectByName("FootL"));
     var result = resultL > resultR ? resultR : resultL;
@@ -382,6 +382,7 @@ function placeStand() {
 
         root.traverse(function(child) {
           if (child instanceof THREE.Mesh) {
+            child.name = "mesh-stand"
             child.castShadow = true;
             child.receiveShadow = true;
           }
@@ -410,8 +411,8 @@ function placeStand() {
 
 window.changeStand = function(stand) {
   var minFinder = new THREE.FindMinGeometry();
-  if (scene.getObjectByName("Stand")) {
-    group.remove(scene.getObjectByName("Stand"));
+  if (scene.getObjectByName("mesh-stand")) {
+    group.remove(scene.getObjectByName("mesh-stand"));
     loader.load(
       publicUrl + "/models/stand/"+stand+".glb",
       gltf => {
@@ -419,6 +420,7 @@ window.changeStand = function(stand) {
 
         root.traverse(function(child) {
           if (child instanceof THREE.Mesh) {
+            child.name = "mesh-stand"
             child.castShadow = true;
             child.receiveShadow = true;
             child.material.color = { r: 0.555, g: 0.48, b: 0.49 };
@@ -604,30 +606,36 @@ window.export = function(name) {
   if (name) {
     saveString(exporter.parse(group), name + ".stl");
   } else {
-    var exportedMeshes = []
-      var Meshes = [
-        "Stand",
-        "Mesh_Torso",
-        "Mesh_Arm_L",
-        "Mesh_Arm_R",
-        "Mesh_Foot_L",
-        "Mesh_Foot_R",
-        "Mesh_Hand_L",
-        "Mesh_Hand_R",
-        "Mesh_Head",
-        "Mesh_Leg_L",
-        "Mesh_Leg_R",
-        "Mesh_Neck"
-      ];
-      for (var i=0; i<Meshes.length; i++){
-        scene.traverse(function(child) {
-          if (child.name === Meshes[i]) {
-            exportedMeshes.push(exporter.parse(child))
-          }
-        });
+    var stlList = []
+    // I need to know in which order the files are exported...
+    var Meshes = [
+      "mesh-stand",
+      "mesh-torso",
+      "mesh-arml",
+      "mesh-armr",
+      "mesh-footl",
+      "mesh-footr",
+      "mesh-handl",
+      "mesh-handr",
+      "mesh-head",
+      "mesh-legl",
+      "mesh-legr",
+      "mesh-neck"
+    ];
+    for (var i = 0; i < Meshes.length; i++) {
+      group.traverse(function (child) {
+        if (child.name === Meshes[i]) {
+          stlList.push(exporter.parse(child))
+        }
+      });
+    }
+    return stlList
+
+    scene.traverse(function(child){
+      if (child instanceof THREE.Mesh){
+        console.log(child.name)
       }
-      // console.log(exportedMeshes)
-      return exportedMeshes
+    })
   }
 };
 
@@ -642,6 +650,13 @@ function animate() {
   render();
 }
 function render() {
+  // update the picking ray with the camera and mouse position
+  // raycaster.setFromCamera( mouse, camera );
+  // calculate objects intersecting the picking ray
+	// var intersects = raycaster.intersectObjects( group );
+	// for ( var i = 0; i < intersects.length; i++ ) {
+	// 	intersects[ i ].object.material.color.set( 0xff0000 );
+	// }
   camera.lookAt(new THREE.Vector3(0, 1, 0));
   renderer.render(scene, camera);
 }
@@ -667,6 +682,14 @@ function saveArrayBuffer(buffer, filename) {
 function saveString(text, filename) {
   save(new Blob([text], { type: "text/plain" }), filename);
 }
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+
+function onMouseClick( event ) {
+
+	// calculate mouse position in normalized device coordinates
+	// (-1 to +1) for both components
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
 }
+
+window.addEventListener( 'click', onMouseClick, false );

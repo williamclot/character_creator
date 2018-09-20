@@ -1,9 +1,20 @@
+/* --------------------------------------------------------
+Style Sheet for the Category.js component
+
+last modified: 07.09.2018
+author: William Clot
+email: contact@williamclot.com
+website: https://github.com/williamclot
+
+CONTENTS:
+- category styling on the left side with the cercles and the svg
+----------------------------------------------------------*/
+
 .panel {
   border: none;
   background-color: rgba(255, 255, 255, 0);
   width: 25%;
   height: 100%;
-  /* padding: 30px; */
 }
 
 .right-side {
@@ -24,7 +35,8 @@
 .category {
   z-index: 10;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-top:10px;
   background-color: rgba(0, 0, 0, 0.8);
   border-radius: 100%;
   border: none;
