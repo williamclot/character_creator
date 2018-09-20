@@ -37,8 +37,8 @@ class Buttons extends Component {
   
   
   renderAuthButton() {
-    this.redirectUri = (process.env.NODE_ENV) ? 'http://localhost:3000' : 'https://www.myminifactory.com/character-creator/';
-    this.clientKey = (process.env.NODE_ENV) ? 'customizerDev' : 'character-creator';
+    this.redirectUri = (process.env.NODE_ENV === 'development') ? 'http://localhost:3000' : 'https://www.myminifactory.com/character-creator/';
+    this.clientKey = (process.env.NODE_ENV === 'development') ? 'customizerDev' : 'character-creator';
     this.mmfAccessToken = window.accessToken; // Global initialized outside the project
     // this.mmfAccessToken = "test-token"; // Global initialized outside the project
     if (this.mmfAccessToken == null) {
