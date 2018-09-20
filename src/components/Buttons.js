@@ -13,9 +13,8 @@ class Buttons extends Component {
     this.state = {
       formVisible: false,
       accesstoken: '', 
-      dev: true
+      dev: false
     }
-    this.updateVisible = this.updateVisible;
   }
 
   updateVisible = formVisible => {
@@ -36,6 +35,7 @@ class Buttons extends Component {
     const clientKey = (this.state.dev) ? 'customizerDev' : 'character-creator';
 
     const onSuccess = response => {
+      console.log(response.access_token)
       this.setState({formVisible: true})
       this.setState({accesstoken: response.access_token})
     }
@@ -82,15 +82,6 @@ class Buttons extends Component {
         >
           Get it printed for $4.99
         </div>
-        {/* <div
-          className="abs buttons"
-          onClick={() => {
-            this.props.updatePopup(true)
-            this.props.updatePopupMessage("Sorry this feature is still in development...")
-          }}
-        >
-          Share on MyMiniFactory.com
-        </div> */}
         <MyMiniFactoryLogin
           className="abs buttons"
           clientKey={clientKey}

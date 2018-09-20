@@ -56,20 +56,6 @@
     "link": ""
   },
   {
-    "name": "Dragon Head",
-    "img": "dragon_head.png",
-    "file": "dragon_head",
-    "author": "William CLOT",
-    "description": "Dragon head.",
-    "rotation": {
-      "x": 0,
-      "y": 3.1415,
-      "z": 0
-    },
-    "scale": 1,
-    "link": ""
-  },
-  {
 		"name": "Stormtrooper",
 		"img": "stormtrooper.png",
     "file": "stormtrooper",
@@ -155,7 +141,7 @@
     "premium": true
   },
   {
-		"name": "Blender Head",
+		"name": "Bender Head",
 		"img": "blender.png",
     "file": "blender_head",
     "author": "William CLOT",
@@ -177,6 +163,20 @@
 		"rotation": {
 			"x":0,
 			"y":3.14,
+			"z":0
+		},
+    "scale": 1,
+    "link": ""
+  },
+  {
+		"name": "Box Head",
+		"img": "box_head.png",
+    "file": "test_head",
+    "author": "William CLOT",
+    "description": "",
+		"rotation": {
+			"x":0,
+			"y":0,
 			"z":0
 		},
     "scale": 1,
