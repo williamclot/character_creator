@@ -28,7 +28,7 @@ class PostForm extends Component {
     const stlData = window.export();
     axios({
       method: "post",
-      url: "http://mmf.local/dev.php/api/v2/object",
+      url: (process.env.NODE_ENV) ? 'http://mmf.local/dev.php/api/v2/object' : 'https://www.myminifactory.com/api/v2/object',
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + accesstoken
@@ -57,7 +57,7 @@ class PostForm extends Component {
       const promises = files.map((file, i) => axios({
         method: "post",
         url:
-          "http://mmf.local/dev.php/api/v2/file?upload_id=" + file.upload_id,
+          (process.env.NODE_ENV) ? 'http://mmf.local/dev.php/api/v2/file?upload_id=' + file.upload_id : 'https://www.myminifactory.com/api/v2/file?upload_id=' + file.upload_id,
         headers: {
           Authorization: "Bearer " + accesstoken
         },
