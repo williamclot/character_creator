@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import logo from './../graphic_assets/logo.jpg';
+import Popup from "./Popup";
 
 // Loading Assets (SubComponents & CSS)
 import "../css/postform.css";
@@ -15,11 +16,20 @@ class PostForm extends Component {
       name: "MyCharacter",
       loader: false,
       response: false,
-      status: false
+      status: false, 
+      popup: false, 
+      message: ''
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  successMessage = "Your character has been uploaded and will be available soon in your MyMiniFactory account! We're making sure this file is ready to be printed, we will let you know when the file is ready!";
+  errorMessage = "Something went wrong during the upload, please try again...";
+
+  updatePopup = popup => {
+    this.setState({ popup });
+  };
 
   handleSubmit(event) {
     this.props.updateVisible(false);
@@ -69,13 +79,13 @@ class PostForm extends Component {
           // Everything okay
           this.setState({loader: false, response: true, status: true});
           setTimeout(() => {
-            this.setState({response: false})
+            this.setState({response: false, popup: true, message: this.successMessage})
           }, 1500);
         } else {
           // Something went wrong
           this.setState({loader: false, response: true, status: false});
           setTimeout(() => {
-            this.setState({response: false})
+            this.setState({response: false, popup: true, message: this.errorMessage});
           }, 1500);
         }
       });
@@ -133,6 +143,11 @@ class PostForm extends Component {
         {this.renderForm()}
         <Loader visible={this.state.loader} />
         <Response visible={this.state.response} status={this.state.status}  />
+        <Popup
+            popupDisplayed={this.state.popup}
+            message={this.state.message}
+            updatePopup={this.updatePopup}
+          />
       </div>
     );
   }
