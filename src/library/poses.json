@@ -40,13 +40,6 @@
       "file": "dab",
       "author": "William CLOT",
       "description": "Default man head."
-    },
-    {
-      "name": "Test",
-      "img": "pose.svg",
-      "file": "test",
-      "author": "William CLOT",
-      "description": "Default man head."
     }
 ]
   
