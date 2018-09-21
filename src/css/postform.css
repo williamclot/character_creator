@@ -38,13 +38,25 @@ Needs redoing -- is very beta like...
 
 .title h2{
     text-align: center;
-    padding-top: 50px; 
+    padding-top: 70px; 
 }
 .submit-container{
-    padding-top: 20px;
+    padding-top: 10px;
     width: 30%;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
 }
 .submit-container .buttons{
     border:none;
     font-weight: 400;
+    border-radius: 5px;
+}
+.large-button{
+    width: 100%;
+}
+
+input.nameinput{
+    border: 1px solid gray;
+    border-radius: 10px;
 }
