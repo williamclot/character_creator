@@ -141,29 +141,6 @@ class Selector extends Component {
 					className="el"
 					key={i}
 					onClick={() => {
-						let meshType;
-						switch (category) {
-							case "torso":
-								meshType = "Torso";
-								break;
-							case "head":
-								meshType = "Head";
-								break;
-							case "hand":
-								meshType = isLeft ? "HandL" : "HandR";
-								break;
-							case "arm":
-								meshType = isLeft ? "ArmL" : "ArmR";
-								break;
-							case "foot":
-								meshType = isLeft ? "FootL" : "FootR";
-								break;
-							case "leg":
-								meshType = isLeft ? "LegL" : "LegR";
-								break;
-							default:
-								meshType = undefined;
-						}
 						if (filteredlibrary[i].premium) {
 							this.props.updatePopupMessage(
 								"Sorry this is a premium object, this feature is still in development..."
