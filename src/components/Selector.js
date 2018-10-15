@@ -26,7 +26,21 @@ class Selector extends Component {
 		};
 	}
 
-	updateSearchValue = search => {
+	updateSearchValue = async search => {
+
+		const res = await axios.get("/api/v2/search", {
+			params: {
+				q: search,
+				// cat: "customizer" // category <- should be tags
+			},
+			headers: {
+				"key": "d2ae774d-c384-4219-9e94-668a0d6764f6",
+			}
+		})
+		console.log(res);
+		console.log(search)
+		
+		
 		this.setState({ search });
 	};
 
