@@ -27,5 +27,6 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "homepage": "http://localhost:3000"
+  "homepage": "http://localhost:3000",
+  "proxy": "https://www.myminifactory.com"
 }
