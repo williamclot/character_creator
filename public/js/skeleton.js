@@ -248,9 +248,9 @@ function rotateElement(item, clearRotation, rotation) {
   }
 }
 
-function loadMeshFromURI(uri) {
-  ...
-}
+// function loadMeshFromURI(uri) {
+//   ...
+// }
 
 /**
  * main function used to load a mesh
