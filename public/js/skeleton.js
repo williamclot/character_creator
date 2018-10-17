@@ -247,6 +247,24 @@ function rotateElement(item, clearRotation, rotation) {
     item.rotation.z = rotation.z;
   }
 }
+
+function loadMeshFromURI(uri) {
+  ...
+}
+
+/**
+ * main function used to load a mesh
+ * @param {string} meshName 
+ * @param {string} bodyPartClass 
+ * @param {string} MeshType 
+ * @param {*} parentAttachment 
+ * @param {*} childAttachment 
+ * @param {*} rotation 
+ * @param {boolean} firstLoad 
+ * @param {boolean} highLight 
+ * @param {*} bones 
+ * @param {*} poseData 
+ */
 function placeMesh(
   meshName,
   bodyPartClass,
@@ -453,6 +471,14 @@ window.loadDefaultMeshes = function(bones, poseData) {
     poseData
   );
 };
+
+/**
+ * @param bodyPart - name of meshType
+ * @param part - json metadata: name, img, file, author, description, rotation, scale, link 
+ * @param isLeft - to identify if left or right
+ * @param bones - list of bone ids and names (from "library/bones.json")
+ * @param poseData - data about the pose to render
+ */
 window.changeMesh = function(bodyPart, part, isLeft, bones, poseData) {
   window.partloaded = false;
   var meshType;
