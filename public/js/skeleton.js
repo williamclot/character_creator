@@ -248,14 +248,10 @@ function rotateElement(item, clearRotation, rotation) {
   }
 }
 
-// function loadMeshFromURI(uri) {
-//   ...
-// }
-
 /**
  * main function used to load a mesh
  * @param {string} meshName 
- * @param {string} bodyPartClass 
+ * @param {string} uri 
  * @param {string} MeshType 
  * @param {*} parentAttachment 
  * @param {*} childAttachment 
@@ -267,7 +263,7 @@ function rotateElement(item, clearRotation, rotation) {
  */
 function placeMesh(
   meshName,
-  bodyPartClass,
+  uri,
   MeshType,
   parentAttachment,
   childAttachment,
@@ -280,7 +276,7 @@ function placeMesh(
   // bodyPartClass : {arm, head, hand, torso, leg, foot}
   // MeshType : {ArmR, ArmL, Head, HandR, HandL, LegR, LegL, FootR, FootL, Torso}
   loader.load(
-    "models/" + bodyPartClass + "/" + meshName + ".glb",
+    uri,
     gltf => {
       var root = gltf.scene.children[0];
       root.traverse(function(child) {
@@ -338,11 +334,16 @@ function placeMesh(
       if (children) {
         for (let i = 0; i < children.length; i++) {
           const childMesh = children[i];
-          
+
+          const bodyPartClass = meshStaticInfo[childMesh].bodyPart;
+          const meshName = loadedMeshes[childMesh].name;
+          const uri = "models/" + bodyPartClass + "/" + meshName + ".glb";
+
           group.remove(group.getObjectByName(childMesh));
+
           placeMesh(
-            loadedMeshes[childMesh].name,
-            meshStaticInfo[childMesh].bodyPart,
+            meshName,
+            uri,
             childMesh,
             meshStaticInfo[childMesh].parentAttachment,
             meshStaticInfo[childMesh].childAttachment,
@@ -374,6 +375,7 @@ function placeMesh(
     }
   );
 }
+
 
 
 function placeStand() {
@@ -457,9 +459,12 @@ window.changeStand = function(stand) {
   }
 };
 window.loadDefaultMeshes = function(bones, poseData) {
+  const bodyPartClass = meshStaticInfo["Torso"].bodyPart;
+  const meshName = loadedMeshes["Torso"].name;
+  const uri = "models/" + bodyPartClass + "/" + meshName + ".glb";
   placeMesh(
-    loadedMeshes["Torso"].name,
-    meshStaticInfo["Torso"].bodyPart,
+    meshName,
+    uri,
     "Torso",
     undefined,
     undefined,
@@ -478,7 +483,7 @@ window.loadDefaultMeshes = function(bones, poseData) {
  * @param bones - list of bone ids and names (from "library/bones.json")
  * @param poseData - data about the pose to render
  */
-window.changeMesh = function(bodyPart, part, isLeft, bones, poseData) {
+window.changeMesh = function(bodyPart, part, isLeft, bones, poseData, meshURI) {
   window.partloaded = false;
   var meshType;
   var file;
@@ -537,9 +542,13 @@ window.changeMesh = function(bodyPart, part, isLeft, bones, poseData) {
           }
         }
       }
+      
+      if(!meshURI){
+        meshURI = "models/" + bodyPart + "/" + file + ".glb";
+      }
       placeMesh(
         file,
-        bodyPart,
+        meshURI,
         meshType,
         parentAttachment,
         childAttachment,
