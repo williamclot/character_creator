@@ -595,7 +595,8 @@ window.changeRotation = function(bone_name, value, axis) {
 window.getRotation = function(bone_name) {
   var bone = scene.getObjectByName(bone_name);
   if (bone instanceof THREE.Bone) {
-    return { x: bone.rotation.x, y: bone.rotation.y, z: bone.rotation.z };
+    const { x, y, z } = bone.rotation; // TODO check if it doesn't break anything
+    return { x, y, z };
   }
 };
 window.loadPose = function(poseData, bones) {
