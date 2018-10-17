@@ -15,6 +15,7 @@ import legElements from "../library/leg.json";
 import standElements from "../library/stands.json";
 import poseElements from "../library/poses.json";
 import bones from "../library/bones.json";
+import { host } from "../config.js";
 
 class Selector extends Component {
 	constructor(props) {
@@ -26,24 +27,6 @@ class Selector extends Component {
 		};
 	}
 
-	updateSearchValue = async search => {
-
-		const res = await axios.get("/api/v2/search", {
-			params: {
-				q: search,
-				// cat: "customizer" // category <- should be tags
-			},
-			headers: {
-				"key": "d2ae774d-c384-4219-9e94-668a0d6764f6",
-			}
-		})
-		console.log(res);
-		console.log(search)
-		
-		
-		this.setState({ search });
-	};
-
 	componentDidMount() {
 		// Load the base model with defaultMeshes and defaultPose
 		axios.get("models/poses/default.json").then(res => {
@@ -51,6 +34,10 @@ class Selector extends Component {
 			window.loadDefaultMeshes(bones, res.data);
 		});
 	}
+
+	updateSearchValue = search => {
+		this.setState({ search });
+	};
 
 	applyPose(file) {
 		let poseData;
@@ -88,11 +75,57 @@ class Selector extends Component {
 		}
 	}
 
+	handleLoadMore = async e => {
+		const requestConfig = {
+			params: {
+				q: "default head",
+				tag: "CharacterCreator"
+			},
+			// headers: {
+			// 	"key": "d2ae774d-c384-4219-9e94-668a0d6764f6",
+			// }
+		};
+		console.log(host);
+		
+		// console.log(e.target);
+		// console.log(e)
+		const { data } = await axios.get(host + "/api/v2/search", requestConfig);
+
+		const glbs = data.items.filter(item => 
+			item.files.items.find(file => file.filename.endsWith('.glb'))
+		);
+		console.log(glbs);
+
+
+		/*const partData = {
+			"name": "Default Head",
+			"img": "default.png",
+			"file": "",
+			"author": "William CLOT",
+			"description": "Default man head.",
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"scale": 1, 
+			"link": ""
+		};
+		window.changeMesh(
+			this.props.currentCategory,
+			partData,
+			this.props.isLeft,
+			bones,
+			this.state.pose,
+			'tmp/default-head.glb'
+		);*/
+	}
+
 	render() {
 		// Passing throught the state from the properties
 		const category = this.props.currentCategory;
 		const isLeft = this.props.isLeft;
-		var library;
+		var library; // list of body parts of one type + metadata
 		var sideIdencator;
 
 		switch (category) {
@@ -231,6 +264,15 @@ class Selector extends Component {
 					/>
 				</div>
 				<div className="unselectable el-name">Add your designs</div>
+			</div>
+		);
+		elementDiv.push(
+			<div
+				className = "el"
+				key = "loadMore"
+				onClick={this.handleLoadMore}
+			>
+				Load More
 			</div>
 		);
 
