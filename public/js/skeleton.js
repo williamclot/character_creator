@@ -337,7 +337,21 @@ function placeMesh(
       let children = childrenList[MeshType];
       if (children) {
         for (let i = 0; i < children.length; i++) {
-          replaceMesh(children[i], firstLoad, bones, poseData);
+          const childMesh = children[i];
+          
+          group.remove(group.getObjectByName(childMesh));
+          placeMesh(
+            loadedMeshes[childMesh].name,
+            meshStaticInfo[childMesh].bodyPart,
+            childMesh,
+            meshStaticInfo[childMesh].parentAttachment,
+            meshStaticInfo[childMesh].childAttachment,
+            loadedMeshes[childMesh].rotation,
+            firstLoad,
+            false,
+            bones,
+            poseData
+          );
         }
       }
 
@@ -361,21 +375,6 @@ function placeMesh(
   );
 }
 
-function replaceMesh(MeshType, firstLoad, bones, poseData) {
-  group.remove(group.getObjectByName(MeshType));
-  placeMesh(
-    loadedMeshes[MeshType].name,
-    meshStaticInfo[MeshType].bodyPart,
-    MeshType,
-    meshStaticInfo[MeshType].parentAttachment,
-    meshStaticInfo[MeshType].childAttachment,
-    loadedMeshes[MeshType].rotation,
-    firstLoad,
-    false,
-    bones,
-    poseData
-  );
-}
 
 function placeStand() {
   // var topStand;
