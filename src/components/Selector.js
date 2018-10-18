@@ -15,7 +15,7 @@ import legElements from "../library/leg.json";
 import standElements from "../library/stands.json";
 import poseElements from "../library/poses.json";
 import bones from "../library/bones.json";
-import { host } from "../config.js";
+import config from "../config.js";
 
 class Selector extends Component {
 	constructor(props) {
@@ -76,20 +76,14 @@ class Selector extends Component {
 	}
 
 	handleLoadMore = async e => {
-		const requestConfig = {
-			params: {
-				q: "default head",
-				tag: "CharacterCreator"
-			},
-			// headers: {
-			// 	"key": "d2ae774d-c384-4219-9e94-668a0d6764f6",
-			// }
+		console.log(config.BASE_URL, config.ACCESS_TOKEN);
+		const params = {
+			q: "default head",
+			tag: "customizer",
+			access_token: config.ACCESS_TOKEN
 		};
-		console.log(host);
-		
-		// console.log(e.target);
-		// console.log(e)
-		const { data } = await axios.get(host + "/api/v2/search", requestConfig);
+
+		const { data } = await axios.get(config.BASE_URL + "/api/v2/search", { params });
 
 		const glbs = data.items.filter(item => 
 			item.files.items.find(file => file.filename.endsWith('.glb'))
