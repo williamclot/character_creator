@@ -80,8 +80,10 @@ class Selector extends Component {
 		const params = {
 			q: "default head",
 			tag: "customizer",
-			access_token: config.ACCESS_TOKEN
 		};
+		if(!config.isProduction) {
+			params['access_token'] = config.ACCESS_TOKEN;
+		}
 
 		const { data } = await axios.get(config.BASE_URL + "/api/v2/search", { params });
 
