@@ -117,50 +117,99 @@ class Selector extends Component {
 		);*/
 	}
 
-	render() {
-		// Passing throught the state from the properties
-		const category = this.props.currentCategory;
-		const isLeft = this.props.isLeft;
-		var library; // list of body parts of one type + metadata
-		var sideIdencator;
-
+	handleClick(libraryData, category, isLeft, event) {
+		let meshType;
 		switch (category) {
+			case "torso":
+				meshType = "Torso";
+				break;
 			case "head":
-				library = headElements;
-				sideIdencator = false;
+				meshType = "Head";
 				break;
 			case "hand":
-				library = handElements;
-				sideIdencator = true;
+				meshType = isLeft ? "HandL" : "HandR";
 				break;
 			case "arm":
-				library = armElements;
-				sideIdencator = true;
-				break;
-			case "torso":
-				library = torsoElements;
-				sideIdencator = false;
+				meshType = isLeft ? "ArmL" : "ArmR";
 				break;
 			case "foot":
-				library = footElements;
-				sideIdencator = true;
+				meshType = isLeft ? "FootL" : "FootR";
 				break;
 			case "leg":
-				library = legElements;
-				sideIdencator = true;
-				break;
-			case "pose":
-				library = poseElements;
-				sideIdencator = false;
-				break;
-			case "stand":
-				library = standElements;
-				sideIdencator = false;
+				meshType = isLeft ? "LegL" : "LegR";
 				break;
 			default:
-				library = headElements;
-				sideIdencator = false;
+				meshType = undefined;
 		}
+		if (libraryData.premium) {
+			this.props.updatePopupMessage(
+				"Sorry this is a premium object, this feature is still in development..."
+			);
+			this.props.updatePopup(true);
+		} else {
+			if (category === "pose") {
+				this.applyPose(libraryData.file);
+			} else if (category === "stand") {
+				window.changeStand(libraryData.file);
+			} else {
+				this.props.updateLoading(true);
+				window.changeMesh(
+					category,
+					libraryData,
+					isLeft,
+					bones,
+					this.state.pose
+				);
+				let loadedMeshes = this.props.loadedMeshes;
+				loadedMeshes[meshType] = libraryData.file;
+				this.props.updateMeshes(loadedMeshes);
+			}
+		}
+	}
+
+	render() {
+		// Passing through the state from the properties
+		const category = this.props.currentCategory;
+		const isLeft = this.props.isLeft;
+
+		const categoryInfo = {
+			head: {
+				library: headElements,
+				sideIdencator: false
+			},
+			hand: {
+				library: handElements,
+				sideIdencator: true
+			},
+			arm: {
+				library: armElements,
+				sideIdencator: true
+			},
+			torso: {
+				library: torsoElements,
+				sideIdencator: false
+			},
+			foot: {
+				library: footElements,
+				sideIdencator: true
+			},
+			leg: {
+				library: legElements,
+				sideIdencator: true
+			},
+			pose: {
+				library: poseElements,
+				sideIdencator: false
+			},
+			stand: {
+				library: standElements,
+				sideIdencator: false
+			}	
+		};
+		const {
+			library = headElements,
+			sideIdencator = false
+		} = categoryInfo[category];
 
 		let filteredlibrary = library.filter(
 			(element) => {
@@ -168,80 +217,31 @@ class Selector extends Component {
 			}
 		);
 
-		//JSX element to display the HTML
-		const elementDiv = [];
 
-		for (let i = 0; i < filteredlibrary.length; i++) {
-			elementDiv.push(
-				<div
-					className="el"
-					key={i}
-					onClick={() => {
-						let meshType;
-						switch (category) {
-							case "torso":
-								meshType = "Torso";
-								break;
-							case "head":
-								meshType = "Head";
-								break;
-							case "hand":
-								meshType = isLeft ? "HandL" : "HandR";
-								break;
-							case "arm":
-								meshType = isLeft ? "ArmL" : "ArmR";
-								break;
-							case "foot":
-								meshType = isLeft ? "FootL" : "FootR";
-								break;
-							case "leg":
-								meshType = isLeft ? "LegL" : "LegR";
-								break;
-							default:
-								meshType = undefined;
+		//JSX element to display the HTML
+		const elementDiv = filteredlibrary.map((libraryData, i) => (
+			<div
+				className="el"
+				key={i}
+				onClick={this.handleClick.bind(this, libraryData, category, isLeft)} // bine some variables
+			>
+				<div className="img">
+					<img
+						src={
+							"img/library/" + category + "/" + libraryData.img
 						}
-						if (filteredlibrary[i].premium) {
-							this.props.updatePopupMessage(
-								"Sorry this is a premium object, this feature is still in development..."
-							);
-							this.props.updatePopup(true);
-						} else {
-							if (category === "pose") {
-								this.applyPose(filteredlibrary[i].file);
-							} else if (category === "stand") {
-								window.changeStand(filteredlibrary[i].file);
-							} else {
-								this.props.updateLoading(true);
-								window.changeMesh(
-									category,
-									filteredlibrary[i],
-									isLeft,
-									bones,
-									this.state.pose
-								);
-								let loadedMeshes = this.props.loadedMeshes;
-								loadedMeshes[meshType] = filteredlibrary[i].file;
-								this.props.updateMeshes(loadedMeshes);
-							}
-						}
-					}}
-				>
-					<div className="img">
-						<img
-							src={
-								"img/library/" + category + "/" + filteredlibrary[i].img
-							}
-							alt={filteredlibrary[i].img}
-						/>
-					</div>
-					<div className="unselectable el-name">
-						{filteredlibrary[i].name}
-					</div>
-					{this.RenderPremium(filteredlibrary[i])}
-					{this.RenderLink(filteredlibrary[i])}
+						alt={libraryData.img}
+					/>
 				</div>
-			);
-		}
+				<div className="unselectable el-name">
+					{libraryData.name}
+				</div>
+				{this.RenderPremium(libraryData)}
+				{this.RenderLink(libraryData)}
+			</div>
+		));
+
+		// add "Add your designs" button
 		elementDiv.push(
 			<div
 				className="el"
@@ -262,6 +262,8 @@ class Selector extends Component {
 				<div className="unselectable el-name">Add your designs</div>
 			</div>
 		);
+
+		// add "LoadMore" button
 		elementDiv.push(
 			<div
 				className = "el"
