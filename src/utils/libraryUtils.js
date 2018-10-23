@@ -18,7 +18,7 @@ import poseElements from "../library/poses.json";
 /**
  * wrapper around the local library of body parts
  */
-const library = {
+const libraryUtils = {
 	libraries: {
 		head: {
 			data: headElements,
@@ -92,7 +92,7 @@ const library = {
 	 * @param {Boolean} isLeft
 	 * @returns {Array} - a list of Data objects with info about the body part
 	 */
-	load(category, isLeft) {
+	getLibrary(category, isLeft) {
 		const currentCategoryInfo = this.libraries[category];
 		const {
 			categoryHasLeftAndRightDistinction,
@@ -121,4 +121,4 @@ const library = {
 };
 
 
-export default library;
+export default libraryUtils;

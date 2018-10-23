@@ -8,7 +8,7 @@ import "../css/selector.css";
 
 import bones from "../library/bones.json";
 import config from "../config.js";
-import library from '../utils/libraryUtils';
+import libraryUtils from '../utils/libraryUtils';
 
 const RenderPremium = ({ premium }) => {
 	if (premium) {
@@ -45,7 +45,7 @@ class Selector extends Component {
 		super(props);
 
 		const { currentCategory, isLeft } = props;
-		const loadedLibraryData = library.load(currentCategory, isLeft);
+		const loadedLibraryData = libraryUtils.getLibrary(currentCategory, isLeft);
 
 		this.state = {
 			editorSelected: false,
@@ -70,7 +70,7 @@ class Selector extends Component {
 			nextProps.isLeft !== this.props.isLeft) {
 			const { currentCategory, isLeft } = nextProps;
 
-			const loadedLibraryData = library.load(currentCategory, isLeft);
+			const loadedLibraryData = libraryUtils.getLibrary(currentCategory, isLeft);
 
 			this.setState({ loadedLibraryData });
 		}
@@ -146,7 +146,7 @@ class Selector extends Component {
 			} else {
 				this.props.updateLoading(true);
 
-				const meshType = library.getMeshType(category, isLeft);
+				const meshType = libraryUtils.getMeshType(category, isLeft);
 				const file = libraryData.file;
 				
 				const url = libraryData.url || "models/" + category + "/" + file + ".glb" // !! URL path should not be relative
@@ -169,7 +169,7 @@ class Selector extends Component {
 		const category = this.props.currentCategory;
 		const isLeft = this.props.isLeft;
 
-		const sideIdencator = library.hasLeftAndRightDistinction(category);
+		const sideIdencator = libraryUtils.hasLeftAndRightDistinction(category);
 
 		let filteredlibrary = this.state.loadedLibraryData.filter(element => (
 			element.name.toLowerCase().indexOf(this.state.searchText) !== -1
@@ -241,7 +241,7 @@ class Selector extends Component {
 					}
 					onClick={() => {
 						this.props.updateLeft(true);
-						const meshType = library.getMeshType(category, isLeft);
+						const meshType = libraryUtils.getMeshType(category, isLeft);
 						if (meshType) {
 							window.selectedMesh(meshType);
 						}
@@ -256,7 +256,7 @@ class Selector extends Component {
 					}
 					onClick={() => {
 						this.props.updateLeft(false);
-						const meshType = library.getMeshType(category, isLeft);
+						const meshType = libraryUtils.getMeshType(category, isLeft);
 						if (meshType) {
 							window.selectedMesh(meshType);
 						}
