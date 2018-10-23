@@ -1,0 +1,80 @@
+[
+    {
+        "name": "Default Foot",
+        "img": "default_foot.png",
+        "file": "default_foot_R",
+        "author": "William CLOT",
+        "description": "Default Foot",
+        "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "scale": 1
+    },
+    {
+        "name": "Buckled Shoe",
+        "img": "buckled_foot.png",
+        "file": "buckled_foot_R",
+        "author": "William CLOT",
+        "description": "",
+        "rotation": {
+            "x": 0.2,
+            "y": 0,
+            "z": 0
+        },
+        "scale": 1
+    },
+    {
+        "name": "Boots",
+        "img": "boot.png",
+        "file": "boots_R",
+        "author": "William CLOT",
+        "description": "",
+        "rotation": {
+            "x": 0.2,
+            "y": 0,
+            "z": 0
+        },
+        "scale": 1
+    },
+    {
+        "name": "Barbarian",
+        "img": "barbarian.png",
+        "file": "barbarian_R",
+        "author": "William CLOT",
+        "description": "",
+        "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "scale": 1
+    },
+    {
+        "name": "Futurama",
+        "img": "futurama.png",
+        "file": "futurama_R",
+        "author": "William CLOT",
+        "description": "",
+        "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "scale": 1
+    },
+    {
+        "name": "Timberland",
+        "img": "timberland.png",
+        "file": "timberland_R",
+        "author": "William CLOT",
+        "description": "",
+        "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "scale": 1
+    }
+]

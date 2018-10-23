@@ -6,24 +6,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SearchBar from "./SearchBar";
 import "../css/selector.css";
 
-import headElements from "../library/heads.json";
-import handElements from "../library/hands.json";
-import armElements from "../library/arm.json";
-import torsoElements from "../library/torso.json";
-import footElements from "../library/foot.json";
-import legElements from "../library/leg.json";
-import standElements from "../library/stands.json";
-import poseElements from "../library/poses.json";
 import bones from "../library/bones.json";
 import config from "../config.js";
+import library from '../utils/libraryUtils';
 
 class Selector extends Component {
 	constructor(props) {
 		super(props);
+
+		const { currentCategory, isLeft } = props;
+		const loadedLibraryData = library.load(currentCategory, isLeft);
+
 		this.state = {
 			editorSelected: false,
 			pose: undefined,
-			search: ""
+			searchText: "",
+			loadedLibraryData,
 		};
 	}
 
@@ -37,10 +35,17 @@ class Selector extends Component {
 		window.loadDefaultMeshes(bones, pose);
 	}
 
-	updateSearchValue = search => {
-		this.setState({ search });
-	};
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.currentCategory !== this.props.currentCategory ||
+			nextProps.isLeft !== this.props.isLeft) {
+			const { currentCategory, isLeft } = nextProps;
 
+			const loadedLibraryData = library.load(currentCategory, isLeft);
+
+			this.setState({ loadedLibraryData });
+		}
+	}
+	
 	applyPose(file) {
 		let poseData;
 		//Ajax in react
@@ -124,29 +129,6 @@ class Selector extends Component {
 	}
 
 	handleClick(libraryData, category, isLeft, event) {
-		let meshType;
-		switch (category) {
-			case "torso":
-				meshType = "Torso";
-				break;
-			case "head":
-				meshType = "Head";
-				break;
-			case "hand":
-				meshType = isLeft ? "HandL" : "HandR";
-				break;
-			case "arm":
-				meshType = isLeft ? "ArmL" : "ArmR";
-				break;
-			case "foot":
-				meshType = isLeft ? "FootL" : "FootR";
-				break;
-			case "leg":
-				meshType = isLeft ? "LegL" : "LegR";
-				break;
-			default:
-				meshType = undefined;
-		}
 		if (libraryData.premium) {
 			this.props.updatePopupMessage(
 				"Sorry this is a premium object, this feature is still in development..."
@@ -159,12 +141,44 @@ class Selector extends Component {
 				window.changeStand(libraryData.file);
 			} else {
 				this.props.updateLoading(true);
+
+				let meshType, file;
+				switch (category) {
+					case "torso":
+						file = libraryData.file;
+						meshType = "Torso";
+						break;
+					case "head":
+						file = libraryData.file;
+						meshType = "Head";
+						break;
+					case "hand":
+						file = libraryData.file;
+						meshType = isLeft ? "HandL" : "HandR";
+						break;
+					case "arm":
+						file = libraryData.file;
+						meshType = isLeft ? "ArmL" : "ArmR";
+						break;
+					case "foot":
+						file = libraryData.file;
+						meshType = isLeft ? "FootL" : "FootR";
+						break;
+					case "leg":
+						file = libraryData.file;
+						meshType = isLeft ? "LegL" : "LegR";
+						break;
+					default:
+						meshType = undefined;
+				}
+				
+				const url = libraryData.url || "models/" + category + "/" + file + ".glb" // !! URL path should not be relative
 				window.changeMesh(
 					category,
 					libraryData,
 					isLeft,
-					bones,
-					this.state.pose
+					this.state.pose,
+					url
 				);
 				let loadedMeshes = this.props.loadedMeshes;
 				loadedMeshes[meshType] = libraryData.file;
@@ -178,50 +192,11 @@ class Selector extends Component {
 		const category = this.props.currentCategory;
 		const isLeft = this.props.isLeft;
 
-		const categoryInfo = {
-			head: {
-				library: headElements,
-				sideIdencator: false
-			},
-			hand: {
-				library: handElements,
-				sideIdencator: true
-			},
-			arm: {
-				library: armElements,
-				sideIdencator: true
-			},
-			torso: {
-				library: torsoElements,
-				sideIdencator: false
-			},
-			foot: {
-				library: footElements,
-				sideIdencator: true
-			},
-			leg: {
-				library: legElements,
-				sideIdencator: true
-			},
-			pose: {
-				library: poseElements,
-				sideIdencator: false
-			},
-			stand: {
-				library: standElements,
-				sideIdencator: false
-			}	
-		};
-		const {
-			library = headElements,
-			sideIdencator = false
-		} = categoryInfo[category];
+		const sideIdencator = library.hasLeftAndRightDistinction(category);
 
-		let filteredlibrary = library.filter(
-			(element) => {
-				return element.name.toLowerCase().indexOf(this.state.search) !== -1;
-			}
-		);
+		let filteredlibrary = this.state.loadedLibraryData.filter(element => (
+			element.name.toLowerCase().indexOf(this.state.searchText) !== -1
+		));
 
 
 		//JSX element to display the HTML
@@ -229,7 +204,7 @@ class Selector extends Component {
 			<div
 				className="el"
 				key={i}
-				onClick={this.handleClick.bind(this, libraryData, category, isLeft)} // bine some variables
+				onClick={this.handleClick.bind(this, libraryData, category, isLeft)} // bind some variables
 			>
 				<div className="img">
 					<img

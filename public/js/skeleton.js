@@ -251,32 +251,32 @@ function rotateElement(item, clearRotation, rotation) {
 /**
  * main function used to load a mesh
  * @param {string} meshName 
- * @param {string} uri 
+ * @param {string} url 
  * @param {string} MeshType 
  * @param {*} parentAttachment 
  * @param {*} childAttachment 
  * @param {*} rotation 
  * @param {boolean} firstLoad 
  * @param {boolean} highLight 
- * @param {*} bones 
+ * @param {*} bones // not used
  * @param {*} poseData 
  */
 function placeMesh(
   meshName,
-  uri,
+  url,
   MeshType,
   parentAttachment,
   childAttachment,
   rotation,
   firstLoad,
   highLight,
-  bones,
+  // bones,
   poseData
 ) {
   // bodyPartClass : {arm, head, hand, torso, leg, foot}
   // MeshType : {ArmR, ArmL, Head, HandR, HandL, LegR, LegL, FootR, FootL, Torso}
   loader.load(
-    uri,
+    url,
     gltf => {
       var root = gltf.scene.children[0];
       root.traverse(function(child) {
@@ -337,20 +337,20 @@ function placeMesh(
 
           const bodyPartClass = meshStaticInfo[childMesh].bodyPart;
           const meshName = loadedMeshes[childMesh].name;
-          const uri = "models/" + bodyPartClass + "/" + meshName + ".glb";
+          const url = "models/" + bodyPartClass + "/" + meshName + ".glb";
 
           group.remove(group.getObjectByName(childMesh));
 
           placeMesh(
             meshName,
-            uri,
+            url,
             childMesh,
             meshStaticInfo[childMesh].parentAttachment,
             meshStaticInfo[childMesh].childAttachment,
             loadedMeshes[childMesh].rotation,
             firstLoad,
             false,
-            bones,
+            // bones,
             poseData
           );
         }
@@ -461,17 +461,17 @@ window.changeStand = function(stand) {
 window.loadDefaultMeshes = function(bones, poseData) {
   const bodyPartClass = meshStaticInfo["Torso"].bodyPart;
   const meshName = loadedMeshes["Torso"].name;
-  const uri = "models/" + bodyPartClass + "/" + meshName + ".glb";
+  const url = "models/" + bodyPartClass + "/" + meshName + ".glb";
   placeMesh(
     meshName,
-    uri,
+    url,
     "Torso",
     undefined,
     undefined,
     undefined,
     true,
     false,
-    bones,
+    // bones,
     poseData
   );
 };
@@ -480,10 +480,10 @@ window.loadDefaultMeshes = function(bones, poseData) {
  * @param bodyPart - name of meshType
  * @param part - json metadata: name, img, file, author, description, rotation, scale, link 
  * @param isLeft - to identify if left or right
- * @param bones - list of bone ids and names (from "library/bones.json")
  * @param poseData - data about the pose to render
+ * @param meshURL - URL of resource to load
  */
-window.changeMesh = function(bodyPart, part, isLeft, bones, poseData, meshURI) {
+window.changeMesh = function(bodyPart, part, isLeft, poseData, meshURL) {
   window.partloaded = false;
   var meshType;
   var file;
@@ -502,23 +502,23 @@ window.changeMesh = function(bodyPart, part, isLeft, bones, poseData, meshURI) {
       break;
     case "hand":
       meshType = isLeft ? "HandL" : "HandR";
-      file = isLeft ? part.file[0] : part.file[1];
-      rotation = isLeft ? part.rotation[0] : part.rotation[1];
+      file = part.file;
+      rotation = part.rotation;
       break;
     case "arm":
       meshType = isLeft ? "ArmL" : "ArmR";
-      file = isLeft ? part.file[0] : part.file[1];
-      rotation = isLeft ? part.rotation[0] : part.rotation[1];
+      file = part.file;
+      rotation = part.rotation;
       break;
     case "foot":
       meshType = isLeft ? "FootL" : "FootR";
-      file = isLeft ? part.file[0] : part.file[1];
-      rotation = isLeft ? part.rotation[0] : part.rotation[1];
+      file = part.file;
+      rotation = part.rotation;
       break;
     case "leg":
       meshType = isLeft ? "LegL" : "LegR";
-      file = isLeft ? part.file[0] : part.file[1];
-      rotation = isLeft ? part.rotation[0] : part.rotation[1];
+      file = part.file;
+      rotation = part.rotation;
       break;
     default:
       meshType = undefined;
@@ -543,19 +543,19 @@ window.changeMesh = function(bodyPart, part, isLeft, bones, poseData, meshURI) {
         }
       }
       
-      if(!meshURI){
-        meshURI = "models/" + bodyPart + "/" + file + ".glb";
+      if(!meshURL){
+        meshURL = "models/" + bodyPart + "/" + file + ".glb";
       }
       placeMesh(
         file,
-        meshURI,
+        meshURL,
         meshType,
         parentAttachment,
         childAttachment,
         rotation,
         false,
         true,
-        bones,
+        // bones,
         poseData
       );
     }
