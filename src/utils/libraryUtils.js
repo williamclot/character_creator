@@ -22,47 +22,67 @@ const library = {
 	libraries: {
 		head: {
 			data: headElements,
-			categoryHasLeftAndRightDistinction: false
+			categoryHasLeftAndRightDistinction: false,
+			meshType: "Head"
 		},
 		hand: {
 			data: {
 				left: leftHandElements,
 				right: rightHandElements
 			},
-			categoryHasLeftAndRightDistinction: true
+			categoryHasLeftAndRightDistinction: true,
+			meshType: {
+				left: "HandL",
+				right: "HandR"
+			}
 		},
 		arm: {
 			data: {
 				left: leftArmElements,
 				right: rightArmElements
 			},
-			categoryHasLeftAndRightDistinction: true
+			categoryHasLeftAndRightDistinction: true,
+			meshType: {
+				left: "ArmL",
+				right: "ArmR"
+			}
 		},
 		torso: {
 			data: torsoElements,
-			categoryHasLeftAndRightDistinction: false
+			categoryHasLeftAndRightDistinction: false,
+			meshType: "Torso"
 		},
 		foot: {
 			data: {
 				left: leftFootElements,
 				right: rightFootElements
 			},
-			categoryHasLeftAndRightDistinction: true
+			categoryHasLeftAndRightDistinction: true,
+			meshType: {
+				left: "FootL",
+				right: "FootR"
+			}
 		},
 		leg: {
 			data: {
 				left: leftLegElements,
 				right: rightLegElements
 			},
-			categoryHasLeftAndRightDistinction: true
+			categoryHasLeftAndRightDistinction: true,
+			meshType: {
+				left: "LegL",
+				right: "LegR"
+			}
 		},
 		pose: {
 			data: poseElements,
-			categoryHasLeftAndRightDistinction: false
+			categoryHasLeftAndRightDistinction: false,
+			meshType: undefined
 		},
 		stand: {
 			data: standElements,
-			categoryHasLeftAndRightDistinction: false
+			categoryHasLeftAndRightDistinction: false,
+			meshType: undefined
 		}	
 	},
 
@@ -86,6 +106,17 @@ const library = {
 	hasLeftAndRightDistinction(category) {
 		const { categoryHasLeftAndRightDistinction } = this.libraries[category];
 		return categoryHasLeftAndRightDistinction;
+	},
+
+	getMeshType(category, isLeft) {
+		const currentCategoryInfo = this.libraries[category];
+		const {
+			categoryHasLeftAndRightDistinction,
+			meshType
+		} = currentCategoryInfo;
+	
+		const side = isLeft ? "left" : "right";
+		return categoryHasLeftAndRightDistinction ? meshType[side] : meshType;
 	}
 };
 

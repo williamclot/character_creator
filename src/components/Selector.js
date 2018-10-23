@@ -142,35 +142,8 @@ class Selector extends Component {
 			} else {
 				this.props.updateLoading(true);
 
-				let meshType, file;
-				switch (category) {
-					case "torso":
-						file = libraryData.file;
-						meshType = "Torso";
-						break;
-					case "head":
-						file = libraryData.file;
-						meshType = "Head";
-						break;
-					case "hand":
-						file = libraryData.file;
-						meshType = isLeft ? "HandL" : "HandR";
-						break;
-					case "arm":
-						file = libraryData.file;
-						meshType = isLeft ? "ArmL" : "ArmR";
-						break;
-					case "foot":
-						file = libraryData.file;
-						meshType = isLeft ? "FootL" : "FootR";
-						break;
-					case "leg":
-						file = libraryData.file;
-						meshType = isLeft ? "LegL" : "LegR";
-						break;
-					default:
-						meshType = undefined;
-				}
+				const meshType = library.getMeshType(category, isLeft);
+				const file = libraryData.file;
 				
 				const url = libraryData.url || "models/" + category + "/" + file + ".glb" // !! URL path should not be relative
 				window.changeMesh(
@@ -181,7 +154,7 @@ class Selector extends Component {
 					url
 				);
 				let loadedMeshes = this.props.loadedMeshes;
-				loadedMeshes[meshType] = libraryData.file;
+				loadedMeshes[meshType] = file;
 				this.props.updateMeshes(loadedMeshes);
 			}
 		}
