@@ -237,31 +237,9 @@ class Selector extends Component {
 					}
 					onClick={() => {
 						this.props.updateLeft(true);
-						var MeshType;
-						switch (category) {
-							case "head":
-								MeshType = "Head";
-								break;
-							case "hand":
-								MeshType = "HandL";
-								break;
-							case "arm":
-								MeshType = "ArmL";
-								break;
-							case "torso":
-								MeshType = "Torso";
-								break;
-							case "foot":
-								MeshType = "FootL";
-								break;
-							case "leg":
-								MeshType = "LegL";
-								break;
-							default:
-								MeshType = undefined;
-						}
-						if (MeshType) {
-							window.selectedMesh(MeshType);
+						const meshType = library.getMeshType(category, isLeft);
+						if (meshType) {
+							window.selectedMesh(meshType);
 						}
 					}}
 				>
@@ -274,31 +252,9 @@ class Selector extends Component {
 					}
 					onClick={() => {
 						this.props.updateLeft(false);
-						var MeshType;
-						switch (category) {
-							case "head":
-								MeshType = "Head";
-								break;
-							case "hand":
-								MeshType = "HandR";
-								break;
-							case "arm":
-								MeshType = "ArmR";
-								break;
-							case "torso":
-								MeshType = "Torso";
-								break;
-							case "foot":
-								MeshType = "FootR";
-								break;
-							case "leg":
-								MeshType = "LegR";
-								break;
-							default:
-								MeshType = undefined;
-						}
-						if (MeshType) {
-							window.selectedMesh(MeshType);
+						const meshType = library.getMeshType(category, isLeft);
+						if (meshType) {
+							window.selectedMesh(meshType);
 						}
 					}}
 				>
