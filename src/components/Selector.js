@@ -27,12 +27,14 @@ class Selector extends Component {
 		};
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
 		// Load the base model with defaultMeshes and defaultPose
-		axios.get("models/poses/default.json").then(res => {
-			this.setState({ pose: res.data });
-			window.loadDefaultMeshes(bones, res.data);
-		});
+		const { data: pose } = await axios.get("models/poses/default.json");
+
+		// await new Promise(resolve => setTimeout(resolve, 3000)); // wait 3 secs
+		this.setState({	pose });
+
+		window.loadDefaultMeshes(bones, pose);
 	}
 
 	updateSearchValue = search => {
@@ -49,6 +51,10 @@ class Selector extends Component {
 		});
 	}
 
+	handleSearch = searchText => {
+		this.setState({ searchText });
+	};
+	
 	RenderPremium(item) {
 		if (item.premium) {
 			return (
@@ -384,7 +390,7 @@ class Selector extends Component {
 			<div>
 				<div className="abs top right right-side">
 					<div className="box">
-						<SearchBar updateSearchValue={this.updateSearchValue} />
+						<SearchBar handleSearch={this.handleSearch} />
 						{sideIdencator ? buttons : ""}
 						{category === "pose" && this.props.editor ? editorButtons : ""}
 						<div
