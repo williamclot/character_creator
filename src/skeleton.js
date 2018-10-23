@@ -6,6 +6,11 @@
  * @author williamclot / https://github.com/williamclot
  */
 
+
+import THREE from './threejs-service';
+
+export default function(){
+
 //Threejs important variables
 var camera, scene, renderer;
 var controls, loader;
@@ -671,4 +676,4 @@ function saveString(text, filename) {
   save(new Blob([text], { type: "text/plain" }), filename);
 }
 
-window.addEventListener( 'click', onMouseClick, false );
+}
