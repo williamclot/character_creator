@@ -10,6 +10,36 @@ import bones from "../library/bones.json";
 import config from "../config.js";
 import library from '../utils/libraryUtils';
 
+const RenderPremium = ({ premium }) => {
+	if (premium) {
+		return (
+			<div className="abs premium">
+				<FontAwesomeIcon
+					className="abs centered white big-icon"
+					icon="dollar-sign"
+				/>
+			</div>
+		);
+	} else {
+		return null;
+	}
+}
+
+const RenderLink = ({ link }) => {
+	if (link) {
+		return (
+			<a className="abs link" href={link}>
+				<FontAwesomeIcon
+					className="abs centered white icon"
+					icon="link"
+				/>
+			</a>
+		);
+	} else {
+		return null;
+	}
+}
+
 class Selector extends Component {
 	constructor(props) {
 		super(props);
@@ -60,32 +90,6 @@ class Selector extends Component {
 		this.setState({ searchText });
 	};
 	
-	RenderPremium(item) {
-		if (item.premium) {
-			return (
-				<div className="abs premium">
-					<FontAwesomeIcon
-						className="abs centered white big-icon"
-						icon="dollar-sign"
-					/>
-				</div>
-			);
-		}
-	}
-
-	RenderLink(item) {
-		if (item.link) {
-			return (
-				<a className="abs link" href={item.link}>
-					<FontAwesomeIcon
-						className="abs centered white icon"
-						icon="link"
-					/>
-				</a>
-			);
-		}
-	}
-
 	handleLoadMore = async e => {
 		console.log(config.BASE_URL, config.ACCESS_TOKEN);
 		const params = {
@@ -190,8 +194,8 @@ class Selector extends Component {
 				<div className="unselectable el-name">
 					{libraryData.name}
 				</div>
-				{this.RenderPremium(libraryData)}
-				{this.RenderLink(libraryData)}
+				<RenderPremium premium = { libraryData.premium } />
+				<RenderLink link = { libraryData.link } />
 			</div>
 		));
 
