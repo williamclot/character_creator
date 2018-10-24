@@ -11,6 +11,8 @@ import rightLegElements from "../library/right_legs.json";
 import standElements from "../library/stands.json";
 import poseElements from "../library/poses.json";
 
+// import { LibraryItem } from "./libraryData.ts"; // interface for items in the library
+
 /**
  * wrapper around the local library of body parts
  */
@@ -86,7 +88,7 @@ const libraryUtils = {
 	 * returns the local data about a body part
 	 * @param {String} category - the body part (i.e. "head", "leg")
 	 * @param {Boolean} isLeft
-	 * @returns {Array} - a list of Data objects with info about the body part
+	 * @returns {Array<LibraryItem>} - a list of Data objects with info about the body part
 	 */
 	getLibrary(category, isLeft) {
 		const currentCategoryInfo = this.libraries[category];
