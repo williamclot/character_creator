@@ -165,7 +165,7 @@
     },
     "scale": 1,
     "mmfLink": "",
-    "premium": false,
+    "premium": true,
     "relativeURL": "models/head/muscled_man.glb",
     "absoluteURL": "XXX/models/head/muscled_man.glb"
   },
