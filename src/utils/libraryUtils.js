@@ -1,17 +1,13 @@
 import headElements from "../library/heads.json";
-// import handElements from "../library/hands.json";
 import leftHandElements from "../library/left_hands.json";
 import rightHandElements from "../library/right_hands.json";
-// import armElements from "../library/arm.json";
-import leftArmElements from "../library/left_arm.json";
-import rightArmElements from "../library/right_arm.json";
+import leftArmElements from "../library/left_arms.json";
+import rightArmElements from "../library/right_arms.json";
 import torsoElements from "../library/torso.json";
-// import footElements from "../library/foot.json";
-import leftFootElements from "../library/left_foot.json";
-import rightFootElements from "../library/right_foot.json";
-// import legElements from "../library/leg.json";
-import leftLegElements from "../library/left_leg.json";
-import rightLegElements from "../library/right_leg.json";
+import leftFootElements from "../library/left_feet.json";
+import rightFootElements from "../library/right_feet.json";
+import leftLegElements from "../library/left_legs.json";
+import rightLegElements from "../library/right_legs.json";
 import standElements from "../library/stands.json";
 import poseElements from "../library/poses.json";
 
