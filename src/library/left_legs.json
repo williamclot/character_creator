@@ -13,8 +13,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/default_leg_L.glb",
-    "absoluteURL": "XXX/models/YYY/default_leg_L.glb"
+    "relativeURL": "models/leg/default_leg_L.glb",
+    "absoluteURL": "XXX/models/leg/default_leg_L.glb"
   },
   {
     "name": "Robot Leg",
@@ -30,7 +30,7 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/robot_leg_L.glb",
-    "absoluteURL": "XXX/models/YYY/robot_leg_L.glb"
+    "relativeURL": "models/leg/robot_leg_L.glb",
+    "absoluteURL": "XXX/models/leg/robot_leg_L.glb"
   }
 ]

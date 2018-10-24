@@ -13,8 +13,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/default_head.glb",
-    "absoluteURL": "XXX/models/YYY/default_head.glb"
+    "relativeURL": "models/head/default_head.glb",
+    "absoluteURL": "XXX/models/head/default_head.glb"
   },
   {
     "name": "Default Man Head",
@@ -30,8 +30,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/default_man_head.glb",
-    "absoluteURL": "XXX/models/YYY/default_man_head.glb"
+    "relativeURL": "models/head/default_man_head.glb",
+    "absoluteURL": "XXX/models/head/default_man_head.glb"
   },
   {
     "name": "Groot Head",
@@ -47,8 +47,8 @@
     "scale": 1,
     "mmfLink": "https://www.myminifactory.com/object/3d-print-baby-groot-26802",
     "premium": false,
-    "relativeURL": "models/YYY/groot.glb",
-    "absoluteURL": "XXX/models/YYY/groot.glb"
+    "relativeURL": "models/head/groot.glb",
+    "absoluteURL": "XXX/models/head/groot.glb"
   },
   {
     "name": "Big Head",
@@ -64,8 +64,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/big_head.glb",
-    "absoluteURL": "XXX/models/YYY/big_head.glb"
+    "relativeURL": "models/head/big_head.glb",
+    "absoluteURL": "XXX/models/head/big_head.glb"
   },
   {
     "name": "Stormtrooper",
@@ -81,8 +81,8 @@
     "scale": 1,
     "mmfLink": "https://www.myminifactory.com/object/3d-print-stormtrooper-helmet-65368",
     "premium": false,
-    "relativeURL": "models/YYY/stormtrooper.glb",
-    "absoluteURL": "XXX/models/YYY/stormtrooper.glb"
+    "relativeURL": "models/head/stormtrooper.glb",
+    "absoluteURL": "XXX/models/head/stormtrooper.glb"
   },
   {
     "name": "Dobby",
@@ -98,8 +98,8 @@
     "scale": 1,
     "mmfLink": "https://www.myminifactory.com/object/3d-print-dobby-from-harry-potter-full-model-3294",
     "premium": false,
-    "relativeURL": "models/YYY/dobby.glb",
-    "absoluteURL": "XXX/models/YYY/dobby.glb"
+    "relativeURL": "models/head/dobby.glb",
+    "absoluteURL": "XXX/models/head/dobby.glb"
   },
   {
     "name": "Hellion Rams",
@@ -115,8 +115,8 @@
     "scale": 1,
     "mmfLink": "https://www.myminifactory.com/object/3d-print-hellion-rams-head-546",
     "premium": false,
-    "relativeURL": "models/YYY/hellion_rams.glb",
-    "absoluteURL": "XXX/models/YYY/hellion_rams.glb"
+    "relativeURL": "models/head/hellion_rams.glb",
+    "absoluteURL": "XXX/models/head/hellion_rams.glb"
   },
   {
     "name": "Flexi Dead Head",
@@ -132,8 +132,8 @@
     "scale": 1,
     "mmfLink": "https://www.myminifactory.com/object/3d-print-dead-head-2426",
     "premium": false,
-    "relativeURL": "models/YYY/flexi_dead_head.glb",
-    "absoluteURL": "XXX/models/YYY/flexi_dead_head.glb"
+    "relativeURL": "models/head/flexi_dead_head.glb",
+    "absoluteURL": "XXX/models/head/flexi_dead_head.glb"
   },
   {
     "name": "Iron Bubble Head",
@@ -149,8 +149,8 @@
     "scale": 1,
     "mmfLink": "https://www.myminifactory.com/object/3d-print-stormtrooper-helmet-65368",
     "premium": false,
-    "relativeURL": "models/YYY/iron_bubble_head.glb",
-    "absoluteURL": "XXX/models/YYY/iron_bubble_head.glb"
+    "relativeURL": "models/head/iron_bubble_head.glb",
+    "absoluteURL": "XXX/models/head/iron_bubble_head.glb"
   },
   {
     "name": "Muscled Man",
@@ -166,8 +166,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/muscled_man.glb",
-    "absoluteURL": "XXX/models/YYY/muscled_man.glb"
+    "relativeURL": "models/head/muscled_man.glb",
+    "absoluteURL": "XXX/models/head/muscled_man.glb"
   },
   {
     "name": "Bender Head",
@@ -183,8 +183,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/blender_head.glb",
-    "absoluteURL": "XXX/models/YYY/blender_head.glb"
+    "relativeURL": "models/head/blender_head.glb",
+    "absoluteURL": "XXX/models/head/blender_head.glb"
   },
   {
     "name": "Barbarian Head",
@@ -200,8 +200,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/barbarian.glb",
-    "absoluteURL": "XXX/models/YYY/barbarian.glb"
+    "relativeURL": "models/head/barbarian.glb",
+    "absoluteURL": "XXX/models/head/barbarian.glb"
   },
   {
     "name": "Box Head",
@@ -217,7 +217,7 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/test_head.glb",
-    "absoluteURL": "XXX/models/YYY/test_head.glb"
+    "relativeURL": "models/head/test_head.glb",
+    "absoluteURL": "XXX/models/head/test_head.glb"
   }
 ]

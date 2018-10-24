@@ -13,8 +13,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/default_torso.glb",
-    "absoluteURL": "XXX/models/YYY/default_torso.glb"
+    "relativeURL": "models/torso/default_torso.glb",
+    "absoluteURL": "XXX/models/torso/default_torso.glb"
   },
   {
     "name": "Turtle Torso",
@@ -30,8 +30,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/turtle_torso.glb",
-    "absoluteURL": "XXX/models/YYY/turtle_torso.glb"
+    "relativeURL": "models/torso/turtle_torso.glb",
+    "absoluteURL": "XXX/models/torso/turtle_torso.glb"
   },
   {
     "name": "Blender Torso",
@@ -47,8 +47,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/blender.glb",
-    "absoluteURL": "XXX/models/YYY/blender.glb"
+    "relativeURL": "models/torso/blender.glb",
+    "absoluteURL": "XXX/models/torso/blender.glb"
   },
   {
     "name": "Barbarian Torso",
@@ -64,8 +64,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/barbarian.glb",
-    "absoluteURL": "XXX/models/YYY/barbarian.glb"
+    "relativeURL": "models/torso/barbarian.glb",
+    "absoluteURL": "XXX/models/torso/barbarian.glb"
   },
   {
     "name": "Man Torso",
@@ -81,7 +81,7 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/man_torso.glb",
-    "absoluteURL": "XXX/models/YYY/man_torso.glb"
+    "relativeURL": "models/torso/man_torso.glb",
+    "absoluteURL": "XXX/models/torso/man_torso.glb"
   }
 ]

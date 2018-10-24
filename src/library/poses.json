@@ -13,8 +13,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/default.glb",
-    "absoluteURL": "XXX/models/YYY/default.glb"
+    "relativeURL": "models/pose/default.glb",
+    "absoluteURL": "XXX/models/pose/default.glb"
   },
   {
     "name": "Egypt",
@@ -30,8 +30,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/egypt.glb",
-    "absoluteURL": "XXX/models/YYY/egypt.glb"
+    "relativeURL": "models/pose/egypt.glb",
+    "absoluteURL": "XXX/models/pose/egypt.glb"
   },
   {
     "name": "King Kong",
@@ -47,8 +47,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/king_kong.glb",
-    "absoluteURL": "XXX/models/YYY/king_kong.glb"
+    "relativeURL": "models/pose/king_kong.glb",
+    "absoluteURL": "XXX/models/pose/king_kong.glb"
   },
   {
     "name": "Running",
@@ -64,8 +64,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/running.glb",
-    "absoluteURL": "XXX/models/YYY/running.glb"
+    "relativeURL": "models/pose/running.glb",
+    "absoluteURL": "XXX/models/pose/running.glb"
   },
   {
     "name": "Gedan Baraï",
@@ -81,8 +81,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/gedan_barai.glb",
-    "absoluteURL": "XXX/models/YYY/gedan_barai.glb"
+    "relativeURL": "models/pose/gedan_barai.glb",
+    "absoluteURL": "XXX/models/pose/gedan_barai.glb"
   },
   {
     "name": "Dab",
@@ -98,8 +98,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/dab.glb",
-    "absoluteURL": "XXX/models/YYY/dab.glb"
+    "relativeURL": "models/pose/dab.glb",
+    "absoluteURL": "XXX/models/pose/dab.glb"
   },
   {
     "name": "Test",
@@ -115,7 +115,7 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/test.glb",
-    "absoluteURL": "XXX/models/YYY/test.glb"
+    "relativeURL": "models/pose/test.glb",
+    "absoluteURL": "XXX/models/pose/test.glb"
   }
 ]

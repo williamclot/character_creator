@@ -13,8 +13,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/default_arm_L.glb",
-    "absoluteURL": "XXX/models/YYY/default_arm_L.glb"
+    "relativeURL": "models/arm/default_arm_L.glb",
+    "absoluteURL": "XXX/models/arm/default_arm_L.glb"
   },
   {
     "name": "Thin Arm",
@@ -30,8 +30,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/thin_arm_L.glb",
-    "absoluteURL": "XXX/models/YYY/thin_arm_L.glb"
+    "relativeURL": "models/arm/thin_arm_L.glb",
+    "absoluteURL": "XXX/models/arm/thin_arm_L.glb"
   },
   {
     "name": "Muscled Arm",
@@ -47,8 +47,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/muscled_arm_L.glb",
-    "absoluteURL": "XXX/models/YYY/muscled_arm_L.glb"
+    "relativeURL": "models/arm/muscled_arm_L.glb",
+    "absoluteURL": "XXX/models/arm/muscled_arm_L.glb"
   },
   {
     "name": "Robot Arm",
@@ -64,8 +64,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/robot_arm_L.glb",
-    "absoluteURL": "XXX/models/YYY/robot_arm_L.glb"
+    "relativeURL": "models/arm/robot_arm_L.glb",
+    "absoluteURL": "XXX/models/arm/robot_arm_L.glb"
   },
   {
     "name": "Spyro Arm",
@@ -81,7 +81,7 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/spyro_arm_L.glb",
-    "absoluteURL": "XXX/models/YYY/spyro_arm_L.glb"
+    "relativeURL": "models/arm/spyro_arm_L.glb",
+    "absoluteURL": "XXX/models/arm/spyro_arm_L.glb"
   }
 ]

@@ -13,8 +13,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/default_foot_R.glb",
-    "absoluteURL": "XXX/models/YYY/default_foot_R.glb"
+    "relativeURL": "models/foot/default_foot_R.glb",
+    "absoluteURL": "XXX/models/foot/default_foot_R.glb"
   },
   {
     "name": "Buckled Shoe",
@@ -30,8 +30,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/buckled_foot_R.glb",
-    "absoluteURL": "XXX/models/YYY/buckled_foot_R.glb"
+    "relativeURL": "models/foot/buckled_foot_R.glb",
+    "absoluteURL": "XXX/models/foot/buckled_foot_R.glb"
   },
   {
     "name": "Boots",
@@ -47,8 +47,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/boots_R.glb",
-    "absoluteURL": "XXX/models/YYY/boots_R.glb"
+    "relativeURL": "models/foot/boots_R.glb",
+    "absoluteURL": "XXX/models/foot/boots_R.glb"
   },
   {
     "name": "Barbarian",
@@ -64,8 +64,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/barbarian_R.glb",
-    "absoluteURL": "XXX/models/YYY/barbarian_R.glb"
+    "relativeURL": "models/foot/barbarian_R.glb",
+    "absoluteURL": "XXX/models/foot/barbarian_R.glb"
   },
   {
     "name": "Futurama",
@@ -81,8 +81,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/futurama_R.glb",
-    "absoluteURL": "XXX/models/YYY/futurama_R.glb"
+    "relativeURL": "models/foot/futurama_R.glb",
+    "absoluteURL": "XXX/models/foot/futurama_R.glb"
   },
   {
     "name": "Timberland",
@@ -98,7 +98,7 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/timberland_R.glb",
-    "absoluteURL": "XXX/models/YYY/timberland_R.glb"
+    "relativeURL": "models/foot/timberland_R.glb",
+    "absoluteURL": "XXX/models/foot/timberland_R.glb"
   }
 ]

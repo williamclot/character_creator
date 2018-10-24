@@ -13,8 +13,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/circle.glb",
-    "absoluteURL": "XXX/models/YYY/circle.glb"
+    "relativeURL": "models/stand/circle.glb",
+    "absoluteURL": "XXX/models/stand/circle.glb"
   },
   {
     "name": "Hexagone",
@@ -30,7 +30,7 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/hexagone.glb",
-    "absoluteURL": "XXX/models/YYY/hexagone.glb"
+    "relativeURL": "models/stand/hexagone.glb",
+    "absoluteURL": "XXX/models/stand/hexagone.glb"
   }
 ]

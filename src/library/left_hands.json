@@ -13,8 +13,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/no_hand_L.glb",
-    "absoluteURL": "XXX/models/YYY/no_hand_L.glb"
+    "relativeURL": "models/hand/no_hand_L.glb",
+    "absoluteURL": "XXX/models/hand/no_hand_L.glb"
   },
   {
     "name": "Open Hand",
@@ -30,8 +30,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/open_hand_L.glb",
-    "absoluteURL": "XXX/models/YYY/open_hand_L.glb"
+    "relativeURL": "models/hand/open_hand_L.glb",
+    "absoluteURL": "XXX/models/hand/open_hand_L.glb"
   },
   {
     "name": "Closed Hand",
@@ -47,8 +47,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/closed_hand_L.glb",
-    "absoluteURL": "XXX/models/YYY/closed_hand_L.glb"
+    "relativeURL": "models/hand/closed_hand_L.glb",
+    "absoluteURL": "XXX/models/hand/closed_hand_L.glb"
   },
   {
     "name": "Hook Hand",
@@ -64,8 +64,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/hook_L.glb",
-    "absoluteURL": "XXX/models/YYY/hook_L.glb"
+    "relativeURL": "models/hand/hook_L.glb",
+    "absoluteURL": "XXX/models/hand/hook_L.glb"
   },
   {
     "name": "Robot Hand",
@@ -81,8 +81,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/robot_hand_L.glb",
-    "absoluteURL": "XXX/models/YYY/robot_hand_L.glb"
+    "relativeURL": "models/hand/robot_hand_L.glb",
+    "absoluteURL": "XXX/models/hand/robot_hand_L.glb"
   },
   {
     "name": "Barbarian",
@@ -98,8 +98,8 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/barbarian_L.glb",
-    "absoluteURL": "XXX/models/YYY/barbarian_L.glb"
+    "relativeURL": "models/hand/barbarian_L.glb",
+    "absoluteURL": "XXX/models/hand/barbarian_L.glb"
   },
   {
     "name": "Blender",
@@ -115,7 +115,7 @@
     "scale": 1,
     "mmfLink": "",
     "premium": false,
-    "relativeURL": "models/YYY/blender_L.glb",
-    "absoluteURL": "XXX/models/YYY/blender_L.glb"
+    "relativeURL": "models/hand/blender_L.glb",
+    "absoluteURL": "XXX/models/hand/blender_L.glb"
   }
 ]
