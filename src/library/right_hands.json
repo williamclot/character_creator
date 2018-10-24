@@ -1,93 +1,121 @@
 [
-    {
-        "name": "no Hand",
-        "img": "../none.svg",
-        "file": "no_hand_R",
-        "author": "William CLOT",
-        "description": "No hands",
-        "rotation": {
-            "x": 0,
-            "y": -1.57,
-            "z": 0
-        },
-        "scale": 1
+  {
+    "name": "no Hand",
+    "file": "no_hand_R",
+    "img": "../none.svg",
+    "author": "William CLOT",
+    "description": "No hands",
+    "rotation": {
+      "x": 0,
+      "y": -1.57,
+      "z": 0
     },
-    {
-        "name": "Open Hand",
-        "img": "open_hand.png",
-        "file": "open_hand_R",
-        "author": "William CLOT",
-        "description": "Open hands",
-        "rotation": {
-            "x": 0,
-            "y": -1.57,
-            "z": 0
-        },
-        "scale": 1
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/no_hand_R.glb",
+    "absoluteURL": "XXX/models/YYY/no_hand_R.glb"
+  },
+  {
+    "name": "Open Hand",
+    "file": "open_hand_R",
+    "img": "open_hand.png",
+    "author": "William CLOT",
+    "description": "Open hands",
+    "rotation": {
+      "x": 0,
+      "y": -1.57,
+      "z": 0
     },
-    {
-        "name": "Closed Hand",
-        "img": "closed_hand.png",
-        "file": "closed_hand_R",
-        "author": "William CLOT",
-        "description": "Closed hands",
-        "rotation": {
-            "x": 0,
-            "y": -1.57,
-            "z": 0
-        },
-        "scale": 1
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/open_hand_R.glb",
+    "absoluteURL": "XXX/models/YYY/open_hand_R.glb"
+  },
+  {
+    "name": "Closed Hand",
+    "file": "closed_hand_R",
+    "img": "closed_hand.png",
+    "author": "William CLOT",
+    "description": "Closed hands",
+    "rotation": {
+      "x": 0,
+      "y": -1.57,
+      "z": 0
     },
-    {
-        "name": "Hook Hand",
-        "img": "hook.png",
-        "file": "hook_R",
-        "author": "William CLOT",
-        "description": "Open hands",
-        "rotation": {
-            "x": 0,
-            "y": -1.57,
-            "z": 0
-        },
-        "scale": 1
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/closed_hand_R.glb",
+    "absoluteURL": "XXX/models/YYY/closed_hand_R.glb"
+  },
+  {
+    "name": "Hook Hand",
+    "file": "hook_R",
+    "img": "hook.png",
+    "author": "William CLOT",
+    "description": "Open hands",
+    "rotation": {
+      "x": 0,
+      "y": -1.57,
+      "z": 0
     },
-    {
-        "name": "Robot Hand",
-        "img": "robot_hand.png",
-        "file": "robot_hand_R",
-        "author": "William CLOT",
-        "description": "Robot Hands",
-        "rotation": {
-            "x": 0,
-            "y": -1.57,
-            "z": 0
-        },
-        "scale": 1
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/hook_R.glb",
+    "absoluteURL": "XXX/models/YYY/hook_R.glb"
+  },
+  {
+    "name": "Robot Hand",
+    "file": "robot_hand_R",
+    "img": "robot_hand.png",
+    "author": "William CLOT",
+    "description": "Robot Hands",
+    "rotation": {
+      "x": 0,
+      "y": -1.57,
+      "z": 0
     },
-    {
-        "name": "Barbarian",
-        "img": "barbarian.png",
-        "file": "barbarian_R",
-        "author": "William CLOT",
-        "description": "",
-        "rotation": {
-            "x": 0,
-            "y": -1.57,
-            "z": 0
-        },
-        "scale": 1
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/robot_hand_R.glb",
+    "absoluteURL": "XXX/models/YYY/robot_hand_R.glb"
+  },
+  {
+    "name": "Barbarian",
+    "file": "barbarian_R",
+    "img": "barbarian.png",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": -1.57,
+      "z": 0
     },
-    {
-        "name": "Blender",
-        "img": "blender.png",
-        "file": "blender_R",
-        "author": "William CLOT",
-        "description": "",
-        "rotation": {
-            "x": 0,
-            "y": -1.57,
-            "z": 0
-        },
-        "scale": 1
-    }
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/barbarian_R.glb",
+    "absoluteURL": "XXX/models/YYY/barbarian_R.glb"
+  },
+  {
+    "name": "Blender",
+    "file": "blender_R",
+    "img": "blender.png",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": -1.57,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/blender_R.glb",
+    "absoluteURL": "XXX/models/YYY/blender_R.glb"
+  }
 ]

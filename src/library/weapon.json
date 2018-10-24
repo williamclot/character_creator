@@ -1,112 +1,376 @@
 [
   {
-    "name":"male head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "male head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"female head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "female head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"monster head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "monster head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"unicorn head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "unicorn head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"horse head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "horse head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"rabbit head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "rabbit head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"dog head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "dog head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"warrior head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "warrior head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"dog head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "dog head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"dog head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "dog head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"dog head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "dog head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"dog head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "dog head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"dog head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "dog head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"dog head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "dog head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"dog head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "dog head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"dog head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "dog head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"dog head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "dog head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"dog head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "dog head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"dog head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "dog head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"dog head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "dog head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"dog head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "dog head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   },
   {
-    "name":"dog head",
-    "author":"William CLOT",
-    "file":"file"
+    "name": "dog head",
+    "file": "file",
+    "img": "",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/file.glb",
+    "absoluteURL": "XXX/models/YYY/file.glb"
   }
 ]

@@ -1,52 +1,121 @@
 [
-    {
-      "name": "Default",
-      "img": "pose.svg",
-      "file": "default",
-      "author": "William CLOT",
-      "description": "Default torso."
+  {
+    "name": "Default",
+    "file": "default",
+    "img": "pose.svg",
+    "author": "William CLOT",
+    "description": "Default torso.",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
     },
-    {
-      "name": "Egypt",
-      "img": "pose.svg",
-      "file": "egypt",
-      "author": "William CLOT",
-      "description": "Default man head."
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/default.glb",
+    "absoluteURL": "XXX/models/YYY/default.glb"
+  },
+  {
+    "name": "Egypt",
+    "file": "egypt",
+    "img": "pose.svg",
+    "author": "William CLOT",
+    "description": "Default man head.",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
     },
-    {
-      "name": "King Kong",
-      "img": "pose.svg",
-      "file": "king_kong",
-      "author": "William CLOT",
-      "description": "Default man head."
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/egypt.glb",
+    "absoluteURL": "XXX/models/YYY/egypt.glb"
+  },
+  {
+    "name": "King Kong",
+    "file": "king_kong",
+    "img": "pose.svg",
+    "author": "William CLOT",
+    "description": "Default man head.",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
     },
-    {
-      "name": "Running",
-      "img": "pose.svg",
-      "file": "running",
-      "author": "William CLOT",
-      "description": "Default man head."
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/king_kong.glb",
+    "absoluteURL": "XXX/models/YYY/king_kong.glb"
+  },
+  {
+    "name": "Running",
+    "file": "running",
+    "img": "pose.svg",
+    "author": "William CLOT",
+    "description": "Default man head.",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
     },
-    {
-      "name": "Gedan Baraï",
-      "img": "pose.svg",
-      "file": "gedan_barai",
-      "author": "William CLOT",
-      "description": "Default man head."
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/running.glb",
+    "absoluteURL": "XXX/models/YYY/running.glb"
+  },
+  {
+    "name": "Gedan Baraï",
+    "file": "gedan_barai",
+    "img": "pose.svg",
+    "author": "William CLOT",
+    "description": "Default man head.",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
     },
-    {
-      "name": "Dab",
-      "img": "pose.svg",
-      "file": "dab",
-      "author": "William CLOT",
-      "description": "Default man head."
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/gedan_barai.glb",
+    "absoluteURL": "XXX/models/YYY/gedan_barai.glb"
+  },
+  {
+    "name": "Dab",
+    "file": "dab",
+    "img": "pose.svg",
+    "author": "William CLOT",
+    "description": "Default man head.",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
     },
-    {
-      "name": "Test",
-      "img": "pose.svg",
-      "file": "test",
-      "author": "William CLOT",
-      "description": "Default man head."
-    }
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/dab.glb",
+    "absoluteURL": "XXX/models/YYY/dab.glb"
+  },
+  {
+    "name": "Test",
+    "file": "test",
+    "img": "pose.svg",
+    "author": "William CLOT",
+    "description": "Default man head.",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/test.glb",
+    "absoluteURL": "XXX/models/YYY/test.glb"
+  }
 ]
-  

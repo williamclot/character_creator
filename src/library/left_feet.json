@@ -1,80 +1,104 @@
 [
-    {
-        "name": "Default Foot",
-        "img": "default_foot.png",
-        "file": "default_foot_L",
-        "author": "William CLOT",
-        "description": "Default Foot",
-        "rotation": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-        },
-        "scale": 1
+  {
+    "name": "Default Foot",
+    "file": "default_foot_L",
+    "img": "default_foot.png",
+    "author": "William CLOT",
+    "description": "Default Foot",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
     },
-    {
-        "name": "Buckled Shoe",
-        "img": "buckled_foot.png",
-        "file": "buckled_foot_L",
-        "author": "William CLOT",
-        "description": "",
-        "rotation": {
-            "x": 0.2,
-            "y": 0,
-            "z": 0
-        },
-        "scale": 1
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/default_foot_L.glb",
+    "absoluteURL": "XXX/models/YYY/default_foot_L.glb"
+  },
+  {
+    "name": "Buckled Shoe",
+    "file": "buckled_foot_L",
+    "img": "buckled_foot.png",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0.2,
+      "y": 0,
+      "z": 0
     },
-    {
-        "name": "Boots",
-        "img": "boot.png",
-        "file": "boots_L",
-        "author": "William CLOT",
-        "description": "",
-        "rotation": {
-            "x": 0.2,
-            "y": 0,
-            "z": 0
-        },
-        "scale": 1
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/buckled_foot_L.glb",
+    "absoluteURL": "XXX/models/YYY/buckled_foot_L.glb"
+  },
+  {
+    "name": "Boots",
+    "file": "boots_L",
+    "img": "boot.png",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0.2,
+      "y": 0,
+      "z": 0
     },
-    {
-        "name": "Barbarian",
-        "img": "barbarian.png",
-        "file": "barbarian_L",
-        "author": "William CLOT",
-        "description": "",
-        "rotation": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-        },
-        "scale": 1
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/boots_L.glb",
+    "absoluteURL": "XXX/models/YYY/boots_L.glb"
+  },
+  {
+    "name": "Barbarian",
+    "file": "barbarian_L",
+    "img": "barbarian.png",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
     },
-    {
-        "name": "Futurama",
-        "img": "futurama.png",
-        "file": "futurama_L",
-        "author": "William CLOT",
-        "description": "",
-        "rotation": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-        },
-        "scale": 1
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/barbarian_L.glb",
+    "absoluteURL": "XXX/models/YYY/barbarian_L.glb"
+  },
+  {
+    "name": "Futurama",
+    "file": "futurama_L",
+    "img": "futurama.png",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
     },
-    {
-        "name": "Timberland",
-        "img": "timberland.png",
-        "file": "timberland_L",
-        "author": "William CLOT",
-        "description": "",
-        "rotation": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-        },
-        "scale": 1
-    }
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/futurama_L.glb",
+    "absoluteURL": "XXX/models/YYY/futurama_L.glb"
+  },
+  {
+    "name": "Timberland",
+    "file": "timberland_L",
+    "img": "timberland.png",
+    "author": "William CLOT",
+    "description": "",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/timberland_L.glb",
+    "absoluteURL": "XXX/models/YYY/timberland_L.glb"
+  }
 ]

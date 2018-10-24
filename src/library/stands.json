@@ -1,18 +1,36 @@
 [
   {
     "name": "Cylinder",
-    "img": "circle.png",
     "file": "circle",
+    "img": "circle.png",
     "author": "William CLOT",
     "description": "Default cylinder stand",
-    "scale": 1
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/circle.glb",
+    "absoluteURL": "XXX/models/YYY/circle.glb"
   },
   {
     "name": "Hexagone",
-    "img": "hexagone.png",
     "file": "hexagone",
+    "img": "hexagone.png",
     "author": "William CLOT",
     "description": "Default cylinder stand",
-    "scale": 1
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/hexagone.glb",
+    "absoluteURL": "XXX/models/YYY/hexagone.glb"
   }
 ]

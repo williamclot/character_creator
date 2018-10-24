@@ -1,42 +1,87 @@
 [
   {
     "name": "Default Torso",
-    "img": "default_torso.png",
     "file": "default_torso",
+    "img": "default_torso.png",
     "author": "William CLOT",
     "description": "Default torso.",
-    "scale": 1
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/default_torso.glb",
+    "absoluteURL": "XXX/models/YYY/default_torso.glb"
   },
   {
     "name": "Turtle Torso",
-    "img": "turtle_torso.png",
     "file": "turtle_torso",
+    "img": "turtle_torso.png",
     "author": "William CLOT",
     "description": "Default man head.",
-    "scale": 1
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/turtle_torso.glb",
+    "absoluteURL": "XXX/models/YYY/turtle_torso.glb"
   },
   {
     "name": "Blender Torso",
-    "img": "blender_torso.png",
     "file": "blender",
+    "img": "blender_torso.png",
     "author": "William CLOT",
     "description": "Default man head.",
-    "scale": 1
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/blender.glb",
+    "absoluteURL": "XXX/models/YYY/blender.glb"
   },
   {
     "name": "Barbarian Torso",
-    "img": "barbarian.png",
     "file": "barbarian",
+    "img": "barbarian.png",
     "author": "William CLOT",
     "description": "Default man head.",
-    "scale": 1
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/barbarian.glb",
+    "absoluteURL": "XXX/models/YYY/barbarian.glb"
   },
   {
     "name": "Man Torso",
-    "img": "man_torso.png",
     "file": "man_torso",
+    "img": "man_torso.png",
     "author": "William CLOT",
     "description": "Default man head.",
-    "scale": 1
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/man_torso.glb",
+    "absoluteURL": "XXX/models/YYY/man_torso.glb"
   }
 ]

@@ -1,28 +1,36 @@
 [
-    {
-        "name": "Default Leg",
-        "img": "default_leg.png",
-        "file": "default_leg_L",
-        "author": "William CLOT",
-        "description": "Default Legs",
-        "rotation": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-        },
-        "scale": 1
+  {
+    "name": "Default Leg",
+    "file": "default_leg_L",
+    "img": "default_leg.png",
+    "author": "William CLOT",
+    "description": "Default Legs",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
     },
-    {
-        "name": "Robot Leg",
-        "img": "robot_leg.png",
-        "file": "robot_leg_L",
-        "author": "William CLOT",
-        "description": "Robot Legs",
-        "rotation": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-        },
-        "scale": 1
-    }
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/default_leg_L.glb",
+    "absoluteURL": "XXX/models/YYY/default_leg_L.glb"
+  },
+  {
+    "name": "Robot Leg",
+    "file": "robot_leg_L",
+    "img": "robot_leg.png",
+    "author": "William CLOT",
+    "description": "Robot Legs",
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 1,
+    "mmfLink": "",
+    "premium": false,
+    "relativeURL": "models/YYY/robot_leg_L.glb",
+    "absoluteURL": "XXX/models/YYY/robot_leg_L.glb"
+  }
 ]
