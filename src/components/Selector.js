@@ -132,30 +132,28 @@ class Selector extends Component {
 		);*/
 	}
 
-	handleClick(libraryData, category, isLeft, event) {
-		if (libraryData.premium) {
+	handleClick(libraryItem, category, isLeft, event) {
+		if (libraryItem.premium) {
 			this.props.updatePopupMessage(
 				"Sorry this is a premium object, this feature is still in development..."
 			);
 			this.props.updatePopup(true);
 		} else {
 			if (category === "pose") {
-				this.applyPose(libraryData.file);
+				this.applyPose(libraryItem.file);
 			} else if (category === "stand") {
-				window.changeStand(libraryData.file);
+				window.changeStand(libraryItem.file);
 			} else {
 				this.props.updateLoading(true);
 
 				const meshType = libraryUtils.getMeshType(category, isLeft);
-				const file = libraryData.file;
-				
-				const url = libraryData.url || "models/" + category + "/" + file + ".glb" // !! URL path should not be relative
+				const file = libraryItem.file;
 				window.changeMesh(
 					category,
-					libraryData,
+					libraryItem,
 					isLeft,
 					this.state.pose,
-					url
+					libraryItem.relativeURL
 				);
 				let loadedMeshes = this.props.loadedMeshes;
 				loadedMeshes[meshType] = file;
@@ -177,25 +175,25 @@ class Selector extends Component {
 
 
 		//JSX element to display the HTML
-		const elementDiv = filteredlibrary.map((libraryData, i) => (
+		const elementDiv = filteredlibrary.map((libraryItem, i) => (
 			<div
 				className="el"
 				key={i}
-				onClick={this.handleClick.bind(this, libraryData, category, isLeft)} // bind some variables
+				onClick={this.handleClick.bind(this, libraryItem, category, isLeft)} // bind some variables
 			>
 				<div className="img">
 					<img
 						src={
-							"img/library/" + category + "/" + libraryData.img
+							"img/library/" + category + "/" + libraryItem.img
 						}
-						alt={libraryData.img}
+						alt={libraryItem.img}
 					/>
 				</div>
 				<div className="unselectable el-name">
-					{libraryData.name}
+					{libraryItem.name}
 				</div>
-				<RenderPremium premium = { libraryData.premium } />
-				<RenderLink link = { libraryData.link } />
+				<RenderPremium premium = { libraryItem.premium } />
+				<RenderLink link = { libraryItem.link } />
 			</div>
 		));
 
