@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import Editor from "./Editor";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { isProduction, PUBLIC_URL, API_URL, ACCESS_TOKEN } from "../config.js";
 
 import SearchBar from "./SearchBar";
 import "../css/selector.css";
 
 import bones from "../library/bones.json";
-import config from "../config.js";
 import libraryUtils from '../utils/libraryUtils';
 
 const RenderPremium = ({ premium }) => {
@@ -91,16 +91,16 @@ class Selector extends Component {
 	};
 	
 	handleLoadMore = async e => {
-		console.log(config.BASE_URL, config.ACCESS_TOKEN);
+		console.log(API_URL, ACCESS_TOKEN);
 		const params = {
 			q: "default head",
 			tag: "customizer",
 		};
-		if(!config.isProduction) {
-			params['access_token'] = config.ACCESS_TOKEN;
+		if(!isProduction) {
+			params['access_token'] = ACCESS_TOKEN;
 		}
 
-		const { data } = await axios.get(config.BASE_URL + "/api/v2/search", { params });
+		const { data } = await axios.get(API_URL + "/api/v2/search", { params });
 
 		const glbs = data.items.filter(item => 
 			item.files.items.find(file => file.filename.endsWith('.glb'))
