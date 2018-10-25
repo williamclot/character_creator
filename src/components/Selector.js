@@ -91,25 +91,24 @@ class Selector extends Component {
 	};
 	
 	handleLoadMore = async e => {
-		console.log(API_URL, ACCESS_TOKEN);
-		const params = {
-			q: "default head",
-			tag: "customizer",
-		};
-		if(!isProduction) {
-			params['access_token'] = ACCESS_TOKEN;
-		}
+		// console.log(API_URL, ACCESS_TOKEN);
+		// const params = {
+		// 	q: "default head",
+		// 	tag: "customizer",
+		// };
+		// if(!isProduction) {
+		// 	params['access_token'] = ACCESS_TOKEN;
+		// }
 
-		const { data } = await axios.get(API_URL + "/api/v2/search", { params });
+		// const { data } = await axios.get(API_URL + "/api/v2/search", { params });
 
-		const glbs = data.items.filter(item => 
-			item.files.items.find(file => file.filename.endsWith('.glb'))
-		);
-		console.log(glbs);
+		// const glbs = data.items.filter(item => 
+		// 	item.files.items.find(file => file.filename.endsWith('.glb'))
+		// );
+		// console.log(glbs);
 
-
-		/*const partData = {
-			"name": "Default Head",
+		const partData = {
+			"name": "Another Default Head",
 			"img": "default.png",
 			"file": "",
 			"author": "William CLOT",
@@ -119,17 +118,16 @@ class Selector extends Component {
 				"y": 0,
 				"z": 0
 			},
-			"scale": 1, 
-			"link": ""
+			"scale": 1,
+			"absoluteURL": PUBLIC_URL + "/tmp/default-head.glb"
 		};
-		window.changeMesh(
-			this.props.currentCategory,
-			partData,
-			this.props.isLeft,
-			bones,
-			this.state.pose,
-			'tmp/default-head.glb'
-		);*/
+
+		console.log(partData);
+		const { loadedLibraryData } = this.state;
+		this.setState({
+			loadedLibraryData: [...loadedLibraryData, partData]
+		});
+
 	}
 
 	handleClick(libraryItem, category, isLeft, event) {
