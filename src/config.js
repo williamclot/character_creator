@@ -8,7 +8,7 @@ export const isProduction = (process.env.NODE_ENV === "production");
 export const MMF_DOMAIN = isProduction ? "https://www.myminifactory.com" : "http://localhost:8080/dev.php";
 
 /** in development use localhost MMF API */
-export const API_URL = MMF_DOMAIN + "/api/v2/";
+export const API_URL = `${MMF_DOMAIN}/api/v2`;
 
 export const PUBLIC_URL = process.env.PUBLIC_URL;
 
