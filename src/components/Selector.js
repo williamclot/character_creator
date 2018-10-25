@@ -91,41 +91,66 @@ class Selector extends Component {
 	};
 	
 	handleLoadMore = async e => {
-		// console.log(API_URL, ACCESS_TOKEN);
-		// const params = {
-		// 	q: "default head",
-		// 	tag: "customizer",
-		// };
-		// if(!isProduction) {
-		// 	params['access_token'] = ACCESS_TOKEN;
-		// }
-
-		// const { data } = await axios.get(API_URL + "/api/v2/search", { params });
-
-		// const glbs = data.items.filter(item => 
-		// 	item.files.items.find(file => file.filename.endsWith('.glb'))
-		// );
-		// console.log(glbs);
-
-		const partData = {
-			"name": "Another Default Head",
-			"img": "default.png",
-			"file": "",
-			"author": "William CLOT",
-			"description": "Default man head.",
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"scale": 1,
-			"absoluteURL": PUBLIC_URL + "/tmp/default-head.glb"
+		const bodyPart = this.props.currentCategory;
+		const params = {
+			q: "", // could be undefined
+			tag: ["customizer", `customizer-${bodyPart}`], // search for specific tags
+			access_token: !isProduction ? ACCESS_TOKEN : undefined // if not in production, needs access token
 		};
 
-		console.log(partData);
-		const { loadedLibraryData } = this.state;
+		const { data } = await axios.get(`${API_URL}/search`, { params });
+		console.log(data);
+
+		const { total_count, items } = data;
+
+		/**
+		 * TODO 
+		 * 	- remove .slice
+		 * 	- refactor reduce
+		 */
+		const itemsToAdd = (isProduction? items : items.slice(0, 10)).reduce((soFar, item) => {
+			const {
+				name,
+				url: mmfLink,
+				description,
+				designer,
+				images,
+				files,
+				licences
+			} = item;
+
+			// find first file associated with this object that ends with .glb
+			// if none is found, step over this object
+			const glbFile = files.items.find(f => f.filename.endsWith('.glb'));
+			if(!glbFile){
+				return soFar;
+			}
+			
+			const primaryImg = images.find(image => image.is_primary);
+			const author = designer.name;
+			const rotation = undefined;
+			const scale = 1;
+
+			const newItem = {
+				name,
+				img: primaryImg.thumbnail.url,
+				file: glbFile.filename,
+				author,
+				description,
+				rotation,
+				scale,
+				mmfLink,
+				absoluteURL: glbFile.download_url
+			};
+
+			// console.log(newItem);
+
+			soFar.push(newItem);
+			return soFar;
+		}, []);
+
 		this.setState({
-			loadedLibraryData: [...loadedLibraryData, partData]
+			loadedLibraryData: [...this.state.loadedLibraryData, ...itemsToAdd]
 		});
 
 	}
