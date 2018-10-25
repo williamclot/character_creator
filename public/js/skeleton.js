@@ -543,9 +543,9 @@ window.changeMesh = function(bodyPart, part, isLeft, poseData, meshURL) {
         }
       }
       
-      if(!meshURL){
-        meshURL = "models/" + bodyPart + "/" + file + ".glb";
-      }
+      // if(!meshURL){
+      //   meshURL = "models/" + bodyPart + "/" + file + ".glb";
+      // }
       placeMesh(
         file,
         meshURL,
