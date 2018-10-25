@@ -22,4 +22,4 @@ export const API_KEY = "12345";
  * gets created with LoadAccessTokenData fixture inside AuthserviceBundle
  * add as request param: { "access_token": ACCESS_TOKEN }
  */
-export const ACCESS_TOKEN = "12sd5f434678";
+export const ACCESS_TOKEN = "bb261bc1-6026-454d-be86-0ce2a78a4925";
