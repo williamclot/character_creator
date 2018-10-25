@@ -153,7 +153,7 @@ class Selector extends Component {
 					libraryItem,
 					isLeft,
 					this.state.pose,
-					libraryItem.relativeURL
+					libraryItem.absoluteURL
 				);
 				let loadedMeshes = this.props.loadedMeshes;
 				loadedMeshes[meshType] = file;

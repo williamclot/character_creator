@@ -1,15 +1,15 @@
-import headElements from "../library/heads.json";
-import leftHandElements from "../library/left_hands.json";
-import rightHandElements from "../library/right_hands.json";
-import leftArmElements from "../library/left_arms.json";
-import rightArmElements from "../library/right_arms.json";
-import torsoElements from "../library/torso.json";
-import leftFootElements from "../library/left_feet.json";
-import rightFootElements from "../library/right_feet.json";
-import leftLegElements from "../library/left_legs.json";
-import rightLegElements from "../library/right_legs.json";
-import standElements from "../library/stands.json";
-import poseElements from "../library/poses.json";
+import headElements from "../library/heads.js";
+import leftHandElements from "../library/left_hands.js";
+import rightHandElements from "../library/right_hands.js";
+import leftArmElements from "../library/left_arms.js";
+import rightArmElements from "../library/right_arms.js";
+import torsoElements from "../library/torso.js";
+import leftFootElements from "../library/left_feet.js";
+import rightFootElements from "../library/right_feet.js";
+import leftLegElements from "../library/left_legs.js";
+import rightLegElements from "../library/right_legs.js";
+import standElements from "../library/stands.js";
+import poseElements from "../library/poses.js";
 
 // import { LibraryItem } from "./libraryData.ts"; // interface for items in the library
 
