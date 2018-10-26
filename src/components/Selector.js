@@ -94,7 +94,7 @@ class Selector extends Component {
 		const bodyPart = this.props.currentCategory;
 		const params = {
 			q: "", // could be undefined
-			tag: ["customizer", `customizer-${bodyPart}`], // search for specific tags
+			tags: ["customizer", `customizer-${bodyPart}`], // search for specific tags
 			access_token: !isProduction ? ACCESS_TOKEN : undefined // if not in production, needs access token
 		};
 
