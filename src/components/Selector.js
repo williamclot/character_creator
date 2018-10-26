@@ -105,10 +105,9 @@ class Selector extends Component {
 
 		/**
 		 * TODO 
-		 * 	- remove .slice
 		 * 	- refactor reduce
 		 */
-		const itemsToAdd = (isProduction? items : items.slice(0, 10)).reduce((soFar, item) => {
+		const itemsToAdd = items.reduce((processedItems, item) => {
 			const {
 				name,
 				url: mmfLink,
@@ -116,14 +115,27 @@ class Selector extends Component {
 				designer,
 				images,
 				files,
-				licences
+				licences,
+				tags
 			} = item;
 
-			// find first file associated with this object that ends with .glb
-			// if none is found, step over this object
+			/** 
+			 * currently, the api returns objects with tag similar to 'customizer';
+			 * therefore, objects with tag different than 'customizer' or 'customizer-<...>'
+			 * need to be filtered out
+			*/
+			const customizerTags = tags.filter(tag => tag.startsWith('customizer'));
+			if (customizerTags.length === 0) {
+				return processedItems;
+			}
+
+			/**
+			 * find first file associated with this object that ends with .glb
+			 * if none is found, step over this object
+			 */
 			const glbFile = files.items.find(f => f.filename.endsWith('.glb'));
-			if(!glbFile){
-				return soFar;
+			if (!glbFile) {
+				return processedItems;
 			}
 			
 			const primaryImg = images.find(image => image.is_primary);
@@ -131,7 +143,7 @@ class Selector extends Component {
 			const rotation = undefined;
 			const scale = 1;
 
-			const newItem = {
+			const processedItem = {
 				name,
 				img: primaryImg.thumbnail.url,
 				file: glbFile.filename,
@@ -143,10 +155,10 @@ class Selector extends Component {
 				absoluteURL: glbFile.download_url
 			};
 
-			// console.log(newItem);
+			// console.log(processedItem);
 
-			soFar.push(newItem);
-			return soFar;
+			processedItems.push(processedItem);
+			return processedItems;
 		}, []);
 
 		this.setState({
