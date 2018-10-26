@@ -2,7 +2,7 @@ export default [
   {
     "name": "Default Foot",
     "file": "default_foot_L",
-    "img": "default_foot.png",
+    "img": process.env.PUBLIC_URL + "/img/library/foot/default_foot.png",
     "author": "William CLOT",
     "description": "Default Foot",
     "rotation": {
@@ -19,7 +19,7 @@ export default [
   {
     "name": "Buckled Shoe",
     "file": "buckled_foot_L",
-    "img": "buckled_foot.png",
+    "img": process.env.PUBLIC_URL + "/img/library/foot/buckled_foot.png",
     "author": "William CLOT",
     "description": "",
     "rotation": {
@@ -36,7 +36,7 @@ export default [
   {
     "name": "Boots",
     "file": "boots_L",
-    "img": "boot.png",
+    "img": process.env.PUBLIC_URL + "/img/library/foot/boot.png",
     "author": "William CLOT",
     "description": "",
     "rotation": {
@@ -53,7 +53,7 @@ export default [
   {
     "name": "Barbarian",
     "file": "barbarian_L",
-    "img": "barbarian.png",
+    "img": process.env.PUBLIC_URL + "/img/library/foot/barbarian.png",
     "author": "William CLOT",
     "description": "",
     "rotation": {
@@ -70,7 +70,7 @@ export default [
   {
     "name": "Futurama",
     "file": "futurama_L",
-    "img": "futurama.png",
+    "img": process.env.PUBLIC_URL + "/img/library/foot/futurama.png",
     "author": "William CLOT",
     "description": "",
     "rotation": {
@@ -87,7 +87,7 @@ export default [
   {
     "name": "Timberland",
     "file": "timberland_L",
-    "img": "timberland.png",
+    "img": process.env.PUBLIC_URL + "/img/library/foot/timberland.png",
     "author": "William CLOT",
     "description": "",
     "rotation": {

@@ -2,7 +2,7 @@ export default [
   {
     "name": "Default",
     "file": "default",
-    "img": "pose.svg",
+    "img": process.env.PUBLIC_URL + "/img/library/pose/pose.svg",
     "author": "William CLOT",
     "description": "Default torso.",
     "rotation": {
@@ -19,7 +19,7 @@ export default [
   {
     "name": "Egypt",
     "file": "egypt",
-    "img": "pose.svg",
+    "img": process.env.PUBLIC_URL + "/img/library/pose/pose.svg",
     "author": "William CLOT",
     "description": "Default man head.",
     "rotation": {
@@ -36,7 +36,7 @@ export default [
   {
     "name": "King Kong",
     "file": "king_kong",
-    "img": "pose.svg",
+    "img": process.env.PUBLIC_URL + "/img/library/pose/pose.svg",
     "author": "William CLOT",
     "description": "Default man head.",
     "rotation": {
@@ -53,7 +53,7 @@ export default [
   {
     "name": "Running",
     "file": "running",
-    "img": "pose.svg",
+    "img": process.env.PUBLIC_URL + "/img/library/pose/pose.svg",
     "author": "William CLOT",
     "description": "Default man head.",
     "rotation": {
@@ -70,7 +70,7 @@ export default [
   {
     "name": "Gedan Baraï",
     "file": "gedan_barai",
-    "img": "pose.svg",
+    "img": process.env.PUBLIC_URL + "/img/library/pose/pose.svg",
     "author": "William CLOT",
     "description": "Default man head.",
     "rotation": {
@@ -87,7 +87,7 @@ export default [
   {
     "name": "Dab",
     "file": "dab",
-    "img": "pose.svg",
+    "img": process.env.PUBLIC_URL + "/img/library/pose/pose.svg",
     "author": "William CLOT",
     "description": "Default man head.",
     "rotation": {
@@ -104,7 +104,7 @@ export default [
   {
     "name": "Test",
     "file": "test",
-    "img": "pose.svg",
+    "img": process.env.PUBLIC_URL + "/img/library/pose/pose.svg",
     "author": "William CLOT",
     "description": "Default man head.",
     "rotation": {

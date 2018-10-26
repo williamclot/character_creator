@@ -2,7 +2,7 @@ export default [
   {
     "name": "Cylinder",
     "file": "circle",
-    "img": "circle.png",
+    "img": process.env.PUBLIC_URL + "/img/library/stand/circle.png",
     "author": "William CLOT",
     "description": "Default cylinder stand",
     "rotation": {
@@ -19,7 +19,7 @@ export default [
   {
     "name": "Hexagone",
     "file": "hexagone",
-    "img": "hexagone.png",
+    "img": process.env.PUBLIC_URL + "/img/library/stand/hexagone.png",
     "author": "William CLOT",
     "description": "Default cylinder stand",
     "rotation": {

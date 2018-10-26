@@ -2,7 +2,7 @@ export default [
   {
     "name": "no Hand",
     "file": "no_hand_R",
-    "img": "../none.svg",
+    "img": process.env.PUBLIC_URL + "/img/library/hand/../none.svg",
     "author": "William CLOT",
     "description": "No hands",
     "rotation": {
@@ -19,7 +19,7 @@ export default [
   {
     "name": "Open Hand",
     "file": "open_hand_R",
-    "img": "open_hand.png",
+    "img": process.env.PUBLIC_URL + "/img/library/hand/open_hand.png",
     "author": "William CLOT",
     "description": "Open hands",
     "rotation": {
@@ -36,7 +36,7 @@ export default [
   {
     "name": "Closed Hand",
     "file": "closed_hand_R",
-    "img": "closed_hand.png",
+    "img": process.env.PUBLIC_URL + "/img/library/hand/closed_hand.png",
     "author": "William CLOT",
     "description": "Closed hands",
     "rotation": {
@@ -53,7 +53,7 @@ export default [
   {
     "name": "Hook Hand",
     "file": "hook_R",
-    "img": "hook.png",
+    "img": process.env.PUBLIC_URL + "/img/library/hand/hook.png",
     "author": "William CLOT",
     "description": "Open hands",
     "rotation": {
@@ -70,7 +70,7 @@ export default [
   {
     "name": "Robot Hand",
     "file": "robot_hand_R",
-    "img": "robot_hand.png",
+    "img": process.env.PUBLIC_URL + "/img/library/hand/robot_hand.png",
     "author": "William CLOT",
     "description": "Robot Hands",
     "rotation": {
@@ -87,7 +87,7 @@ export default [
   {
     "name": "Barbarian",
     "file": "barbarian_R",
-    "img": "barbarian.png",
+    "img": process.env.PUBLIC_URL + "/img/library/hand/barbarian.png",
     "author": "William CLOT",
     "description": "",
     "rotation": {
@@ -104,7 +104,7 @@ export default [
   {
     "name": "Blender",
     "file": "blender_R",
-    "img": "blender.png",
+    "img": process.env.PUBLIC_URL + "/img/library/hand/blender.png",
     "author": "William CLOT",
     "description": "",
     "rotation": {

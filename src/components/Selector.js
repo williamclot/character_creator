@@ -206,9 +206,7 @@ class Selector extends Component {
 			>
 				<div className="img">
 					<img
-						src={
-							"img/library/" + category + "/" + libraryItem.img
-						}
+						src={libraryItem.img}
 						alt={libraryItem.img}
 					/>
 				</div>

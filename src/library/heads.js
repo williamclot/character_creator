@@ -2,7 +2,7 @@ export default [
   {
     "name": "Default Head",
     "file": "default_head",
-    "img": "default.png",
+    "img": process.env.PUBLIC_URL + "/img/library/head/default.png",
     "author": "William CLOT",
     "description": "Default man head.",
     "rotation": {
@@ -19,7 +19,7 @@ export default [
   {
     "name": "Default Man Head",
     "file": "default_man_head",
-    "img": "default_man_head.png",
+    "img": process.env.PUBLIC_URL + "/img/library/head/default_man_head.png",
     "author": "William CLOT",
     "description": "Default man head.",
     "rotation": {
@@ -36,7 +36,7 @@ export default [
   {
     "name": "Groot Head",
     "file": "groot",
-    "img": "groot.png",
+    "img": process.env.PUBLIC_URL + "/img/library/head/groot.png",
     "author": "William CLOT",
     "description": "Default man head.",
     "rotation": {
@@ -53,7 +53,7 @@ export default [
   {
     "name": "Big Head",
     "file": "big_head",
-    "img": "big_head.png",
+    "img": process.env.PUBLIC_URL + "/img/library/head/big_head.png",
     "author": "William CLOT",
     "description": "Big stalion head.",
     "rotation": {
@@ -70,7 +70,7 @@ export default [
   {
     "name": "Stormtrooper",
     "file": "stormtrooper",
-    "img": "stormtrooper.png",
+    "img": process.env.PUBLIC_URL + "/img/library/head/stormtrooper.png",
     "author": "William CLOT",
     "description": "Stoormtrooper mask.",
     "rotation": {
@@ -87,7 +87,7 @@ export default [
   {
     "name": "Dobby",
     "file": "dobby",
-    "img": "dobby.png",
+    "img": process.env.PUBLIC_URL + "/img/library/head/dobby.png",
     "author": "Scan The World",
     "description": "Dobby from Harry Potter",
     "rotation": {
@@ -104,7 +104,7 @@ export default [
   {
     "name": "Hellion Rams",
     "file": "hellion_rams",
-    "img": "hellion_rams.png",
+    "img": process.env.PUBLIC_URL + "/img/library/head/hellion_rams.png",
     "author": "MyMiniFactory",
     "description": "",
     "rotation": {
@@ -121,7 +121,7 @@ export default [
   {
     "name": "Flexi Dead Head",
     "file": "flexi_dead_head",
-    "img": "flexi_dead_head.png",
+    "img": process.env.PUBLIC_URL + "/img/library/head/flexi_dead_head.png",
     "author": "William CLOT",
     "description": "",
     "rotation": {
@@ -138,7 +138,7 @@ export default [
   {
     "name": "Iron Bubble Head",
     "file": "iron_bubble_head",
-    "img": "iron_bubble_head.png",
+    "img": process.env.PUBLIC_URL + "/img/library/head/iron_bubble_head.png",
     "author": "William CLOT",
     "description": "",
     "rotation": {
@@ -155,7 +155,7 @@ export default [
   {
     "name": "Muscled Man",
     "file": "muscled_man",
-    "img": "muscled_man.png",
+    "img": process.env.PUBLIC_URL + "/img/library/head/muscled_man.png",
     "author": "Loic Rouviere",
     "description": "Default man head.",
     "rotation": {
@@ -172,7 +172,7 @@ export default [
   {
     "name": "Bender Head",
     "file": "blender_head",
-    "img": "blender.png",
+    "img": process.env.PUBLIC_URL + "/img/library/head/blender.png",
     "author": "William CLOT",
     "description": "",
     "rotation": {
@@ -189,7 +189,7 @@ export default [
   {
     "name": "Barbarian Head",
     "file": "barbarian",
-    "img": "barbarian.png",
+    "img": process.env.PUBLIC_URL + "/img/library/head/barbarian.png",
     "author": "William CLOT",
     "description": "",
     "rotation": {
@@ -206,7 +206,7 @@ export default [
   {
     "name": "Box Head",
     "file": "test_head",
-    "img": "box_head.png",
+    "img": process.env.PUBLIC_URL + "/img/library/head/box_head.png",
     "author": "William CLOT",
     "description": "",
     "rotation": {

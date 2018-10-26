@@ -2,7 +2,7 @@ export default [
   {
     "name": "Default Leg",
     "file": "default_leg_L",
-    "img": "default_leg.png",
+    "img": process.env.PUBLIC_URL + "/img/library/leg/default_leg.png",
     "author": "William CLOT",
     "description": "Default Legs",
     "rotation": {
@@ -19,7 +19,7 @@ export default [
   {
     "name": "Robot Leg",
     "file": "robot_leg_L",
-    "img": "robot_leg.png",
+    "img": process.env.PUBLIC_URL + "/img/library/leg/robot_leg.png",
     "author": "William CLOT",
     "description": "Robot Legs",
     "rotation": {

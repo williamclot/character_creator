@@ -2,7 +2,7 @@ export default [
   {
     "name": "Default Arm",
     "file": "default_arm_R",
-    "img": "default_arm.png",
+    "img": process.env.PUBLIC_URL + "/img/library/arm/default_arm.png",
     "author": "William CLOT",
     "description": "Default Arms",
     "rotation": {
@@ -19,7 +19,7 @@ export default [
   {
     "name": "Thin Arm",
     "file": "thin_arm_R",
-    "img": "thin_arm.png",
+    "img": process.env.PUBLIC_URL + "/img/library/arm/thin_arm.png",
     "author": "William CLOT",
     "description": "Open hands",
     "rotation": {
@@ -36,7 +36,7 @@ export default [
   {
     "name": "Muscled Arm",
     "file": "muscled_arm_R",
-    "img": "muscled_arm.png",
+    "img": process.env.PUBLIC_URL + "/img/library/arm/muscled_arm.png",
     "author": "William CLOT",
     "description": "Closed hands",
     "rotation": {
@@ -53,7 +53,7 @@ export default [
   {
     "name": "Robot Arm",
     "file": "robot_arm_R",
-    "img": "robot_arm.png",
+    "img": process.env.PUBLIC_URL + "/img/library/arm/robot_arm.png",
     "author": "William CLOT",
     "description": "Closed hands",
     "rotation": {
@@ -70,7 +70,7 @@ export default [
   {
     "name": "Spyro Arm",
     "file": "spyro_arm_R",
-    "img": "spyro.png",
+    "img": process.env.PUBLIC_URL + "/img/library/arm/spyro.png",
     "author": "William CLOT",
     "description": "Wings",
     "rotation": {

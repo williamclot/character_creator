@@ -2,7 +2,7 @@ export default [
   {
     "name": "Default Torso",
     "file": "default_torso",
-    "img": "default_torso.png",
+    "img": process.env.PUBLIC_URL + "/img/library/torso/default_torso.png",
     "author": "William CLOT",
     "description": "Default torso.",
     "rotation": {
@@ -19,7 +19,7 @@ export default [
   {
     "name": "Turtle Torso",
     "file": "turtle_torso",
-    "img": "turtle_torso.png",
+    "img": process.env.PUBLIC_URL + "/img/library/torso/turtle_torso.png",
     "author": "William CLOT",
     "description": "Default man head.",
     "rotation": {
@@ -36,7 +36,7 @@ export default [
   {
     "name": "Blender Torso",
     "file": "blender",
-    "img": "blender_torso.png",
+    "img": process.env.PUBLIC_URL + "/img/library/torso/blender_torso.png",
     "author": "William CLOT",
     "description": "Default man head.",
     "rotation": {
@@ -53,7 +53,7 @@ export default [
   {
     "name": "Barbarian Torso",
     "file": "barbarian",
-    "img": "barbarian.png",
+    "img": process.env.PUBLIC_URL + "/img/library/torso/barbarian.png",
     "author": "William CLOT",
     "description": "Default man head.",
     "rotation": {
@@ -70,7 +70,7 @@ export default [
   {
     "name": "Man Torso",
     "file": "man_torso",
-    "img": "man_torso.png",
+    "img": process.env.PUBLIC_URL + "/img/library/torso/man_torso.png",
     "author": "William CLOT",
     "description": "Default man head.",
     "rotation": {
