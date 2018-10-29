@@ -7,6 +7,8 @@ import registerServiceWorker from './registerServiceWorker';
 // needed to polyfill THREE global object with the class FindMinGeometry
 import './FindMinGeometry';
 
+console.log('PUBLIC_URL:', process.env.PUBLIC_URL);
+
 ReactDOM.render(
     <React.Fragment>
         <ThreeContainer />
