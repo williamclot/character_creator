@@ -2,42 +2,80 @@ import React, { Component } from "react";
 import Editor from "./Editor";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { isProduction, PUBLIC_URL, API_URL, ACCESS_TOKEN } from "../config.js";
 
 import SearchBar from "./SearchBar";
 import "../css/selector.css";
 
-import headElements from "../library/heads.json";
-import handElements from "../library/hands.json";
-import armElements from "../library/arm.json";
-import torsoElements from "../library/torso.json";
-import footElements from "../library/foot.json";
-import legElements from "../library/leg.json";
-import standElements from "../library/stands.json";
-import poseElements from "../library/poses.json";
 import bones from "../library/bones.json";
+import libraryUtils from '../utils/libraryUtils';
+
+const RenderPremium = ({ premium }) => {
+	if (premium) {
+		return (
+			<div className="abs premium">
+				<FontAwesomeIcon
+					className="abs centered white big-icon"
+					icon="dollar-sign"
+				/>
+			</div>
+		);
+	} else {
+		return null;
+	}
+}
+
+const RenderLink = ({ link }) => {
+	if (link) {
+		return (
+			<a className="abs link" href={link}>
+				<FontAwesomeIcon
+					className="abs centered white icon"
+					icon="link"
+				/>
+			</a>
+		);
+	} else {
+		return null;
+	}
+}
 
 class Selector extends Component {
 	constructor(props) {
 		super(props);
+
+		const { currentCategory, isLeft } = props;
+		const loadedLibraryData = libraryUtils.getLibrary(currentCategory, isLeft);
+
 		this.state = {
 			editorSelected: false,
 			pose: undefined,
-			search: ""
+			searchText: "",
+			loadedLibraryData,
 		};
 	}
 
-	updateSearchValue = search => {
-		this.setState({ search });
-	};
-
-	componentDidMount() {
+	async componentDidMount() {
 		// Load the base model with defaultMeshes and defaultPose
-		axios.get(process.env.PUBLIC_URL + "/models/poses/default.json").then(res => {
-			this.setState({ pose: res.data });
-			window.loadDefaultMeshes(bones, res.data);
-		});
+		const { data: pose } = await axios.get(process.env.PUBLIC_URL + "models/poses/default.json");
+
+		// await new Promise(resolve => setTimeout(resolve, 3000)); // wait 3 secs
+		this.setState({	pose });
+
+		window.loadDefaultMeshes(bones, pose);
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.currentCategory !== this.props.currentCategory ||
+			nextProps.isLeft !== this.props.isLeft) {
+			const { currentCategory, isLeft } = nextProps;
+
+			const loadedLibraryData = libraryUtils.getLibrary(currentCategory, isLeft);
+
+			this.setState({ loadedLibraryData });
+		}
+	}
+	
 	applyPose(file) {
 		let poseData;
 		//Ajax in react
@@ -48,141 +86,151 @@ class Selector extends Component {
 		});
 	}
 
-	RenderPremium(item) {
-		if (item.premium) {
-			return (
-				<div className="abs premium">
-					<FontAwesomeIcon
-						className="abs centered white big-icon"
-						icon="dollar-sign"
-					/>
-				</div>
-			);
-		}
+	handleSearch = searchText => {
+		this.setState({ searchText });
+	};
+	
+	handleLoadMore = async e => {
+		const bodyPart = this.props.currentCategory;
+		const params = {
+			q: "", // could be undefined
+			tags: ["customizer", `customizer-${bodyPart}`], // search for specific tags
+			access_token: !isProduction ? ACCESS_TOKEN : undefined // if not in production, needs access token
+		};
+
+		const { data } = await axios.get(`${API_URL}/search`, { params });
+		console.log(data);
+
+		const { total_count, items } = data;
+
+		/**
+		 * TODO 
+		 * 	- refactor reduce
+		 */
+		const itemsToAdd = items.reduce((processedItems, item) => {
+			const {
+				name,
+				url: mmfLink,
+				description,
+				designer,
+				images,
+				files,
+				licences,
+				tags
+			} = item;
+
+			/** 
+			 * currently, the api returns objects with tag similar to 'customizer';
+			 * therefore, objects with tag different than 'customizer' or 'customizer-<...>'
+			 * need to be filtered out
+			*/
+			const customizerTags = tags.filter(tag => tag.startsWith('customizer'));
+			if (customizerTags.length === 0) {
+				return processedItems;
+			}
+
+			/**
+			 * find first file associated with this object that ends with .glb
+			 * if none is found, step over this object
+			 */
+			const glbFile = files.items.find(f => f.filename.endsWith('.glb'));
+			if (!glbFile) {
+				return processedItems;
+			}
+			
+			const primaryImg = images.find(image => image.is_primary);
+			const author = designer.name;
+			const rotation = undefined;
+			const scale = 1;
+
+			const processedItem = {
+				name,
+				img: primaryImg.thumbnail.url,
+				file: glbFile.filename,
+				author,
+				description,
+				rotation,
+				scale,
+				mmfLink,
+				absoluteURL: glbFile.download_url
+			};
+
+			// console.log(processedItem);
+
+			processedItems.push(processedItem);
+			return processedItems;
+		}, []);
+
+		this.setState({
+			loadedLibraryData: [...this.state.loadedLibraryData, ...itemsToAdd]
+		});
+
 	}
 
-	RenderLink(item) {
-		if (item.link) {
-			return (
-				<a className="abs link" href={item.link}>
-					<FontAwesomeIcon
-						className="abs centered white icon"
-						icon="link"
-					/>
-				</a>
+	handleClick(libraryItem, category, isLeft, event) {
+		if (libraryItem.premium) {
+			this.props.updatePopupMessage(
+				"Sorry this is a premium object, this feature is still in development..."
 			);
+			this.props.updatePopup(true);
+		} else {
+			if (category === "pose") {
+				this.applyPose(libraryItem.file);
+			} else if (category === "stand") {
+				window.changeStand(libraryItem.file);
+			} else {
+				this.props.updateLoading(true);
+
+				const meshType = libraryUtils.getMeshType(category, isLeft);
+				const file = libraryItem.file;
+				window.changeMesh(
+					category,
+					libraryItem,
+					isLeft,
+					this.state.pose,
+					libraryItem.absoluteURL
+				);
+				let loadedMeshes = this.props.loadedMeshes;
+				loadedMeshes[meshType] = file;
+				this.props.updateMeshes(loadedMeshes);
+			}
 		}
 	}
 
 	render() {
-		// Passing throught the state from the properties
+		// Passing through the state from the properties
 		const category = this.props.currentCategory;
 		const isLeft = this.props.isLeft;
-		var library;
-		var sideIdencator;
-		var meshType;
 
-		switch (category) {
-			case "head":
-				library = headElements;
-				sideIdencator = false;
-				meshType = "Head";
-				break;
-			case "hand":
-				library = handElements;
-				sideIdencator = true;
-				meshType = isLeft ? "HandL" : "HandR";
-				break;
-			case "arm":
-				library = armElements;
-				sideIdencator = true;
-				meshType = isLeft ? "ArmL" : "ArmR";
-				break;
-			case "torso":
-				library = torsoElements;
-				sideIdencator = false;
-				meshType = "Torso";
-				break;
-			case "foot":
-				library = footElements;
-				sideIdencator = true;
-				meshType = isLeft ? "FootL" : "FootR";
-				break;
-			case "leg":
-				library = legElements;
-				sideIdencator = true;
-				meshType = isLeft ? "LegL" : "LegR";
-				break;
-			case "pose":
-				library = poseElements;
-				sideIdencator = false;
-				break;
-			case "stand":
-				library = standElements;
-				sideIdencator = false;
-				break;
-			default:
-				library = headElements;
-				sideIdencator = false;
-		}
+		const sideIdencator = libraryUtils.hasLeftAndRightDistinction(category);
 
-		let filteredlibrary = library.filter(
-			(element) => {
-				return element.name.toLowerCase().indexOf(this.state.search) !== -1;
-			}
-		);
+		let filteredlibrary = this.state.loadedLibraryData.filter(element => (
+			element.name.toLowerCase().indexOf(this.state.searchText) !== -1
+		));
+
 
 		//JSX element to display the HTML
-		const elementDiv = [];
-
-		for (let i = 0; i < filteredlibrary.length; i++) {
-			elementDiv.push(
-				<div
-					className="el"
-					key={i}
-					onClick={() => {
-						if (filteredlibrary[i].premium) {
-							this.props.updatePopupMessage(
-								"Sorry this is a premium object, this feature is still in development..."
-							);
-							this.props.updatePopup(true);
-						} else {
-							if (category === "pose") {
-								this.applyPose(filteredlibrary[i].file);
-							} else if (category === "stand") {
-								window.changeStand(filteredlibrary[i].file);
-							} else {
-								this.props.updateLoading(true);
-								window.changeMesh(
-									category,
-									filteredlibrary[i],
-									isLeft,
-									bones,
-									this.state.pose
-								);
-								let loadedMeshes = this.props.loadedMeshes;
-								loadedMeshes[meshType] = filteredlibrary[i].file;
-								this.props.updateMeshes(loadedMeshes);
-							}
-						}
-					}}
-				>
-					<div className="img">
-						<img
-							src={
-								process.env.PUBLIC_URL + "/img/library/" + category + "/" + filteredlibrary[i].img
-							}
-							alt={filteredlibrary[i].img}
-						/>
-					</div>
-					<div className="unselectable el-name">
-						{filteredlibrary[i].name}
-					</div>
-					{this.RenderPremium(filteredlibrary[i])}
-					{this.RenderLink(filteredlibrary[i])}
+		const elementDiv = filteredlibrary.map((libraryItem, i) => (
+			<div
+				className="el"
+				key={i}
+				onClick={this.handleClick.bind(this, libraryItem, category, isLeft)} // bind some variables
+			>
+				<div className="img">
+					<img
+						src={libraryItem.img}
+						alt={libraryItem.img}
+					/>
 				</div>
-			);
-		}
+				<div className="unselectable el-name">
+					{libraryItem.name}
+				</div>
+				<RenderPremium premium = { libraryItem.premium } />
+				<RenderLink link = { libraryItem.link } />
+			</div>
+		));
+
+		// add "Add your designs" button
 		elementDiv.push(
 			<div
 				className="el"
@@ -204,6 +252,17 @@ class Selector extends Component {
 			</div>
 		);
 
+		// add "LoadMore" button
+		elementDiv.push(
+			<div
+				className = "el"
+				key = "loadMore"
+				onClick={this.handleLoadMore}
+			>
+				Load More
+			</div>
+		);
+
 		const buttons = (
 			<div className="abs switch">
 				<div
@@ -213,31 +272,9 @@ class Selector extends Component {
 					}
 					onClick={() => {
 						this.props.updateLeft(true);
-						var MeshType;
-						switch (category) {
-							case "head":
-								MeshType = "Head";
-								break;
-							case "hand":
-								MeshType = "HandL";
-								break;
-							case "arm":
-								MeshType = "ArmL";
-								break;
-							case "torso":
-								MeshType = "Torso";
-								break;
-							case "foot":
-								MeshType = "FootL";
-								break;
-							case "leg":
-								MeshType = "LegL";
-								break;
-							default:
-								MeshType = undefined;
-						}
-						if (MeshType) {
-							window.selectedMesh(MeshType);
+						const meshType = libraryUtils.getMeshType(category, isLeft);
+						if (meshType) {
+							window.selectedMesh(meshType);
 						}
 					}}
 				>
@@ -250,31 +287,9 @@ class Selector extends Component {
 					}
 					onClick={() => {
 						this.props.updateLeft(false);
-						var MeshType;
-						switch (category) {
-							case "head":
-								MeshType = "Head";
-								break;
-							case "hand":
-								MeshType = "HandR";
-								break;
-							case "arm":
-								MeshType = "ArmR";
-								break;
-							case "torso":
-								MeshType = "Torso";
-								break;
-							case "foot":
-								MeshType = "FootR";
-								break;
-							case "leg":
-								MeshType = "LegR";
-								break;
-							default:
-								MeshType = undefined;
-						}
-						if (MeshType) {
-							window.selectedMesh(MeshType);
+						const meshType = libraryUtils.getMeshType(category, isLeft);
+						if (meshType) {
+							window.selectedMesh(meshType);
 						}
 					}}
 				>
@@ -314,7 +329,7 @@ class Selector extends Component {
 			<div>
 				<div className="abs top right right-side">
 					<div className="box">
-						<SearchBar updateSearchValue={this.updateSearchValue} />
+						<SearchBar handleSearch={this.handleSearch} />
 						{sideIdencator ? buttons : ""}
 						{category === "pose" && this.props.editor ? editorButtons : ""}
 						<div

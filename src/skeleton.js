@@ -1,5 +1,3 @@
-var publicUrl = 'hello';
-
 /**
  * CHARACTER CREATOR
  *
@@ -7,6 +5,11 @@ var publicUrl = 'hello';
  * Tested on r95
  * @author williamclot / https://github.com/williamclot
  */
+
+
+import THREE from './threejs-service';
+
+export default function(){
 
 //Threejs important variables
 var camera, scene, renderer;
@@ -246,22 +249,36 @@ function rotateElement(item, clearRotation, rotation) {
     item.rotation.z = rotation.z;
   }
 }
+
+/**
+ * main function used to load a mesh
+ * @param {string} meshName 
+ * @param {string} url 
+ * @param {string} MeshType 
+ * @param {*} parentAttachment 
+ * @param {*} childAttachment 
+ * @param {*} rotation 
+ * @param {boolean} firstLoad 
+ * @param {boolean} highLight 
+ * @param {*} bones // not used
+ * @param {*} poseData 
+ */
 function placeMesh(
   meshName,
-  bodyPartClass,
+  url,
   MeshType,
   parentAttachment,
   childAttachment,
   rotation,
   firstLoad,
   highLight,
-  bones,
+  // bones,
   poseData
 ) {
   // bodyPartClass : {arm, head, hand, torso, leg, foot}
   // MeshType : {ArmR, ArmL, Head, HandR, HandL, LegR, LegL, FootR, FootL, Torso}
   loader.load(
-    publicUrl + "/models/" + bodyPartClass + "/" + meshName + ".glb",
+    url,
     gltf => {
       var root = gltf.scene.children[0];
       root.traverse(function(child) {
@@ -318,7 +335,26 @@ function placeMesh(
       let children = childrenList[MeshType];
       if (children) {
         for (let i = 0; i < children.length; i++) {
-          replaceMesh(children[i], firstLoad, bones, poseData);
+          const childMesh = children[i];
+
+          const bodyPartClass = meshStaticInfo[childMesh].bodyPart;
+          const meshName = loadedMeshes[childMesh].name;
+          const url = "models/" + bodyPartClass + "/" + meshName + ".glb";
+
+          group.remove(group.getObjectByName(childMesh));
+
+          placeMesh(
+            meshName,
+            url,
+            childMesh,
+            meshStaticInfo[childMesh].parentAttachment,
+            meshStaticInfo[childMesh].childAttachment,
+            loadedMeshes[childMesh].rotation,
+            firstLoad,
+            false,
+            // bones,
+            poseData
+          );
         }
       }
 
@@ -342,21 +378,7 @@ function placeMesh(
   );
 }
 
-function replaceMesh(MeshType, firstLoad, bones, poseData) {
-  group.remove(group.getObjectByName(MeshType));
-  placeMesh(
-    loadedMeshes[MeshType].name,
-    meshStaticInfo[MeshType].bodyPart,
-    MeshType,
-    meshStaticInfo[MeshType].parentAttachment,
-    meshStaticInfo[MeshType].childAttachment,
-    loadedMeshes[MeshType].rotation,
-    firstLoad,
-    false,
-    bones,
-    poseData
-  );
-}
+
 
 function placeStand() {
   // var topStand;
@@ -373,7 +395,7 @@ function placeStand() {
     scene.getObjectByName("Torso_Hip").position.y -= result;
   } else {
     loader.load(
-      publicUrl + "/models/stand/circle.glb",
+      process.env.PUBLIC_URL + "/models/stand/circle.glb",
       gltf => {
         var root = gltf.scene.children[0];
 
@@ -411,7 +433,7 @@ window.changeStand = function(stand) {
   if (scene.getObjectByName("mesh-stand")) {
     group.remove(scene.getObjectByName("mesh-stand"));
     loader.load(
-      publicUrl + "/models/stand/"+stand+".glb",
+      process.env.PUBLIC_URL + "/models/stand/"+stand+".glb",
       gltf => {
         var root = gltf.scene.children[0];
 
@@ -439,20 +461,31 @@ window.changeStand = function(stand) {
   }
 };
 window.loadDefaultMeshes = function(bones, poseData) {
+  const bodyPartClass = meshStaticInfo["Torso"].bodyPart;
+  const meshName = loadedMeshes["Torso"].name;
+  const url = "models/" + bodyPartClass + "/" + meshName + ".glb";
   placeMesh(
-    loadedMeshes["Torso"].name,
-    meshStaticInfo["Torso"].bodyPart,
+    meshName,
+    url,
     "Torso",
     undefined,
     undefined,
     undefined,
     true,
     false,
-    bones,
+    // bones,
     poseData
   );
 };
-window.changeMesh = function(bodyPart, part, isLeft, bones, poseData) {
+
+/**
+ * @param bodyPart - name of meshType
+ * @param part - json metadata: name, img, file, author, description, rotation, scale, link 
+ * @param isLeft - to identify if left or right
+ * @param poseData - data about the pose to render
+ * @param meshURL - URL of resource to load
+ */
+window.changeMesh = function(bodyPart, part, isLeft, poseData, meshURL) {
   window.partloaded = false;
   var meshType;
   var file;
@@ -471,23 +504,23 @@ window.changeMesh = function(bodyPart, part, isLeft, bones, poseData) {
       break;
     case "hand":
       meshType = isLeft ? "HandL" : "HandR";
-      file = isLeft ? part.file[0] : part.file[1];
-      rotation = isLeft ? part.rotation[0] : part.rotation[1];
+      file = part.file;
+      rotation = part.rotation;
       break;
     case "arm":
       meshType = isLeft ? "ArmL" : "ArmR";
-      file = isLeft ? part.file[0] : part.file[1];
-      rotation = isLeft ? part.rotation[0] : part.rotation[1];
+      file = part.file;
+      rotation = part.rotation;
       break;
     case "foot":
       meshType = isLeft ? "FootL" : "FootR";
-      file = isLeft ? part.file[0] : part.file[1];
-      rotation = isLeft ? part.rotation[0] : part.rotation[1];
+      file = part.file;
+      rotation = part.rotation;
       break;
     case "leg":
       meshType = isLeft ? "LegL" : "LegR";
-      file = isLeft ? part.file[0] : part.file[1];
-      rotation = isLeft ? part.rotation[0] : part.rotation[1];
+      file = part.file;
+      rotation = part.rotation;
       break;
     default:
       meshType = undefined;
@@ -511,16 +544,20 @@ window.changeMesh = function(bodyPart, part, isLeft, bones, poseData) {
           }
         }
       }
+      
+      // if(!meshURL){
+      //   meshURL = "models/" + bodyPart + "/" + file + ".glb";
+      // }
       placeMesh(
         file,
-        bodyPart,
+        meshURL,
         meshType,
         parentAttachment,
         childAttachment,
         rotation,
         false,
         true,
-        bones,
+        // bones,
         poseData
       );
     }
@@ -569,7 +606,8 @@ window.changeRotation = function(bone_name, value, axis) {
 window.getRotation = function(bone_name) {
   var bone = scene.getObjectByName(bone_name);
   if (bone instanceof THREE.Bone) {
-    return { x: bone.rotation.x, y: bone.rotation.y, z: bone.rotation.z };
+    const { x, y, z } = bone.rotation; // TODO check if it doesn't break anything
+    return { x, y, z };
   }
 };
 window.loadPose = function(poseData, bones) {
@@ -642,7 +680,11 @@ function onWindowResize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 function animate() {
-  requestAnimationFrame(animate);
+  if (process.env.NODE_ENV === 'production') {
+    requestAnimationFrame(animate);
+  } else {
+    setTimeout(() => requestAnimationFrame(animate), 300);
+  }
   controls.update();
   render();
 }
@@ -673,4 +715,4 @@ function saveString(text, filename) {
   save(new Blob([text], { type: "text/plain" }), filename);
 }
 
-window.addEventListener( 'click', onMouseClick, false );
+}
