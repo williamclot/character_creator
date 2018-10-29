@@ -680,7 +680,11 @@ function onWindowResize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 function animate() {
-  requestAnimationFrame(animate);
+  if (process.env.NODE_ENV === 'production') {
+    requestAnimationFrame(animate);
+  } else {
+    setTimeout(() => requestAnimationFrame(animate), 300);
+  }
   controls.update();
   render();
 }
