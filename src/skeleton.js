@@ -339,7 +339,7 @@ function placeMesh(
 
           const bodyPartClass = meshStaticInfo[childMesh].bodyPart;
           const meshName = loadedMeshes[childMesh].name;
-          const url = process.env.PUBLIC_URL + "models/" + bodyPartClass + "/" + meshName + ".glb";
+          const url = process.env.PUBLIC_URL + "/models/" + bodyPartClass + "/" + meshName + ".glb";
 
           group.remove(group.getObjectByName(childMesh));
 
@@ -463,7 +463,7 @@ window.changeStand = function(stand) {
 window.loadDefaultMeshes = function(bones, poseData) {
   const bodyPartClass = meshStaticInfo["Torso"].bodyPart;
   const meshName = loadedMeshes["Torso"].name;
-  const url = process.env.PUBLIC_URL + "models/" + bodyPartClass + "/" + meshName + ".glb";
+  const url = process.env.PUBLIC_URL + "/models/" + bodyPartClass + "/" + meshName + ".glb";
   placeMesh(
     meshName,
     url,

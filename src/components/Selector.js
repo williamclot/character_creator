@@ -57,7 +57,7 @@ class Selector extends Component {
 
 	async componentDidMount() {
 		// Load the base model with defaultMeshes and defaultPose
-		const { data: pose } = await axios.get(process.env.PUBLIC_URL + "models/poses/default.json");
+		const { data: pose } = await axios.get(process.env.PUBLIC_URL + "/models/poses/default.json");
 
 		// await new Promise(resolve => setTimeout(resolve, 3000)); // wait 3 secs
 		this.setState({	pose });
