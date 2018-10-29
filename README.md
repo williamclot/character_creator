@@ -10,7 +10,7 @@ $ npm install
 $ npm start
 ```
 
-You can find a detailed update sheet of the project in [UPDATES.md](UPDATES.md).
+You can find the wiki of the project [here](https://github.com/williamclot/CharacterCreator/wiki).
 
 *William CLOT* | Summer 2018
 
