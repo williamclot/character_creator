@@ -272,7 +272,7 @@ class Selector extends Component {
 					}
 					onClick={() => {
 						this.props.updateLeft(true);
-						const meshType = libraryUtils.getMeshType(category, isLeft);
+						const meshType = libraryUtils.getMeshType(category, true);
 						if (meshType) {
 							window.selectedMesh(meshType);
 						}
@@ -287,7 +287,7 @@ class Selector extends Component {
 					}
 					onClick={() => {
 						this.props.updateLeft(false);
-						const meshType = libraryUtils.getMeshType(category, isLeft);
+						const meshType = libraryUtils.getMeshType(category, false);
 						if (meshType) {
 							window.selectedMesh(meshType);
 						}
