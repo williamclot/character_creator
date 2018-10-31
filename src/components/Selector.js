@@ -253,15 +253,15 @@ class Selector extends Component {
 		);
 
 		// add "LoadMore" button
-		elementDiv.push(
-			<div
-				className = "el"
-				key = "loadMore"
-				onClick={this.handleLoadMore}
-			>
-				Load More
-			</div>
-		);
+		// elementDiv.push(
+		// 	<div
+		// 		className = "el"
+		// 		key = "loadMore"
+		// 		onClick={this.handleLoadMore}
+		// 	>
+		// 		Load More
+		// 	</div>
+		// );
 
 		const buttons = (
 			<div className="abs switch">
