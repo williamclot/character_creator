@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Editor from "./Editor";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { isProduction, PUBLIC_URL, API_URL, ACCESS_TOKEN } from "../config.js";
+import * as env from "../config.js";
 
 import SearchBar from "./SearchBar";
 import "../css/selector.css";
@@ -95,10 +95,10 @@ class Selector extends Component {
 		const params = {
 			q: "", // could be undefined
 			tags: ["customizer", `customizer-${bodyPart}`], // search for specific tags
-			access_token: !isProduction ? ACCESS_TOKEN : undefined // if not in production, needs access token
+			access_token: !env.isProduction ? env.ACCESS_TOKEN : undefined // if not in production, needs access token
 		};
 
-		const { data } = await axios.get(`${API_URL}/search`, { params });
+		const { data } = await axios.get(`${env.MMF_API_ENDPOINT}/search`, { params });
 		console.log(data);
 
 		const { total_count, items } = data;
