@@ -40,7 +40,11 @@ class Buttons extends Component {
   }
   
   renderAuthButton(message) {
-    if (env.isIntegrated) { // when integrated, the login popup from MMF site can be accessed
+    if (env.isIntegrated) {
+      /** when integrated, the login popup from MMF site can be accessed
+        * and logging in will cause the page to reload with the access token
+        * loaded in the page (available as window.accessToken)
+        */
       return <div
         className = "abs buttons"
         onClick = {() => {
@@ -55,7 +59,9 @@ class Buttons extends Component {
       >
         {message}
       </div>;
-    } else { // when stand-alone, MyMiniFactoryLogin will be used
+    } else { 
+      /** when stand-alone, MyMiniFactoryLogin will be used
+       * and logging in will put the access token into this state */
       return <MyMiniFactoryLogin
         className="abs buttons"
         clientKey={env.CLIENT_KEY}
