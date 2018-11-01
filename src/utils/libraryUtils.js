@@ -115,6 +115,62 @@ const libraryUtils = {
 	
 		const side = isLeft ? "left" : "right";
 		return categoryHasLeftAndRightDistinction ? meshType[side] : meshType;
+	},
+
+	processAPIObjects(items) {
+		return items.reduce((processedItems, item) => {
+			const {
+				name,
+				url: mmfLink,
+				description,
+				designer,
+				images,
+				files,
+				licences,
+				tags
+			} = item;
+
+			/** 
+			 * currently, the api returns objects with tag similar to 'customizer';
+			 * therefore, objects with tag different than 'customizer' or 'customizer-<...>'
+			 * need to be filtered out
+			*/
+			const customizerTags = tags.filter(tag => tag.startsWith('customizer'));
+			if (customizerTags.length === 0) {
+				return processedItems;
+			}
+
+			/**
+			 * find first file associated with this object that ends with .glb
+			 * if none is found, step over this object
+			 */
+			const glbFile = files.items.find(f => f.filename.endsWith('.glb'));
+			if (!glbFile) {
+				return processedItems;
+			}
+			
+			const primaryImg = images.find(image => image.is_primary);
+			const author = designer.name;
+			const rotation = undefined;
+			const scale = 1;
+
+			const processedItem = {
+				name,
+				img: primaryImg.thumbnail.url,
+				file: glbFile.filename,
+				author,
+				description,
+				rotation,
+				scale,
+				mmfLink,
+				absoluteURL: glbFile.download_url
+			};
+
+			// console.log(processedItem);
+
+			processedItems.push(processedItem);
+			return processedItems;
+		}, []);
 	}
 };
 
