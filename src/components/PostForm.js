@@ -9,6 +9,8 @@ import "../css/postform.css";
 import Loader from "./Loader";
 import Response from "./Response";
 
+import * as env from '../config';
+
 class PostForm extends Component {
   constructor(props) {
     super(props);
@@ -31,14 +33,16 @@ class PostForm extends Component {
     this.setState({ popup });
   };
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
+    event.preventDefault();
     this.props.updateVisible(false);
     this.setState({ loader: true });
     const accesstoken = this.props.accesstoken;
     const stlData = window.export();
-    axios({
+
+    const responseMetaData = await axios({
       method: "post",
-      url: (process.env.NODE_ENV === 'development') ? 'http://mmf.local/dev.php/api/v2/object' : 'https://www.myminifactory.com/api/v2/object',
+      url: `${env.LIVE_MMF_API_ENDPOINT}/object`,
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + accesstoken
@@ -62,35 +66,36 @@ class PostForm extends Component {
           {filename: "Mesh_Leg_R.stl"}
         ]
       }
-    }).then(responseMetaData => {
-      const files = responseMetaData.data.files;
-      const promises = files.map((file, i) => axios({
-        method: "post",
-        url:
-          (process.env.NODE_ENV == 'development') ? 'http://mmf.local/dev.php/api/v2/file?upload_id=' + file.upload_id : 'https://www.myminifactory.com/api/v2/file?upload_id=' + file.upload_id,
-        headers: {
-          Authorization: "Bearer " + accesstoken
-        },
-        data: stlData[i]
-        }));
-      Promise.all(promises).then(responses => {
-        var statusCounter = responses.filter(response => response.status === 201).length;
-        if (statusCounter === responses.length){
-          // Everything okay
-          this.setState({loader: false, response: true, status: true});
-          setTimeout(() => {
-            this.setState({response: false, popup: true, message: this.successMessage})
-          }, 1500);
-        } else {
-          // Something went wrong
-          this.setState({loader: false, response: true, status: false});
-          setTimeout(() => {
-            this.setState({response: false, popup: true, message: this.errorMessage});
-          }, 1500);
-        }
-      });
     });
-    event.preventDefault();
+
+    const files = responseMetaData.data.files;
+    const promises = files.map((file, i) => axios({
+      method: "post",
+      url: `${env.LIVE_MMF_API_ENDPOINT}/file`,
+      headers: {
+        Authorization: "Bearer " + accesstoken
+      },
+      params: {
+        upload_id: file.upload_id
+      },
+      data: stlData[i]
+    }));
+    const responses = await Promise.all(promises);
+
+
+    const status = responses.every(response => response.status === 201);
+    const message = status ? this.successMessage : this.errorMessage;
+    this.setState({
+      loader: false,
+      response: true,
+      status
+    });
+    setTimeout(() => {
+      this.setState({
+        response: false,
+        popup: true,
+        message})
+    }, 1500);
   }
 
   handleInputChange(event) {
@@ -136,7 +141,6 @@ class PostForm extends Component {
     }
   }
   
-
   render() {
     return (
       <div>
