@@ -4,6 +4,9 @@
 
 export const isProduction = (process.env.NODE_ENV === "production");
 
+/** the url where this project is hosted (used for loading static assets) */
+export const PUBLIC_URL = process.env.PUBLIC_URL;
+
 /**
  * used to identify whether project is integrated into MMF or running independently
  */
@@ -13,19 +16,18 @@ export const isIntegrated = (process.env.REACT_APP__IS_INTEGRATED === "true");
 export const LIVE_MMF_ENDPOINT = process.env.REACT_APP__LIVE_MMF_ENDPOINT;
 
 /** live MMF API url */
-export const LIVE_MMF_API_ENDPOINT = process.env.REACT_APP__LIVE_MMF_API_ENDPOINT;
+export const LIVE_MMF_API_ENDPOINT = `${LIVE_MMF_ENDPOINT}/api/v2`;
 
-/** MMF endpoint (this can be set to localhost when running MMF locally) */
+/** MMF endpoint (use this when endpoint depends on node environment) */
 export const MMF_ENDPOINT = process.env.REACT_APP__MMF_ENDPOINT;
 
 /** MMF API endpoint (this can be set to localhost when running MMF locally) */
-export const MMF_API_ENDPOINT = process.env.REACT_APP__MMF_API_ENDPOINT;
+export const MMF_API_ENDPOINT = `${MMF_ENDPOINT}/api/v2`;
 
-/** the url where this project is hosted (used for loading static assets) */
-export const PUBLIC_URL = process.env.PUBLIC_URL;
 
 
 // variables below only used when not in production
+
 /**
  * gets created with LoadOauthApiKeyData fixture inside AuthserviceBundle
  * to use add as request header: { "key": API_KEY }
