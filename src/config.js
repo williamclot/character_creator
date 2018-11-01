@@ -4,6 +4,11 @@
 
 export const isProduction = (process.env.NODE_ENV === "production");
 
+/**
+ * used to identify whether project is integrated into MMF or running independently
+ */
+export const isIntegrated = (process.env.REACT_APP__IS_INTEGRATED === "true");
+
 /** live MMF domain url */
 export const LIVE_MMF_ENDPOINT = process.env.REACT_APP__LIVE_MMF_ENDPOINT;
 
@@ -32,3 +37,6 @@ export const API_KEY = process.env.REACT_APP__API_KEY;
  * add as request param: { "access_token": ACCESS_TOKEN }
  */
 export const ACCESS_TOKEN = process.env.REACT_APP__ACCESS_TOKEN;
+
+export const CLIENT_KEY = process.env.REACT_APP__CLIENT_KEY;
+export const REDIRECT_URI = process.env.REACT_APP__REDIRECT_URI;
