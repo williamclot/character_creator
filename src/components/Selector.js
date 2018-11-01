@@ -178,6 +178,11 @@ class Selector extends Component {
 				this.applyPose(libraryItem.file);
 			} else if (category === "stand") {
 				window.changeStand(libraryItem.file);
+			} else if(!libraryItem.absoluteURL) {
+				this.props.updatePopupMessage(
+					"You need to be logged in to view this item"
+				);
+				this.props.updatePopup(true);
 			} else {
 				this.props.updateLoading(true);
 
