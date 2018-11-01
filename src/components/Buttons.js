@@ -4,7 +4,7 @@ import PostForm from './PostForm';
 
 import MyMiniFactoryLogin from 'myminifactory-login';
 
-import * as env from '../config.js';
+import * as env from '../config';
 
 // Loading Assets (SubComponents & CSS)
 import "../css/buttons.css";
