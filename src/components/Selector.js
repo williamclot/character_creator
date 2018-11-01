@@ -92,16 +92,20 @@ class Selector extends Component {
 	
 	handleLoadMore = async e => {
 		const bodyPart = this.props.currentCategory;
-		const params = {
-			q: "", // could be undefined
-			tags: ["customizer", `customizer-${bodyPart}`], // search for specific tags
-			access_token: !env.isProduction ? env.ACCESS_TOKEN : undefined // if not in production, needs access token
-		};
 
-		const { data } = await axios.get(`${env.MMF_API_ENDPOINT}/search`, { params });
-		console.log(data);
+		const response = await axios.get(
+			`${env.MMF_API_ENDPOINT}/search`,
+			{
+				params: {
+					q: "", // could be undefined
+					tags: ["customizer", `customizer-${bodyPart}`], // search for specific tags
+					access_token: env.ACCESS_TOKEN // if not set, param will be ignored
+				}
+			}
+		);
+		console.log(response.data);
 
-		const { total_count, items } = data;
+		const { total_count, items } = response.data;
 
 		/**
 		 * TODO 
