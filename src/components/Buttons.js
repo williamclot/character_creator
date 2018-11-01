@@ -4,17 +4,30 @@ import PostForm from './PostForm';
 
 import MyMiniFactoryLogin from 'myminifactory-login';
 
+import * as env from '../config.js';
+
 // Loading Assets (SubComponents & CSS)
 import "../css/buttons.css";
 
 class Buttons extends Component {
   constructor(props){
     super(props);
+
+    /**
+     * @type {string | undefined}
+     * global initialized outside this project.
+     * it can have one of the following values:
+     * - undefined -- this project is running independently;
+     * - "" -- the value was initialized outside this project, but user not logged in
+     * - "<valid-token>" -- user is logged in (unless the token is invalid or expired)
+     */
+    const accesstoken = window.accessToken;
+
     this.state = {
       formVisible: false,
-      accesstoken: ''
+      isLoggedIn: Boolean(accesstoken), // true only if it is defined and not the empty string
+      accesstoken
     }
-    this.updateVisible = this.updateVisible;
   }
 
   updateVisible = formVisible => {
@@ -25,45 +38,41 @@ class Buttons extends Component {
     // Google Analytics for the page
     ReactGA.initialize("UA-41837285-1");
   }
-
   
-  
-  onSuccess = response => {
-    this.setState({ formVisible: true })
-    this.setState({ accesstoken: response.access_token })
-  }
-  onFailure = response => console.error(response);
-  
-  
-  
-  renderAuthButton() {
-    this.redirectUri = (process.env.NODE_ENV === 'development') ? 'http://localhost:3000' : 'https://www.myminifactory.com/character-creator/';
-    this.clientKey = (process.env.NODE_ENV === 'development') ? 'customizerDev' : 'character-creator';
-    this.mmfAccessToken = window.accessToken; // Global initialized outside the project
-    // this.mmfAccessToken = "test-token"; // Global initialized outside the project
-    if (this.mmfAccessToken == null) {
-      return (<MyMiniFactoryLogin
-        className="abs buttons"
-        clientKey={this.clientKey}
-        redirectUri={this.redirectUri}
-        buttonText="Share on MyMiniFactory.com"
-        onSuccess={this.onSuccess}
-        onFailure={this.onFailure}
-      />);
-    } else {
-      return (<div
-        className="abs buttons"
-        onClick={() => {
-          this.setState({ formVisible: true })
-          this.setState({ accesstoken: this.mmfAccessToken })
+  renderAuthButton(message) {
+    if (env.isIntegrated) { // when integrated, the login popup from MMF site can be accessed
+      return <div
+        className = "abs buttons"
+        onClick = {() => {
+          // the following jQuery command will reveal the login popup
+          try {
+            // eslint-disable-next-line no-undef
+            $('#loginscreen').foundation('reveal', 'open');
+          } catch (err) {
+            console.error(err);
+          }
         }}
       >
-        Upload to MyMiniFactory
-        </div>);
+        {message}
+      </div>;
+    } else { // when stand-alone, MyMiniFactoryLogin will be used
+      return <MyMiniFactoryLogin
+        className="abs buttons"
+        clientKey={env.CLIENT_KEY}
+        redirectUri={env.REDIRECT_URI}
+        buttonText={message}
+        onSuccess={response => this.setState({
+          formVisible: true,
+          accesstoken: response.access_token,
+          isLoggedIn: true
+        })}
+        onFailure={response => console.error(response)}
+      />;
     }
   }
 
   render() {
+    const { isLoggedIn } = this.state;
 
     return (
       <div>
@@ -105,24 +114,16 @@ class Buttons extends Component {
         >
           Get it printed for $4.99
         </div>
-        {/* <div
-          className="abs buttons"
-          onClick={() => {
-            this.props.updatePopup(true)
-            this.props.updatePopupMessage("Sorry this feature is still in development...")
-          }}
-        >
-          Share on MyMiniFactory.com
-        </div> */}
-        {/* <MyMiniFactoryLogin
-          className="abs buttons"
-          clientKey={clientKey}
-          redirectUri={redirectUri}
-          buttonText="Share on MyMiniFactory.com"
-          onSuccess={onSuccess}
-          onFailure={onFailure}
-        /> */}
-        { this.renderAuthButton() }
+        { !isLoggedIn ? 
+          this.renderAuthButton("Share on MyMiniFactory.com") 
+          :
+          <div
+            className="abs buttons"
+            onClick={() => this.setState({ formVisible: true })}
+          >
+            Upload to MyMiniFactory
+          </div>
+        }
         <PostForm
           visible={this.state.formVisible}
           updateVisible={this.updateVisible}
