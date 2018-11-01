@@ -23,7 +23,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:integrated": "REACT_APP__IS_INTEGRATED=true react-scripts start",
+    "start:stand-alone": "REACT_APP__IS_INTEGRATED=false react-scripts start",
     "build": "react-scripts build",
+    "build:integrated": "REACT_APP__IS_INTEGRATED=true react-scripts build",
+    "build:stand-alone": "REACT_APP__IS_INTEGRATED=false react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
