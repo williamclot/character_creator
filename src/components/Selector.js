@@ -99,7 +99,9 @@ class Selector extends Component {
 				params: {
 					q: "", // could be undefined
 					tags: ["customizer", `customizer-${bodyPart}`], // search for specific tags
-					access_token: env.ACCESS_TOKEN // if not set, param will be ignored
+				},
+				headers: {
+					'X-Api-Key': env.API_KEY // if not set, param will be ignored
 				}
 			}
 		);
