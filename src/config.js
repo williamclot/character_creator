@@ -28,20 +28,22 @@ export const MMF_API_ENDPOINT = `${MMF_ENDPOINT}/api/v2`;
 
 
 
-// variables below only used when not in production
+// variables below only used when project is running stand-alone
 /**************************************************/
 
 /**
- * gets created with LoadOauthApiKeyData fixture inside AuthserviceBundle
- * to use add as request header: { "key": API_KEY }
+ * Developer needs to generate an API key for the MMF API
+ * in order to make API calls
  */
 export const API_KEY = process.env.REACT_APP__API_KEY || undefined;
 
 /**
- * gets created with LoadAccessTokenData fixture inside AuthserviceBundle
- * add as request param: { "access_token": ACCESS_TOKEN }
+ * can be used in development to skip having to login 
  */
 export const ACCESS_TOKEN = process.env.REACT_APP__ACCESS_TOKEN || undefined;
 
+/** Developer needs to register the app and will receive a client key */
 export const CLIENT_KEY = process.env.REACT_APP__CLIENT_KEY;
+
+/** also created when registering the app */
 export const REDIRECT_URI = process.env.REACT_APP__REDIRECT_URI;
