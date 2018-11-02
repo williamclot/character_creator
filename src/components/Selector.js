@@ -185,7 +185,7 @@ class Selector extends Component {
 					{libraryItem.name}
 				</div>
 				<RenderPremium premium = { libraryItem.premium } />
-				<RenderLink link = { libraryItem.link } />
+				<RenderLink link = { libraryItem.mmfLink } />
 			</div>
 		));
 
