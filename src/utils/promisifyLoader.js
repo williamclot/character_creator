@@ -9,9 +9,19 @@ export default function promisifyLoader ( loader, onProgress ) {
     } );
   }
 
+  function promiseParser ( data, path ) {
+
+    return new Promise( ( resolve, reject ) => {
+
+      loader.parse( data, path, resolve, reject );
+
+    } );
+  }
+
   return {
     originalLoader: loader,
     load: promiseLoader,
+    parse: promiseParser
   };
 
 }
