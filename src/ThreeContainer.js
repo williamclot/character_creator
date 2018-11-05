@@ -5,7 +5,6 @@ import THREE from './threejs-service';
 
 import promisifyLoader from './utils/promisifyLoader';
 import { defaultMeshes, meshStaticInfo, childrenList } from './utils/meshInfo';
-import libraryUtils from './utils/libraryUtils';
 
 class ThreeContainer extends React.PureComponent {
     componentDidMount() {
@@ -401,17 +400,13 @@ class ThreeContainer extends React.PureComponent {
         }.bind(this);
         
         /**
-         * @param bodyPart - name of meshType
-         * @param part - json metadata: name, img, file, author, description, rotation, scale, link 
-         * @param isLeft - to identify if left or right
-         * @param poseData - data about the pose to render
          * @param meshURL - URL of resource to load
+         * @param options - extra arguments
          */
-        window.changeMesh = function(bodyPart, part, isLeft, poseData, meshURL) {
+        window.changeMesh = function(meshURL, options) {
+            const { meshType, file, rotation, poseData } = options;
+
             window.partloaded = false;
-        
-            const meshType = libraryUtils.getMeshType(bodyPart, isLeft);
-            const { rotation, file } = part;
         
             if (meshType) {
                 let parentAttachment = meshStaticInfo[meshType].parentAttachment;

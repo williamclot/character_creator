@@ -141,13 +141,16 @@ class Selector extends Component {
 				this.props.updateLoading(true);
 
 				const meshType = libraryUtils.getMeshType(category, isLeft);
-				const file = libraryItem.file;
+				const { rotation, file } = libraryItem;
+
 				window.changeMesh(
-					category,
-					libraryItem,
-					isLeft,
-					this.state.pose,
-					libraryItem.absoluteURL
+					libraryItem.absoluteURL,
+					{
+						meshType,
+						file,
+						rotation,
+						poseData: this.state.pose
+					}
 				);
 				let loadedMeshes = this.props.loadedMeshes;
 				loadedMeshes[meshType] = file;
