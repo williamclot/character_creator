@@ -147,7 +147,7 @@ class ThreeContainer extends React.PureComponent {
             item.rotation.set(x, y, z);
         }
     }
-    
+
     /**
      * main function used to load a mesh
      * @param {string} meshName 
@@ -162,17 +162,21 @@ class ThreeContainer extends React.PureComponent {
      * @param {*} poseData 
      */
     placeMesh(
-        meshName,
         url,
-        MeshType,
-        parentAttachment,
-        childAttachment,
-        rotation,
-        firstLoad,
-        highLight,
-        // bones,
-        poseData
+        options
     ) {
+        const {
+            meshName,
+            MeshType,
+            parentAttachment,
+            childAttachment,
+            rotation,
+            firstLoad,
+            highLight,
+            // bones,
+            poseData
+        } = options;
+
         // bodyPartClass : {arm, head, hand, torso, leg, foot}
         // MeshType : {ArmR, ArmL, Head, HandR, HandL, LegR, LegL, FootR, FootL, Torso}
         this.loader.load(
@@ -242,16 +246,17 @@ class ThreeContainer extends React.PureComponent {
                     this.group.remove(this.group.getObjectByName(childMesh));
         
                     this.placeMesh(
-                        meshName,
                         url,
-                        childMesh,
-                        meshStaticInfo[childMesh].parentAttachment,
-                        meshStaticInfo[childMesh].childAttachment,
-                        this.loadedMeshes[childMesh].rotation,
-                        firstLoad,
-                        false,
-                        // bones,
-                        poseData
+                        {
+                            meshName: this.loadedMeshes[childMesh].name,
+                            MeshType: childMesh,
+                            parentAttachment: meshStaticInfo[childMesh].parentAttachment,
+                            childAttachment: meshStaticInfo[childMesh].childAttachment,
+                            rotation: this.loadedMeshes[childMesh].rotation,
+                            firstLoad,
+                            highLight: false,
+                            poseData
+                        }
                     );
                 }
                 }
@@ -388,17 +393,19 @@ class ThreeContainer extends React.PureComponent {
             const bodyPartClass = meshStaticInfo["Torso"].bodyPart;
             const meshName = this.loadedMeshes["Torso"].name;
             const url = process.env.PUBLIC_URL + "/models/" + bodyPartClass + "/" + meshName + ".glb";
+
             this.placeMesh(
-                meshName,
                 url,
-                "Torso",
-                undefined,
-                undefined,
-                undefined,
-                true,
-                false,
-                // bones,
-                poseData
+                {
+                    meshName,
+                    MeshType: "Torso",
+                    parentAttachment: undefined,
+                    childAttachment: undefined,
+                    rotation: undefined,
+                    firstLoad: true,
+                    highLight: false,
+                    poseData
+                }
             );
         }.bind(this);
         
@@ -472,17 +479,19 @@ class ThreeContainer extends React.PureComponent {
                     // if(!meshURL){
                     //   meshURL = "models/" + bodyPart + "/" + file + ".glb";
                     // }
+
                     this.placeMesh(
-                        file,
                         meshURL,
-                        meshType,
-                        parentAttachment,
-                        childAttachment,
-                        rotation,
-                        false,
-                        true,
-                        // bones,
-                        poseData
+                        {
+                            meshName: file,
+                            MeshType: meshType,
+                            parentAttachment,
+                            childAttachment,
+                            rotation,
+                            firstLoad: false,
+                            highLight: true,
+                            poseData
+                        }
                     );
                 }
             }
