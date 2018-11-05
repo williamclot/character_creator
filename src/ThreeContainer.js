@@ -137,19 +137,14 @@ class ThreeContainer extends React.PureComponent {
     // util functions below...    
     clearPosition(item) {
         // This function is used to clear the position of an imported gltf file
-        item.position.x = 0;
-        item.position.y = 0;
-        item.position.z = 0;
+        item.position.set(0, 0, 0);
     }
     rotateElement(item, clearRotation, rotation) {
         if (clearRotation === true) {
-        item.rotation.x = 0;
-        item.rotation.y = 0;
-        item.rotation.z = 0;
+            item.rotation.set(0,0,0);
         } else {
-        item.rotation.x = rotation.x;
-        item.rotation.y = rotation.y;
-        item.rotation.z = rotation.z;
+            const { x, y, z } = rotation;
+            item.rotation.set(x, y, z);
         }
     }
     
