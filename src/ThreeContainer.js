@@ -3,6 +3,7 @@ import React from 'react';
 
 import THREE from './threejs-service';
 
+import promisifyLoader from './utils/promisifyLoader';
 import { defaultMeshes, meshStaticInfo, childrenList } from './utils/meshInfo';
 
 class ThreeContainer extends React.PureComponent {
@@ -19,7 +20,7 @@ class ThreeContainer extends React.PureComponent {
 
 
         this.scene = new THREE.Scene();
-        this.loader = new THREE.GLTFLoader();
+        this.loader = promisifyLoader( new THREE.GLTFLoader() );
         // fogColor = new THREE.Color(0xffffff);
 
         this.scene.background = new THREE.Color(0xeeeeee);
@@ -150,8 +151,8 @@ class ThreeContainer extends React.PureComponent {
 
     /**
      * main function used to load a mesh
-     * @param {string} meshName 
      * @param {string} url 
+     * @param {string} meshName 
      * @param {string} MeshType 
      * @param {*} parentAttachment 
      * @param {*} childAttachment 
@@ -161,90 +162,89 @@ class ThreeContainer extends React.PureComponent {
      * @param {*} bones // not used
      * @param {*} poseData 
      */
-    placeMesh(
+    async placeMesh(
         url,
         options
     ) {
-        const {
-            meshName,
-            MeshType,
-            parentAttachment,
-            childAttachment,
-            rotation,
-            firstLoad,
-            highLight,
-            // bones,
-            poseData
-        } = options;
-
         // bodyPartClass : {arm, head, hand, torso, leg, foot}
         // MeshType : {ArmR, ArmL, Head, HandR, HandL, LegR, LegL, FootR, FootL, Torso}
-        this.loader.load(
-            url,
-            gltf => {
-                var root = gltf.scene.children[0];
+        try {
+            const gltf = await this.loader.load(url);
+            const {
+                meshName,
+                MeshType,
+                parentAttachment,
+                childAttachment,
+                rotation,
+                firstLoad,
+                highLight,
+                // bones,
+                poseData
+            } = options;
+    
+            var root = gltf.scene.children[0];
+            root.traverse(function(child) {
+                if (child instanceof THREE.Mesh) {
+                    // Gives a fixed name to the mesh and same gray color
+                    child.name = "mesh-"+MeshType.toLowerCase();
+                    child.castShadow = true;
+                    child.material.color = { r: 0.5, g: 0.5, b: 0.5 };
+                }
+            });
+    
+            // group is one element with all the meshes and bones of the character
+            this.group.add(root);
+            this.scene.updateMatrixWorld(true);
+    
+            // Updates the loadedMeshes variable (used for replacing children)
+            this.loadedMeshes[MeshType].name = meshName;
+            this.loadedMeshes[MeshType].rotation = rotation;
+    
+            if (MeshType === "Head" && firstLoad) {
+                this.changeColor("Head", this.color);
+            }
+    
+            if (highLight) {
+                this.changeColor(MeshType, this.color);
+            }
+    
+            // Putting the new mesh in the pose configuration if any pose as been selected
+            if (poseData) {
                 root.traverse(function(child) {
-                    if (child instanceof THREE.Mesh) {
-                        // Gives a fixed name to the mesh and same gray color
-                        child.name = "mesh-"+MeshType.toLowerCase();
-                        child.castShadow = true;
-                        child.material.color = { r: 0.5, g: 0.5, b: 0.5 };
+                    if (child instanceof THREE.Bone) {
+                        if (poseData[child.name]) {
+                            window.changeRotation(child.name, poseData[child.name].x, "x");
+                            window.changeRotation(child.name, poseData[child.name].y, "y");
+                            window.changeRotation(child.name, poseData[child.name].z, "z");
+                        }
                     }
                 });
-        
-                // group is one element with all the meshes and bones of the character
-                this.group.add(root);
-                this.scene.updateMatrixWorld(true);
-        
-                // Updates the loadedMeshes variable (used for replacing children)
-                this.loadedMeshes[MeshType].name = meshName;
-                this.loadedMeshes[MeshType].rotation = rotation;
-        
-                if (MeshType === "Head" && firstLoad) {
-                    this.changeColor("Head", this.color);
-                }
-        
-                if (highLight) {
-                    this.changeColor(MeshType, this.color);
-                }
-        
-                // Putting the new mesh in the pose configuration if any pose as been selected
-                if (poseData) {
-                    root.traverse(function(child) {
-                        if (child instanceof THREE.Bone) {
-                            if (poseData[child.name]) {
-                                window.changeRotation(child.name, poseData[child.name].x, "x");
-                                window.changeRotation(child.name, poseData[child.name].y, "y");
-                                window.changeRotation(child.name, poseData[child.name].z, "z");
-                            }
-                        }
-                    });
-                }
-        
-                if (
-                    typeof parentAttachment !== "undefined" &&
-                    typeof childAttachment !== "undefined"
-                ) {
-                    let targetBone = this.scene.getObjectByName(parentAttachment);
-                    let object = this.scene.getObjectByName(childAttachment);
-                    this.clearPosition(object);
-                    this.rotateElement(object, true);
-                    this.rotateElement(object, false, rotation);
-                    targetBone.add(object);
-                }
-        
-                //Going to look for all children of current mesh
-                let children = childrenList[MeshType];
-                if (children) {
+            }
+    
+            if (
+                typeof parentAttachment !== "undefined" &&
+                typeof childAttachment !== "undefined"
+            ) {
+                let targetBone = this.scene.getObjectByName(parentAttachment);
+                let object = this.scene.getObjectByName(childAttachment);
+                this.clearPosition(object);
+                this.rotateElement(object, true);
+                this.rotateElement(object, false, rotation);
+                targetBone.add(object);
+            }
+    
+            //Going to look for all children of current mesh
+            let children = childrenList[MeshType];
+            if (children) {
                 for (let i = 0; i < children.length; i++) {
                     const childMesh = children[i];
-        
+    
                     const bodyPartClass = meshStaticInfo[childMesh].bodyPart;
                     const meshName = this.loadedMeshes[childMesh].name;
                     const url = process.env.PUBLIC_URL + "/models/" + bodyPartClass + "/" + meshName + ".glb";
-        
+    
                     this.group.remove(this.group.getObjectByName(childMesh));
-        
+    
                     this.placeMesh(
                         url,
                         {
@@ -259,29 +259,26 @@ class ThreeContainer extends React.PureComponent {
                         }
                     );
                 }
-                }
-        
-                if (MeshType === "FootR") {
-                    if (this.scene.getObjectByName("FootL_Toes_L")) {
-                        this.scene.updateMatrixWorld();
-                        this.placeStand();
-                    }
-                } else if (MeshType === "FootL") {
-                    if (this.scene.getObjectByName("FootR_Toes_R")) {
-                        this.scene.updateMatrixWorld();
-                        this.placeStand();
-                    }
-                }
-                window.partloaded = true;
-            },
-            null,
-            function(error) {
-                console.log(error);
             }
-        );
+    
+            if (MeshType === "FootR") {
+                if (this.scene.getObjectByName("FootL_Toes_L")) {
+                    this.scene.updateMatrixWorld();
+                    this.placeStand();
+                }
+            } else if (MeshType === "FootL") {
+                if (this.scene.getObjectByName("FootR_Toes_R")) {
+                    this.scene.updateMatrixWorld();
+                    this.placeStand();
+                }
+            }
+            window.partloaded = true;
+        } catch (err) {
+            console.error(err);
+        }
     }
     
-    placeStand() {
+    async placeStand() {
         // var topStand;
         var minFinder = new THREE.FindMinGeometry();
     
@@ -295,37 +292,33 @@ class ThreeContainer extends React.PureComponent {
             // topStand = bBoxStand.max.y;
             this.scene.getObjectByName("Torso_Hip").position.y -= result;
         } else {
-            this.loader.load(
-                process.env.PUBLIC_URL + "/models/stand/circle.glb",
-                gltf => {
-                    var root = gltf.scene.children[0];
-            
-                    root.traverse(function(child) {
-                        if (child instanceof THREE.Mesh) {
-                            child.name = "mesh-stand"
-                            child.castShadow = true;
-                            child.receiveShadow = true;
-                        }
-                    });
-            
-                    var resultR = minFinder.parse(this.scene.getObjectByName("FootR"));
-                    var resultL = minFinder.parse(this.scene.getObjectByName("FootL"));
-                    var result = resultL > resultR ? resultR : resultL;
-            
-                    //Default color to all the meshes
-                    if (root.material) {
-                        root.material.color = { r: 0.5, g: 0.5, b: 0.5 };
+            const gltf = await this.loader.load(process.env.PUBLIC_URL + "/models/stand/circle.glb");
+            try {
+                var root = gltf.scene.children[0];
+        
+                root.traverse(function(child) {
+                    if (child instanceof THREE.Mesh) {
+                        child.name = "mesh-stand"
+                        child.castShadow = true;
+                        child.receiveShadow = true;
                     }
-            
-                    this.group.add(root);
-                    this.scene.getObjectByName("Torso_Hip").position.y -= result;
-                    window.loaded = true;
-                },
-                null,
-                function(error) {
-                    console.log(error);
+                });
+        
+                var resultR = minFinder.parse(this.scene.getObjectByName("FootR"));
+                var resultL = minFinder.parse(this.scene.getObjectByName("FootL"));
+                var result = resultL > resultR ? resultR : resultL;
+        
+                //Default color to all the meshes
+                if (root.material) {
+                    root.material.color = { r: 0.5, g: 0.5, b: 0.5 };
                 }
-            );
+        
+                this.group.add(root);
+                this.scene.getObjectByName("Torso_Hip").position.y -= result;
+                window.loaded = true;
+            } catch (err) {
+                console.error(err);
+            }
         }
     }
 
@@ -357,36 +350,32 @@ class ThreeContainer extends React.PureComponent {
             save(new Blob([text], { type: "text/plain" }), filename);
         }
 
-        window.changeStand = function(stand) {
+        window.changeStand = async function(stand) {
             var minFinder = new THREE.FindMinGeometry();
             if (this.scene.getObjectByName("mesh-stand")) {
                 this.group.remove(this.scene.getObjectByName("mesh-stand"));
-                this.loader.load(
-                    process.env.PUBLIC_URL + "/models/stand/"+stand+".glb",
-                    gltf => {
-                        var root = gltf.scene.children[0];
-                
-                        root.traverse(function(child) {
-                            if (child instanceof THREE.Mesh) {
-                                child.name = "mesh-stand"
-                                child.castShadow = true;
-                                child.receiveShadow = true;
-                                child.material.color = { r: 0.555, g: 0.48, b: 0.49 };
-                            }
-                        });
-                
-                        var resultR = minFinder.parse(this.scene.getObjectByName("FootR"));
-                        var resultL = minFinder.parse(this.scene.getObjectByName("FootL"));
-                        var result = resultL > resultR ? resultR : resultL;
-                
-                        this.group.add(root);
-                        this.scene.getObjectByName("Torso_Hip").position.y -= result;
-                    },
-                    null,
-                    function(error) {
-                        console.log(error);
-                    }
-                );
+                const gltf = await this.loader.load(process.env.PUBLIC_URL + "/models/stand/"+stand+".glb");
+                try {
+                    var root = gltf.scene.children[0];
+            
+                    root.traverse(function(child) {
+                        if (child instanceof THREE.Mesh) {
+                            child.name = "mesh-stand"
+                            child.castShadow = true;
+                            child.receiveShadow = true;
+                            child.material.color = { r: 0.555, g: 0.48, b: 0.49 };
+                        }
+                    });
+            
+                    var resultR = minFinder.parse(this.scene.getObjectByName("FootR"));
+                    var resultL = minFinder.parse(this.scene.getObjectByName("FootL"));
+                    var result = resultL > resultR ? resultR : resultL;
+            
+                    this.group.add(root);
+                    this.scene.getObjectByName("Torso_Hip").position.y -= result;
+                } catch (err) {
+                    console.error(err);
+                }
             }
         }.bind(this);
         window.loadDefaultMeshes = function(bones, poseData) {
