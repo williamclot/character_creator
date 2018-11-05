@@ -53,7 +53,9 @@ class ThreeContainer extends React.PureComponent {
     }
 
     render() {
-        return <div id = "canvas" />;
+        return <div
+            ref={el => this.canvasContainer = el}
+        />;
     }
 
     // functions to initialize below...    
@@ -75,13 +77,12 @@ class ThreeContainer extends React.PureComponent {
     buildRenderer() {
         // Create a renderer with Antialiasing
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
-        var container = document.getElementById("canvas");
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
         this.renderer.setSize((6 / 5) * window.innerWidth, window.innerHeight); // Configure renderer size
         // Append Renderer to DOM
-        container.appendChild(this.renderer.domElement);
+        this.canvasContainer.appendChild(this.renderer.domElement);
 
         var size = 50;
         var divisions = 60;
