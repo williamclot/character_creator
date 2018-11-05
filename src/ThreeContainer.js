@@ -5,6 +5,7 @@ import THREE from './threejs-service';
 
 import promisifyLoader from './utils/promisifyLoader';
 import { defaultMeshes, meshStaticInfo, childrenList } from './utils/meshInfo';
+import libraryUtils from './utils/libraryUtils';
 
 class ThreeContainer extends React.PureComponent {
     componentDidMount() {
@@ -408,44 +409,9 @@ class ThreeContainer extends React.PureComponent {
          */
         window.changeMesh = function(bodyPart, part, isLeft, poseData, meshURL) {
             window.partloaded = false;
-            var meshType;
-            var file;
-            var rotation;
         
-            switch (bodyPart) {
-            case "torso":
-                file = part.file;
-                rotation = undefined;
-                meshType = "Torso";
-                break;
-            case "head":
-                file = part.file;
-                rotation = part.rotation;
-                meshType = "Head";
-                break;
-            case "hand":
-                meshType = isLeft ? "HandL" : "HandR";
-                file = part.file;
-                rotation = part.rotation;
-                break;
-            case "arm":
-                meshType = isLeft ? "ArmL" : "ArmR";
-                file = part.file;
-                rotation = part.rotation;
-                break;
-            case "foot":
-                meshType = isLeft ? "FootL" : "FootR";
-                file = part.file;
-                rotation = part.rotation;
-                break;
-            case "leg":
-                meshType = isLeft ? "LegL" : "LegR";
-                file = part.file;
-                rotation = part.rotation;
-                break;
-            default:
-                meshType = undefined;
-            }
+            const meshType = libraryUtils.getMeshType(bodyPart, isLeft);
+            const { rotation, file } = part;
         
             if (meshType) {
                 let parentAttachment = meshStaticInfo[meshType].parentAttachment;
