@@ -3,8 +3,8 @@ import React from 'react';
 
 import THREE from './threejs-service';
 
-import promisifyLoader from './utils/promisifyLoader';
-import { defaultMeshes, meshStaticInfo, childrenList } from './utils/meshInfo';
+import promisifyLoader from '../utils/promisifyLoader';
+import { defaultMeshes, meshStaticInfo, childrenList } from './meshInfo';
 
 class ThreeContainer extends React.PureComponent {
     componentDidMount() {

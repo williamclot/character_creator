@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import ThreeContainer from './ThreeContainer';
+import ThreeContainer from './three/ThreeContainer';
 import registerServiceWorker from './registerServiceWorker';
 
 // needed to polyfill THREE global object with the class FindMinGeometry
-import './FindMinGeometry';
+import './three/FindMinGeometry';
 
 ReactDOM.render(
     <React.Fragment>
