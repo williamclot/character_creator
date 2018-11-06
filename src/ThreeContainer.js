@@ -170,7 +170,13 @@ class ThreeContainer extends React.PureComponent {
         // bodyPartClass : {arm, head, hand, torso, leg, foot}
         // MeshType : {ArmR, ArmL, Head, HandR, HandL, LegR, LegL, FootR, FootL, Torso}
         try {
-            const gltf = await this.loader.load(url);
+            let gltf;
+            if (options.shouldParse) {
+                gltf = await this.loader.parse(options.data);
+            } else {
+                gltf = await this.loader.load(url);
+            }
+            
             const {
                 meshName,
                 MeshType,
@@ -404,7 +410,7 @@ class ThreeContainer extends React.PureComponent {
          * @param options - extra arguments
          */
         window.changeMesh = function(meshURL, options) {
-            const { meshType, file, rotation, poseData } = options;
+            const { meshType, file, rotation, poseData, shouldParse, data } = options;
 
             window.partloaded = false;
         
@@ -441,7 +447,9 @@ class ThreeContainer extends React.PureComponent {
                             rotation,
                             firstLoad: false,
                             highLight: true,
-                            poseData
+                            poseData,
+                            shouldParse,
+                            data
                         }
                     );
                 }
