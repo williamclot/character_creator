@@ -1,5 +1,15 @@
 import THREE from './threejs-service';
 
+export function initScene() {
+    const scene = new THREE.Scene();
+    // fogColor = new THREE.Color(0xffffff);
+
+    scene.background = new THREE.Color(0xeeeeee);
+    scene.fog = new THREE.Fog(0xeeeeee, 1, 20);
+
+    return scene;
+}
+
 export function initCamera() {
     const camera = new THREE.PerspectiveCamera(
         75,

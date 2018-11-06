@@ -5,52 +5,58 @@ import THREE from './threejs-service';
 
 import promisifyLoader from '../utils/promisifyLoader';
 import { defaultMeshes, meshStaticInfo, childrenList } from './meshInfo';
-import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper  } from './init';
+import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './init';
 
 const selectedColor = { r: 0.555, g: 0.48, b: 0.49 };
 
 class ThreeContainer extends React.PureComponent {
-    componentDidMount() {
+    constructor() {
+        super();
+
+        this.loader = promisifyLoader( new THREE.GLTFLoader() );
+
+        /** keeps track of the currently selected mesh */
         this.selected = "Head";
-        this.group = new THREE.Group(); //this group will contain all the meshes but not the floor, the lights etc...
-        // var bBoxStand;
+
+        /** This keeps track of every mesh on the viewport */
+        this.loadedMeshes = defaultMeshes;
+
         window.loaded = false;
         window.partloaded = false;
 
-        //This keeps track of every mesh on the viewport
-        this.loadedMeshes = defaultMeshes;
 
+        /** This will contain the group and everything else */
+        this.scene = initScene();
+    
+        /** This group will contain all the meshes but not the floor, the lights etc... */
+        this.group = new THREE.Group();
+        
+        const lights = initLights();
+        const floor = initFloor();
+        const gridHelper = initGridHelper();
+        
+        this.scene.add(this.group, floor, gridHelper, ...lights);
+    }
 
-        this.scene = new THREE.Scene();
-        this.loader = promisifyLoader( new THREE.GLTFLoader() );
-        // fogColor = new THREE.Color(0xffffff);
+    animate = () => {
+        if (process.env.NODE_ENV === 'production') {
+            requestAnimationFrame(animate);
+        } else {
+            setTimeout(() => requestAnimationFrame(animate), 300);
+        }
+        this.controls.update();
 
-        this.scene.background = new THREE.Color(0xeeeeee);
-        this.scene.fog = new THREE.Fog(0xeeeeee, 1, 20);
+        // TODO function calls below may not be needed !!!
+        this.camera.lookAt(new THREE.Vector3(0, 1, 0));
+        this.renderer.render(this.scene, this.camera);
+    }
 
-        this.scene.add(this.group);
-
+    componentDidMount() {
         this.camera = initCamera();
         this.renderer = initRenderer(this.canvas);
         this.controls = initControls(this.camera, this.canvas);
 
-        const lights = initLights();
-        const floor = initFloor();
-        const gridHelper = initGridHelper();
-
-        this.scene.add(...lights, floor, gridHelper);
-
-        const animate = () => {
-            if (process.env.NODE_ENV === 'production') {
-                requestAnimationFrame(animate);
-            } else {
-                setTimeout(() => requestAnimationFrame(animate), 300);
-            }
-            this.controls.update();
-            this.camera.lookAt(new THREE.Vector3(0, 1, 0));
-            this.renderer.render(this.scene, this.camera);
-        }
-        animate();
+        this.animate();
         
         this.initWindowFunctions();
     }
