@@ -7,10 +7,11 @@ import promisifyLoader from '../utils/promisifyLoader';
 import { defaultMeshes, meshStaticInfo, childrenList } from './meshInfo';
 import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper  } from './init';
 
+const selectedColor = { r: 0.555, g: 0.48, b: 0.49 };
+
 class ThreeContainer extends React.PureComponent {
     componentDidMount() {
         this.selected = "Head";
-        this.color = { r: 0.555, g: 0.48, b: 0.49 };
         this.group = new THREE.Group(); //this group will contain all the meshes but not the floor, the lights etc...
         // var bBoxStand;
         window.loaded = false;
@@ -135,11 +136,11 @@ class ThreeContainer extends React.PureComponent {
             this.loadedMeshes[MeshType].rotation = rotation;
     
             if (MeshType === "Head" && firstLoad) {
-                this.changeColor("Head", this.color);
+                this.changeColor("Head", selectedColor);
             }
     
             if (highLight) {
-                this.changeColor(MeshType, this.color);
+                this.changeColor(MeshType, selectedColor);
             }
     
             // Putting the new mesh in the pose configuration if any pose as been selected
@@ -388,7 +389,7 @@ class ThreeContainer extends React.PureComponent {
             let normal = { r: 0.5, g: 0.5, b: 0.5 };
         
             this.changeColor(this.selected, normal);
-            this.changeColor(MeshType, this.color);
+            this.changeColor(MeshType, selectedColor);
         
             this.selected = MeshType;
         }.bind(this);
