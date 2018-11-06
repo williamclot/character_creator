@@ -9,7 +9,7 @@ export function initCamera() {
     );
 
     // Camera position in space (will be controled by the OrbitControls later on)
-    camera.position.set(2, -1, 2);
+    camera.position.set(-1, 2, 2);
 
     return camera;
 }
