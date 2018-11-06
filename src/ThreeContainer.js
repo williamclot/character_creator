@@ -34,10 +34,6 @@ class ThreeContainer extends React.PureComponent {
         this.buildLights();
         this.buildFloor();
 
-        const render = () => {
-            this.camera.lookAt(new THREE.Vector3(0, 1, 0));
-            this.renderer.render(this.scene, this.camera);
-        }
         const animate = () => {
             if (process.env.NODE_ENV === 'production') {
                 requestAnimationFrame(animate);
@@ -45,7 +41,8 @@ class ThreeContainer extends React.PureComponent {
                 setTimeout(() => requestAnimationFrame(animate), 300);
             }
             this.controls.update();
-            render();
+            this.camera.lookAt(new THREE.Vector3(0, 1, 0));
+            this.renderer.render(this.scene, this.camera);
         }
         animate();
         
