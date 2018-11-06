@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as env from "../config.js";
 
 import SearchBar from "./SearchBar";
+import AddYourDesignForm from "./AddYourDesignForm";
 import "../css/selector.css";
 
 import bones from "../library/bones.json";
@@ -200,7 +201,10 @@ class Selector extends Component {
 				onClick={() => {
 					this.props.updatePopup(true);
 					this.props.updatePopupMessage(
-						"Sorry this feature is still in development..."
+						<AddYourDesignForm
+							meshType = {libraryUtils.getMeshType(category)}
+							pose = {this.state.pose}
+						/>
 					);
 				}}
 			>
