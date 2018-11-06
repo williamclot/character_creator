@@ -5,6 +5,7 @@ import THREE from './threejs-service';
 
 import promisifyLoader from '../utils/promisifyLoader';
 import { defaultMeshes, meshStaticInfo, childrenList } from './meshInfo';
+import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper  } from './init';
 
 class ThreeContainer extends React.PureComponent {
     componentDidMount() {
@@ -28,11 +29,15 @@ class ThreeContainer extends React.PureComponent {
 
         this.scene.add(this.group);
 
-        this.buildCamera();
-        this.buildRenderer();
-        this.buildControls();
-        this.buildLights();
-        this.buildFloor();
+        this.camera = initCamera();
+        this.renderer = initRenderer(this.canvas);
+        this.controls = initControls(this.camera, this.canvas);
+
+        const lights = initLights();
+        const floor = initFloor();
+        const gridHelper = initGridHelper();
+
+        this.scene.add(...lights, floor, gridHelper);
 
         const animate = () => {
             if (process.env.NODE_ENV === 'production') {
@@ -57,85 +62,7 @@ class ThreeContainer extends React.PureComponent {
         );
     }
 
-    // functions to initialize below...    
-    buildCamera() {
-        this.camera = new THREE.PerspectiveCamera(
-            75,
-            (6 / 5) * (window.innerWidth / window.innerHeight),
-            0.001,
-            1000
-        );
-
-        // Camera position in space (will be controled by the OrbitControls later on)
-        this.camera.position.z = 2;
-        this.camera.position.x = -1;
-        this.camera.position.y = 2;
-
-        // this.camera.position.set(2, -1, 2); // this should replace the above lines (but needs testing)
-    }
-    buildRenderer() {
-        // Create a renderer with Antialiasing
-        this.renderer = new THREE.WebGLRenderer({
-            antialias: true,
-            canvas: this.canvas
-        });
-        this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
-
-        this.renderer.setSize((6 / 5) * window.innerWidth, window.innerHeight); // Configure renderer size
-
-        var size = 50;
-        var divisions = 60;
-
-        var gridHelper = new THREE.GridHelper(size, divisions);
-        this.scene.add(gridHelper);
-    }
-    buildControls() {
-        this.controls = new THREE.OrbitControls(this.camera, this.canvas);
-        // controls.target.set(-1,0,0);
-        this.controls.minDistance = 2; //Controling max and min for ease of use
-        this.controls.maxDistance = 7;
-        this.controls.minPolarAngle = 0;
-        this.controls.maxPolarAngle = Math.PI / 2 - 0.1;
-        this.controls.enablePan = false;
-    }
-    buildLights() {
-        //hemisphere light: like sun light but without any shadows
-        var hemi = new THREE.HemisphereLight(0xffffff, 0xffffff);
-        this.scene.add(hemi);
-
-        //Create a PointLight and turn on shadows for the light
-        var light = new THREE.PointLight(0xc1c1c1, 1, 100);
-        light.position.set(3, 10, 10);
-        light.castShadow = true;
-        //Set up shadow properties for the light
-        light.shadow.mapSize.width = 2048; // default
-        light.shadow.mapSize.height = 2048; // default
-        light.decay = 1;
-        this.scene.add(light);
-
-        // This light is here to show the details in the back (no shadows)
-        var backlight = new THREE.PointLight(0xc4b0ac, 1, 100);
-        backlight.position.set(0, 2, -20);
-        backlight.penumbra = 2;
-        this.scene.add(backlight);
-    }
-    buildFloor() {
-        //Create a plane that receives shadows (but does not cast them)
-        var planeGeometry = new THREE.PlaneGeometry(2000, 2000);
-        // planeGeometry.rotateX( - Math.PI / 2 );
-
-        var planeMaterial = new THREE.ShadowMaterial();
-        planeMaterial.opacity = 0.2;
-
-        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-        plane.name = "plane";
-        plane.rotation.x = -Math.PI / 2;
-        plane.position.y = 0;
-        plane.receiveShadow = true;
-        this.scene.add(plane);
-    }
-
+   
     // util functions below...    
     clearPosition(item) {
         // This function is used to clear the position of an imported gltf file
