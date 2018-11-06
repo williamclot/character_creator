@@ -6,6 +6,7 @@ import THREE from './threejs-service';
 import promisifyLoader from '../utils/promisifyLoader';
 import { defaultMeshes, meshStaticInfo, childrenList } from './meshInfo';
 import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './init';
+import { clearPosition, rotateElement} from './helpers';
 
 const selectedColor = { r: 0.555, g: 0.48, b: 0.49 };
 
@@ -40,9 +41,9 @@ class ThreeContainer extends React.PureComponent {
 
     animate = () => {
         if (process.env.NODE_ENV === 'production') {
-            requestAnimationFrame(animate);
+            requestAnimationFrame(this.animate);
         } else {
-            setTimeout(() => requestAnimationFrame(animate), 300);
+            setTimeout(() => requestAnimationFrame(this.animate), 300);
         }
         this.controls.update();
 
@@ -69,20 +70,6 @@ class ThreeContainer extends React.PureComponent {
         );
     }
 
-   
-    // util functions below...    
-    clearPosition(item) {
-        // This function is used to clear the position of an imported gltf file
-        item.position.set(0, 0, 0);
-    }
-    rotateElement(item, clearRotation, rotation) {
-        if (clearRotation === true) {
-            item.rotation.set(0,0,0);
-        } else {
-            const { x, y, z } = rotation;
-            item.rotation.set(x, y, z);
-        }
-    }
 
     /**
      * main function used to load a mesh
@@ -168,9 +155,9 @@ class ThreeContainer extends React.PureComponent {
             ) {
                 let targetBone = this.scene.getObjectByName(parentAttachment);
                 let object = this.scene.getObjectByName(childAttachment);
-                this.clearPosition(object);
-                this.rotateElement(object, true);
-                this.rotateElement(object, false, rotation);
+                clearPosition(object);
+                rotateElement(object, true);
+                rotateElement(object, false, rotation);
                 targetBone.add(object);
             }
     
