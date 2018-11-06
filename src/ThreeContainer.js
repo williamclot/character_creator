@@ -53,9 +53,11 @@ class ThreeContainer extends React.PureComponent {
     }
 
     render() {
-        return <div
-            ref={el => this.canvasContainer = el}
-        />;
+        return (
+            <canvas
+                ref={el => this.canvas = el}
+            />
+        );
     }
 
     // functions to initialize below...    
@@ -76,13 +78,14 @@ class ThreeContainer extends React.PureComponent {
     }
     buildRenderer() {
         // Create a renderer with Antialiasing
-        this.renderer = new THREE.WebGLRenderer({ antialias: true });
+        this.renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            canvas: this.canvas
+        });
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
         this.renderer.setSize((6 / 5) * window.innerWidth, window.innerHeight); // Configure renderer size
-        // Append Renderer to DOM
-        this.canvasContainer.appendChild(this.renderer.domElement);
 
         var size = 50;
         var divisions = 60;
@@ -91,7 +94,7 @@ class ThreeContainer extends React.PureComponent {
         this.scene.add(gridHelper);
     }
     buildControls() {
-        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+        this.controls = new THREE.OrbitControls(this.camera, this.canvas);
         // controls.target.set(-1,0,0);
         this.controls.minDistance = 2; //Controling max and min for ease of use
         this.controls.maxDistance = 7;
