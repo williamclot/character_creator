@@ -4,23 +4,33 @@ import React from 'react';
 import THREE from './threejs-service';
 
 import promisifyLoader from '../utils/promisifyLoader';
+import { localStorageWrapper as lsWrapper } from '../utils/localStorageUtils';
 import { defaultMeshes, meshStaticInfo, childrenList } from './meshInfo';
 import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './init';
 import { clearPosition, rotateElement} from './helpers';
 
 const selectedColor = { r: 0.555, g: 0.48, b: 0.49 };
 
+
 class ThreeContainer extends React.PureComponent {
+    initLoadedMeshes() {
+        /** keeps track of the currently selected mesh */
+        if (!lsWrapper.isSelectedMeshSet) {
+            lsWrapper.selectedMesh = "Head";
+        }
+
+        /** This keeps track of every mesh on the viewport */
+        if (!lsWrapper.isLoadedMeshesSet) {
+            lsWrapper.loadedMeshes = defaultMeshes;            
+        }
+    }
+
     constructor() {
         super();
 
         this.loader = promisifyLoader( new THREE.GLTFLoader() );
 
-        /** keeps track of the currently selected mesh */
-        this.selected = "Head";
-
-        /** This keeps track of every mesh on the viewport */
-        this.loadedMeshes = defaultMeshes;
+        this.initLoadedMeshes();
 
         window.loaded = false;
         window.partloaded = false;
@@ -130,8 +140,14 @@ class ThreeContainer extends React.PureComponent {
             this.scene.updateMatrixWorld(true);
     
             // Updates the loadedMeshes variable (used for replacing children)
-            this.loadedMeshes[MeshType].name = meshName;
-            this.loadedMeshes[MeshType].rotation = rotation;
+
+            lsWrapper.setSingleLoadedMesh(
+                MeshType,
+                {
+                    name: meshName,
+                    rotation
+                }
+            );
     
             if (MeshType === "Head" && firstLoad) {
                 this.changeColor("Head", selectedColor);
@@ -172,8 +188,10 @@ class ThreeContainer extends React.PureComponent {
                 for (let i = 0; i < children.length; i++) {
                     const childMesh = children[i];
     
+                    const loadedChildMesh = lsWrapper.loadedMeshes[childMesh];
                     const bodyPartClass = meshStaticInfo[childMesh].bodyPart;
-                    const meshName = this.loadedMeshes[childMesh].name;
+
+                    const meshName = loadedChildMesh.name;
                     const url = process.env.PUBLIC_URL + "/models/" + bodyPartClass + "/" + meshName + ".glb";
     
                     this.group.remove(this.group.getObjectByName(childMesh));
@@ -181,11 +199,11 @@ class ThreeContainer extends React.PureComponent {
                     this.placeMesh(
                         url,
                         {
-                            meshName: this.loadedMeshes[childMesh].name,
+                            meshName,
                             MeshType: childMesh,
                             parentAttachment: meshStaticInfo[childMesh].parentAttachment,
                             childAttachment: meshStaticInfo[childMesh].childAttachment,
-                            rotation: this.loadedMeshes[childMesh].rotation,
+                            rotation: loadedChildMesh.rotation,
                             firstLoad,
                             highLight: false,
                             poseData
@@ -313,7 +331,7 @@ class ThreeContainer extends React.PureComponent {
         }.bind(this);
         window.loadDefaultMeshes = function(bones, poseData) {
             const bodyPartClass = meshStaticInfo["Torso"].bodyPart;
-            const meshName = this.loadedMeshes["Torso"].name;
+            const meshName = lsWrapper.loadedMeshes["Torso"].name;
             const url = process.env.PUBLIC_URL + "/models/" + bodyPartClass + "/" + meshName + ".glb";
 
             this.placeMesh(
@@ -386,10 +404,10 @@ class ThreeContainer extends React.PureComponent {
             // console.log(MeshType, selected);
             let normal = { r: 0.5, g: 0.5, b: 0.5 };
         
-            this.changeColor(this.selected, normal);
+            this.changeColor(lsWrapper.selectedMesh, normal);
             this.changeColor(MeshType, selectedColor);
         
-            this.selected = MeshType;
+            lsWrapper.selectedMesh = MeshType;
         }.bind(this);
 
         window.changeRotation = function(bone_name, value, axis) {
