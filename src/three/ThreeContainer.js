@@ -105,128 +105,129 @@ class ThreeContainer extends React.PureComponent {
     ) {
         // bodyPartClass : {arm, head, hand, torso, leg, foot}
         // MeshType : {ArmR, ArmL, Head, HandR, HandL, LegR, LegL, FootR, FootL, Torso}
+        let gltf;
         try {
-            let gltf;
             if (options.shouldParse) {
                 gltf = await this.loader.parse(options.data);
             } else {
                 gltf = await this.loader.load(url);
             }
-            
-            const {
-                meshName,
-                MeshType,
-                parentAttachment,
-                childAttachment,
-                rotation,
-                firstLoad,
-                highLight,
-                // bones,
-                poseData
-            } = options;
-    
-            var root = gltf.scene.children[0];
-            root.traverse(function(child) {
-                if (child instanceof THREE.Mesh) {
-                    // Gives a fixed name to the mesh and same gray color
-                    child.name = "mesh-"+MeshType.toLowerCase();
-                    child.castShadow = true;
-                    child.material.color = { r: 0.5, g: 0.5, b: 0.5 };
-                }
-            });
-    
-            // group is one element with all the meshes and bones of the character
-            this.group.add(root);
-            this.scene.updateMatrixWorld(true);
-    
-            // Updates the loadedMeshes variable (used for replacing children)
-
-            lsWrapper.setSingleLoadedMesh(
-                MeshType,
-                {
-                    name: meshName,
-                    rotation
-                }
-            );
-    
-            if (MeshType === "Head" && firstLoad) {
-                this.changeColor("Head", selectedColor);
-            }
-    
-            if (highLight) {
-                this.changeColor(MeshType, selectedColor);
-            }
-    
-            // Putting the new mesh in the pose configuration if any pose as been selected
-            if (poseData) {
-                root.traverse(function(child) {
-                    if (child instanceof THREE.Bone) {
-                        if (poseData[child.name]) {
-                            window.changeRotation(child.name, poseData[child.name].x, "x");
-                            window.changeRotation(child.name, poseData[child.name].y, "y");
-                            window.changeRotation(child.name, poseData[child.name].z, "z");
-                        }
-                    }
-                });
-            }
-    
-            if (
-                typeof parentAttachment !== "undefined" &&
-                typeof childAttachment !== "undefined"
-            ) {
-                let targetBone = this.scene.getObjectByName(parentAttachment);
-                let object = this.scene.getObjectByName(childAttachment);
-                clearPosition(object);
-                rotateElement(object, true);
-                rotateElement(object, false, rotation);
-                targetBone.add(object);
-            }
-    
-            //Going to look for all children of current mesh
-            let children = childrenList[MeshType];
-            if (children) {
-                for (let i = 0; i < children.length; i++) {
-                    const childMesh = children[i];
-    
-                    const loadedChildMesh = lsWrapper.loadedMeshes[childMesh];
-                    const bodyPartClass = meshStaticInfo[childMesh].bodyPart;
-
-                    const meshName = loadedChildMesh.name;
-                    const url = process.env.PUBLIC_URL + "/models/" + bodyPartClass + "/" + meshName + ".glb";
-    
-                    this.group.remove(this.group.getObjectByName(childMesh));
-    
-                    this.placeMesh(
-                        url,
-                        {
-                            meshName,
-                            MeshType: childMesh,
-                            parentAttachment: meshStaticInfo[childMesh].parentAttachment,
-                            childAttachment: meshStaticInfo[childMesh].childAttachment,
-                            rotation: loadedChildMesh.rotation,
-                            firstLoad,
-                            highLight: false,
-                            poseData
-                        }
-                    );
-                }
-            }
-    
-            if (MeshType === "FootR") {
-                if (this.scene.getObjectByName("FootL_Toes_L")) {
-                    this.scene.updateMatrixWorld();
-                    this.placeStand();
-                }
-            } else if (MeshType === "FootL") {
-                if (this.scene.getObjectByName("FootR_Toes_R")) {
-                    this.scene.updateMatrixWorld();
-                    this.placeStand();
-                }
-            }
-            window.partloaded = true;
         } catch (err) {
             console.error(err);
+            return;
+        }        
+        
+        const {
+            meshName,
+            MeshType,
+            parentAttachment,
+            childAttachment,
+            rotation,
+            firstLoad,
+            highLight,
+            // bones,
+            poseData
+        } = options;
+
+        var root = gltf.scene.children[0];
+        root.traverse(function(child) {
+            if (child instanceof THREE.Mesh) {
+                // Gives a fixed name to the mesh and same gray color
+                child.name = "mesh-"+MeshType.toLowerCase();
+                child.castShadow = true;
+                child.material.color = { r: 0.5, g: 0.5, b: 0.5 };
+            }
+        });
+
+        // group is one element with all the meshes and bones of the character
+        this.group.add(root);
+        this.scene.updateMatrixWorld(true);
+
+        // Updates the loadedMeshes variable (used for replacing children)
+
+        lsWrapper.setSingleLoadedMesh(
+            MeshType,
+            {
+                name: meshName,
+                rotation
+            }
+        );
+
+        if (MeshType === "Head" && firstLoad) {
+            this.changeColor("Head", selectedColor);
         }
+
+        if (highLight) {
+            this.changeColor(MeshType, selectedColor);
+        }
+
+        // Putting the new mesh in the pose configuration if any pose as been selected
+        if (poseData) {
+            root.traverse(function(child) {
+                if (child instanceof THREE.Bone) {
+                    if (poseData[child.name]) {
+                        window.changeRotation(child.name, poseData[child.name].x, "x");
+                        window.changeRotation(child.name, poseData[child.name].y, "y");
+                        window.changeRotation(child.name, poseData[child.name].z, "z");
+                    }
+                }
+            });
+        }
+
+        if (
+            typeof parentAttachment !== "undefined" &&
+            typeof childAttachment !== "undefined"
+        ) {
+            let targetBone = this.scene.getObjectByName(parentAttachment);
+            let object = this.scene.getObjectByName(childAttachment);
+            clearPosition(object);
+            rotateElement(object, true);
+            rotateElement(object, false, rotation);
+            targetBone.add(object);
+        }
+
+        //Going to look for all children of current mesh
+        let children = childrenList[MeshType];
+        if (children) {
+            for (let i = 0; i < children.length; i++) {
+                const childMesh = children[i];
+
+                const loadedChildMesh = lsWrapper.loadedMeshes[childMesh];
+                const bodyPartClass = meshStaticInfo[childMesh].bodyPart;
+
+                const meshName = loadedChildMesh.name;
+                const url = process.env.PUBLIC_URL + "/models/" + bodyPartClass + "/" + meshName + ".glb";
+
+                this.group.remove(this.group.getObjectByName(childMesh));
+
+                this.placeMesh(
+                    url,
+                    {
+                        meshName,
+                        MeshType: childMesh,
+                        parentAttachment: meshStaticInfo[childMesh].parentAttachment,
+                        childAttachment: meshStaticInfo[childMesh].childAttachment,
+                        rotation: loadedChildMesh.rotation,
+                        firstLoad,
+                        highLight: false,
+                        poseData
+                    }
+                );
+            }
+        }
+
+        if (MeshType === "FootR") {
+            if (this.scene.getObjectByName("FootL_Toes_L")) {
+                this.scene.updateMatrixWorld();
+                this.placeStand();
+            }
+        } else if (MeshType === "FootL") {
+            if (this.scene.getObjectByName("FootR_Toes_R")) {
+                this.scene.updateMatrixWorld();
+                this.placeStand();
+            }
+        }
+        window.partloaded = true;
     }
     
     async placeStand() {
