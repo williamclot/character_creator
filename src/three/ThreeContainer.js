@@ -37,6 +37,11 @@ class ThreeContainer extends React.PureComponent {
         const gridHelper = initGridHelper();
         
         this.scene.add(this.group, floor, gridHelper, ...lights);
+
+        if (process.env.NODE_ENV === "development") {
+            // expose variable to window in order to be able to use Three.js inspector
+            window.scene = this.scene;
+        }
     }
 
     animate = () => {
