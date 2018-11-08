@@ -115,7 +115,7 @@ class ThreeContainer extends React.PureComponent {
         } catch (err) {
             console.error(err);
             return;
-        }        
+        }
         
         const {
             meshName,
@@ -163,12 +163,12 @@ class ThreeContainer extends React.PureComponent {
 
         // Putting the new mesh in the pose configuration if any pose as been selected
         if (poseData) {
-            root.traverse(function(child) {
+            root.traverse(child => {
                 if (child instanceof THREE.Bone) {
-                    if (poseData[child.name]) {
-                        window.changeRotation(child.name, poseData[child.name].x, "x");
-                        window.changeRotation(child.name, poseData[child.name].y, "y");
-                        window.changeRotation(child.name, poseData[child.name].z, "z");
+                    const rotation = poseData[child.name];
+                    if (rotation) {
+                        const { x, y, z } = rotation;
+                        child.rotation.set(x, y, z);
                     }
                 }
             });
