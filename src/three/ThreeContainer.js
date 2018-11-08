@@ -12,6 +12,30 @@ import { clearPosition, rotateElement} from './helpers';
 const selectedColor = { r: 0.555, g: 0.48, b: 0.49 };
 
 
+const __getBones = (mesh) => mesh.children.reduce((acc, child) => {
+    if (!(child instanceof THREE.Bone)) {
+        return acc;
+    }
+    const toAdd = __getBones(child) // empty object if children is empty array
+    const isEmptyObject = Object.keys(toAdd).length !== 0;
+    acc[child.name] = isEmptyObject ? toAdd : null;
+    return acc;
+}, {})
+
+const __getMeshes = (mesh) => mesh.children.reduce((acc, child) => {
+    if (!(child instanceof THREE.Mesh)) {
+        return acc;
+    }
+    const toAdd = __getMeshes(child) // empty object if children is empty array
+    const isEmptyObject = Object.keys(toAdd).length !== 0;
+    acc[child.name] = isEmptyObject ? toAdd : null;
+    return acc;
+}, {})
+
+
+const loadedObjects = {};
+
+
 class ThreeContainer extends React.PureComponent {
     initLoadedMeshes() {
         /** keeps track of the currently selected mesh */
