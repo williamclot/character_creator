@@ -10,7 +10,7 @@ import './three/FindMinGeometry';
 ReactDOM.render(
     <React.Fragment>
         <ThreeContainer />
-        <App />
+        {/* <App /> */}
     </React.Fragment>
     ,
     document.getElementById('app')

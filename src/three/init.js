@@ -24,7 +24,7 @@ export function initCamera() {
     return camera;
 }
 
-export function initRenderer(canvasElement) {
+export function initRenderer(canvasElement, pixelRatio) {
     const renderer = new THREE.WebGLRenderer({
         antialias: true,
         canvas: canvasElement
@@ -32,6 +32,9 @@ export function initRenderer(canvasElement) {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
+    if (pixelRatio) {
+        renderer.setPixelRatio(window.devicePixelRatio * pixelRatio);
+    }
     renderer.setSize((6 / 5) * window.innerWidth, window.innerHeight); // Configure renderer size
 
     return renderer;
@@ -72,9 +75,7 @@ export function initLights() {
 
 export function initFloor() {
     //Create a plane that receives shadows (but does not cast them)
-    const planeGeometry = new THREE.PlaneGeometry(2000, 2000);
-    // planeGeometry.rotateX( - Math.PI / 2 );
-
+    const planeGeometry = new THREE.PlaneBufferGeometry(10, 10);
     const planeMaterial = new THREE.ShadowMaterial();
     planeMaterial.opacity = 0.2;
 

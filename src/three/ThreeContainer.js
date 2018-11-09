@@ -32,6 +32,14 @@ const __getMeshes = (mesh) => mesh.children.reduce((acc, child) => {
     return acc;
 }, {})
 
+if (process.env.NODE_ENV === "development") {
+    // do this to force webpack not to shake off these functions
+    // (if a variable is not used in the code, it will not be included in
+    // the build and will therefore not be available when debugging)
+    console.log(__getBones);
+    console.log(__getMeshes);
+}
+
 
 const loadedObjects = {};
 
@@ -93,12 +101,13 @@ class ThreeContainer extends React.PureComponent {
 
     componentDidMount() {
         this.camera = initCamera();
-        this.renderer = initRenderer(this.canvas);
+        this.renderer = initRenderer(this.canvas, 0.5);
         this.controls = initControls(this.camera, this.canvas);
 
         this.animate();
         
-        this.initWindowFunctions();
+        this.loadMeshesFirstTime();
+
     }
 
     render() {
@@ -109,6 +118,102 @@ class ThreeContainer extends React.PureComponent {
         );
     }
 
+    loadMeshFromURL(url) {
+        return this.loader.load(url);
+    }
+
+    parseMesh(data) {
+        return this.loader.parse(data);
+    }
+
+    async loadMeshesFirstTime() {
+        console.log( 'loading first time ...' );
+
+        const url = process.env.PUBLIC_URL + "/models/torso/blender.glb";
+        const gltf = await this.loadMeshFromURL(url);
+        this.placeSingleMesh(gltf, { MeshType: "torso" });
+    }
+
+    
+
+    placeSingleMesh(gltf, options = {}) {
+        const {
+            meshName,
+            MeshType,
+            parentAttachment,
+            childAttachment,
+            rotation,
+            firstLoad,
+            highLight,
+            // bones,
+            poseData
+        } = options;
+
+        const root = gltf.scene.children[0];
+        // console.log(root);
+
+
+
+        root.traverse(function(child) {
+            if (child instanceof THREE.Mesh) {
+                // Gives a fixed name to the mesh and same gray color
+                child.name = "mesh-" + MeshType.toLowerCase(); // store ID in dictionary instead
+
+                child.castShadow = true;
+                child.material.color = { r: 0.5, g: 0.5, b: 0.5 };
+            }
+        });
+
+        
+        // group is one element with all the meshes and bones of the character
+        this.group.add(root);
+        // this.scene.updateMatrixWorld(true);
+        
+        // add reference to this object in loadedObjects
+        loadedObjects[MeshType] = root;
+        
+        lsWrapper.setSingleLoadedMesh(
+            MeshType,
+            {
+                name: meshName,
+                rotation
+            }
+        );
+
+        if (MeshType === "Head" && firstLoad) {
+            this.changeColor("Head", selectedColor);
+        }
+
+        if (highLight) {
+            this.changeColor(MeshType, selectedColor);
+        }
+
+        // Putting the new mesh in the pose configuration if any pose as been selected
+        if (poseData) {
+            root.traverse(child => {
+                if (child instanceof THREE.Bone) {
+                    const rotation = poseData[child.name];
+                    if (rotation) {
+                        const { x, y, z } = rotation;
+                        child.rotation.set(x, y, z);
+                    }
+                }
+            });
+        }
+
+        if (
+            typeof parentAttachment !== "undefined" &&
+            typeof childAttachment !== "undefined"
+        ) {
+            let targetBone = this.scene.getObjectByName(parentAttachment);
+            let object = this.scene.getObjectByName(childAttachment);
+            clearPosition(object);
+            rotateElement(object, true);
+            rotateElement(object, false, rotation);
+            targetBone.add(object);
+        }
+
+    }
 
     /**
      * main function used to load a mesh
