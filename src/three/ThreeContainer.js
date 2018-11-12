@@ -7,7 +7,7 @@ import promisifyLoader from '../utils/promisifyLoader';
 import { localStorageWrapper as lsWrapper } from '../utils/localStorageUtils';
 import { defaultMeshes, meshStaticInfo, childrenList } from './meshInfo';
 import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './init';
-import { clearPosition, rotateElement} from './helpers';
+import { clearPosition, rotateElement, clearRotation } from './helpers';
 
 const selectedColor = { r: 0.555, g: 0.48, b: 0.49 };
 
@@ -143,9 +143,6 @@ class ThreeContainer extends React.PureComponent {
             parentAttachment,
             childAttachment,
             rotation,
-            firstLoad,
-            highLight,
-            // bones,
             poseData
         } = options;
 
@@ -169,7 +166,6 @@ class ThreeContainer extends React.PureComponent {
         this.group.add(root);
         // this.scene.updateMatrixWorld(true);
         
-        // add reference to this object in loadedObjects
         loadedObjects[MeshType] = root;
         
         lsWrapper.setSingleLoadedMesh(
@@ -180,15 +176,11 @@ class ThreeContainer extends React.PureComponent {
             }
         );
 
-        if (MeshType === "Head" && firstLoad) {
-            this.changeColor("Head", selectedColor);
-        }
+        // if (highLight) {
+        //     this.changeColor(MeshType, selectedColor);
+        // }
 
-        if (highLight) {
-            this.changeColor(MeshType, selectedColor);
-        }
-
-        // Putting the new mesh in the pose configuration if any pose as been selected
+        // Putting the new mesh in the pose configuration if any pose has been selected
         if (poseData) {
             root.traverse(child => {
                 if (child instanceof THREE.Bone) {
@@ -205,11 +197,11 @@ class ThreeContainer extends React.PureComponent {
             typeof parentAttachment !== "undefined" &&
             typeof childAttachment !== "undefined"
         ) {
-            let targetBone = this.scene.getObjectByName(parentAttachment);
-            let object = this.scene.getObjectByName(childAttachment);
+            const targetBone = this.scene.getObjectByName(parentAttachment);
+            const object = this.scene.getObjectByName(childAttachment);
             clearPosition(object);
-            rotateElement(object, true);
-            rotateElement(object, false, rotation);
+            clearRotation(object);
+            rotateElement(object, rotation);
             targetBone.add(object);
         }
 
@@ -310,8 +302,8 @@ class ThreeContainer extends React.PureComponent {
             let targetBone = this.scene.getObjectByName(parentAttachment);
             let object = this.scene.getObjectByName(childAttachment);
             clearPosition(object);
-            rotateElement(object, true);
-            rotateElement(object, false, rotation);
+            clearRotation(object);
+            rotateElement(object, rotation);
             targetBone.add(object);
         }
 

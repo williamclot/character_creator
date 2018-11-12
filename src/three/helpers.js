@@ -3,11 +3,11 @@ export function clearPosition(item) {
     item.position.set(0, 0, 0);
 }
 
-export function rotateElement(item, clearRotation, rotation) {
-    if (clearRotation === true) {
-        item.rotation.set(0,0,0);
-    } else {
-        const { x, y, z } = rotation;
-        item.rotation.set(x, y, z);
-    }
+export function rotateElement(item, rotation) {
+    const { x, y, z } = rotation;
+    item.rotation.set(x, y, z);
+}
+
+export function clearRotation(item) {
+    item.rotation.set(0, 0, 0);
 }
