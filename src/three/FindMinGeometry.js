@@ -25,15 +25,16 @@ THREE.FindMinGeometry.prototype = {
 			var output = 100;
 
 			scene.traverse( function ( mesh ) {
-
+				
 				if ( mesh instanceof THREE.Mesh ) {
-
+					
 					var matrixWorld = mesh.matrixWorld;
 
 					var bufferGeometry = mesh.geometry;
 					var geometry = new THREE.Geometry().fromBufferGeometry( bufferGeometry );
-
-					const bufferIndex = bufferGeometry.getIndex();
+					
+					const bufferIndices = bufferGeometry.getIndex();
+					// const indices = bufferIndices.array;
 					const bufferSkinIndices = bufferGeometry.getAttribute('skinIndex');
 					const bufferSkinWeights = bufferGeometry.getAttribute('skinWeight');
 					const bufferPositions = bufferGeometry.getAttribute('position');
@@ -51,8 +52,6 @@ THREE.FindMinGeometry.prototype = {
 						cb.cross( ab );
 					
 						cb.normalize();
-
-						// face.normal.copy( cb );
 
 						return cb;
 					}
