@@ -67,6 +67,23 @@ THREE.FindMinGeometry.prototype = {
 
 						normalMatrixWorld.getNormalMatrix( matrixWorld );
 
+						// for ( let i = 0, len = bufferIndices.count; i < len; i += 3 ) {
+						// 	const a = bufferIndices.getX(i);
+						// 	const b = bufferIndices.getY(i);
+						// 	const c = bufferIndices.getZ(i);
+
+						// 	const faceNormal = computeFaceNormal(a, b, c);
+
+						// 	vector.copy(faceNormal).applyMatrix3(normalMatrixWorld).normalize();
+
+						// 	[a,b,c].forEach(vertexIndex => {
+						// 		// vector.copy( vertices[ vertexIndex ] );
+						// 		vector.fromArray(positions, vertexIndex)
+
+								
+						// 	});
+						// }
+
 						for ( var i = 0, l = faces.length; i < l; i ++ ) {
 							var face = faces[ i ];
 
