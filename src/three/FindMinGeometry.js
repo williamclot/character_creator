@@ -31,6 +31,31 @@ THREE.FindMinGeometry.prototype = {
 					var bufferGeometry = mesh.geometry;
 					var geometry = new THREE.Geometry().fromBufferGeometry( bufferGeometry );
 
+					const bufferIndex = bufferGeometry.getIndex();
+					const bufferSkinIndices = bufferGeometry.getAttribute('skinIndex');
+					const bufferSkinWeights = bufferGeometry.getAttribute('skinWeight');
+					const bufferPositions = bufferGeometry.getAttribute('position');
+					const positions = bufferPositions.array;
+
+					function computeFaceNormal(face) {
+						const cb = new THREE.Vector3(), ab = new THREE.Vector3();
+						const { a, b, c } = face;
+					
+						const vA = new THREE.Vector3().fromArray(positions, a * 3);
+						const vB = new THREE.Vector3().fromArray(positions, b * 3);
+						const vC = new THREE.Vector3().fromArray(positions, c * 3);
+					
+						cb.subVectors( vC, vB );
+						ab.subVectors( vA, vB );
+						cb.cross( ab );
+					
+						cb.normalize();
+					
+						// face.normal.copy( cb );
+
+						return cb;
+					}
+					
 					// console.log(geometry)
 
 					var matrixWorld = mesh.matrixWorld;
