@@ -41,16 +41,16 @@ THREE.FindMinGeometry.prototype = {
 						const cb = new THREE.Vector3(), ab = new THREE.Vector3();
 						const { a, b, c } = face;
 					
-						const vA = new THREE.Vector3().fromArray(positions, a * 3);
-						const vB = new THREE.Vector3().fromArray(positions, b * 3);
-						const vC = new THREE.Vector3().fromArray(positions, c * 3);
+						const vA = new THREE.Vector3().fromArray(positions, a * bufferPositions.itemSize);
+						const vB = new THREE.Vector3().fromArray(positions, b * bufferPositions.itemSize);
+						const vC = new THREE.Vector3().fromArray(positions, c * bufferPositions.itemSize);
 					
 						cb.subVectors( vC, vB );
 						ab.subVectors( vA, vB );
 						cb.cross( ab );
 					
 						cb.normalize();
-					
+
 						// face.normal.copy( cb );
 
 						return cb;
