@@ -28,6 +28,8 @@ THREE.FindMinGeometry.prototype = {
 
 				if ( mesh instanceof THREE.Mesh ) {
 
+					var matrixWorld = mesh.matrixWorld;
+
 					var bufferGeometry = mesh.geometry;
 					var geometry = new THREE.Geometry().fromBufferGeometry( bufferGeometry );
 
@@ -56,8 +58,6 @@ THREE.FindMinGeometry.prototype = {
 					}
 					
 					// console.log(geometry)
-
-					var matrixWorld = mesh.matrixWorld;
 
 					if ( geometry instanceof THREE.Geometry ) {
 
