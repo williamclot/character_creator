@@ -37,9 +37,8 @@ THREE.FindMinGeometry.prototype = {
 					const bufferPositions = bufferGeometry.getAttribute('position');
 					const positions = bufferPositions.array;
 
-					function computeFaceNormal(face) {
+					function computeFaceNormal(a, b, c) {
 						const cb = new THREE.Vector3(), ab = new THREE.Vector3();
-						const { a, b, c } = face;
 					
 						const vA = new THREE.Vector3().fromArray(positions, a * bufferPositions.itemSize);
 						const vB = new THREE.Vector3().fromArray(positions, b * bufferPositions.itemSize);
