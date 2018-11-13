@@ -1,3 +1,5 @@
+import { Bone, Mesh } from 'three';
+
 export function clearPosition(item) {
     // This function is used to clear the position of an imported gltf file
     item.position.set(0, 0, 0);
@@ -40,7 +42,7 @@ export function __getStructure(mesh) {
 
 
 export const __getBones = (mesh) => mesh.children.reduce((acc, child) => {
-    if (!(child instanceof THREE.Bone)) {
+    if (!(child instanceof Bone)) {
         return acc;
     }
     const toAdd = __getBones(child) // empty object if children is empty array
@@ -50,7 +52,7 @@ export const __getBones = (mesh) => mesh.children.reduce((acc, child) => {
 }, {})
 
 export const __getMeshes = (mesh) => mesh.children.reduce((acc, child) => {
-    if (!(child instanceof THREE.Mesh)) {
+    if (!(child instanceof Mesh)) {
         return acc;
     }
     const toAdd = __getMeshes(child) // empty object if children is empty array
