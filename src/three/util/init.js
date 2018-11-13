@@ -25,7 +25,7 @@ export function initCamera() {
     return camera;
 }
 
-export function initRenderer(canvasElement, pixelRatio) {
+export function initRenderer(canvasElement, pixelRatio = 1) {
     const renderer = new THREE.WebGLRenderer({
         antialias: true,
         canvas: canvasElement

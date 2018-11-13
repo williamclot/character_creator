@@ -82,7 +82,7 @@ class ThreeContainer extends React.PureComponent {
 
     componentDidMount() {
         this.camera = initCamera();
-        this.renderer = initRenderer(this.canvas, 0.5);
+        this.renderer = initRenderer(this.canvas);
         this.controls = initControls(this.camera, this.canvas);
 
         this.animate();
