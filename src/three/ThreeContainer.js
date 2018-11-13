@@ -7,11 +7,11 @@ import STLExporter from 'three-stlexporter';
 
 import { localStorageWrapper as lsWrapper } from '../utils/localStorageUtils';
 
-import promisifyLoader from './promisifyLoader';
-import { findMinGeometry } from './FindMinGeometry';
-import { defaultMeshes, meshStaticInfo, childrenList, boneAttachmentRelationships } from './meshInfo';
-import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './init';
-import { clearPosition, rotateElement, clearRotation, __getStructure, __validateStructure } from './helpers';
+import promisifyLoader from './util/promisifyLoader';
+import { findMinGeometry } from './util/FindMinGeometry';
+import { defaultMeshes, meshStaticInfo, childrenList, boneAttachmentRelationships } from './util/meshInfo';
+import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './util/init';
+import { clearPosition, rotateElement, clearRotation, __getStructure, __validateStructure } from './util/helpers';
 
 const selectedColor = { r: 0.555, g: 0.48, b: 0.49 };
 
