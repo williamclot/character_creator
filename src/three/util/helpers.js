@@ -37,3 +37,24 @@ export function __getStructure(mesh) {
         children: mesh.children.map(__getStructure)
     }
 }
+
+
+export const __getBones = (mesh) => mesh.children.reduce((acc, child) => {
+    if (!(child instanceof THREE.Bone)) {
+        return acc;
+    }
+    const toAdd = __getBones(child) // empty object if children is empty array
+    const isEmptyObject = Object.keys(toAdd).length !== 0;
+    acc[child.name] = isEmptyObject ? toAdd : null;
+    return acc;
+}, {})
+
+export const __getMeshes = (mesh) => mesh.children.reduce((acc, child) => {
+    if (!(child instanceof THREE.Mesh)) {
+        return acc;
+    }
+    const toAdd = __getMeshes(child) // empty object if children is empty array
+    const isEmptyObject = Object.keys(toAdd).length !== 0;
+    acc[child.name] = isEmptyObject ? toAdd : null;
+    return acc;
+}, {})

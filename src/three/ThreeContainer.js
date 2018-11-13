@@ -15,36 +15,6 @@ import { clearPosition, rotateElement, clearRotation, __getStructure, __validate
 
 const selectedColor = { r: 0.555, g: 0.48, b: 0.49 };
 
-
-const __getBones = (mesh) => mesh.children.reduce((acc, child) => {
-    if (!(child instanceof THREE.Bone)) {
-        return acc;
-    }
-    const toAdd = __getBones(child) // empty object if children is empty array
-    const isEmptyObject = Object.keys(toAdd).length !== 0;
-    acc[child.name] = isEmptyObject ? toAdd : null;
-    return acc;
-}, {})
-
-const __getMeshes = (mesh) => mesh.children.reduce((acc, child) => {
-    if (!(child instanceof THREE.Mesh)) {
-        return acc;
-    }
-    const toAdd = __getMeshes(child) // empty object if children is empty array
-    const isEmptyObject = Object.keys(toAdd).length !== 0;
-    acc[child.name] = isEmptyObject ? toAdd : null;
-    return acc;
-}, {})
-
-if (process.env.NODE_ENV === "development") {
-    // do this to force webpack not to shake off these functions
-    // (if a variable is not used in the code, it will not be included in
-    // the build and will therefore not be available when debugging)
-    console.log(__getBones);
-    console.log(__getMeshes);
-}
-
-
 class ThreeContainer extends React.PureComponent {
     initLoadedMeshes() {
         /** keeps track of the currently selected mesh */
