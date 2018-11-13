@@ -2,12 +2,11 @@ import React from 'react';
 
 
 import * as THREE from 'three';
-import GLTFLoader from 'three-gltf-loader';
 import STLExporter from 'three-stlexporter';
 
 import { localStorageWrapper as lsWrapper } from '../utils/localStorageUtils';
 
-import promisifyLoader from './util/promisifyLoader';
+import { loadMeshFromURL, parseMesh } from './util/gltfLoader';
 import { findMinGeometry } from './util/FindMinGeometry';
 import { defaultMeshes, meshStaticInfo, childrenList, boneAttachmentRelationships } from './util/meshInfo';
 import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './util/init';
@@ -30,8 +29,6 @@ class ThreeContainer extends React.PureComponent {
 
     constructor() {
         super();
-
-        this.loader = promisifyLoader( new GLTFLoader() );
 
         this.initLoadedMeshes();
 
@@ -102,14 +99,6 @@ class ThreeContainer extends React.PureComponent {
         );
     }
 
-    loadMeshFromURL(url) {
-        return this.loader.load(url);
-    }
-
-    parseMesh(data) {
-        return this.loader.parse(data);
-    }
-
     async loadMeshesFirstTime() {
         console.log( 'loading first time ...' );
 
@@ -156,7 +145,7 @@ class ThreeContainer extends React.PureComponent {
             },
         ];
 
-        const promises = lib.map( obj => this.loadMeshFromURL(obj.url));
+        const promises = lib.map( obj => loadMeshFromURL(obj.url));
 
         // this.group.updateMatrixWorld();
         const gltfs = await Promise.all(promises);
