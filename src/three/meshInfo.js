@@ -46,15 +46,15 @@ export const defaultMeshes = {
 };
 
 export const BoneAttachmentRelationships = {
-  ArmL_UpperArm_L: "Torso_UpperArm_L",
-  ArmR_UpperArm_R: "Torso_UpperArm_R",
-  FootL_Foot_L   : "LegL_Foot_L",
-  FootR_Foot_R   : "LegR_Foot_R",
-  HandL_Hand_L   : "ArmL_Hand_L",
-  HandR_Hand_R   : "ArmR_Hand_R",
-  Head_Neck      : "Torso_Neck",
-  LegL_UpperLeg_L: "Torso_UpperLeg_L",
-  LegR_UpperLeg_R: "Torso_UpperLeg_R"
+  "ArmL_UpperArm_L": "Torso_UpperArm_L",
+  "ArmR_UpperArm_R": "Torso_UpperArm_R",
+  "FootL_Foot_L"   : "LegL_Foot_L",
+  "FootR_Foot_R"   : "LegR_Foot_R",
+  "HandL_Hand_L"   : "ArmL_Hand_L",
+  "HandR_Hand_R"   : "ArmR_Hand_R",
+  "Head_Neck"      : "Torso_Neck",
+  "LegL_UpperLeg_L": "Torso_UpperLeg_L",
+  "LegR_UpperLeg_R": "Torso_UpperLeg_R"
 };
 
 // List of information on the meshes (attach points, body groups...)
