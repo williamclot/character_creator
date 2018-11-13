@@ -45,6 +45,11 @@ export const defaultMeshes = {
     }
 };
 
+/**
+ * the keys are the childAttachments and the values are the parentAttachments
+ * 
+ * to find out the parent attachment of a bone: BoneAttachmentRelationships[childBoneName]
+ */
 export const BoneAttachmentRelationships = {
   "ArmL_UpperArm_L": "Torso_UpperArm_L",
   "ArmR_UpperArm_R": "Torso_UpperArm_R",
