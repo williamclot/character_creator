@@ -7,103 +7,107 @@
  * @author williamclot / https://github.com/williamclot
  */
 
-import THREE from './threejs-service';
+import * as THREE from 'three';
 
-THREE.FindMinGeometry = function () {};
+export const findMinGeometry = ( function() {
+	var vector = new THREE.Vector3();
+	var normalMatrixWorld = new THREE.Matrix3();
 
-THREE.FindMinGeometry.prototype = {
+	return function ( scene ) {
 
-	constructor: THREE.FindMinGeometry,
+		var output = 100;
 
-	parse: ( function () {
+		scene.traverse( function ( mesh ) {
+			
+			if ( mesh instanceof THREE.Mesh ) {
 
-		var vector = new THREE.Vector3();
-		var normalMatrixWorld = new THREE.Matrix3();
+				const {
+					matrixWorld,
+					geometry: bufferGeometry,
+					skeleton
+				} = mesh;
+				
+				// var geometry = new THREE.Geometry().fromBufferGeometry( bufferGeometry );
+				
+				const bufferIndices = bufferGeometry.getIndex();
+				const bufferSkinIndices = bufferGeometry.getAttribute('skinIndex');
+				const bufferSkinWeights = bufferGeometry.getAttribute('skinWeight');
+				const bufferPositions = bufferGeometry.getAttribute('position');
 
-		return function ( scene ) {
+				function computeFaceNormal(a, b, c) {
+					const cb = new THREE.Vector3(), ab = new THREE.Vector3();
+				
+					const vA = new THREE.Vector3().fromBufferAttribute(bufferPositions, a);
+					const vB = new THREE.Vector3().fromBufferAttribute(bufferPositions, b);
+					const vC = new THREE.Vector3().fromBufferAttribute(bufferPositions, c);
+				
+					cb.subVectors( vC, vB );
+					ab.subVectors( vA, vB );
+					cb.cross( ab );
+				
+					cb.normalize();
 
-			var output = 100;
-
-			scene.traverse( function ( mesh ) {
-
-				if ( mesh instanceof THREE.Mesh ) {
-
-					var bufferGeometry = mesh.geometry;
-					var geometry = new THREE.Geometry().fromBufferGeometry( bufferGeometry );
-
-					// console.log(geometry)
-
-					var matrixWorld = mesh.matrixWorld;
-
-					if ( geometry instanceof THREE.Geometry ) {
-
-						var vertices = geometry.vertices;
-						var faces = geometry.faces;
-
-						normalMatrixWorld.getNormalMatrix( matrixWorld );
-
-						for ( var i = 0, l = faces.length; i < l; i ++ ) {
-							var face = faces[ i ];
-
-							vector.copy( face.normal ).applyMatrix3( normalMatrixWorld ).normalize();
-
-							var indices = [ face.a, face.b, face.c ];
-
-							for ( var j = 0; j < 3; j ++ ) {
-								var vertexIndex = indices[ j ];
-								if (geometry.skinIndices.length == 0) {
-									vector.copy( vertices[ vertexIndex ] ).applyMatrix4( matrixWorld );
-									output += '\t\t\tvertex ' + vector.x + ' ' + vector.y + ' ' + vector.z + '\n';
-								} else {
-									vector.copy( vertices[ vertexIndex ] ); //.applyMatrix4( matrixWorld );
-									
-									// see https://github.com/mrdoob/three.js/issues/3187
-									let boneIndices = [];
-									boneIndices[0] = geometry.skinIndices[vertexIndex].x;
-									boneIndices[1] = geometry.skinIndices[vertexIndex].y;
-									boneIndices[2] = geometry.skinIndices[vertexIndex].z;
-									boneIndices[3] = geometry.skinIndices[vertexIndex].w;
-									
-									let weights = [];
-									weights[0] = geometry.skinWeights[vertexIndex].x;
-									weights[1] = geometry.skinWeights[vertexIndex].y;
-									weights[2] = geometry.skinWeights[vertexIndex].z;
-									weights[3] = geometry.skinWeights[vertexIndex].w;
-									
-									let inverses = [];
-									inverses[0] = mesh.skeleton.boneInverses[ boneIndices[0] ];
-									inverses[1] = mesh.skeleton.boneInverses[ boneIndices[1] ];
-									inverses[2] = mesh.skeleton.boneInverses[ boneIndices[2] ];
-									inverses[3] = mesh.skeleton.boneInverses[ boneIndices[3] ];
-
-									let skinMatrices = [];
-									skinMatrices[0] = mesh.skeleton.bones[ boneIndices[0] ].matrixWorld;
-									skinMatrices[1] = mesh.skeleton.bones[ boneIndices[1] ].matrixWorld;
-									skinMatrices[2] = mesh.skeleton.bones[ boneIndices[2] ].matrixWorld;
-									skinMatrices[3] = mesh.skeleton.bones[ boneIndices[3] ].matrixWorld;
-									
-									var finalVector = new THREE.Vector4();
-									for(var k = 0; k<4; k++) {
-										var tempVector = new THREE.Vector4(vector.x, vector.y, vector.z);
-										tempVector.multiplyScalar(weights[k]);
-										//the inverse takes the vector into local bone space
-										tempVector.applyMatrix4(inverses[k])
-										//which is then transformed to the appropriate world space
-										.applyMatrix4(skinMatrices[k]);
-										finalVector.add(tempVector);
-									}
-									if (output > finalVector.y){
-										output = finalVector.y;
-									}
-								}
-							}
-						}
-					}
+					return cb;
 				}
 
-			} );
+				normalMatrixWorld.getNormalMatrix( matrixWorld );
 
-			return output;
-		};
-	}() )
-};
+				for ( let i = 0, len = bufferIndices.count; i < len; i += 3 ) {
+					const a = bufferIndices.getX(i);
+					const b = bufferIndices.getY(i);
+					const c = bufferIndices.getZ(i);
+
+					const faceNormal = computeFaceNormal(a, b, c);
+
+					// this may be redundant
+					vector.copy(faceNormal).applyMatrix3(normalMatrixWorld).normalize();
+
+					[a,b,c].forEach(vertexIndex => {
+
+						vector.fromBufferAttribute(bufferPositions, vertexIndex);
+
+						let boneIndices = [];
+						boneIndices[0] = bufferSkinIndices.getX(vertexIndex);
+						boneIndices[1] = bufferSkinIndices.getY(vertexIndex);
+						boneIndices[2] = bufferSkinIndices.getZ(vertexIndex);
+						boneIndices[3] = bufferSkinIndices.getW(vertexIndex);
+						
+						let weights = [];
+						weights[0] = bufferSkinWeights.getX(vertexIndex);
+						weights[1] = bufferSkinWeights.getY(vertexIndex);
+						weights[2] = bufferSkinWeights.getZ(vertexIndex);
+						weights[3] = bufferSkinWeights.getW(vertexIndex);
+						
+						let inverses = [];
+						inverses[0] = skeleton.boneInverses[ boneIndices[0] ];
+						inverses[1] = skeleton.boneInverses[ boneIndices[1] ];
+						inverses[2] = skeleton.boneInverses[ boneIndices[2] ];
+						inverses[3] = skeleton.boneInverses[ boneIndices[3] ];
+
+						let skinMatrices = [];
+						skinMatrices[0] = skeleton.bones[ boneIndices[0] ].matrixWorld;
+						skinMatrices[1] = skeleton.bones[ boneIndices[1] ].matrixWorld;
+						skinMatrices[2] = skeleton.bones[ boneIndices[2] ].matrixWorld;
+						skinMatrices[3] = skeleton.bones[ boneIndices[3] ].matrixWorld;
+						
+						var finalVector = new THREE.Vector4();
+						for(var k = 0; k<4; k++) {
+							var tempVector = new THREE.Vector4(vector.x, vector.y, vector.z);
+							tempVector.multiplyScalar(weights[k]);
+							//the inverse takes the vector into local bone space
+							tempVector.applyMatrix4(inverses[k])
+							//which is then transformed to the appropriate world space
+							.applyMatrix4(skinMatrices[k]);
+							finalVector.add(tempVector);
+						}
+						if (output > finalVector.y){
+							output = finalVector.y;
+						}
+					});
+				}
+			}
+		} );
+
+		return output;
+	}
+} )();

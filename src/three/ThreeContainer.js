@@ -1,10 +1,14 @@
 import React from 'react';
 
 
-import THREE from './threejs-service';
+import * as THREE from 'three';
+import GLTFLoader from 'three-gltf-loader';
+import STLExporter from 'three-stlexporter';
 
-import promisifyLoader from '../utils/promisifyLoader';
 import { localStorageWrapper as lsWrapper } from '../utils/localStorageUtils';
+
+import promisifyLoader from './promisifyLoader';
+import { findMinGeometry } from './FindMinGeometry';
 import { defaultMeshes, meshStaticInfo, childrenList, boneAttachmentRelationships } from './meshInfo';
 import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './init';
 import { clearPosition, rotateElement, clearRotation, __getStructure, __validateStructure } from './helpers';
@@ -57,7 +61,7 @@ class ThreeContainer extends React.PureComponent {
     constructor() {
         super();
 
-        this.loader = promisifyLoader( new THREE.GLTFLoader() );
+        this.loader = promisifyLoader( new GLTFLoader() );
 
         this.initLoadedMeshes();
 
@@ -397,11 +401,10 @@ class ThreeContainer extends React.PureComponent {
     
     async placeStand() {
         // var topStand;
-        var minFinder = new THREE.FindMinGeometry();
     
         if (this.scene.getObjectByName("mesh-stand")) {
-            var resultR = minFinder.parse(this.scene.getObjectByName("FootR"));
-            var resultL = minFinder.parse(this.scene.getObjectByName("FootL"));
+            var resultR = findMinGeometry(this.scene.getObjectByName("FootR"));
+            var resultL = findMinGeometry(this.scene.getObjectByName("FootL"));
             var result = resultL > resultR ? resultR : resultL;
             // console.log(result);
         
@@ -421,8 +424,8 @@ class ThreeContainer extends React.PureComponent {
                     }
                 });
         
-                var resultR = minFinder.parse(this.scene.getObjectByName("FootR"));
-                var resultL = minFinder.parse(this.scene.getObjectByName("FootL"));
+                var resultR = findMinGeometry(this.scene.getObjectByName("FootR"));
+                var resultL = findMinGeometry(this.scene.getObjectByName("FootL"));
                 var result = resultL > resultR ? resultR : resultL;
         
                 //Default color to all the meshes
@@ -468,7 +471,6 @@ class ThreeContainer extends React.PureComponent {
         }
 
         window.changeStand = async function(stand) {
-            var minFinder = new THREE.FindMinGeometry();
             if (this.scene.getObjectByName("mesh-stand")) {
                 this.group.remove(this.scene.getObjectByName("mesh-stand"));
                 const gltf = await this.loader.load(process.env.PUBLIC_URL + "/models/stand/"+stand+".glb");
@@ -484,8 +486,8 @@ class ThreeContainer extends React.PureComponent {
                         }
                     });
             
-                    var resultR = minFinder.parse(this.scene.getObjectByName("FootR"));
-                    var resultL = minFinder.parse(this.scene.getObjectByName("FootL"));
+                    var resultR = findMinGeometry(this.scene.getObjectByName("FootR"));
+                    var resultL = findMinGeometry(this.scene.getObjectByName("FootL"));
                     var result = resultL > resultR ? resultR : resultL;
             
                     this.group.add(root);
@@ -626,7 +628,7 @@ class ThreeContainer extends React.PureComponent {
             }
         }.bind(this);
         window.export = function(name) {
-            var exporter = new THREE.STLExporter();
+            var exporter = new STLExporter();
         
             if (name) {
                 saveString(exporter.parse(this.group), name + ".stl");

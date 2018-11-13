@@ -1,4 +1,5 @@
-import THREE from './threejs-service';
+import * as THREE from 'three';
+import OrbitControls from 'three-orbitcontrols';
 
 export function initScene() {
     const scene = new THREE.Scene();
@@ -41,7 +42,7 @@ export function initRenderer(canvasElement, pixelRatio) {
 }
 
 export function initControls(camera, canvas) {
-    const controls = new THREE.OrbitControls(camera, canvas);
+    const controls = new OrbitControls(camera, canvas);
     // controls.target.set(-1,0,0);
     controls.minDistance = 2; //Controling max and min for ease of use
     controls.maxDistance = 7;
