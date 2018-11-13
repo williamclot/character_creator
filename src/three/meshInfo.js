@@ -45,21 +45,33 @@ export const defaultMeshes = {
     }
 };
 
-/**
- * the keys are the childAttachments and the values are the parentAttachments
- * 
- * to find out the parent attachment of a bone: BoneAttachmentRelationships[childBoneName]
- */
-export const BoneAttachmentRelationships = {
-  "ArmL_UpperArm_L": "Torso_UpperArm_L",
-  "ArmR_UpperArm_R": "Torso_UpperArm_R",
-  "FootL_Foot_L"   : "LegL_Foot_L",
-  "FootR_Foot_R"   : "LegR_Foot_R",
-  "HandL_Hand_L"   : "ArmL_Hand_L",
-  "HandR_Hand_R"   : "ArmR_Hand_R",
-  "Head_Neck"      : "Torso_Neck",
-  "LegL_UpperLeg_L": "Torso_UpperLeg_L",
-  "LegR_UpperLeg_R": "Torso_UpperLeg_R"
+
+export const boneAttachmentRelationships = {
+  /** used to find the parent attachment of a child bone by name */
+  parent: {
+    "ArmL_UpperArm_L": "Torso_UpperArm_L",
+    "ArmR_UpperArm_R": "Torso_UpperArm_R",
+    "FootL_Foot_L"   : "LegL_Foot_L",
+    "FootR_Foot_R"   : "LegR_Foot_R",
+    "HandL_Hand_L"   : "ArmL_Hand_L",
+    "HandR_Hand_R"   : "ArmR_Hand_R",
+    "Head_Neck"      : "Torso_Neck",
+    "LegL_UpperLeg_L": "Torso_UpperLeg_L",
+    "LegR_UpperLeg_R": "Torso_UpperLeg_R"
+  },
+
+  /** used to find the child attachment of a parent bone by name */
+  child: {
+    "ArmL_Hand_L"     : "HandL_Hand_L",
+    "ArmR_Hand_R"     : "HandR_Hand_R",
+    "LegL_Foot_L"     : "FootL_Foot_L",
+    "LegR_Foot_R"     : "FootR_Foot_R",
+    "Torso_Neck"      : "Head_Neck",
+    "Torso_UpperArm_L": "ArmL_UpperArm_L",
+    "Torso_UpperArm_R": "ArmR_UpperArm_R",
+    "Torso_UpperLeg_L": "LegL_UpperLeg_L",
+    "Torso_UpperLeg_R": "LegR_UpperLeg_R"
+  }
 };
 
 // List of information on the meshes (attach points, body groups...)
