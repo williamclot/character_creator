@@ -7,7 +7,7 @@ import promisifyLoader from '../utils/promisifyLoader';
 import { localStorageWrapper as lsWrapper } from '../utils/localStorageUtils';
 import { defaultMeshes, meshStaticInfo, childrenList } from './meshInfo';
 import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './init';
-import { clearPosition, rotateElement, clearRotation } from './helpers';
+import { clearPosition, rotateElement, clearRotation, __getStructure, __validateStructure } from './helpers';
 
 const selectedColor = { r: 0.555, g: 0.48, b: 0.49 };
 
