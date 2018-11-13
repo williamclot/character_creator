@@ -5,7 +5,7 @@ import THREE from './threejs-service';
 
 import promisifyLoader from '../utils/promisifyLoader';
 import { localStorageWrapper as lsWrapper } from '../utils/localStorageUtils';
-import { defaultMeshes, meshStaticInfo, childrenList } from './meshInfo';
+import { defaultMeshes, meshStaticInfo, childrenList, boneAttachmentRelationships } from './meshInfo';
 import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './init';
 import { clearPosition, rotateElement, clearRotation, __getStructure, __validateStructure } from './helpers';
 
@@ -41,9 +41,6 @@ if (process.env.NODE_ENV === "development") {
 }
 
 
-const loadedObjects = {};
-
-
 class ThreeContainer extends React.PureComponent {
     initLoadedMeshes() {
         /** keeps track of the currently selected mesh */
@@ -63,6 +60,19 @@ class ThreeContainer extends React.PureComponent {
         this.loader = promisifyLoader( new THREE.GLTFLoader() );
 
         this.initLoadedMeshes();
+
+        
+        this.loadedAttachmentBones = {
+            "ArmL_Hand_L"     : {},
+            "ArmR_Hand_R"     : {},
+            "LegL_Foot_L"     : {},
+            "LegR_Foot_R"     : {},
+            "Torso_Neck"      : {},
+            "Torso_UpperArm_L": {},
+            "Torso_UpperArm_R": {},
+            "Torso_UpperLeg_L": {},
+            "Torso_UpperLeg_R": {},
+        };
 
         window.loaded = false;
         window.partloaded = false;
@@ -129,9 +139,59 @@ class ThreeContainer extends React.PureComponent {
     async loadMeshesFirstTime() {
         console.log( 'loading first time ...' );
 
-        const url = process.env.PUBLIC_URL + "/models/torso/blender.glb";
-        const gltf = await this.loadMeshFromURL(url);
-        this.placeSingleMesh(gltf, { MeshType: "torso" });
+        const lib = [
+            {
+                url: process.env.PUBLIC_URL + "/models/torso/blender.glb",
+                type: "Torso"
+            },
+            {
+                url: process.env.PUBLIC_URL + "/models/head/default_head.glb",
+                type: "Head"
+            },
+            {
+                url: process.env.PUBLIC_URL + "/models/arm/muscled_arm_L.glb",
+                type: "ArmL"
+            },
+            {
+                url: process.env.PUBLIC_URL + "/models/arm/muscled_arm_R.glb",
+                type: "ArmR"
+            },
+            {
+                url: process.env.PUBLIC_URL + "/models/hand/barbarian_L.glb",
+                type: "HandL"
+            },
+            {
+                url: process.env.PUBLIC_URL + "/models/hand/barbarian_R.glb",
+                type: "HandR"
+            },
+            {
+                url: process.env.PUBLIC_URL + "/models/leg/robot_leg_R.glb",
+                type: "LegR"
+            },
+            {
+                url: process.env.PUBLIC_URL + "/models/leg/robot_leg_L.glb",
+                type: "LegL"
+            },
+            {
+                url: process.env.PUBLIC_URL + "/models/foot/barbarian_L.glb",
+                type: "FootL"
+            },
+            {
+                url: process.env.PUBLIC_URL + "/models/foot/barbarian_R.glb",
+                type: "FootR"
+            },
+        ];
+
+        const promises = lib.map( obj => this.loadMeshFromURL(obj.url));
+
+        // this.group.updateMatrixWorld();
+        const gltfs = await Promise.all(promises);
+        gltfs.forEach( ( gltf, index ) => {
+            this.placeSingleMesh(gltf, { MeshType: lib[index].type });
+        })
+
+        // const newHead = await this.loadMeshFromURL(process.env.PUBLIC_URL + "/models/head/groot.glb");
+        // this.placeSingleMesh(newHead);
     }
 
     
@@ -147,63 +207,47 @@ class ThreeContainer extends React.PureComponent {
         } = options;
 
         const root = gltf.scene.children[0];
-        // console.log(root);
-
-
 
         root.traverse(function(child) {
             if (child instanceof THREE.Mesh) {
-                // Gives a fixed name to the mesh and same gray color
-                child.name = "mesh-" + MeshType.toLowerCase(); // store ID in dictionary instead
-
                 child.castShadow = true;
                 child.material.color = { r: 0.5, g: 0.5, b: 0.5 };
             }
         });
 
-        
-        // group is one element with all the meshes and bones of the character
-        this.group.add(root);
-        // this.scene.updateMatrixWorld(true);
-        
-        loadedObjects[MeshType] = root;
-        
-        lsWrapper.setSingleLoadedMesh(
-            MeshType,
-            {
-                name: meshName,
-                rotation
-            }
-        );
+        function isParentAttachment(boneName) {
+            return boneAttachmentRelationships.child[ boneName ] !== undefined;
+        }
+        function isChildAttachment(boneName) {
+            return boneAttachmentRelationships.parent[ boneName ] !== undefined;
+        }
 
-        // if (highLight) {
-        //     this.changeColor(MeshType, selectedColor);
-        // }
+        let anchor;
+        root.traverse(element => {
+            if ( element instanceof THREE.Bone ) {
+                if ( isParentAttachment( element.name ) ) {
 
-        // Putting the new mesh in the pose configuration if any pose has been selected
-        if (poseData) {
-            root.traverse(child => {
-                if (child instanceof THREE.Bone) {
-                    const rotation = poseData[child.name];
-                    if (rotation) {
-                        const { x, y, z } = rotation;
-                        child.rotation.set(x, y, z);
-                    }
+                    this.loadedAttachmentBones[ element.name ].parent = element;
+
+                } else if ( isChildAttachment( element.name ) ) {
+
+                    const parentName = boneAttachmentRelationships.parent[ element.name ];
+                    anchor = this.loadedAttachmentBones[ parentName ];
                 }
-            });
-        }
+            }
+        });
 
-        if (
-            typeof parentAttachment !== "undefined" &&
-            typeof childAttachment !== "undefined"
-        ) {
-            const targetBone = this.scene.getObjectByName(parentAttachment);
-            const object = this.scene.getObjectByName(childAttachment);
-            clearPosition(object);
-            clearRotation(object);
-            rotateElement(object, rotation);
-            targetBone.add(object);
+
+        if ( anchor ) {
+            if ( anchor.child ) {
+                anchor.parent.remove( anchor.child );
+            }
+            anchor.parent.add(root);
+            anchor.child = root;
+        } else {
+            this.group.add(root);
         }
+        
 
     }
 
