@@ -6,6 +6,8 @@ import STLExporter from 'three-stlexporter';
 
 import { localStorageWrapper as lsWrapper } from '../utils/localStorageUtils';
 
+import GroupManager from './loadedObjectsManager';
+
 import { loadMeshFromURL, parseMesh } from './util/gltfLoader';
 import { findMinGeometry } from './util/FindMinGeometry';
 import { defaultMeshes, meshStaticInfo, childrenList, boneAttachmentRelationships } from './util/meshInfo';
@@ -57,6 +59,8 @@ class ThreeContainer extends React.PureComponent {
         
         const lights = initLights();
         const floor = initFloor();
+        this.groupManager = new GroupManager( this.group );
+        
         const gridHelper = initGridHelper();
         
         this.scene.add(this.group, floor, gridHelper, ...lights);
