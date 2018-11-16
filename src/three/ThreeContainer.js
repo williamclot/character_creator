@@ -1,5 +1,5 @@
 import React from 'react';
-
+import axios from 'axios';
 
 import * as THREE from 'three';
 import STLExporter from 'three-stlexporter';
@@ -13,6 +13,9 @@ import { findMinGeometry } from './util/FindMinGeometry';
 import { defaultMeshes, meshStaticInfo, childrenList, boneAttachmentRelationships } from './util/meshInfo';
 import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './util/init';
 import { clearPosition, rotateElement, clearRotation, __getStructure, __validateStructure } from './util/helpers';
+
+import TMP_LIB from './tmp-lib';
+
 
 const selectedColor = { r: 0.555, g: 0.48, b: 0.49 };
 
@@ -34,19 +37,6 @@ class ThreeContainer extends React.PureComponent {
 
         this.initLoadedMeshes();
 
-        
-        this.loadedAttachmentBones = {
-            "ArmL_Hand_L"     : {},
-            "ArmR_Hand_R"     : {},
-            "LegL_Foot_L"     : {},
-            "LegR_Foot_R"     : {},
-            "Torso_Neck"      : {},
-            "Torso_UpperArm_L": {},
-            "Torso_UpperArm_R": {},
-            "Torso_UpperLeg_L": {},
-            "Torso_UpperLeg_R": {},
-        };
-
         window.loaded = false;
         window.partloaded = false;
 
@@ -56,11 +46,11 @@ class ThreeContainer extends React.PureComponent {
     
         /** This group will contain all the meshes but not the floor, the lights etc... */
         this.group = new THREE.Group();
+
+        this.groupManager = new GroupManager( this.group );
         
         const lights = initLights();
         const floor = initFloor();
-        this.groupManager = new GroupManager( this.group );
-        
         const gridHelper = initGridHelper();
         
         this.scene.add(this.group, floor, gridHelper, ...lights);
@@ -91,7 +81,7 @@ class ThreeContainer extends React.PureComponent {
 
         this.animate();
         
-        this.loadMeshesFirstTime();
+        this.loadMeshesFirstTime(TMP_LIB);
 
     }
 
@@ -103,62 +93,22 @@ class ThreeContainer extends React.PureComponent {
         );
     }
 
-    async loadMeshesFirstTime() {
+    async loadMeshesFirstTime(lib) {
         console.log( 'loading first time ...' );
 
-        const lib = [
-            {
-                url: process.env.PUBLIC_URL + "/models/torso/blender.glb",
-                type: "Torso"
-            },
-            {
-                url: process.env.PUBLIC_URL + "/models/head/default_head.glb",
-                type: "Head"
-            },
-            {
-                url: process.env.PUBLIC_URL + "/models/arm/muscled_arm_L.glb",
-                type: "ArmL"
-            },
-            {
-                url: process.env.PUBLIC_URL + "/models/arm/muscled_arm_R.glb",
-                type: "ArmR"
-            },
-            {
-                url: process.env.PUBLIC_URL + "/models/hand/barbarian_L.glb",
-                type: "HandL"
-            },
-            {
-                url: process.env.PUBLIC_URL + "/models/hand/barbarian_R.glb",
-                type: "HandR"
-            },
-            {
-                url: process.env.PUBLIC_URL + "/models/leg/robot_leg_R.glb",
-                type: "LegR"
-            },
-            {
-                url: process.env.PUBLIC_URL + "/models/leg/robot_leg_L.glb",
-                type: "LegL"
-            },
-            {
-                url: process.env.PUBLIC_URL + "/models/foot/barbarian_L.glb",
-                type: "FootL"
-            },
-            {
-                url: process.env.PUBLIC_URL + "/models/foot/barbarian_R.glb",
-                type: "FootR"
-            },
-        ];
+        const { data: poseData } = await axios.get( process.env.PUBLIC_URL + '/models/poses/default.json' );
 
-        const promises = lib.map( obj => loadMeshFromURL(obj.url));
+        const promises = lib.map( obj => loadMeshFromURL( obj.url ));
+
 
         // this.group.updateMatrixWorld();
         const gltfs = await Promise.all(promises);
         gltfs.forEach( ( gltf, index ) => {
-            this.placeSingleMesh(gltf, { MeshType: lib[index].type });
+            this.placeSingleMesh(gltf, {
+                MeshType: lib[index].type,
+                poseData
+            });
         })
-
-        // const newHead = await this.loadMeshFromURL(process.env.PUBLIC_URL + "/models/head/groot.glb");
-        // this.placeSingleMesh(newHead);
     }
 
     
@@ -182,38 +132,52 @@ class ThreeContainer extends React.PureComponent {
             }
         });
 
-        function isParentAttachment(boneName) {
-            return boneAttachmentRelationships.child[ boneName ] !== undefined;
-        }
-        function isChildAttachment(boneName) {
-            return boneAttachmentRelationships.parent[ boneName ] !== undefined;
-        }
-
-        let anchor;
-        root.traverse(element => {
-            if ( element instanceof THREE.Bone ) {
-                if ( isParentAttachment( element.name ) ) {
-
-                    this.loadedAttachmentBones[ element.name ].parent = element;
-
-                } else if ( isChildAttachment( element.name ) ) {
-
-                    const parentName = boneAttachmentRelationships.parent[ element.name ];
-                    anchor = this.loadedAttachmentBones[ parentName ];
+        if (poseData) {
+            root.traverse(child => {
+                if (child instanceof THREE.Bone) {
+                    const rotation = poseData[child.name];
+                    if (rotation) {
+                        const { x, y, z } = rotation;
+                        child.rotation.set(x, y, z);
+                    }
                 }
-            }
-        });
-
-
-        if ( anchor ) {
-            if ( anchor.child ) {
-                anchor.parent.remove( anchor.child );
-            }
-            anchor.parent.add(root);
-            anchor.child = root;
-        } else {
-            this.group.add(root);
+            });
         }
+
+        // function isParentAttachment(boneName) {
+        //     return boneAttachmentRelationships.child[ boneName ] !== undefined;
+        // }
+        // function isChildAttachment(boneName) {
+        //     return boneAttachmentRelationships.parent[ boneName ] !== undefined;
+        // }
+
+        this.groupManager.add( MeshType, root );
+
+        // let anchor;
+        // root.traverse(element => {
+        //     if ( element instanceof THREE.Bone ) {
+        //         if ( isParentAttachment( element.name ) ) {
+
+        //             this.loadedAttachmentBones[ element.name ].parent = element;
+
+        //         } else if ( isChildAttachment( element.name ) ) {
+
+        //             const parentName = boneAttachmentRelationships.parent[ element.name ];
+        //             anchor = this.loadedAttachmentBones[ parentName ];
+        //         }
+        //     }
+        // });
+
+
+        // if ( anchor ) {
+        //     if ( anchor.child ) {
+        //         anchor.parent.remove( anchor.child );
+        //     }
+        //     anchor.parent.add(root);
+        //     anchor.child = root;
+        // } else {
+        //     this.group.add(root);
+        // }
         
 
     }

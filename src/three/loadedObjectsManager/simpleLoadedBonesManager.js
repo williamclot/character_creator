@@ -1,4 +1,5 @@
 import { ANCHORS } from './boneRelationships';
+import { clearPosition } from '../util/helpers';
 
 class GroupManager {
     /**
@@ -11,6 +12,8 @@ class GroupManager {
 
     add( bodyPartName, objectToAdd ) {
         objectToAdd.name = bodyPartName; // give name to identify it later on
+
+        clearPosition(objectToAdd);
 
         const anchor = ANCHORS[ bodyPartName ];
         
@@ -40,7 +43,15 @@ class GroupManager {
             attachPointBone.remove( currentObject );
         }
 
+        if ( attachPoint ) {
+            const currentBone = objectToAdd.getObjectByName( attachPoint.childAttachment );
+            if ( currentBone ) {
+                clearPosition(currentBone);
+            }
+        }
+
         attachPointBone.add( objectToAdd );
+        
     }
 }
 
