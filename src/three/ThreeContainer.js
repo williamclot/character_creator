@@ -62,11 +62,8 @@ class ThreeContainer extends React.PureComponent {
     }
 
     animate = () => {
-        if (process.env.NODE_ENV === 'production') {
-            requestAnimationFrame(this.animate);
-        } else {
-            setTimeout(() => requestAnimationFrame(this.animate), 300);
-        }
+        requestAnimationFrame(this.animate);
+
         this.controls.update();
 
         // TODO function calls below may not be needed !!!
