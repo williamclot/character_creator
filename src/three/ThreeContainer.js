@@ -71,6 +71,32 @@ class ThreeContainer extends React.PureComponent {
         this.renderer.render(this.scene, this.camera);
     }
 
+    _onMouseClick = ev => {
+
+        ev.preventDefault();
+
+        const mouse = new THREE.Vector2;
+
+        // get mouse coordinates: https://github.com/mrdoob/three.js/blob/dev/examples/js/controls/TransformControls.js#L502
+        const { left, top, width, height } = this.canvas.getBoundingClientRect();
+
+        mouse.x = ( ev.clientX - left ) / width * 2 - 1;
+        mouse.y = - ( ev.clientY - top ) / height * 2 + 1;
+
+        const raycaster = new THREE.Raycaster;
+
+        raycaster.setFromCamera( mouse, this.camera );
+
+        const intersects = raycaster.intersectObjects( this.group.children );
+
+        if ( intersects.length > 0 ) {
+            const obj = intersects[ 0 ].object;
+            // if ( this.transformControls.object !== obj ) {
+            //     this.transformControls.attach(obj);
+            // }
+        }
+    }
+
     componentDidMount() {
         this.camera = initCamera();
         this.renderer = initRenderer(this.canvas);
