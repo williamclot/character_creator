@@ -168,42 +168,8 @@ class ThreeContainer extends React.PureComponent {
                 }
             });
         }
-
-        // function isParentAttachment(boneName) {
-        //     return boneAttachmentRelationships.child[ boneName ] !== undefined;
-        // }
-        // function isChildAttachment(boneName) {
-        //     return boneAttachmentRelationships.parent[ boneName ] !== undefined;
-        // }
-
-        this.groupManager.add( MeshType, root );
-
-        // let anchor;
-        // root.traverse(element => {
-        //     if ( element instanceof THREE.Bone ) {
-        //         if ( isParentAttachment( element.name ) ) {
-
-        //             this.loadedAttachmentBones[ element.name ].parent = element;
-
-        //         } else if ( isChildAttachment( element.name ) ) {
-
-        //             const parentName = boneAttachmentRelationships.parent[ element.name ];
-        //             anchor = this.loadedAttachmentBones[ parentName ];
-        //         }
-        //     }
-        // });
-
-
-        // if ( anchor ) {
-        //     if ( anchor.child ) {
-        //         anchor.parent.remove( anchor.child );
-        //     }
-        //     anchor.parent.add(root);
-        //     anchor.child = root;
-        // } else {
-        //     this.group.add(root);
-        // }
         
+        this.groupManager.add( MeshType, root );
 
     }
 
