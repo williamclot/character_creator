@@ -1,70 +1,121 @@
-import { Matrix4 } from 'three'
+import { Matrix4, Object3D, Group, Bone } from 'three'
 
 import defaultCategories from './categories'
+import Category, { ParentCategory } from './category'
 
 /**
  * 
  */
 class GroupManager {
+    /**
+     * @param { Group } group
+     */
     constructor( group, categories = defaultCategories ) {
+        
         this.group = group
-        // this.categories = categories
 
+        /**
+         * A mapping from category ID to category data
+         * @type { Map< string, Category > }
+         */
         this.categoriesMap = categories.reduce(
-            ( map, category ) => map.set( category.id, category ),
-            new Map
-        )
-
-        /** mapping from categoryName to loadedObject (initially filled with null) */
-        this.loadedObjectsMap = categories.reduce(
-            ( map, category ) => map.set( category.id, null ),
+            ( categoriesMap, category ) => categoriesMap.set( category.id, category ),
             new Map
         )
 
         /**
-         *  mapping from boneId to loadedObject (initially filled with null)
+         * @type { Map< string, Object3D > }
+         * used to keep track of loaded objects
+         */
+        this.loadedObjectsMap = new Map
+
+        /**
+         * @type { Map< string, Bone > }
+         *  used to keep track of Bone objects within each loaded object
          * 
          * Note: assumes bone names are unique
          */
-        this.bonesMap = categories.reduce(
-            ( map, category ) => {
-                const { attachmentBones } = category
-                attachmentBones.forEach( boneId => map.set( boneId, null ) )
-                return map
-            },
-            new Map
-        )
+        this.bonesMap = new Map;
     }
 
-    getBone( boneId ) {
-        return this.bonesMap.get( boneId )
-    }
-
-    setBone( boneId, value ) {
-        this.bonesMap.set( boneId, value )
-    }
 
     add( categoryId, object3d, metaData = {} ) {
         if ( ! this.categoriesMap.has( categoryId ) ) {
-            throw new Error( `Category ${categoryId} is not defined!` )
+            throw new Error( `Category ${ categoryId } is not defined!` )
         }
 
-        
-        const currentObject = this.loadedObjectsMap.get( categoryId )
-        
-        const newBonesMap = this.getBonesMap( object3d )
-        if ( currentObject ) {
-            this.replace( categoryId, object3d, newBonesMap )
+        const category = this.categoriesMap.get( categoryId )
+
+        if ( this.loadedObjectsMap.has( categoryId ) ) {
+
+            const currentObject = this.loadedObjectsMap.get( categoryId )
+
+            this.replace( category, currentObject, object3d, metaData )
+
         } else {
-            this.place( categoryId, object3d )
+
+            this.place( category, object3d, metaData )
+
         }
         
-        // this.extractBones( object3d )
-        this.updateBones( newBonesMap )
         this.loadedObjectsMap.set( categoryId, object3d )
 
     }
 
+    /**
+     * @param { Category } category 
+     * @param { Object3D } object3d 
+     */
+    place( category, object3d ) {
+        const { attachmentBones, parent } = category
+
+        const extractedBones = extractKnownBones( object3d, attachmentBones )
+
+        for ( let boneId of attachmentBones ) {
+
+            const newBone = extractedBones.get( boneId )
+
+            this.bonesMap.set( boneId, newBone )
+
+        }
+
+        this.getParent( parent ).add( object3d )
+
+    }
+
+    /**
+     * @param { Category } category 
+     * @param { Object3D } object3d 
+     */
+    replace( category, currentObject, object3d ) {
+        const { attachmentBones, parent } = category
+
+        const extractedBones = extractKnownBones( object3d, attachmentBones )
+
+        for ( let boneId of attachmentBones ) {
+
+            const oldBone = this.bonesMap.get( boneId )
+            const newBone = extractedBones.get( boneId )
+
+            // update bonesMap to reference new bone
+            this.bonesMap.set( boneId, newBone )
+
+            // this will automatically move the children to their new bone parent
+            newBone.add( ...oldBone.children )
+
+        }
+        
+        const parentObject = this.getParent( parent )
+
+        parentObject.remove( currentObject )
+        parentObject.add( object3d )
+        
+    }
+
+    /**
+     * @param { ParentCategory } parentCategory 
+     * @returns - the parent bone of the category or the group if the category is the root
+     */
     getParent( parentCategory ) {
         if ( parentCategory ) {
             const parentBone = this.bonesMap.get( parentCategory.boneName )
@@ -79,89 +130,6 @@ class GroupManager {
             return this.group
 
         }
-    }
-
-    place( categoryId, object3d ) {
-
-        const category = this.categoriesMap.get( categoryId )
-
-        this.getParent( category.parent ).add( object3d )
-
-    }
-
-    replace( categoryId, object3d, bonesMap ) {
-
-        const category = this.categoriesMap.get( categoryId )
-
-        category.attachmentBones.forEach( boneId => {
-            const oldBone = this.bonesMap.get( boneId )
-            const newBone = bonesMap.get( boneId )
-
-            // this will automatically move the children to their new parent
-            newBone.add( ...oldBone.children )
-
-        } )
-        
-        const parent = this.getParent( category.parent )
-        // TODO
-        // remove current obj from parent
-
-        // then add new object to parent
-        
-    }
-
-    /**
-     * traverses the object and adds all sets all bones that are in the bonesMap;
-     * if the bone is not in the map, it is ignored
-     * @param {THREE.Object3D} object3d 
-     */
-    extractBones( object3d ) {
-        object3d.traverse( element => {
-            if ( element.isBone ) {
-                if ( this.bonesMap.has( element.name ) ) {
-                    this.bonesMap.set( element.name, element )
-                }
-            }
-        } )
-    }
-
-    updateBones( newBonesMap ) {
-        newBonesMap.forEach(
-            ( value, key ) => {
-                this.bonesMap.set( key, value )
-            }
-        )
-    }
-
-    getBonesMap( object3d ) {
-        const map = new Map
-
-        object3d.traverse( element => {
-            if ( element.isBone ) {
-                if ( this.bonesMap.has( element.name ) ) {
-                    map.set( element.name, element )
-                }
-            }
-        } )
-
-        return map
-    }
-
-    getCategoryById( id ) {
-        return this.categoriesMap.get( id )
-    }
-
-    log( id ) {
-        // if ( typeof id === "string" ) {
-        //     const found = this.categories.find( c => c.id === id )
-        //     console.log( found )
-        // } else {
-        //     console.log( this.categories )
-        // }
-
-        console.log("categories:", this.categoriesMap )
-        console.log("loadedBones:", this.bonesMap )
-        console.log("loadedObjects:", this.loadedObjectsMap )
     }
 }
 
@@ -183,7 +151,7 @@ function getChildWithCorrectMatrixWorld( child, parent ) {
  * @param { Set< string > } knownBoneNames
  */
 function extractKnownBones( object3d, knownBoneNames ) {
-    
+
     /** @type { Map< string, Bone > } */
     const extractedBones = new Map
 
