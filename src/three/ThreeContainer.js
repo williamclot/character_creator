@@ -34,7 +34,7 @@ class ThreeContainer extends React.PureComponent {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
 
         window.loaded = false;
         window.partloaded = false;
@@ -65,8 +65,10 @@ class ThreeContainer extends React.PureComponent {
         this.scene.add(this.group, this.transformControls, floor, gridHelper, ...lights);
 
         this.animate();
+
+        const { data: poseData } = await axios.get( process.env.PUBLIC_URL + '/models/poses/default.json' );
         
-        this.loadMeshesFirstTime(TMP_LIB);
+        this.loadMeshesFirstTime(TMP_LIB, poseData);
 
         // this.canvas.addEventListener('click', this._onMouseClick );
     }
@@ -115,21 +117,21 @@ class ThreeContainer extends React.PureComponent {
         }
     }
         }
+
+    async loadObject( url ) {
+        const gltf = await loadMeshFromURL( url );
+        return gltf.scene.children[0];
     }
 
 
-    async loadMeshesFirstTime(lib) {
+    async loadMeshesFirstTime(lib, poseData) {
         console.log( 'loading first time ...' );
 
-        const { data: poseData } = await axios.get( process.env.PUBLIC_URL + '/models/poses/default.json' );
+        const promises = lib.map( obj => this.loadObject( obj.url ));
 
-        const promises = lib.map( obj => loadMeshFromURL( obj.url ));
+        const objects = await Promise.all(promises);
 
-
-        const gltfs = await Promise.all(promises);
-
-        for (let [ index, gltf ] of gltfs.entries()) {
-            const obj = gltf.scene.children[ 0 ]; // get root
+        for (let [ index, obj ] of objects.entries()) {
             const categoryName = lib[ index ].type;
 
             this.placeSingleMesh(categoryName, obj, { poseData });
