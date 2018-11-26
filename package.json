@@ -22,7 +22,7 @@
     "three-orbitcontrols": "^2.96.3",
     "three-stl-loader": "^1.0.6",
     "three-stlexporter": "^1.0.0",
-    "three-transformcontrols": "^0.78.1",
+    "three-transformcontrols": "^0.78.1"
   },
   "devDependencies": {
     "react-scripts": "1.1.4"
