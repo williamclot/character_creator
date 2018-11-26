@@ -126,19 +126,20 @@ class ThreeContainer extends React.PureComponent {
         const promises = lib.map( obj => loadMeshFromURL( obj.url ));
 
 
-        // this.group.updateMatrixWorld();
         const gltfs = await Promise.all(promises);
-        gltfs.forEach( ( gltf, index ) => {
-            this.placeSingleMesh(gltf, {
-                MeshType: lib[index].type,
+
+        for (let [ index, gltf ] of gltfs.entries()) {
+            const obj = gltf.scene.children[ 0 ]; // get root
+            this.placeSingleMesh( obj, {
+                MeshType: lib[ index ].type,
                 poseData
             });
-        })
+        }
     }
 
     
 
-    placeSingleMesh(gltf, options = {}) {
+    placeSingleMesh(root, options = {}) {
         const {
             meshName,
             MeshType,
@@ -147,8 +148,6 @@ class ThreeContainer extends React.PureComponent {
             rotation,
             poseData
         } = options;
-
-        const root = gltf.scene.children[0];
 
         root.traverse(function(child) {
             if (child instanceof THREE.Mesh) {
@@ -168,7 +167,7 @@ class ThreeContainer extends React.PureComponent {
                 }
             });
         }
-        
+
         this.groupManager.add( MeshType, root );
 
     }
