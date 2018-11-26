@@ -15,7 +15,7 @@ export const findMinGeometry = ( function() {
 
 	return function ( scene ) {
 
-		var output = 100;
+		var output = Infinity;
 
 		scene.traverse( function ( mesh ) {
 			

@@ -2,6 +2,7 @@ import { Matrix4, Object3D, Group, Bone } from 'three'
 
 import defaultCategories from './categories'
 import Category, { ParentCategory } from './category'
+import { findMinGeometry } from './FindMinGeometry'
 
 /**
  * 
@@ -13,6 +14,9 @@ class GroupManager {
     constructor( group, categories = defaultCategories ) {
         
         this.group = group
+        this.stand = null
+
+        this.rootCategory = categories.find( category => category.parent === null )
 
         /**
          * A mapping from category ID to category data
@@ -127,7 +131,56 @@ class GroupManager {
 
         } else {
 
-            return this.group
+            if ( ! this.stand ) {
+                throw new Error( `You first need to place a stand before adding objects` )
+            }
+
+            return this.stand
+
+        }
+    }
+
+    resetStand() {
+
+        const rootCategoryId = this.rootCategory.id
+
+        const rootObj = this.loadedObjectsMap.get( rootCategoryId )
+        
+        if ( rootObj ) {
+            
+            const minGeometry = findMinGeometry( rootObj )
+            const currentY = rootObj.position.y
+            rootObj.position.setY( currentY - minGeometry )
+
+        }
+
+    }
+
+    /**
+     * @param { Object3D } stand 
+     */
+    placeStand( newStand ) {
+        
+        const rootCategoryId = this.rootCategory.id        
+        
+        if ( this.stand ) {
+            this.group.remove( this.stand )
+        }
+        
+        this.group.add( newStand )
+        
+        this.stand = newStand
+        
+        const rootObj = this.loadedObjectsMap.get( rootCategoryId )
+        
+        if ( rootObj ) {
+
+            // adding an object will remove it from the previous parent
+            newStand.add( rootObj )
+            
+            const minGeometry = findMinGeometry( rootObj )
+            const currentY = rootObj.position.y
+            rootObj.position.setY( currentY - minGeometry )
 
         }
     }

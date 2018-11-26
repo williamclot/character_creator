@@ -10,12 +10,12 @@ import ls from './util/localStorageUtils';
 import GroupManager from './loadedObjectsManager';
 
 import { loadMeshFromURL, parseMesh } from './util/gltfLoader';
-import { findMinGeometry } from './util/FindMinGeometry';
+import { findMinGeometry } from './loadedObjectsManager/FindMinGeometry';
 import { defaultMeshes, meshStaticInfo, childrenList, boneAttachmentRelationships } from './util/meshInfo';
 import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './util/init';
 import { clearPosition, rotateElement, clearRotation, __getStructure, __validateStructure } from './util/helpers';
 
-import TMP_LIB from './tmp-lib';
+import { lib as LIB, stand as STAND } from './tmp-lib';
 
 
 const selectedColor = { r: 0.555, g: 0.48, b: 0.49 };
@@ -66,11 +66,14 @@ class ThreeContainer extends React.PureComponent {
 
         this.animate();
 
-        const { data: poseData } = await axios.get( process.env.PUBLIC_URL + '/models/poses/default.json' );
+        // const { data: poseData } = await axios.get( process.env.PUBLIC_URL + '/models/poses/default.json' );
         
-        this.loadMeshesFirstTime(TMP_LIB, poseData);
+        // this.loadMeshesFirstTime(TMP_LIB, poseData);
 
         // this.canvas.addEventListener('click', this._onMouseClick );
+
+        this.initWindowFunctions();
+        window.loadDefaultMeshes();
     }
 
     render() {
@@ -124,8 +127,12 @@ class ThreeContainer extends React.PureComponent {
     }
 
 
-    async loadMeshesFirstTime(lib, poseData) {
+    async loadMeshesFirstTime(standURL, lib, poseData) {
         console.log( 'loading first time ...' );
+
+        const stand = await this.loadObject( standURL );
+        
+        this.placeStand( stand );
 
         const promises = lib.map( obj => this.loadObject( obj.url ));
 
@@ -169,6 +176,13 @@ class ThreeContainer extends React.PureComponent {
 
         this.groupManager.add( categoryName, root );
 
+    }
+
+    /**
+     * @param { THREE.Object3D } stand 
+     */
+    placeStand( stand ) {
+        this.groupManager.placeStand( stand );
     }
 
     /**
@@ -315,7 +329,7 @@ class ThreeContainer extends React.PureComponent {
         window.partloaded = true;
     }
     
-    async placeStand() {
+    async __old__placeStand() {
         // var topStand;
     
         if (this.scene.getObjectByName("mesh-stand")) {
