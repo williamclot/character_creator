@@ -413,24 +413,8 @@ class ThreeContainer extends React.PureComponent {
                 }
             }
         }.bind(this);
-        window.loadDefaultMeshes = function(bones, poseData) {
-            const bodyPartClass = meshStaticInfo["Torso"].bodyPart;
-            const meshName = lsWrapper.loadedMeshes["Torso"].name;
-            const url = process.env.PUBLIC_URL + "/models/" + bodyPartClass + "/" + meshName + ".glb";
-
-            this.placeMesh(
-                url,
-                {
-                    meshName,
-                    MeshType: "Torso",
-                    parentAttachment: undefined,
-                    childAttachment: undefined,
-                    rotation: undefined,
-                    firstLoad: true,
-                    highLight: false,
-                    poseData
-                }
-            );
+        window.loadDefaultMeshes = function(poseData) {
+            this.loadMeshesFirstTime(TMP_LIB, poseData)
         }.bind(this);
         
         /**
