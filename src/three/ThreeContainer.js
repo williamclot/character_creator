@@ -130,22 +130,19 @@ class ThreeContainer extends React.PureComponent {
 
         for (let [ index, gltf ] of gltfs.entries()) {
             const obj = gltf.scene.children[ 0 ]; // get root
-            this.placeSingleMesh( obj, {
-                MeshType: lib[ index ].type,
-                poseData
-            });
+            const categoryName = lib[ index ].type;
+
+            this.placeSingleMesh(categoryName, obj, { poseData });
         }
     }
 
     
 
-    placeSingleMesh(root, options = {}) {
+    placeSingleMesh(categoryName, root, options = {}) {
         const {
-            meshName,
-            MeshType,
-            parentAttachment,
-            childAttachment,
             rotation,
+            position,
+            scale,
             poseData
         } = options;
 
@@ -168,7 +165,7 @@ class ThreeContainer extends React.PureComponent {
             });
         }
 
-        this.groupManager.add( MeshType, root );
+        this.groupManager.add( categoryName, root );
 
     }
 
