@@ -98,7 +98,8 @@ class GroupManager {
             const newBone = bonesMap.get( boneId )
 
             // this will automatically move the children to their new parent
-            newBone.add( oldBone.children )
+            newBone.add( ...oldBone.children )
+
         } )
         
         const parent = this.getParent( category.parent )
