@@ -176,4 +176,24 @@ function getChildWithCorrectMatrixWorld( child, parent ) {
     return child
 }
 
+
+/**
+ * returns a map from boneId to Bone containing only the registered bones
+ * @param { Object3D } object3d
+ * @param { Set< string > } knownBoneNames
+ */
+function extractKnownBones( object3d, knownBoneNames ) {
+    
+    /** @type { Map< string, Bone > } */
+    const extractedBones = new Map
+
+    object3d.traverse( element => {
+        if ( element.isBone && knownBoneNames.has( element.name ) ) {
+            extractedBones.set( element.name, element )
+        }
+    } )
+
+    return extractedBones
+}
+
 export default GroupManager 
