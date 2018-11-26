@@ -4,7 +4,7 @@ import axios from 'axios';
 import * as THREE from 'three';
 import STLExporter from 'three-stlexporter';
 
-import { localStorageWrapper as lsWrapper } from '../utils/localStorageUtils';
+import ls from './util/localStorageUtils';
 
 import GroupManager from './loadedObjectsManager';
 
@@ -20,22 +20,17 @@ import TMP_LIB from './tmp-lib';
 const selectedColor = { r: 0.555, g: 0.48, b: 0.49 };
 
 class ThreeContainer extends React.PureComponent {
-    initLoadedMeshes() {
-        /** keeps track of the currently selected mesh */
-        if (!lsWrapper.isSelectedMeshSet) {
-            lsWrapper.selectedMesh = "Head";
-        }
-
-        /** This keeps track of every mesh on the viewport */
-        if (!lsWrapper.isLoadedMeshesSet) {
-            lsWrapper.loadedMeshes = defaultMeshes;            
-        }
-    }
 
     constructor() {
         super();
 
-        this.initLoadedMeshes();
+        if (!ls.isSelectedMeshSet) {
+            ls.selectedMesh = "Head";
+        }
+
+        if (!ls.isLoadedMeshesSet) {
+            ls.loadedMeshes = defaultMeshes;
+        }
 
         window.loaded = false;
         window.partloaded = false;
