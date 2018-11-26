@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import * as THREE from 'three';
 import STLExporter from 'three-stlexporter';
+import TransformControls from 'three-transformcontrols';
 
 import ls from './util/localStorageUtils';
 
@@ -31,6 +32,9 @@ class ThreeContainer extends React.PureComponent {
         if (!ls.isLoadedMeshesSet) {
             ls.loadedMeshes = defaultMeshes;
         }
+    }
+
+    componentDidMount() {
 
         window.loaded = false;
         window.partloaded = false;
@@ -41,25 +45,44 @@ class ThreeContainer extends React.PureComponent {
     
         /** This group will contain all the meshes but not the floor, the lights etc... */
         this.group = new THREE.Group();
-
         this.groupManager = new GroupManager( this.group );
         
         const lights = initLights();
         const floor = initFloor();
         const gridHelper = initGridHelper();
         
-        this.scene.add(this.group, floor, gridHelper, ...lights);
 
         if (process.env.NODE_ENV === "development") {
             // expose variable to window in order to be able to use Three.js inspector
             window.scene = this.scene;
         }
+
+        this.camera = initCamera();
+        this.renderer = initRenderer(this.canvas);
+        this.orbitControls = initControls(this.camera, this.canvas);
+        this.transformControls = new TransformControls(this.camera, this.canvas);
+        
+        this.scene.add(this.group, this.transformControls, floor, gridHelper, ...lights);
+
+        this.animate();
+        
+        this.loadMeshesFirstTime(TMP_LIB);
+
+        // this.canvas.addEventListener('click', this._onMouseClick );
+    }
+
+    render() {
+        return (
+            <canvas
+                ref={el => this.canvas = el}
+            />
+        );
     }
 
     animate = () => {
         requestAnimationFrame(this.animate);
 
-        this.controls.update();
+        this.orbitControls.update();
 
         // TODO function calls below may not be needed !!!
         this.camera.lookAt(new THREE.Vector3(0, 1, 0));
@@ -91,25 +114,9 @@ class ThreeContainer extends React.PureComponent {
             // }
         }
     }
-
-    componentDidMount() {
-        this.camera = initCamera();
-        this.renderer = initRenderer(this.canvas);
-        this.controls = initControls(this.camera, this.canvas);
-
-        this.animate();
-        
-        this.loadMeshesFirstTime(TMP_LIB);
-
+        }
     }
 
-    render() {
-        return (
-            <canvas
-                ref={el => this.canvas = el}
-            />
-        );
-    }
 
     async loadMeshesFirstTime(lib) {
         console.log( 'loading first time ...' );
