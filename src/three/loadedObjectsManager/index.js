@@ -1,1 +1,1 @@
-export { default } from './simpleLoadedBonesManager';
+export { default } from './manager';
