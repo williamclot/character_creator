@@ -1,4 +1,4 @@
-import { Matrix4, Object3D, Group, Bone } from 'three'
+import { Matrix4, Object3D, Group, Bone, Mesh, Material, Color } from 'three'
 
 import defaultCategories from './categories'
 import Category, { ParentCategory } from './category'
@@ -183,6 +183,56 @@ class GroupManager {
             rootObj.position.setY( currentY - minGeometry )
 
         }
+    }
+
+    /**
+     * @param { Object3D } object3d
+     * @param { Color } newColour
+     */
+    _setColour( object3d, newColour ) {
+
+        object3d.traverse( child  => {
+
+            if ( child instanceof Mesh ) {
+                const { material } = child
+                if (
+                    material instanceof Material &&
+                    material.color instanceof Color
+                ) {
+                    material.color.set( newColour )
+                }
+            }
+
+        } )
+
+    }
+
+    /**
+     * @param { string } categoryId
+     * @param { Color } newColour
+     */
+    changeColour( categoryId, newColour ) {
+        
+        if ( ! this.loadedObjectsMap.has( categoryId ) ) { return }
+
+        const object3d = this.loadedObjectsMap.get( categoryId )
+
+        this._setColour( object3d, newColour )
+
+    }
+
+    changeStandColour( newColour ) {
+
+        if ( ! this.stand ) { return }
+
+        this._setColour( this.stand, newColour )
+
+    }
+
+    changePoseColour( newColour ) {
+
+        this._setColour( this.group, newColour )
+
     }
 }
 
