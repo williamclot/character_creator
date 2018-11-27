@@ -1,0 +1,121 @@
+[
+    {
+        "url": "/models/hand/no_hand_R.glb",
+        "categoryName": "HandR",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": -1.57,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/hand/open_hand_R.glb",
+        "categoryName": "HandR",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": -1.57,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/hand/closed_hand_R.glb",
+        "categoryName": "HandR",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": -1.57,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/hand/hook_R.glb",
+        "categoryName": "HandR",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": -1.57,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/hand/robot_hand_R.glb",
+        "categoryName": "HandR",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": -1.57,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/hand/barbarian_R.glb",
+        "categoryName": "HandR",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": -1.57,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/hand/blender_R.glb",
+        "categoryName": "HandR",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": -1.57,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    }
+]

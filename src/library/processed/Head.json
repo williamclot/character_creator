@@ -1,0 +1,223 @@
+[
+    {
+        "url": "/models/head/default_head.glb",
+        "categoryName": "Head",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/head/default_man_head.glb",
+        "categoryName": "Head",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 3.1415,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/head/groot.glb",
+        "categoryName": "Head",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 3.1415,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/head/big_head.glb",
+        "categoryName": "Head",
+        "metadata": {
+            "rotation": {
+                "x": -0.3,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/head/stormtrooper.glb",
+        "categoryName": "Head",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 3.1415,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/head/dobby.glb",
+        "categoryName": "Head",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 3.1415,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/head/hellion_rams.glb",
+        "categoryName": "Head",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 3.1415,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/head/flexi_dead_head.glb",
+        "categoryName": "Head",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/head/iron_bubble_head.glb",
+        "categoryName": "Head",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 3.14,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/head/muscled_man.glb",
+        "categoryName": "Head",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 3.14,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/head/blender_head.glb",
+        "categoryName": "Head",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 3.14,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/head/barbarian.glb",
+        "categoryName": "Head",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 3.14,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/head/test_head.glb",
+        "categoryName": "Head",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    }
+]

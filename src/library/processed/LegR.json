@@ -1,0 +1,36 @@
+[
+    {
+        "url": "/models/leg/default_leg_R.glb",
+        "categoryName": "LegR",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/leg/robot_leg_R.glb",
+        "categoryName": "LegR",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    }
+]

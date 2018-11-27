@@ -1,0 +1,87 @@
+[
+    {
+        "url": "/models/arm/default_arm_L.glb",
+        "categoryName": "ArmL",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/arm/thin_arm_L.glb",
+        "categoryName": "ArmL",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/arm/muscled_arm_L.glb",
+        "categoryName": "ArmL",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/arm/robot_arm_L.glb",
+        "categoryName": "ArmL",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/arm/spyro_arm_L.glb",
+        "categoryName": "ArmL",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    }
+]

@@ -1,0 +1,104 @@
+[
+    {
+        "url": "/models/foot/default_foot_L.glb",
+        "categoryName": "FootL",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/foot/buckled_foot_L.glb",
+        "categoryName": "FootL",
+        "metadata": {
+            "rotation": {
+                "x": 0.2,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/foot/boots_L.glb",
+        "categoryName": "FootL",
+        "metadata": {
+            "rotation": {
+                "x": 0.2,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/foot/barbarian_L.glb",
+        "categoryName": "FootL",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/foot/futurama_L.glb",
+        "categoryName": "FootL",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    },
+    {
+        "url": "/models/foot/timberland_L.glb",
+        "categoryName": "FootL",
+        "metadata": {
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        },
+        "extension": "glb"
+    }
+]
