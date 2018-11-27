@@ -14,11 +14,9 @@ import { findMinGeometry } from './loadedObjectsManager/FindMinGeometry';
 import { defaultMeshes, meshStaticInfo, childrenList, boneAttachmentRelationships } from './util/meshInfo';
 import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './util/init';
 import { clearPosition, rotateElement, clearRotation, __getStructure, __validateStructure } from './util/helpers';
+import { GRAY, SELECTED_COLOR } from './util/colours';
 
 import { lib as LIB, stand as STAND } from './tmp-lib';
-
-
-const selectedColor = { r: 0.555, g: 0.48, b: 0.49 };
 
 class ThreeContainer extends React.PureComponent {
 
@@ -158,6 +156,7 @@ class ThreeContainer extends React.PureComponent {
         root.traverse(function(child) {
             if (child instanceof THREE.Mesh) {
                 child.castShadow = true;
+                child.material.color.set( GRAY );
                 child.material.color = { r: 0.5, g: 0.5, b: 0.5 };
             }
         });
@@ -182,6 +181,17 @@ class ThreeContainer extends React.PureComponent {
      * @param { THREE.Object3D } stand 
      */
     placeStand( stand ) {
+
+        stand.traverse( child => {
+            if ( child instanceof THREE.Mesh ) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+                if (child.material.color){
+                    child.material.color.set( GRAY )
+                }
+            }
+        } );
+
         this.groupManager.placeStand( stand );
     }
 
