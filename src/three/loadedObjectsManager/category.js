@@ -18,15 +18,11 @@ class Category {
      * @param { ParentCategory } whereToAttach 
      */
     constructor( id, attachmentBones = [], whereToAttach = null ) {
+
         this.id = id
         this.attachmentBones = attachmentBones
         this.parent = whereToAttach
-        
-        this.imgPath = ""
-    }
 
-    setImage( path ) {
-        this.imgPath = path
     }
 
 }
@@ -35,8 +31,9 @@ class Category {
  * only used as an abstract
  */
 class CategoryWrapper {
-    constructor( name ) {
+    constructor( name, imgPath ) {
         this.name = name
+        this.imgPath = imgPath
     }
 
     getCategories() {}
@@ -46,8 +43,8 @@ class NormalCategory extends CategoryWrapper {
     /**
      * @param { Category } category
      */
-    constructor( name, category ) {
-        super( name )
+    constructor( category, name, imgPath ) {
+        super( name, imgPath )
         this.category = category
     }
 
@@ -61,8 +58,8 @@ class MirroredCategory extends CategoryWrapper {
      * @param { Category } leftCategory 
      * @param { Category } rightCategory 
      */
-    constructor( name, leftCategory, rightCategory ) {
-        super( name )
+    constructor( leftCategory, rightCategory, name, imgPath ) {
+        super( name, imgPath )
         this.leftCategory = leftCategory
         this.rightCategory = rightCategory
     }
