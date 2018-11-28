@@ -60,12 +60,12 @@ const FootR = new Category(
     new ParentCategory( "LegR", "LegR_Foot_R" )
 )
 
-const torso = new NormalCategory( Torso, "torso" )
-const head = new NormalCategory( Head, "head" )
-const arm = new MirroredCategory( ArmL, ArmR, "arm" )
-const hand = new MirroredCategory( HandL, HandR, "hand" )
-const leg = new MirroredCategory( LegL, LegR, "leg" )
-const foot = new MirroredCategory( FootL, FootR, "foot" )
+const torso = new NormalCategory( Torso, "torso", "/img/graphics_creation/torso.svg" )
+const head = new NormalCategory( Head, "head", "/img/graphics_creation/head.svg" )
+const arm = new MirroredCategory( ArmL, ArmR, "arm", "/img/graphics_creation/arm.svg" )
+const hand = new MirroredCategory( HandL, HandR, "hand", "/img/graphics_creation/hand.svg" )
+const leg = new MirroredCategory( LegL, LegR, "leg", "/img/graphics_creation/leg.svg" )
+const foot = new MirroredCategory( FootL, FootR, "foot", "/img/graphics_creation/foot.svg" )
 
 /**
  * List of category wrappers. These can be used to identify whether a category
