@@ -18,7 +18,7 @@ import "./css/master.css";
 import logo from "./graphic_assets/mmf_logo.png";
 
 // Loading the data this way for now
-import data from "./library/category.json";
+import { defaultCategoryWrappers as defaultCategories } from "./three/util/category";
 
 // Loading the different components
 import Name from "./components/Name";
@@ -39,8 +39,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      category: data,
-      currentCategory: "head",
+      category: defaultCategories,
+      currentCategory: defaultCategories[1],
       characterName: "myCharacter",
       UIDisplayed: true,
       popup: false,

@@ -8,7 +8,7 @@ import SearchBar from "./SearchBar";
 import AddYourDesignForm from "./AddYourDesignForm";
 import "../css/selector.css";
 
-import bones from "../library/bones.json";
+// import bones from "../library/bones.json";
 import libraryUtils from '../utils/libraryUtils';
 
 const RenderPremium = ({ premium }) => {
@@ -45,33 +45,37 @@ class Selector extends Component {
 	constructor(props) {
 		super(props);
 
-		const { currentCategory, isLeft } = props;
-		const loadedLibraryData = libraryUtils.getLibrary(currentCategory, isLeft);
-
 		this.state = {
 			editorSelected: false,
 			pose: undefined,
 			searchText: "",
-			loadedLibraryData,
+			loadedLibraryData: [],
 		};
 	}
 
 	async componentDidMount() {
+
+		const { currentCategory, isLeft } = this.props;
+		const { data: loadedLibraryData } = await libraryUtils.getLibrary(currentCategory, isLeft);
+
 		// Load the base model with defaultMeshes and defaultPose
 		const { data: pose } = await axios.get(process.env.PUBLIC_URL + "/models/poses/default.json");
 
 		// await new Promise(resolve => setTimeout(resolve, 3000)); // wait 3 secs
-		this.setState({	pose });
+		this.setState({
+			pose,
+			loadedLibraryData
+		});
 
-		window.loadDefaultMeshes(bones, pose);
+		window.loadDefaultMeshes(pose);
 	}
 
-	componentWillReceiveProps(nextProps) {
+	async componentWillReceiveProps(nextProps) {
 		if (nextProps.currentCategory !== this.props.currentCategory ||
 			nextProps.isLeft !== this.props.isLeft) {
 			const { currentCategory, isLeft } = nextProps;
 
-			const loadedLibraryData = libraryUtils.getLibrary(currentCategory, isLeft);
+			const { data: loadedLibraryData } = await libraryUtils.getLibrary(currentCategory, isLeft);
 
 			this.setState({ loadedLibraryData });
 		}
@@ -83,7 +87,7 @@ class Selector extends Component {
     axios.get(process.env.PUBLIC_URL + "/models/poses/" + file + ".json").then(res => {
 			poseData = res.data;
 			this.setState({ pose: poseData });
-			window.loadPose(poseData, bones);
+			window.loadPose(poseData);
 		});
 	}
 
@@ -145,10 +149,11 @@ class Selector extends Component {
 				const { rotation, file } = libraryItem;
 
 				window.changeMesh(
+					meshType,
 					libraryItem.absoluteURL,
 					{
-						meshType,
-						file,
+						// meshType,
+						// file,
 						rotation,
 						poseData: this.state.pose
 					}
@@ -167,13 +172,13 @@ class Selector extends Component {
 
 		const sideIdencator = libraryUtils.hasLeftAndRightDistinction(category);
 
-		let filteredlibrary = this.state.loadedLibraryData.filter(element => (
-			element.name.toLowerCase().indexOf(this.state.searchText) !== -1
-		));
+		// let filteredlibrary = this.state.loadedLibraryData.filter(element => (
+		// 	element.name.toLowerCase().indexOf(this.state.searchText) !== -1
+		// ));
 
 
 		//JSX element to display the HTML
-		const elementDiv = filteredlibrary.map((libraryItem, i) => (
+		const elementDiv = this.state.loadedLibraryData.map((libraryItem, i) => (
 			<div
 				className="el"
 				key={i}
