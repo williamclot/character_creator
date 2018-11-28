@@ -14,7 +14,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Default Foot",
+        "imgURL": "/img/library/foot/default_foot.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Default Foot",
+        "author": "William CLOT"
     },
     {
         "url": "/models/foot/buckled_foot_R.glb",
@@ -31,7 +37,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Buckled Shoe",
+        "imgURL": "/img/library/foot/buckled_foot.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "",
+        "author": "William CLOT"
     },
     {
         "url": "/models/foot/boots_R.glb",
@@ -48,7 +60,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Boots",
+        "imgURL": "/img/library/foot/boot.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "",
+        "author": "William CLOT"
     },
     {
         "url": "/models/foot/barbarian_R.glb",
@@ -65,7 +83,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Barbarian",
+        "imgURL": "/img/library/foot/barbarian.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "",
+        "author": "William CLOT"
     },
     {
         "url": "/models/foot/futurama_R.glb",
@@ -82,7 +106,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Futurama",
+        "imgURL": "/img/library/foot/futurama.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "",
+        "author": "William CLOT"
     },
     {
         "url": "/models/foot/timberland_R.glb",
@@ -99,6 +129,12 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Timberland",
+        "imgURL": "/img/library/foot/timberland.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "",
+        "author": "William CLOT"
     }
 ]

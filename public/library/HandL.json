@@ -14,7 +14,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "no Hand",
+        "imgURL": "/img/library/hand/../none.svg",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "No hands",
+        "author": "William CLOT"
     },
     {
         "url": "/models/hand/open_hand_L.glb",
@@ -31,7 +37,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Open Hand",
+        "imgURL": "/img/library/hand/open_hand.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Open hands",
+        "author": "William CLOT"
     },
     {
         "url": "/models/hand/closed_hand_L.glb",
@@ -48,7 +60,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Closed Hand",
+        "imgURL": "/img/library/hand/closed_hand.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Closed hands",
+        "author": "William CLOT"
     },
     {
         "url": "/models/hand/hook_L.glb",
@@ -65,7 +83,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Hook Hand",
+        "imgURL": "/img/library/hand/hook.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Open hands",
+        "author": "William CLOT"
     },
     {
         "url": "/models/hand/robot_hand_L.glb",
@@ -82,7 +106,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Robot Hand",
+        "imgURL": "/img/library/hand/robot_hand.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Robot Hands",
+        "author": "William CLOT"
     },
     {
         "url": "/models/hand/barbarian_L.glb",
@@ -99,7 +129,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Barbarian",
+        "imgURL": "/img/library/hand/barbarian.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "",
+        "author": "William CLOT"
     },
     {
         "url": "/models/hand/blender_L.glb",
@@ -116,6 +152,12 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Blender",
+        "imgURL": "/img/library/hand/blender.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "",
+        "author": "William CLOT"
     }
 ]

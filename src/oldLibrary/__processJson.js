@@ -6,7 +6,7 @@ const file = "allLibs.json"
 
 const json = JSON.parse( fs.readFileSync(file) )
 
-const dirName = "./processed"
+const dirName = "./out"
 
 for ( let [ categoryId, data ] of Object.entries(json) ) {
     console.log(categoryId)
@@ -19,7 +19,12 @@ for ( let [ categoryId, data ] of Object.entries(json) ) {
                 img, 
                 rotation,
                 scale: scaleXYZ,
-                absoluteURL
+                absoluteURL,
+                mmfLink,
+                premium,
+                description,
+                author,
+                file: fileName
             } = item
 
             return {
@@ -33,7 +38,13 @@ for ( let [ categoryId, data ] of Object.entries(json) ) {
                         z: scaleXYZ
                     }
                 },
-                extension: "glb"
+                extension: "glb",
+                name,
+                imgURL: img,
+                mmfLink,
+                isPremium: premium,
+                description,
+                author
             }
         }
     )

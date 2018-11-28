@@ -14,7 +14,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Default Leg",
+        "imgURL": "/img/library/leg/default_leg.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Default Legs",
+        "author": "William CLOT"
     },
     {
         "url": "/models/leg/robot_leg_R.glb",
@@ -31,6 +37,12 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Robot Leg",
+        "imgURL": "/img/library/leg/robot_leg.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Robot Legs",
+        "author": "William CLOT"
     }
 ]

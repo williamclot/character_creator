@@ -14,7 +14,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Default Torso",
+        "imgURL": "/img/library/torso/default_torso.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Default torso.",
+        "author": "William CLOT"
     },
     {
         "url": "/models/torso/turtle_torso.glb",
@@ -31,7 +37,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Turtle Torso",
+        "imgURL": "/img/library/torso/turtle_torso.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Default man head.",
+        "author": "William CLOT"
     },
     {
         "url": "/models/torso/blender.glb",
@@ -48,7 +60,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Blender Torso",
+        "imgURL": "/img/library/torso/blender_torso.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Default man head.",
+        "author": "William CLOT"
     },
     {
         "url": "/models/torso/barbarian.glb",
@@ -65,7 +83,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Barbarian Torso",
+        "imgURL": "/img/library/torso/barbarian.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Default man head.",
+        "author": "William CLOT"
     },
     {
         "url": "/models/torso/man_torso.glb",
@@ -82,6 +106,12 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Man Torso",
+        "imgURL": "/img/library/torso/man_torso.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Default man head.",
+        "author": "William CLOT"
     }
 ]

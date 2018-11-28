@@ -14,7 +14,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Default Arm",
+        "imgURL": "/img/library/arm/default_arm.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Default Arms",
+        "author": "William CLOT"
     },
     {
         "url": "/models/arm/thin_arm_R.glb",
@@ -31,7 +37,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Thin Arm",
+        "imgURL": "/img/library/arm/thin_arm.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Open hands",
+        "author": "William CLOT"
     },
     {
         "url": "/models/arm/muscled_arm_R.glb",
@@ -48,7 +60,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Muscled Arm",
+        "imgURL": "/img/library/arm/muscled_arm.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Closed hands",
+        "author": "William CLOT"
     },
     {
         "url": "/models/arm/robot_arm_R.glb",
@@ -65,7 +83,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Robot Arm",
+        "imgURL": "/img/library/arm/robot_arm.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Closed hands",
+        "author": "William CLOT"
     },
     {
         "url": "/models/arm/spyro_arm_R.glb",
@@ -82,6 +106,12 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Spyro Arm",
+        "imgURL": "/img/library/arm/spyro.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Wings",
+        "author": "William CLOT"
     }
 ]

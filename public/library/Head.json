@@ -14,7 +14,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Default Head",
+        "imgURL": "/img/library/head/default.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Default man head.",
+        "author": "William CLOT"
     },
     {
         "url": "/models/head/default_man_head.glb",
@@ -31,7 +37,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Default Man Head",
+        "imgURL": "/img/library/head/default_man_head.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Default man head.",
+        "author": "William CLOT"
     },
     {
         "url": "/models/head/groot.glb",
@@ -48,7 +60,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Groot Head",
+        "imgURL": "/img/library/head/groot.png",
+        "mmfLink": "https://www.myminifactory.com/object/3d-print-baby-groot-26802",
+        "isPremium": false,
+        "description": "Default man head.",
+        "author": "William CLOT"
     },
     {
         "url": "/models/head/big_head.glb",
@@ -65,7 +83,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Big Head",
+        "imgURL": "/img/library/head/big_head.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "Big stalion head.",
+        "author": "William CLOT"
     },
     {
         "url": "/models/head/stormtrooper.glb",
@@ -82,7 +106,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Stormtrooper",
+        "imgURL": "/img/library/head/stormtrooper.png",
+        "mmfLink": "https://www.myminifactory.com/object/3d-print-stormtrooper-helmet-65368",
+        "isPremium": false,
+        "description": "Stoormtrooper mask.",
+        "author": "William CLOT"
     },
     {
         "url": "/models/head/dobby.glb",
@@ -99,7 +129,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Dobby",
+        "imgURL": "/img/library/head/dobby.png",
+        "mmfLink": "https://www.myminifactory.com/object/3d-print-dobby-from-harry-potter-full-model-3294",
+        "isPremium": false,
+        "description": "Dobby from Harry Potter",
+        "author": "Scan The World"
     },
     {
         "url": "/models/head/hellion_rams.glb",
@@ -116,7 +152,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Hellion Rams",
+        "imgURL": "/img/library/head/hellion_rams.png",
+        "mmfLink": "https://www.myminifactory.com/object/3d-print-hellion-rams-head-546",
+        "isPremium": false,
+        "description": "",
+        "author": "MyMiniFactory"
     },
     {
         "url": "/models/head/flexi_dead_head.glb",
@@ -133,7 +175,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Flexi Dead Head",
+        "imgURL": "/img/library/head/flexi_dead_head.png",
+        "mmfLink": "https://www.myminifactory.com/object/3d-print-dead-head-2426",
+        "isPremium": false,
+        "description": "",
+        "author": "William CLOT"
     },
     {
         "url": "/models/head/iron_bubble_head.glb",
@@ -150,7 +198,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Iron Bubble Head",
+        "imgURL": "/img/library/head/iron_bubble_head.png",
+        "mmfLink": "https://www.myminifactory.com/object/3d-print-stormtrooper-helmet-65368",
+        "isPremium": false,
+        "description": "",
+        "author": "William CLOT"
     },
     {
         "url": "/models/head/muscled_man.glb",
@@ -167,7 +221,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Muscled Man",
+        "imgURL": "/img/library/head/muscled_man.png",
+        "mmfLink": "",
+        "isPremium": true,
+        "description": "Default man head.",
+        "author": "Loic Rouviere"
     },
     {
         "url": "/models/head/blender_head.glb",
@@ -184,7 +244,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Bender Head",
+        "imgURL": "/img/library/head/blender.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "",
+        "author": "William CLOT"
     },
     {
         "url": "/models/head/barbarian.glb",
@@ -201,7 +267,13 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Barbarian Head",
+        "imgURL": "/img/library/head/barbarian.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "",
+        "author": "William CLOT"
     },
     {
         "url": "/models/head/test_head.glb",
@@ -218,6 +290,12 @@
                 "z": 1
             }
         },
-        "extension": "glb"
+        "extension": "glb",
+        "name": "Box Head",
+        "imgURL": "/img/library/head/box_head.png",
+        "mmfLink": "",
+        "isPremium": false,
+        "description": "",
+        "author": "William CLOT"
     }
 ]
