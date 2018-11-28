@@ -9,6 +9,7 @@ import ls from './util/localStorageUtils';
 
 import GroupManager from './loadedObjectsManager';
 
+import { Category, ParentCategory, defaultCategories } from './util/category';
 import { loadMeshFromURL, parseMesh } from './util/gltfLoader';
 import { findMinGeometry } from './loadedObjectsManager/FindMinGeometry';
 import { defaultMeshes, meshStaticInfo, childrenList, boneAttachmentRelationships } from './util/meshInfo';
@@ -43,7 +44,7 @@ class ThreeContainer extends React.PureComponent {
     
         /** This group will contain all the meshes but not the floor, the lights etc... */
         this.group = new THREE.Group();
-        this.groupManager = new GroupManager( this.group );
+        this.groupManager = new GroupManager( this.group, defaultCategories );
         
         const lights = initLights();
         const floor = initFloor();
