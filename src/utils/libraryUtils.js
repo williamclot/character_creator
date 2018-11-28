@@ -1,120 +1,75 @@
-import headElements from "../library/heads.js";
-import leftHandElements from "../library/left_hands.js";
-import rightHandElements from "../library/right_hands.js";
-import leftArmElements from "../library/left_arms.js";
-import rightArmElements from "../library/right_arms.js";
-import torsoElements from "../library/torso.js";
-import leftFootElements from "../library/left_feet.js";
-import rightFootElements from "../library/right_feet.js";
-import leftLegElements from "../library/left_legs.js";
-import rightLegElements from "../library/right_legs.js";
-import standElements from "../library/stands.js";
-import poseElements from "../library/poses.js";
+import {
+	Category, CategoryWrapper, MirroredCategory, NormalCategory,
+	defaultCategories, defaultCategoryWrappers
+} from '../three/util/category'
 
-// import { LibraryItem } from "./libraryData.ts"; // interface for items in the library
+import { axiosWithPublicUrl } from './axiosUtils'
+
+const LIB_FOLDER = "/library"
+
+/** @returns { Promise< LibraryItem[] > } */
+function requestLib( categoryId ) {
+	return axiosWithPublicUrl.get( `${ LIB_FOLDER }/${ categoryId }.json` )
+}
 
 /**
  * wrapper around the local library of body parts
  */
 const libraryUtils = {
-	libraries: {
-		head: {
-			data: headElements,
-			categoryHasLeftAndRightDistinction: false,
-			meshType: "Head"
-		},
-		hand: {
-			data: {
-				left: leftHandElements,
-				right: rightHandElements
-			},
-			categoryHasLeftAndRightDistinction: true,
-			meshType: {
-				left: "HandL",
-				right: "HandR"
+	/**
+	 * returns the local data about a body part
+	 * @param { CategoryWrapper } categoryWrapper - the body part (i.e. "head", "leg")
+	 * @param { boolean } [isLeft]
+	 * @returns { Promise< LibraryItem[] > } - promise that resolves to a list of LibraryItem objects
+	 */
+	getLibrary( categoryWrapper, isLeft ) {
+
+		switch ( categoryWrapper.constructor ) { // could also check for category.isMirrored
+			case MirroredCategory: {
+				const category = isLeft ? categoryWrapper.leftCategory : categoryWrapper.rightCategory
+				const categoryId = category.id
+
+				return requestLib( categoryId )
 			}
-		},
-		arm: {
-			data: {
-				left: leftArmElements,
-				right: rightArmElements
-			},
-			categoryHasLeftAndRightDistinction: true,
-			meshType: {
-				left: "ArmL",
-				right: "ArmR"
+			case NormalCategory: {
+				const categoryId = categoryWrapper.category.id
+
+				return requestLib( categoryId )
 			}
-		},
-		torso: {
-			data: torsoElements,
-			categoryHasLeftAndRightDistinction: false,
-			meshType: "Torso"
-		},
-		foot: {
-			data: {
-				left: leftFootElements,
-				right: rightFootElements
-			},
-			categoryHasLeftAndRightDistinction: true,
-			meshType: {
-				left: "FootL",
-				right: "FootR"
+			default: {
+				return Promise.reject( new Error( `Not an instance of CategoryWrapper!` ) )
 			}
-		},
-		leg: {
-			data: {
-				left: leftLegElements,
-				right: rightLegElements
-			},
-			categoryHasLeftAndRightDistinction: true,
-			meshType: {
-				left: "LegL",
-				right: "LegR"
-			}
-		},
-		pose: {
-			data: poseElements,
-			categoryHasLeftAndRightDistinction: false,
-			meshType: undefined
-		},
-		stand: {
-			data: standElements,
-			categoryHasLeftAndRightDistinction: false,
-			meshType: undefined
-		}	
+		}
+
 	},
 
 	/**
-	 * returns the local data about a body part
-	 * @param {String} category - the body part (i.e. "head", "leg")
-	 * @param {Boolean} isLeft
-	 * @returns {Array<LibraryItem>} - a list of Data objects with info about the body part
+	 * @param { CategoryWrapper } categoryWrapper 
 	 */
-	getLibrary(category, isLeft) {
-		const currentCategoryInfo = this.libraries[category];
-		const {
-			categoryHasLeftAndRightDistinction,
-			data
-		} = currentCategoryInfo;
-	
-		const side = isLeft ? "left" : "right";
-		return categoryHasLeftAndRightDistinction ? data[side] : data;
+	hasLeftAndRightDistinction( categoryWrapper ) {
+		return categoryWrapper.isMirrored
 	},
 
-	hasLeftAndRightDistinction(category) {
-		const { categoryHasLeftAndRightDistinction } = this.libraries[category];
-		return categoryHasLeftAndRightDistinction;
-	},
+	/**
+	 * 
+	 * @param { CategoryWrapper } categoryWrapper 
+	 * @param { boolean } isLeft 
+	 */
+	getMeshType( categoryWrapper, isLeft ) {
+		
+		switch ( categoryWrapper.constructor ) {
+			case MirroredCategory: {
+				const category = isLeft ? categoryWrapper.leftCategory : categoryWrapper.rightCategory
+				return category.id
+			}
+			case NormalCategory: {
+				return categoryWrapper.category.id
+			}
+			default: {
+				return undefined
+			}
+		}
 
-	getMeshType(category, isLeft) {
-		const currentCategoryInfo = this.libraries[category];
-		const {
-			categoryHasLeftAndRightDistinction,
-			meshType
-		} = currentCategoryInfo;
-	
-		const side = isLeft ? "left" : "right";
-		return categoryHasLeftAndRightDistinction ? meshType[side] : meshType;
 	},
 
 	processAPIObjects(items) {
