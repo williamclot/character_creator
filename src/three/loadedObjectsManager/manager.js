@@ -1,7 +1,6 @@
 import { Matrix4, Object3D, Group, Bone, Mesh, Material, Color } from 'three'
 
-import defaultCategories from './categories'
-import Category, { ParentCategory } from './category'
+import { Category, ParentCategory } from '../util/category/category'
 import { findMinGeometry } from './FindMinGeometry'
 
 /**
@@ -11,7 +10,7 @@ class GroupManager {
     /**
      * @param { Group } group
      */
-    constructor( group, categories = defaultCategories ) {
+    constructor( group, categories ) {
         
         this.group = group
         this.stand = null

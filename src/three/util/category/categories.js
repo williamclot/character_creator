@@ -82,6 +82,7 @@ const categoryWrappers = [
 
 /**
  * The list of categories available
+ * @type { Category[] }
  */
 const categories = categoryWrappers.flatMap( wrapper => wrapper.getCategories() )
 

@@ -1,4 +1,4 @@
-class ParentCategory {
+class ParentCategory { // TODO rename class
     /**
      * 
      * @param { string } categoryId 
@@ -31,9 +31,16 @@ class Category {
  * only used as an abstract
  */
 class CategoryWrapper {
-    constructor( name, imgPath ) {
+    /**
+     * 
+     * @param { string } name 
+     * @param { string } imgPath 
+     * @param { boolean } isMirrored 
+     */
+    constructor( name, imgPath, isMirrored ) {
         this.name = name
         this.imgPath = imgPath
+        this.isMirrored = isMirrored
     }
 
     getCategories() {}
@@ -44,7 +51,7 @@ class NormalCategory extends CategoryWrapper {
      * @param { Category } category
      */
     constructor( category, name, imgPath ) {
-        super( name, imgPath )
+        super( name, imgPath, false )
         this.category = category
     }
 
@@ -59,7 +66,7 @@ class MirroredCategory extends CategoryWrapper {
      * @param { Category } rightCategory 
      */
     constructor( leftCategory, rightCategory, name, imgPath ) {
-        super( name, imgPath )
+        super( name, imgPath, true )
         this.leftCategory = leftCategory
         this.rightCategory = rightCategory
     }
@@ -70,5 +77,5 @@ class MirroredCategory extends CategoryWrapper {
 
 }
 
-export { Category, NormalCategory, MirroredCategory, ParentCategory }
+export { Category, CategoryWrapper, NormalCategory, MirroredCategory, ParentCategory }
 export default Category
