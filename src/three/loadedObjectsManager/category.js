@@ -17,7 +17,7 @@ class Category {
      * @param { Set< string > } attachmentBones 
      * @param { ParentCategory } whereToAttach 
      */
-    constructor( id, attachmentBones = [], whereToAttach = null ) {
+    constructor( id, attachmentBones, whereToAttach = null ) {
 
         this.id = id
         this.attachmentBones = attachmentBones
