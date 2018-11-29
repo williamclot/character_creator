@@ -1,7 +1,18 @@
 import { Matrix4, Object3D, Group, Bone, Mesh, Material, Color } from 'three'
 
-import { Category, ParentCategory } from '../util/category/category'
+import { loadMeshFromURL, parseMesh } from '../util/gltfLoader'
+import { GRAY } from '../util/colours'
+
+import { Category, ParentCategory, STAND_SYMBOL } from '../util/category/category'
 import { findMinGeometry } from './FindMinGeometry'
+
+async function loadObject( url ) {
+
+    const gltf = await loadMeshFromURL( url )
+
+    return gltf.scene.children[ 0 ] // returns first element found in the scene
+
+}
 
 /**
  * 
@@ -41,11 +52,121 @@ class GroupManager {
         this.bonesMap = new Map;
     }
 
+    /**
+     * lib is a js object with values of type LibraryItem (as defind in oldLibrary/__LibItemType.ts)
+     * 
+     * it has a special unique property (the STAND_SYMBOL) that holds the info for the stand;
+     * this ensured that the stand property cannot be overwritten by a different property
+     * with the same key (because a symbol is globally unique)
+     * @param { Object.< string, LibraryItem > } lib
+     */
+    async addAll( lib ) {
 
-    add( categoryId, object3d, metaData = {} ) {
-        if ( ! this.categoriesMap.has( categoryId ) ) {
-            throw new Error( `Category ${ categoryId } is not defined!` )
+        const standLibItem = lib[ STAND_SYMBOL ]
+
+        if ( standLibItem ) {
+
+            const stand = await loadObject( standLibItem.url )
+
+            this.placeStand( stand, standLibItem.metadata )
+
         }
+
+        const topologicallySortedCategoryKeys = [] // TODO category names in topological order (categories should be a DAG)
+
+        for ( let key of topologicallySortedCategoryKeys ) {
+
+            const libItem = lib[ key ]
+
+            if ( libItem ) {
+
+                const object = await loadObject( libItem.url )
+                
+                this.add( key, object, metadata )
+
+            }
+        }
+
+    }
+
+    placeStand( newStand, options = {} ) {
+
+        newStand.traverse( child => {
+            if ( child instanceof Mesh ) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+                if (child.material.color){
+                    child.material.color.set( GRAY )
+                }
+            }
+        } );
+
+        // stand processed successfully;
+        // code below actually adds stand to scene and updates its reference in group manager
+        
+        const rootCategoryId = this.rootCategory.id        
+        
+        if ( this.stand ) {
+            this.group.remove( this.stand )
+        }
+        
+        this.group.add( newStand )
+        
+        this.stand = newStand
+        
+        const rootObj = this.loadedObjectsMap.get( rootCategoryId )
+        
+        if ( rootObj ) {
+
+            // adding an object will remove it from the previous parent
+            newStand.add( rootObj )
+            
+            const minGeometry = findMinGeometry( rootObj )
+            const currentY = rootObj.position.y
+            rootObj.position.setY( currentY - minGeometry )
+
+        }
+    }
+
+
+    add( categoryId, object3d, options = {} ) {
+
+        if ( ! this.categoriesMap.has( categoryId ) ) {
+
+            throw new Error( `Category ${ categoryId } is not defined!` )
+            // TODO handle this case (or make sure it can't happen)
+
+        }
+
+
+        const {
+            rotation,
+            position,
+            scale,
+            poseData
+        } = options
+
+        object3d.traverse(function(child) {
+            if (child instanceof Mesh) {
+                child.castShadow = true;
+                child.material.color.set( GRAY );
+            }
+        });
+
+        if (poseData) {
+            object3d.traverse(child => {
+                if (child instanceof Bone) {
+                    const rotation = poseData[child.name];
+                    if (rotation) {
+                        const { x, y, z } = rotation;
+                        child.rotation.set(x, y, z);
+                    }
+                }
+            });
+        }
+
+        // object3d processed sucessfully;
+        // code below actually adds object to scene and updates references in group manager
 
         const category = this.categoriesMap.get( categoryId )
 
@@ -153,35 +274,6 @@ class GroupManager {
 
         }
 
-    }
-
-    /**
-     * @param { Object3D } stand 
-     */
-    placeStand( newStand ) {
-        
-        const rootCategoryId = this.rootCategory.id        
-        
-        if ( this.stand ) {
-            this.group.remove( this.stand )
-        }
-        
-        this.group.add( newStand )
-        
-        this.stand = newStand
-        
-        const rootObj = this.loadedObjectsMap.get( rootCategoryId )
-        
-        if ( rootObj ) {
-
-            // adding an object will remove it from the previous parent
-            newStand.add( rootObj )
-            
-            const minGeometry = findMinGeometry( rootObj )
-            const currentY = rootObj.position.y
-            rootObj.position.setY( currentY - minGeometry )
-
-        }
     }
 
     /**
