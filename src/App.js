@@ -12,8 +12,50 @@ class App extends Component {
 
         this.state = {
             customizerName: name,
-            groups
+            groups,
+
+            selectedCategoryPath: {
+                groupIndex: null,
+                categoryIndex: null
+            },
+            
+            editMode: false
         }
+    }
+
+    setSelectedGroup = index => {
+        this.setState({
+            selectedCategoryPath: {
+                groupIndex: index
+            }
+        })
+    }
+
+    getSelectedGroup = () => {
+        const { groups, selectedCategoryPath } = this.state
+
+        const { groupIndex, categoryIndex } = selectedCategoryPath
+
+        return groups[ groupIndex ]
+    }
+
+    setSelectedCategory = index => {
+        const { selectedCategoryPath } = this.state
+
+        this.setState({
+            selectedCategoryPath: {
+                ...selectedCategoryPath,
+                categoryIndex: index
+            }
+        })
+    }
+
+    getSelectedCategory = () => {
+        const { categoryIndex } = this.state.selectedCategoryPath
+
+        const selectedGroup = this.getSelectedGroup()
+
+        return selectedGroup && selectedGroup.categories[ categoryIndex ]
     }
 
     /*
@@ -32,7 +74,49 @@ class App extends Component {
     */
 
     render() {
-        return <h1> HELLO </h1>
+        const { customizerName, groups } = this.state
+
+        const selectedGroup = this.getSelectedGroup()
+        const selectedCategory = this.getSelectedCategory()
+
+        console.log( 'group', selectedGroup )
+        console.log( 'category', selectedCategory )
+
+        return <>
+            <h1> {customizerName} </h1>
+            
+            <div>
+                <ul>
+                    {groups.map(
+                        ( group, index ) => (
+                            <li
+                                key = { group.name }
+                                onClick = { () => this.setSelectedGroup( index ) }
+                            >
+                                { group.name }
+                            </li>
+                        )
+                    )}
+                </ul>
+            </div>
+
+            <div>
+                {selectedGroup && (
+                    <ul>
+                        {selectedGroup.categories.map(
+                            ( category, index ) => (
+                                <li
+                                    key = { category.id }
+                                    onClick = { () => this.setSelectedCategory( index ) }
+                                >
+                                    { category.name }
+                                </li>
+                            )
+                        )}
+                    </ul>
+                )}
+            </div>
+        </>
     }
 
 }
