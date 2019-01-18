@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 
-
-
+import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from './config'
 
 class App extends Component {
 
@@ -10,8 +9,22 @@ class App extends Component {
         super( props )
 
         this.state = {
-            
+            customizerName: "",
+            groups: []
         }
+    }
+
+    async componentDidMount() {
+        const res = await axios.get(
+            `${apiEndpoint}/users/${userName}/customizers/${customizerName}`
+        )
+
+        const { name, groups } = res.data
+
+        this.setState({
+            customizerName: name,
+            groups
+        })
     }
 
     render() {
