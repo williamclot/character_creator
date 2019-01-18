@@ -1,0 +1,41 @@
+.italic {
+    font-style: italic;
+}
+
+.line-through {
+    text-decoration: line-through;
+}
+
+.selected {
+    background-color: yellow;
+}
+
+.editor {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    /* grid-template-rows: 1fr; */
+}
+
+.editor .customizers {
+
+}
+
+.editor .groups {
+
+}
+
+.editor .categories {
+
+}
+
+.customizer-editor {
+    background-color: aqua;
+}
+
+.customizer-editor .groups-list {
+    background-color: aquamarine;
+}
+
+.customizer-editor .groups-list .groups-item {
+    background-color: rgb(87, 200, 200);
+}
