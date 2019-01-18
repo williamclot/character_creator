@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 
+import { name, groups } from './lib/user_my-human-world.json'
+
 import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from './config'
 
 class App extends Component {
@@ -9,11 +11,12 @@ class App extends Component {
         super( props )
 
         this.state = {
-            customizerName: "",
-            groups: []
+            customizerName: name,
+            groups
         }
     }
 
+    /*
     async componentDidMount() {
         const res = await axios.get(
             `${apiEndpoint}/users/${userName}/customizers/${customizerName}`
@@ -26,6 +29,7 @@ class App extends Component {
             groups
         })
     }
+    */
 
     render() {
         return <h1> HELLO </h1>

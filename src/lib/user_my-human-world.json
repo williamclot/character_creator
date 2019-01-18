@@ -1,0 +1,148 @@
+{
+    "id": 37,
+    "name": "My Human World",
+    "slug": "my-human-world",
+    "groups": [
+        {
+            "name": "torso",
+            "categories": [
+                {
+                    "id": 95,
+                    "name": "Torso",
+                    "label": "Torso",
+                    "attachPoints": [
+                        "Torso_Neck",
+                        "Torso_UpperArm_L",
+                        "Torso_UpperArm_R",
+                        "Torso_UpperLeg_L",
+                        "Torso_UpperLeg_R"
+                    ],
+                    "parent": null
+                }
+            ]
+        },
+        {
+            "name": "head",
+            "categories": [
+                {
+                    "id": 96,
+                    "name": "Head",
+                    "label": "Head",
+                    "attachPoints": [],
+                    "parent": {
+                        "name": "Torso",
+                        "attachPoint": null
+                    }
+                }
+            ]
+        },
+        {
+            "name": "arm",
+            "categories": [
+                {
+                    "id": 97,
+                    "name": "ArmL",
+                    "label": "Left Arm",
+                    "attachPoints": [
+                        "ArmL_Hand_L"
+                    ],
+                    "parent": {
+                        "name": "Torso",
+                        "attachPoint": null
+                    }
+                },
+                {
+                    "id": 98,
+                    "name": "ArmR",
+                    "label": "Right Arm",
+                    "attachPoints": [
+                        "ArmR_Hand_R"
+                    ],
+                    "parent": {
+                        "name": "Torso",
+                        "attachPoint": null
+                    }
+                }
+            ]
+        },
+        {
+            "name": "hand",
+            "categories": [
+                {
+                    "id": 99,
+                    "name": "HandL",
+                    "label": "Left Hand",
+                    "attachPoints": [],
+                    "parent": {
+                        "name": "ArmL",
+                        "attachPoint": null
+                    }
+                },
+                {
+                    "id": 100,
+                    "name": "HandR",
+                    "label": "Right Hand",
+                    "attachPoints": [],
+                    "parent": {
+                        "name": "ArmR",
+                        "attachPoint": null
+                    }
+                }
+            ]
+        },
+        {
+            "name": "leg",
+            "categories": [
+                {
+                    "id": 101,
+                    "name": "LegL",
+                    "label": "Left Leg",
+                    "attachPoints": [
+                        "LegL_Foot_L"
+                    ],
+                    "parent": {
+                        "name": "Torso",
+                        "attachPoint": null
+                    }
+                },
+                {
+                    "id": 102,
+                    "name": "LegR",
+                    "label": "Right Leg",
+                    "attachPoints": [
+                        "LegR_Foot_R"
+                    ],
+                    "parent": {
+                        "name": "Torso",
+                        "attachPoint": null
+                    }
+                }
+            ]
+        },
+        {
+            "name": "foot",
+            "categories": [
+                {
+                    "id": 103,
+                    "name": "FootL",
+                    "label": "Left Foot",
+                    "attachPoints": [],
+                    "parent": {
+                        "name": "LegL",
+                        "attachPoint": null
+                    }
+                },
+                {
+                    "id": 104,
+                    "name": "FootR",
+                    "label": "Right Foot",
+                    "attachPoints": [],
+                    "parent": {
+                        "name": "LegR",
+                        "attachPoint": null
+                    }
+                }
+            ]
+        }
+    ]
+}
