@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import axios from 'axios'
 
-import { name, groups } from './lib/user_my-human-world.json'
+import { setCurrentGroup, setCurrentCategory } from '../actions'
 
-import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from './config'
+import { name, groups } from '../lib/user_my-human-world.json'
+
+import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../config'
 
 class App extends Component {
 
@@ -13,49 +16,26 @@ class App extends Component {
         this.state = {
             customizerName: name,
             groups,
-
-            selectedCategoryPath: {
-                groupIndex: null,
-                categoryIndex: null
-            },
             
             editMode: false
         }
     }
 
-    setSelectedGroup = index => {
-        this.setState({
-            selectedCategoryPath: {
-                groupIndex: index
-            }
-        })
-    }
 
     getSelectedGroup = () => {
-        const { groups, selectedCategoryPath } = this.state
+        const { selectedGroupIndex } = this.props
+        const { groups } = this.state
 
-        const { groupIndex, categoryIndex } = selectedCategoryPath
-
-        return groups[ groupIndex ]
+        return groups[ selectedGroupIndex ]
     }
 
-    setSelectedCategory = index => {
-        const { selectedCategoryPath } = this.state
-
-        this.setState({
-            selectedCategoryPath: {
-                ...selectedCategoryPath,
-                categoryIndex: index
-            }
-        })
-    }
 
     getSelectedCategory = () => {
-        const { categoryIndex } = this.state.selectedCategoryPath
+        const { selectedCategoryIndex } = this.props
 
         const selectedGroup = this.getSelectedGroup()
 
-        return selectedGroup && selectedGroup.categories[ categoryIndex ]
+        return selectedGroup && selectedGroup.categories[ selectedCategoryIndex ]
     }
 
     /*
@@ -74,13 +54,16 @@ class App extends Component {
     */
 
     render() {
+        const {
+            selectedGroupIndex, selectedCategoryIndex,
+            onGroupClick, onCategoryClick
+        } = this.props
+        
         const { customizerName, groups } = this.state
 
         const selectedGroup = this.getSelectedGroup()
         const selectedCategory = this.getSelectedCategory()
 
-        console.log( 'group', selectedGroup )
-        console.log( 'category', selectedCategory )
 
         return <>
             <h1> {customizerName} </h1>
@@ -91,7 +74,8 @@ class App extends Component {
                         ( group, index ) => (
                             <li
                                 key = { group.name }
-                                onClick = { () => this.setSelectedGroup( index ) }
+                                onClick = { () => onGroupClick( index ) }
+                                selected = { index === selectedGroupIndex }
                             >
                                 { group.name }
                             </li>
@@ -107,7 +91,8 @@ class App extends Component {
                             ( category, index ) => (
                                 <li
                                     key = { category.id }
-                                    onClick = { () => this.setSelectedCategory( index ) }
+                                    onClick = { () => onCategoryClick( index ) }
+                                    selected = { index === selectedCategoryIndex }
                                 >
                                     { category.name }
                                 </li>
@@ -121,4 +106,17 @@ class App extends Component {
 
 }
 
-export default App
+const mapStateToProps = state => ({
+    selectedGroupIndex: state.selectedCategoryPath.groupIndex,
+    selectedCategoryIndex: state.selectedCategoryPath.categoryIndex
+})
+
+const mapDispatchToProps = dispatch => ({
+    onGroupClick: index => dispatch( setCurrentGroup( index ) ),
+    onCategoryClick: index => dispatch( setCurrentCategory( index ) )
+})
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)( App )
