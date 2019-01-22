@@ -1,11 +1,8 @@
-
 import { connect } from 'react-redux'
-import axios from 'axios'
 
 import { setCurrentGroup, setCurrentCategory } from '../actions'
 
-import App from '../components/App'
-
+import Categories from '../components/Categories'
 
 const mapStateToProps = state => ({
     selectedGroupIndex: state.selectedCategoryPath.groupIndex,
@@ -20,4 +17,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)( App )
+)( Categories )
