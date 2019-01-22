@@ -22,19 +22,17 @@ const Categories = props => {
 
     return <div className = "groups-container">
         <div className = "groups-view">
-            <ul>
-                {groups.map(
-                    ( group, index ) => (
-                        <li
-                            key = { group.name }
-                            onClick = { () => onGroupClick( index ) }
-                            selected = { index === selectedGroupIndex }
-                        >
-                            { group.name }
-                        </li>
-                    )
-                )}
-            </ul>
+            {groups.map(
+                ( group, index ) => (
+                    <div
+                        className = { 'groups-item' + (index === selectedGroupIndex ? ' selected' : '') }
+                        key = { group.name }
+                        onClick = { () => onGroupClick( index ) }
+                    >
+                        <img src = { group.imgPath } alt = { group.name } />
+                    </div>
+                )
+            )}
         </div>
 
 

@@ -1,11 +1,57 @@
 .groups-container {
+    width: 25vw;
     position: absolute;
+    right: 0;
     background-color: aqua;
 }
 
 .groups-view {
-    background-color: green;
+    position: relative;
+    /* background-color: green; */
+
+    width: 20%;
+    /* max-width: 20%; */
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
+
+.groups-view .groups-item {
+    min-height: 60px;
+    min-width: 60px;
+
+    max-height: 60px;
+    max-width: 60px;
+
+    margin-bottom: 10px;
+    margin-top:10px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 100%;
+    border: none;
+    box-shadow: 0px 0px 10px #000000;
+    transition: background-color .2;
+    cursor: pointer;
+}
+
+.groups-view .groups-item:hover {
+    background-color: rgba(0, 55, 39, 0.31);
+}
+
+.groups-view .groups-item img {
+    /*  */
+}
+
+
+.groups-view .groups-item.selected {
+    background-color: rgba(34, 94, 71, 0.71);
+}
+
+
+
+
 
 .categories-view {
     background-color: blueviolet;
