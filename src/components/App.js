@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import ThreeContainer from './ThreeContainer'
 
-import Categories from '../containers/Categories'
+import Categories from '../components/Categories'
 
 import { name, groups } from '../lib/user_my-human-world.json'
 
