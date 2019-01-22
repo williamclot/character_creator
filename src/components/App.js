@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import ThreeContainer from './ThreeContainer'
+
 import { name, groups } from '../lib/user_my-human-world.json'
 
 import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../config'
@@ -13,8 +15,12 @@ class App extends Component {
             customizerName: name,
             groups,
             
+            testKey: 'test',
+            
             editMode: false
         }
+
+        window.test = k => this.setState({ testKey: k })
     }
 
 
@@ -97,6 +103,12 @@ class App extends Component {
                     </ul>
                 )}
             </div>
+
+            <ThreeContainer
+                testKey = { this.state.testKey }
+                width = { window.innerWidth }
+                height = { window.innerHeight }
+            />
         </>
     }
 
