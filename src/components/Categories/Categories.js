@@ -17,8 +17,8 @@ const Categories = props => {
 
     const selectedGroup = getSelectedGroup()
 
-    return <>
-        <div>
+    return <div className = "groups-container">
+        <div className = "groups-view">
             <ul>
                 {groups.map(
                     ( group, index ) => (
@@ -35,7 +35,7 @@ const Categories = props => {
         </div>
 
 
-        <div>
+        <div className = "categories-view">
             {selectedGroup && (
                 <ul>
                     {selectedGroup.categories.map(
@@ -52,7 +52,7 @@ const Categories = props => {
                 </ul>
             )}
         </div>
-    </>
+    </div>
 }
 
 export default Categories

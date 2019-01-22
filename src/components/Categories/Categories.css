@@ -1,0 +1,12 @@
+.groups-container {
+    position: absolute;
+    background-color: aqua;
+}
+
+.groups-view {
+    background-color: green;
+}
+
+.categories-view {
+    background-color: blueviolet;
+}
