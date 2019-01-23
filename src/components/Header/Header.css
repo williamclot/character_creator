@@ -1,0 +1,18 @@
+.header {
+    position: absolute;
+}
+
+.header .title {
+    padding: 30px;
+    font-size: 40px;
+    font-weight: 600;
+}
+
+.header .title .beta {
+    margin-left: 5px;
+    text-transform: lowercase;
+    font-size: 12px;
+}
+.header .title .my {
+    color: rgb(49, 184, 161);
+}
