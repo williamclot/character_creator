@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { setCurrentGroup, setCurrentCategory } from '../../actions'
 
 import './Categories.css'
+import GroupsView from './GroupsView';
+import CategoriesView from './CategoriesView';
 
 const Categories = props => {
     const {
@@ -21,36 +23,16 @@ const Categories = props => {
     const selectedGroup = getSelectedGroup()
 
     return <div className = "groups-container">
-        <div className = "groups-view">
-            {groups.map(
-                ( group, index ) => (
-                    <div
-                        className = { 'groups-item' + (index === selectedGroupIndex ? ' selected' : '') }
-                        key = { group.name }
-                        onClick = { () => onGroupClick( index ) }
-                    >
-                        <img src = { group.imgPath } alt = { group.name } />
-                    </div>
-                )
-            )}
-        </div>
+        <GroupsView 
+            groups = { groups }
+        />
 
 
         <div className = "categories-view">
             {selectedGroup && (
-                <ul>
-                    {selectedGroup.categories.map(
-                        ( category, index ) => (
-                            <li
-                                key = { category.id }
-                                onClick = { () => onCategoryClick( index ) }
-                                selected = { index === selectedCategoryIndex }
-                            >
-                                { category.name }
-                            </li>
-                        )
-                    )}
-                </ul>
+                <CategoriesView
+                    categories = { selectedGroup.categories }
+                />
             )}
         </div>
     </div>
@@ -62,12 +44,6 @@ const mapStateToProps = state => ({
     selectedCategoryIndex: state.selectedCategoryPath.categoryIndex
 })
 
-const mapDispatchToProps = dispatch => ({
-    onGroupClick: index => dispatch( setCurrentGroup( index ) ),
-    onCategoryClick: index => dispatch( setCurrentCategory( index ) )
-})
-
 export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToProps
 )( Categories )
