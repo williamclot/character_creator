@@ -1,0 +1,87 @@
+{
+    "arm": [
+        "http://localhost:3000/models/arm-default_arm_L.glb",
+        "http://localhost:3000/models/arm-default_arm_R.glb",
+        "http://localhost:3000/models/arm-muscled_arm_L.glb",
+        "http://localhost:3000/models/arm-muscled_arm_R.glb",
+        "http://localhost:3000/models/arm-robot_arm_L.glb",
+        "http://localhost:3000/models/arm-robot_arm_R.glb",
+        "http://localhost:3000/models/arm-spyro_arm_L.glb",
+        "http://localhost:3000/models/arm-spyro_arm_R.glb",
+        "http://localhost:3000/models/arm-thin_arm_L.glb",
+        "http://localhost:3000/models/arm-thin_arm_R.glb"
+    ],
+    "hand": [
+        "http://localhost:3000/models/hand-barbarian_R.glb",
+        "http://localhost:3000/models/hand-blender_L.glb",
+        "http://localhost:3000/models/hand-blender_R.glb",
+        "http://localhost:3000/models/hand-closed_hand_L.glb",
+        "http://localhost:3000/models/hand-closed_hand_R.glb",
+        "http://localhost:3000/models/hand-hook_L.glb",
+        "http://localhost:3000/models/hand-hook_R.glb",
+        "http://localhost:3000/models/hand-no_hand_L.glb",
+        "http://localhost:3000/models/hand-no_hand_R.glb",
+        "http://localhost:3000/models/hand-open_hand_L.glb",
+        "http://localhost:3000/models/hand-open_hand_R.glb",
+        "http://localhost:3000/models/hand-robot_hand_L.glb",
+        "http://localhost:3000/models/hand-robot_hand_R.glb",
+        "http://localhost:3000/models/hand-barbarian_L.glb"
+    ],
+    "head": [
+        "http://localhost:3000/models/head-muscled_man.glb",
+        "http://localhost:3000/models/head-stormtrooper.glb",
+        "http://localhost:3000/models/head-test_head.glb",
+        "http://localhost:3000/models/head-barbarian.glb",
+        "http://localhost:3000/models/head-big_head.glb",
+        "http://localhost:3000/models/head-blender_head.glb",
+        "http://localhost:3000/models/head-creator.glb",
+        "http://localhost:3000/models/head-default_head.glb",
+        "http://localhost:3000/models/head-default_man_head.glb",
+        "http://localhost:3000/models/head-dobby.glb",
+        "http://localhost:3000/models/head-flexi_dead_head.glb",
+        "http://localhost:3000/models/head-groot.glb",
+        "http://localhost:3000/models/head-hellion_rams.glb",
+        "http://localhost:3000/models/head-iron_bubble_head.glb"
+    ],
+    "leg": [
+        "http://localhost:3000/models/leg-default_leg_L.glb",
+        "http://localhost:3000/models/leg-default_leg_R.glb",
+        "http://localhost:3000/models/leg-robot_leg_L.glb",
+        "http://localhost:3000/models/leg-robot_leg_R.glb"
+    ],
+    "poses": [
+        "http://localhost:3000/models/pose-dab.json",
+        "http://localhost:3000/models/pose-default.json",
+        "http://localhost:3000/models/pose-egypt.json",
+        "http://localhost:3000/models/pose-gedan_barai.json",
+        "http://localhost:3000/models/pose-king_kong.json",
+        "http://localhost:3000/models/pose-running.json",
+        "http://localhost:3000/models/pose-test.json"
+    ],
+    "foot": [
+        "http://localhost:3000/models/foot-barbarian_L.glb",
+        "http://localhost:3000/models/foot-barbarian_R.glb",
+        "http://localhost:3000/models/foot-boots_L.glb",
+        "http://localhost:3000/models/foot-boots_R.glb",
+        "http://localhost:3000/models/foot-buckled_foot_L.glb",
+        "http://localhost:3000/models/foot-buckled_foot_R.glb",
+        "http://localhost:3000/models/foot-default_foot_L.glb",
+        "http://localhost:3000/models/foot-default_foot_R.glb",
+        "http://localhost:3000/models/foot-futurama_L.glb",
+        "http://localhost:3000/models/foot-futurama_R.glb",
+        "http://localhost:3000/models/foot-timberland_L.glb",
+        "http://localhost:3000/models/foot-timberland_R.glb"
+    ],
+    "stand": [
+        "http://localhost:3000/models/stand-circle.glb",
+        "http://localhost:3000/models/stand-hexagone.glb",
+        "http://localhost:3000/models/stand-scaled"
+    ],
+    "torso": [
+        "http://localhost:3000/models/torso-barbarian.glb",
+        "http://localhost:3000/models/torso-blender.glb",
+        "http://localhost:3000/models/torso-default_torso.glb",
+        "http://localhost:3000/models/torso-man_torso.glb",
+        "http://localhost:3000/models/torso-turtle_torso.glb"
+    ]
+}
