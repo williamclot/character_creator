@@ -11,10 +11,15 @@ const CategoryItem = props => {
         selected
     } = props
 
+    const classList = [ 'categories-item' ]
+    if ( selected ) {
+        classList.push( 'selected' )
+    }
+
     return (
         <div
             onClick = { onClick }
-            className = { 'categories-item' + (selected ? ' selected' : '') }
+            className = { classList.join(' ') }
         >
             { category.label }
         </div>

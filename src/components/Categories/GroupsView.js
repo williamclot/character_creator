@@ -11,9 +11,14 @@ const GroupItem = props => {
         selected
     } = props
 
+    const classList = [ 'groups-item' ]
+    if ( selected ) {
+        classList.push( 'selected' )
+    }
+
     return (
         <div
-            className = { 'groups-item' + (selected ? ' selected' : '') }
+            className = { classList.join(' ') }
             onClick = { onClick }
         >
             <img src = { group.imgPath } alt = { group.name } />
