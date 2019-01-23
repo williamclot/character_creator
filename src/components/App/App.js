@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 
-import ThreeContainer from './ThreeContainer'
+import ThreeContainer from '../ThreeContainer'
 
-import Categories from '../components/Categories'
+import Categories from '../Categories'
 
-import { name, groups } from '../lib/user_my-human-world.json'
+import { name, groups } from '../../lib/user_my-human-world.json'
 
-import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../config'
+import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../../config'
 
 class App extends Component {
 
