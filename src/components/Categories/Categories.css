@@ -1,17 +1,19 @@
 .groups-container {
-    width: 25vw;
-    position: absolute;
-    right: 0;
-    background-color: aqua;
+    position: relative;
+    
+    
+    /* temp */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    /* background-color: aqua; */
 }
 
 .groups-view {
     position: relative;
+    
     /* background-color: green; */
-
-    width: 20%;
-    /* max-width: 20%; */
-    height: 100%;
 
     display: flex;
     align-items: center;

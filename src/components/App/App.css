@@ -1,0 +1,22 @@
+/* .app {
+    background-color: coral;
+} */
+
+.editor-panel {
+    position: absolute;
+    right: 5%;
+
+    top: 50%;
+    transform: translateY(-50%);
+
+    /* height: 70vh;
+    width: 30vw; */
+
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* flex-direction: column; */
+
+    /* background-color: blue; */
+}
