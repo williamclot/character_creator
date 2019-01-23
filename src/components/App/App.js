@@ -47,7 +47,10 @@ class App extends Component {
         return <>
             <h1> {customizerName} </h1>
             
-            <Categories groups = {groups} />
+            <div className = "editor-panel">
+                <Categories groups = { groups } />
+                <Selector />
+            </div>
 
             <ThreeContainer
                 testKey = { this.state.testKey }
