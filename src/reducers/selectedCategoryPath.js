@@ -1,20 +1,23 @@
 const selectedCategoryPath = ( state = {}, action ) => {
     switch( action.type ) {
 
-        case 'SET_CURRENT_GROUP':
+        case 'SET_CURRENT_GROUP': {
             return {
                 groupIndex: action.index
             }
-
-        case 'SET_CURRENT_CATEGORY':
+        }
+        
+        case 'SET_CURRENT_CATEGORY': {
             return {
                 ...state,
                 categoryIndex: action.index
             }
-
-        default: 
+        }
+        
+        default: {
             return state
-
+        }
+        
     }
 }
 
