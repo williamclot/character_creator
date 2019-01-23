@@ -23,18 +23,17 @@ const Categories = props => {
     const selectedGroup = getSelectedGroup()
 
     return <div className = "groups-container">
+
         <GroupsView 
             groups = { groups }
         />
 
+        {selectedGroup && (
+            <CategoriesView
+                categories = { selectedGroup.categories }
+            />
+        )}
 
-        <div className = "categories-view">
-            {selectedGroup && (
-                <CategoriesView
-                    categories = { selectedGroup.categories }
-                />
-            )}
-        </div>
     </div>
 }
 
