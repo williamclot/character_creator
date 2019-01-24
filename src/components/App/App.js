@@ -5,6 +5,7 @@ import ThreeContainer from '../ThreeContainer'
 import Categories from '../Categories'
 
 import { name, groups } from '../../lib/user_my-human-world.json'
+import { objects } from '../../lib'
 
 import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../../config'
 
@@ -16,30 +17,34 @@ class App extends Component {
         this.state = {
             customizerName: name,
             groups,
-            
-            testKey: 'test',
+            loadedObjects: {},
             
             editMode: false
         }
-
-        window.test = k => this.setState({ testKey: k })
     }
 
 
-    /*
-    async componentDidMount() {
-        const res = await axios.get(
-            `${apiEndpoint}/users/${userName}/customizers/${customizerName}`
-        )
-
-        const { name, groups } = res.data
+    componentDidMount = async () => {
+        // for ( let [ category, data ] of Object.entries( objects.oneOfEach ) ) {
+        //     // do smth
+        // }
 
         this.setState({
-            customizerName: name,
-            groups
+            loadedObjects: objects.oneOfEach
         })
     }
-    */
+
+    onObjectSelected = ( category, object ) => {
+        const stateReducer = state => ({
+            loadedObjects: {
+                ...state.loadedObjects,
+                [category]: object
+            }
+        })
+
+        this.setState( stateReducer )
+    }
+
 
     render() {        
         const { customizerName, groups } = this.state
@@ -53,7 +58,7 @@ class App extends Component {
             </div>
 
             <ThreeContainer
-                testKey = { this.state.testKey }
+                loadedObjects = { this.state.loadedObjects }
                 width = { window.innerWidth }
                 height = { window.innerHeight }
             />
