@@ -3,257 +3,316 @@
         "ArmR": [
             {
                 "name": "arm-default_arm_R",
-                "download_url": "http://localhost:3000/models/arm-default_arm_R.glb"
+                "download_url": "http://localhost:3000/models/arm-default_arm_R.glb",
+                "extension": "glb"
             },
             {
                 "name": "arm-muscled_arm_R",
-                "download_url": "http://localhost:3000/models/arm-muscled_arm_R.glb"
+                "download_url": "http://localhost:3000/models/arm-muscled_arm_R.glb",
+                "extension": "glb"
             },
             {
                 "name": "arm-robot_arm_R",
-                "download_url": "http://localhost:3000/models/arm-robot_arm_R.glb"
+                "download_url": "http://localhost:3000/models/arm-robot_arm_R.glb",
+                "extension": "glb"
             },
             {
                 "name": "arm-spyro_arm_R",
-                "download_url": "http://localhost:3000/models/arm-spyro_arm_R.glb"
+                "download_url": "http://localhost:3000/models/arm-spyro_arm_R.glb",
+                "extension": "glb"
             },
             {
                 "name": "arm-thin_arm_R",
-                "download_url": "http://localhost:3000/models/arm-thin_arm_R.glb"
+                "download_url": "http://localhost:3000/models/arm-thin_arm_R.glb",
+                "extension": "glb"
             }
         ],
         "ArmL": [
             {
                 "name": "arm-default_arm_L",
-                "download_url": "http://localhost:3000/models/arm-default_arm_L.glb"
+                "download_url": "http://localhost:3000/models/arm-default_arm_L.glb",
+                "extension": "glb"
             },
             {
                 "name": "arm-muscled_arm_L",
-                "download_url": "http://localhost:3000/models/arm-muscled_arm_L.glb"
+                "download_url": "http://localhost:3000/models/arm-muscled_arm_L.glb",
+                "extension": "glb"
             },
             {
                 "name": "arm-robot_arm_L",
-                "download_url": "http://localhost:3000/models/arm-robot_arm_L.glb"
+                "download_url": "http://localhost:3000/models/arm-robot_arm_L.glb",
+                "extension": "glb"
             },
             {
                 "name": "arm-spyro_arm_L",
-                "download_url": "http://localhost:3000/models/arm-spyro_arm_L.glb"
+                "download_url": "http://localhost:3000/models/arm-spyro_arm_L.glb",
+                "extension": "glb"
             },
             {
                 "name": "arm-thin_arm_L",
-                "download_url": "http://localhost:3000/models/arm-thin_arm_L.glb"
+                "download_url": "http://localhost:3000/models/arm-thin_arm_L.glb",
+                "extension": "glb"
             }
         ],
         "HandR": [
             {
                 "name": "hand-barbarian_R",
-                "download_url": "http://localhost:3000/models/hand-barbarian_R.glb"
+                "download_url": "http://localhost:3000/models/hand-barbarian_R.glb",
+                "extension": "glb"
             },
             {
                 "name": "hand-blender_R",
-                "download_url": "http://localhost:3000/models/hand-blender_R.glb"
+                "download_url": "http://localhost:3000/models/hand-blender_R.glb",
+                "extension": "glb"
             },
             {
                 "name": "hand-closed_hand_R",
-                "download_url": "http://localhost:3000/models/hand-closed_hand_R.glb"
+                "download_url": "http://localhost:3000/models/hand-closed_hand_R.glb",
+                "extension": "glb"
             },
             {
                 "name": "hand-hook_R",
-                "download_url": "http://localhost:3000/models/hand-hook_R.glb"
+                "download_url": "http://localhost:3000/models/hand-hook_R.glb",
+                "extension": "glb"
             },
             {
                 "name": "hand-no_hand_R",
-                "download_url": "http://localhost:3000/models/hand-no_hand_R.glb"
+                "download_url": "http://localhost:3000/models/hand-no_hand_R.glb",
+                "extension": "glb"
             },
             {
                 "name": "hand-open_hand_R",
-                "download_url": "http://localhost:3000/models/hand-open_hand_R.glb"
+                "download_url": "http://localhost:3000/models/hand-open_hand_R.glb",
+                "extension": "glb"
             },
             {
                 "name": "hand-robot_hand_R",
-                "download_url": "http://localhost:3000/models/hand-robot_hand_R.glb"
+                "download_url": "http://localhost:3000/models/hand-robot_hand_R.glb",
+                "extension": "glb"
             }
         ],
         "HandL": [
             {
                 "name": "hand-blender_L",
-                "download_url": "http://localhost:3000/models/hand-blender_L.glb"
+                "download_url": "http://localhost:3000/models/hand-blender_L.glb",
+                "extension": "glb"
             },
             {
                 "name": "hand-closed_hand_L",
-                "download_url": "http://localhost:3000/models/hand-closed_hand_L.glb"
+                "download_url": "http://localhost:3000/models/hand-closed_hand_L.glb",
+                "extension": "glb"
             },
             {
                 "name": "hand-hook_L",
-                "download_url": "http://localhost:3000/models/hand-hook_L.glb"
+                "download_url": "http://localhost:3000/models/hand-hook_L.glb",
+                "extension": "glb"
             },
             {
                 "name": "hand-no_hand_L",
-                "download_url": "http://localhost:3000/models/hand-no_hand_L.glb"
+                "download_url": "http://localhost:3000/models/hand-no_hand_L.glb",
+                "extension": "glb"
             },
             {
                 "name": "hand-open_hand_L",
-                "download_url": "http://localhost:3000/models/hand-open_hand_L.glb"
+                "download_url": "http://localhost:3000/models/hand-open_hand_L.glb",
+                "extension": "glb"
             },
             {
                 "name": "hand-robot_hand_L",
-                "download_url": "http://localhost:3000/models/hand-robot_hand_L.glb"
+                "download_url": "http://localhost:3000/models/hand-robot_hand_L.glb",
+                "extension": "glb"
             },
             {
                 "name": "hand-barbarian_L",
-                "download_url": "http://localhost:3000/models/hand-barbarian_L.glb"
+                "download_url": "http://localhost:3000/models/hand-barbarian_L.glb",
+                "extension": "glb"
             }
         ],
         "Head": [
             {
                 "name": "head-muscled_man",
-                "download_url": "http://localhost:3000/models/head-muscled_man.glb"
+                "download_url": "http://localhost:3000/models/head-muscled_man.glb",
+                "extension": "glb"
             },
             {
                 "name": "head-stormtrooper",
-                "download_url": "http://localhost:3000/models/head-stormtrooper.glb"
+                "download_url": "http://localhost:3000/models/head-stormtrooper.glb",
+                "extension": "glb"
             },
             {
                 "name": "head-test_head",
-                "download_url": "http://localhost:3000/models/head-test_head.glb"
+                "download_url": "http://localhost:3000/models/head-test_head.glb",
+                "extension": "glb"
             },
             {
                 "name": "head-barbarian",
-                "download_url": "http://localhost:3000/models/head-barbarian.glb"
+                "download_url": "http://localhost:3000/models/head-barbarian.glb",
+                "extension": "glb"
             },
             {
                 "name": "head-big_head",
-                "download_url": "http://localhost:3000/models/head-big_head.glb"
+                "download_url": "http://localhost:3000/models/head-big_head.glb",
+                "extension": "glb"
             },
             {
                 "name": "head-blender_head",
-                "download_url": "http://localhost:3000/models/head-blender_head.glb"
+                "download_url": "http://localhost:3000/models/head-blender_head.glb",
+                "extension": "glb"
             },
             {
                 "name": "head-creator",
-                "download_url": "http://localhost:3000/models/head-creator.glb"
+                "download_url": "http://localhost:3000/models/head-creator.glb",
+                "extension": "glb"
             },
             {
                 "name": "head-default_head",
-                "download_url": "http://localhost:3000/models/head-default_head.glb"
+                "download_url": "http://localhost:3000/models/head-default_head.glb",
+                "extension": "glb"
             },
             {
                 "name": "head-default_man_head",
-                "download_url": "http://localhost:3000/models/head-default_man_head.glb"
+                "download_url": "http://localhost:3000/models/head-default_man_head.glb",
+                "extension": "glb"
             },
             {
                 "name": "head-dobby",
-                "download_url": "http://localhost:3000/models/head-dobby.glb"
+                "download_url": "http://localhost:3000/models/head-dobby.glb",
+                "extension": "glb"
             },
             {
                 "name": "head-flexi_dead_head",
-                "download_url": "http://localhost:3000/models/head-flexi_dead_head.glb"
+                "download_url": "http://localhost:3000/models/head-flexi_dead_head.glb",
+                "extension": "glb"
             },
             {
                 "name": "head-groot",
-                "download_url": "http://localhost:3000/models/head-groot.glb"
+                "download_url": "http://localhost:3000/models/head-groot.glb",
+                "extension": "glb"
             },
             {
                 "name": "head-hellion_rams",
-                "download_url": "http://localhost:3000/models/head-hellion_rams.glb"
+                "download_url": "http://localhost:3000/models/head-hellion_rams.glb",
+                "extension": "glb"
             },
             {
                 "name": "head-iron_bubble_head",
-                "download_url": "http://localhost:3000/models/head-iron_bubble_head.glb"
+                "download_url": "http://localhost:3000/models/head-iron_bubble_head.glb",
+                "extension": "glb"
             }
         ],
         "LegR": [
             {
                 "name": "leg-default_leg_R",
-                "download_url": "http://localhost:3000/models/leg-default_leg_R.glb"
+                "download_url": "http://localhost:3000/models/leg-default_leg_R.glb",
+                "extension": "glb"
             },
             {
                 "name": "leg-robot_leg_R",
-                "download_url": "http://localhost:3000/models/leg-robot_leg_R.glb"
+                "download_url": "http://localhost:3000/models/leg-robot_leg_R.glb",
+                "extension": "glb"
             }
         ],
         "LegL": [
             {
                 "name": "leg-default_leg_L",
-                "download_url": "http://localhost:3000/models/leg-default_leg_L.glb"
+                "download_url": "http://localhost:3000/models/leg-default_leg_L.glb",
+                "extension": "glb"
             },
             {
                 "name": "leg-robot_leg_L",
-                "download_url": "http://localhost:3000/models/leg-robot_leg_L.glb"
+                "download_url": "http://localhost:3000/models/leg-robot_leg_L.glb",
+                "extension": "glb"
             }
         ],
         "FootR": [
             {
                 "name": "foot-barbarian_R",
-                "download_url": "http://localhost:3000/models/foot-barbarian_R.glb"
+                "download_url": "http://localhost:3000/models/foot-barbarian_R.glb",
+                "extension": "glb"
             },
             {
                 "name": "foot-boots_R",
-                "download_url": "http://localhost:3000/models/foot-boots_R.glb"
+                "download_url": "http://localhost:3000/models/foot-boots_R.glb",
+                "extension": "glb"
             },
             {
                 "name": "foot-buckled_foot_R",
-                "download_url": "http://localhost:3000/models/foot-buckled_foot_R.glb"
+                "download_url": "http://localhost:3000/models/foot-buckled_foot_R.glb",
+                "extension": "glb"
             },
             {
                 "name": "foot-default_foot_R",
-                "download_url": "http://localhost:3000/models/foot-default_foot_R.glb"
+                "download_url": "http://localhost:3000/models/foot-default_foot_R.glb",
+                "extension": "glb"
             },
             {
                 "name": "foot-futurama_R",
-                "download_url": "http://localhost:3000/models/foot-futurama_R.glb"
+                "download_url": "http://localhost:3000/models/foot-futurama_R.glb",
+                "extension": "glb"
             },
             {
                 "name": "foot-timberland_R",
-                "download_url": "http://localhost:3000/models/foot-timberland_R.glb"
+                "download_url": "http://localhost:3000/models/foot-timberland_R.glb",
+                "extension": "glb"
             }
         ],
         "FootL": [
             {
                 "name": "foot-barbarian_L",
-                "download_url": "http://localhost:3000/models/foot-barbarian_L.glb"
+                "download_url": "http://localhost:3000/models/foot-barbarian_L.glb",
+                "extension": "glb"
             },
             {
                 "name": "foot-boots_L",
-                "download_url": "http://localhost:3000/models/foot-boots_L.glb"
+                "download_url": "http://localhost:3000/models/foot-boots_L.glb",
+                "extension": "glb"
             },
             {
                 "name": "foot-buckled_foot_L",
-                "download_url": "http://localhost:3000/models/foot-buckled_foot_L.glb"
+                "download_url": "http://localhost:3000/models/foot-buckled_foot_L.glb",
+                "extension": "glb"
             },
             {
                 "name": "foot-default_foot_L",
-                "download_url": "http://localhost:3000/models/foot-default_foot_L.glb"
+                "download_url": "http://localhost:3000/models/foot-default_foot_L.glb",
+                "extension": "glb"
             },
             {
                 "name": "foot-futurama_L",
-                "download_url": "http://localhost:3000/models/foot-futurama_L.glb"
+                "download_url": "http://localhost:3000/models/foot-futurama_L.glb",
+                "extension": "glb"
             },
             {
                 "name": "foot-timberland_L",
-                "download_url": "http://localhost:3000/models/foot-timberland_L.glb"
+                "download_url": "http://localhost:3000/models/foot-timberland_L.glb",
+                "extension": "glb"
             }
         ],
         "Torso": [
             {
                 "name": "torso-barbarian",
-                "download_url": "http://localhost:3000/models/torso-barbarian.glb"
+                "download_url": "http://localhost:3000/models/torso-barbarian.glb",
+                "extension": "glb"
             },
             {
                 "name": "torso-blender",
-                "download_url": "http://localhost:3000/models/torso-blender.glb"
+                "download_url": "http://localhost:3000/models/torso-blender.glb",
+                "extension": "glb"
             },
             {
                 "name": "torso-default_torso",
-                "download_url": "http://localhost:3000/models/torso-default_torso.glb"
+                "download_url": "http://localhost:3000/models/torso-default_torso.glb",
+                "extension": "glb"
             },
             {
                 "name": "torso-man_torso",
-                "download_url": "http://localhost:3000/models/torso-man_torso.glb"
+                "download_url": "http://localhost:3000/models/torso-man_torso.glb",
+                "extension": "glb"
             },
             {
                 "name": "torso-turtle_torso",
-                "download_url": "http://localhost:3000/models/torso-turtle_torso.glb"
+                "download_url": "http://localhost:3000/models/torso-turtle_torso.glb",
+                "extension": "glb"
             }
         ]
     },
