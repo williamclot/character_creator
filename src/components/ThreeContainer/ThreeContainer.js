@@ -69,10 +69,14 @@ class ThreeContainer extends PureComponent {
             loading: true
         })
         
+        try {
 
-        const objectToLoad = await get3DObject( objectData )
-        this.group.add( objectToLoad )
+            const objectToLoad = await get3DObject( objectData )
+            this.group.add( objectToLoad )
 
+        } catch ( err ) {
+            console.error( err )
+        }
 
         this.setState({
             loading: false
