@@ -9,18 +9,20 @@ class Selector extends Component {
         // console.log(props.objects)
     }
 
-    handleClick = index => {
-        console.log( 'clicked', index )
+    handleClick = object => {
+        console.log( 'clicked', object )
+
+        this.props.onObjectSelected( "Head", object )
     }
 
     render() {
         const { objects } = this.props
 
-        const elementDiv = objects.map( ( objUrl, index ) => (
+        const elementDiv = objects.map( ( object, index ) => (
 			<div
 				className = "selector-item"
-				key = {objUrl}
-				onClick = { () => this.handleClick( objUrl ) }
+				key = {object.name}
+				onClick = { () => this.handleClick( object ) }
 			>
 				<div className = "img">
 					<img
@@ -29,7 +31,7 @@ class Selector extends Component {
 					/>
 				</div>
 				<div className = "unselectable item-name">
-					{ objUrl.slice( 29, -4 ) }
+					{ object.name }
 				</div>
 			</div>
 		))
