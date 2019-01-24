@@ -43,11 +43,11 @@ class ThreeContainer extends PureComponent {
     }
 
     componentDidUpdate( prevProps, prevState ) {
-        const { testKey, rotationX, loadedObjects } = this.props
+        const { categories, loadedObjects } = this.props
         
         const prevObjects = prevProps.loadedObjects
         if ( prevObjects !== loadedObjects ) {
-            const keysToSearch = [ 'Head', 'Torso' ] // category names
+            const keysToSearch = categories.map( cat => cat.name ) // category names
 
             for ( const key of keysToSearch ) {
                 if ( prevObjects[ key ] !== loadedObjects[ key ] ) {
