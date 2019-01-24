@@ -10,13 +10,26 @@ class Selector extends Component {
     }
 
     handleClick = object => {
-        console.log( 'clicked', object )
+        const {
+            onObjectSelected,
+            data
+        } = this.props
 
-        this.props.onObjectSelected( "Head", object )
+        onObjectSelected( data.currentCategory, object )
     }
 
     render() {
-        const { objects } = this.props
+        const { data } = this.props
+
+        if ( !data ) {
+            return (
+                <div className = "selector">
+                    <p>Select a category!</p>
+                </div>
+            )
+        }
+
+        const { objects } = data
 
         const elementDiv = objects.map( ( object, index ) => (
 			<div

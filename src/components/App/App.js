@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 import ThreeContainer from '../ThreeContainer'
 
@@ -10,6 +11,10 @@ import { objects } from '../../lib'
 import { getCategories } from '../../util/helpers'
 
 import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../../config'
+import Header from '../Header';
+import Selector from '../Selector';
+
+import './App.css'
 
 class App extends Component {
 
@@ -48,26 +53,56 @@ class App extends Component {
     }
 
 
-    render() {        
+    getSelectedGroup = () => this.state.groups[ this.props.selectedGroupIndex ]
+    getSelectedCategory = () => {
+        const selectedGroup = this.getSelectedGroup()
+        return selectedGroup && selectedGroup.categories[ this.props.selectedCategoryIndex ]
+    }
+
+
+    render() {
         const { customizerName, groups } = this.state
 
-        return <>
-            <h1> {customizerName} </h1>
-            
+        const selectedCategory = this.getSelectedCategory()
+
+        const selectorData = ( selectedCategory ?
+            {
+                objects:  objects.byCategory[ selectedCategory.name ],
+                currentCategory: selectedCategory.name
+            } : null
+        )
+
+        const categories = getCategories( groups )
+
+        return <div className = "app">
+
+            <Header>
+                <h1> {customizerName} </h1>
+            </Header>
+
             <div className = "editor-panel">
                 <Categories groups = { groups } />
-                <Selector />
+                <Selector
+                    data = { selectorData }
+                    onObjectSelected = { this.onObjectSelected }
+                />
             </div>
 
             <ThreeContainer
-                categories = { getCategories( groups ) }
+                categories = { categories }
                 loadedObjects = { this.state.loadedObjects }
                 width = { window.innerWidth }
                 height = { window.innerHeight }
             />
-        </>
+
+        </div>
     }
 
 }
 
-export default App
+export default connect(
+    state => ({
+        selectedGroupIndex: state.selectedCategoryPath.groupIndex,
+        selectedCategoryIndex: state.selectedCategoryPath.categoryIndex
+    })
+)( App )
