@@ -43,9 +43,17 @@ class ThreeContainer extends PureComponent {
     }
 
     componentDidUpdate( prevProps, prevState ) {
-        if ( prevProps.testKey !== this.props.testKey ) {
-            console.log('key changed:', this.props.testKey)
-            this.renderScene()
+        const { testKey, rotationX, loadedObjects } = this.props
+        
+        const prevObjects = prevProps.loadedObjects
+        if ( prevObjects !== loadedObjects ) {
+            const keysToSearch = [ 'Head', 'Torso' ] // category names
+
+            for ( const key of keysToSearch ) {
+                if ( prevObjects[ key ] !== loadedObjects[ key ] ) {
+                    console.log( `key changed: ${key}` )
+                }
+            }
         }
     }
 
