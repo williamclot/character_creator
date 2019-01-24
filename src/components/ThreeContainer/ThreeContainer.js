@@ -4,6 +4,7 @@ import * as THREE from 'three'
 
 
 import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './util/init';
+import { get3DObject } from './util/objectHelpers'
 
 import './ThreeContainer.css'
 import Loader from './Loader';
@@ -11,6 +12,10 @@ import Loader from './Loader';
 class ThreeContainer extends PureComponent {
     constructor( props ) {
         super( props )
+
+        this.state = {
+            loading: false
+        }
     }
 
     componentDidMount() {
@@ -53,9 +58,26 @@ class ThreeContainer extends PureComponent {
             for ( const key of keysToSearch ) {
                 if ( prevObjects[ key ] !== loadedObjects[ key ] ) {
                     console.log( `key changed: ${key}` )
+                    this.loadObj( loadedObjects[ key ] )
                 }
             }
         }
+    }
+
+    loadObj = async objectData => {
+        this.setState({
+            loading: true
+        })
+        
+
+        const objectToLoad = await get3DObject( objectData )
+        this.group.add( objectToLoad )
+
+
+        this.setState({
+            loading: false
+        }, this.renderScene )
+
     }
 
     renderScene = () => this.renderer.render( this.scene, this.camera )
