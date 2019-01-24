@@ -15,6 +15,8 @@
     
     /* background-color: green; */
 
+    padding-right: 40px;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,6 +51,23 @@
 
 .groups-view .groups-item.selected {
     background-color: rgba(34, 94, 71, 0.71);
+}
+
+
+.categories-view {
+
+}
+
+.categories-view .categories-item {
+
+}
+
+.categories-view .categories-item:hover {
+
+}
+
+.categories-view .categories-item.selected {
+
 }
 
 

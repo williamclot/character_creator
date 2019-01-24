@@ -4,13 +4,12 @@
 
 .editor-panel {
     position: absolute;
-    right: 5%;
+    right: 50px;
 
     top: 50%;
     transform: translateY(-50%);
 
-    /* height: 70vh;
-    width: 30vw; */
+    height: 85vh;
 
 
     display: flex;
