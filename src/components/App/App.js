@@ -7,6 +7,8 @@ import Categories from '../Categories'
 import { name, groups } from '../../lib/user_my-human-world.json'
 import { objects } from '../../lib'
 
+import { getCategories } from '../../util/helpers'
+
 import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../../config'
 
 class App extends Component {
@@ -58,6 +60,7 @@ class App extends Component {
             </div>
 
             <ThreeContainer
+                categories = { getCategories( groups ) }
                 loadedObjects = { this.state.loadedObjects }
                 width = { window.innerWidth }
                 height = { window.innerHeight }
