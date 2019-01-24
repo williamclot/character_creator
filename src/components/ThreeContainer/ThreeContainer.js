@@ -6,6 +6,7 @@ import * as THREE from 'three'
 import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './util/init';
 
 import './ThreeContainer.css'
+import Loader from './Loader';
 
 class ThreeContainer extends PureComponent {
     constructor( props ) {
@@ -63,14 +64,22 @@ class ThreeContainer extends PureComponent {
 
     render() {
         const { width, height } = this.props
+        const { loading: isLoading } = this.state
+
+        const className = [
+            'canvas-container',
+            ... isLoading ? ['loading'] : []
+        ].join(' ')
 
         return (
-            <canvas
-                className = "three-canvas"
-                ref = { el => this.canvas = el }
-                width = { width }
-                height = { height }
-            />
+            <div className = { className }>
+                <canvas
+                    ref = { el => this.canvas = el }
+                    width = { width }
+                    height = { height }
+                />
+                <Loader loading = { isLoading } />
+            </div>
         );
     }
 }

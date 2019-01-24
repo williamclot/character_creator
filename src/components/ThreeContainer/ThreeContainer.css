@@ -1,5 +1,25 @@
-.three-canvas {
+.canvas-container {
     position: absolute;
     top: 0;
-    z-index: -1;
+    z-index: -3;
+}
+
+.canvas-container canvas {
+    z-index: -2;
+}
+
+.canvas-container.loading canvas {
+    filter: blur(1.5px);
+}
+
+.canvas-container .loader {
+    z-index: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    visibility: hidden;
+}
+
+.canvas-container .loader.loading {
+    visibility: visible;
 }
