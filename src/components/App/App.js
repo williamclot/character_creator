@@ -2,19 +2,17 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import ThreeContainer from '../ThreeContainer'
-
 import Categories from '../Categories'
-
-import { name, groups } from '../../lib/user_my-human-world.json'
-import { objects } from '../../lib'
-
-import { getCategories } from '../../util/helpers'
-
-import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../../config'
 import Header from '../Header';
 import Selector from '../Selector';
 
+// import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../../config'
+
+import { getCategories } from '../../util/helpers'
+
+import * as defaultProps from '../../lib'
 import './App.css'
+
 
 class App extends Component {
 
@@ -22,8 +20,6 @@ class App extends Component {
         super( props )
 
         this.state = {
-            customizerName: name,
-            groups,
             loadedObjects: {},
             
             editMode: false
@@ -35,6 +31,7 @@ class App extends Component {
         // for ( let [ category, data ] of Object.entries( objects.oneOfEach ) ) {
         //     // do smth
         // }
+        const { objects } = this.props
 
         this.setState({
             loadedObjects: objects.oneOfEach
@@ -53,7 +50,7 @@ class App extends Component {
     }
 
 
-    getSelectedGroup = () => this.state.groups[ this.props.selectedGroupIndex ]
+    getSelectedGroup = () => this.props.worldData.groups[ this.props.selectedGroupIndex ]
     getSelectedCategory = () => {
         const selectedGroup = this.getSelectedGroup()
         return selectedGroup && selectedGroup.categories[ this.props.selectedCategoryIndex ]
@@ -61,7 +58,10 @@ class App extends Component {
 
 
     render() {
-        const { customizerName, groups } = this.state
+        const {
+            worldData: { name, groups },
+            objects
+        } = this.props
 
         const selectedCategory = this.getSelectedCategory()
 
@@ -77,7 +77,7 @@ class App extends Component {
         return <div className = "app">
 
             <Header>
-                <h1> {customizerName} </h1>
+                <h1>{ name }</h1>
             </Header>
 
             <div className = "editor-panel">
@@ -99,6 +99,8 @@ class App extends Component {
     }
 
 }
+
+App.defaultProps = defaultProps
 
 export default connect(
     state => ({
