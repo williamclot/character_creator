@@ -135,6 +135,18 @@
                 "extension": "glb"
             },
             {
+                "name": "head-box",
+                "download_url": "http://localhost:3000/models/head-box_with_neck.stl",
+                "extension": "stl",
+                "metadata": {
+                    "pivotPoint": {    
+                        "x": 0,
+                        "y": -0.6111557443726947,
+                        "z": 0
+                    }
+                }
+            },
+            {
                 "name": "head-stormtrooper",
                 "download_url": "http://localhost:3000/models/head-stormtrooper.glb",
                 "extension": "glb"
@@ -313,6 +325,40 @@
                 "name": "torso-turtle_torso",
                 "download_url": "http://localhost:3000/models/torso-turtle_torso.glb",
                 "extension": "glb"
+            },
+            {
+                "name": "CUBE TORSO",
+                "download_url": "http://localhost:3000/models/torso-cube.stl",
+                "extension": "stl",
+                "metadata": {
+                    "attachPoints": {
+                        "Torso_Neck": {
+                            "x": -0.004552757158817977,
+                            "y": 0.5,
+                            "z": -0.04862498299947271
+                        },
+                        "Torso_UpperArm_L": {
+                            "x": -0.5,
+                            "y": 0.05934291105191403,
+                            "z": 0.033437911132452314
+                        },
+                        "Torso_UpperArm_R": {
+                            "x": 0.5,
+                            "y": 0.10856463702668284,
+                            "z": 0.07631037319471545
+                        },
+                        "Torso_UpperLeg_L": {
+                            "x": -0.27564668472500375,
+                            "y": -0.5,
+                            "z": 0.09211377758511352
+                        },
+                        "Torso_UpperLeg_R": {
+                            "x": 0.2569476047538435,
+                            "y": -0.5,
+                            "z": 0.018594168965584856
+                        }
+                    }
+                }
             }
         ]
     },
