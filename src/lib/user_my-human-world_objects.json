@@ -317,16 +317,16 @@
         ]
     },
     "allCategories": [
+        "Torso",
+        "Head",
         "ArmR",
         "ArmL",
         "HandR",
         "HandL",
-        "Head",
         "LegR",
         "LegL",
         "FootR",
-        "FootL",
-        "Torso"
+        "FootL"
     ],
     "poses": [
         "http://localhost:3000/models/pose-dab.json",
