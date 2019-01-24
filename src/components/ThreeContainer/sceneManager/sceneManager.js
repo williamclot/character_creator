@@ -1,12 +1,21 @@
 import { Matrix4, Object3D, Group, Bone, Mesh, Material, Color } from 'three'
 import topologicalSort from 'toposort'
 
-import { GRAY } from '../util/colours'
-
-
 
 /**
+ * An object that holds a reference to a group of 3D objects (_container_).
+ * It also needs the categories that define the structure of the objects
+ * that need to be added.
  * 
+ * It provides methods to place and replace objects for a given category.
+ * 
+ * 3D objects can be added as children of other 3D objects; therefore it is
+ * possible to form a tree structure of 3D objects. The structure is defined
+ * by the second argument (_categories_). Each category has a parent category
+ * that can be followed until the root category is reached.
+ * 
+ * When objects from a category are loaded, it is placed as a child of the
+ * object from the parent category.
  */
 class SceneManager {
     /**
