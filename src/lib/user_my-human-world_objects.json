@@ -130,11 +130,6 @@
         ],
         "Head": [
             {
-                "name": "head-muscled_man",
-                "download_url": "http://localhost:3000/models/head-muscled_man.glb",
-                "extension": "glb"
-            },
-            {
                 "name": "head-box",
                 "download_url": "http://localhost:3000/models/head-box_with_neck.stl",
                 "extension": "stl",
@@ -145,6 +140,11 @@
                         "z": 0
                     }
                 }
+            },
+            {
+                "name": "head-muscled_man",
+                "download_url": "http://localhost:3000/models/head-muscled_man.glb",
+                "extension": "glb"
             },
             {
                 "name": "head-stormtrooper",
@@ -302,31 +302,6 @@
         ],
         "Torso": [
             {
-                "name": "torso-barbarian",
-                "download_url": "http://localhost:3000/models/torso-barbarian.glb",
-                "extension": "glb"
-            },
-            {
-                "name": "torso-blender",
-                "download_url": "http://localhost:3000/models/torso-blender.glb",
-                "extension": "glb"
-            },
-            {
-                "name": "torso-default_torso",
-                "download_url": "http://localhost:3000/models/torso-default_torso.glb",
-                "extension": "glb"
-            },
-            {
-                "name": "torso-man_torso",
-                "download_url": "http://localhost:3000/models/torso-man_torso.glb",
-                "extension": "glb"
-            },
-            {
-                "name": "torso-turtle_torso",
-                "download_url": "http://localhost:3000/models/torso-turtle_torso.glb",
-                "extension": "glb"
-            },
-            {
                 "name": "CUBE TORSO",
                 "download_url": "http://localhost:3000/models/torso-cube.stl",
                 "extension": "stl",
@@ -359,7 +334,32 @@
                         }
                     }
                 }
-            }
+            },
+            {
+                "name": "torso-barbarian",
+                "download_url": "http://localhost:3000/models/torso-barbarian.glb",
+                "extension": "glb"
+            },
+            {
+                "name": "torso-blender",
+                "download_url": "http://localhost:3000/models/torso-blender.glb",
+                "extension": "glb"
+            },
+            {
+                "name": "torso-default_torso",
+                "download_url": "http://localhost:3000/models/torso-default_torso.glb",
+                "extension": "glb"
+            },
+            {
+                "name": "torso-man_torso",
+                "download_url": "http://localhost:3000/models/torso-man_torso.glb",
+                "extension": "glb"
+            },
+            {
+                "name": "torso-turtle_torso",
+                "download_url": "http://localhost:3000/models/torso-turtle_torso.glb",
+                "extension": "glb"
+            }            
         ]
     },
     "allCategories": [
