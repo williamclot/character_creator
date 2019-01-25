@@ -32,11 +32,11 @@ export async function get3DObject( objectData ) {
                     const { x, y, z } = pivotPoint
 
                     // the pivot point represents the distance to position 0;
-                    // the object needs to be added at the inverse position => position needs to be inversed
+                    // the mesh needs to be added at the inverse position
                     const newPosition = new Vector3( x, y, z )
                         .negate()
 
-                    root.position.copy( newPosition )
+                    mesh.position.copy( newPosition )
                 }
             }
 
