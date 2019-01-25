@@ -13,7 +13,8 @@
     "three": "^0.100.0",
     "three-gltf-loader": "^1.100.0",
     "three-orbitcontrols": "^2.99.1",
-    "three-stl-loader": "^1.0.6"
+    "three-stl-loader": "^1.0.6",
+    "toposort": "^2.0.2"
   },
   "scripts": {
     "start": "react-scripts start",

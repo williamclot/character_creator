@@ -8,6 +8,7 @@ import { get3DObject } from './util/objectHelpers'
 
 import './ThreeContainer.css'
 import Loader from './Loader';
+import SceneManager from './sceneManager';
 
 class ThreeContainer extends PureComponent {
     constructor( props ) {
@@ -39,10 +40,15 @@ class ThreeContainer extends PureComponent {
         
         this.scene.add(this.group, floor, gridHelper, ...lights);
 
+        this.sceneManager = new SceneManager( this.group, this.props.categories )
+
         if (process.env.NODE_ENV === "development") {
             // expose variable to window in order to be able to use Three.js inspector
             window.scene = this.scene;
+            window.sceneManager = this.sceneManager
         }
+
+        this.initGroup()
 
         this.renderScene()
 
@@ -58,7 +64,7 @@ class ThreeContainer extends PureComponent {
             for ( const key of keysToSearch ) {
                 if ( prevObjects[ key ] !== loadedObjects[ key ] ) {
                     console.log( `key changed: ${key}` )
-                    this.loadObj( loadedObjects[ key ] )
+                    this.loadObj( key, loadedObjects[ key ] )
                 }
             }
         }
@@ -71,7 +77,8 @@ class ThreeContainer extends PureComponent {
             loading: true
         })
 
-        const myKeys = ['Torso', 'Head'] // Object.keys( loadedObjects )
+        // const myKeys = ['Torso', 'LegL'] // Object.keys( loadedObjects )
+        const myKeys = Object.keys( loadedObjects )
         const objectsData = myKeys.map( key => loadedObjects[ key ] )
 
         // console.log(myKeys)
@@ -89,12 +96,13 @@ class ThreeContainer extends PureComponent {
                 
                 const object3D = await objectPromise
                 
-                this.group.add( object3D )
-                // this.sceneManager.add( object3D )
+                const categoryKey = myKeys[ index ]
+                // this.group.add( object3D )
+                this.sceneManager.add( categoryKey, object3D )
 
-                console.log('loaded:', myKeys[ index ] )
+                console.log('loaded:', categoryKey )
             },
-            Promise.resolve()
+            null
         )
 
 
@@ -112,7 +120,7 @@ class ThreeContainer extends PureComponent {
         })
     }
 
-    loadObj = async objectData => {
+    loadObj = async ( categoryKey, objectData ) => {
         this.setState({
             loading: true
         })
@@ -120,7 +128,7 @@ class ThreeContainer extends PureComponent {
         try {
 
             const objectToLoad = await get3DObject( objectData )
-            this.group.add( objectToLoad )
+            this.sceneManager.add( categoryKey, objectToLoad )
 
         } catch ( err ) {
             console.error( err )

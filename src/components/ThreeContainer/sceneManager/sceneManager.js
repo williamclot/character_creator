@@ -1,5 +1,6 @@
 import { Matrix4, Object3D, Group, Bone, Mesh, Material, Color } from 'three'
 import topologicalSort from 'toposort'
+import findMinGeometry from '../util/findMinGeometry'
 
 
 /**
@@ -70,56 +71,8 @@ class SceneManager {
         this.bonesMap = new Map;
     }
 
-    /**
-     * lib is a js object with values of type LibraryItem (as defind in oldLibrary/__LibItemType.ts)
-     * 
-     * it has a special unique property (the STAND_SYMBOL) that holds the info for the stand;
-     * this ensured that the stand property cannot be overwritten by a different property
-     * with the same key (because a symbol is globally unique)
-     * @param { Object.< string, LibraryItem > } lib
-     */
-    async addAll( lib ) {
-
-        const standLibItem = lib[ STAND_SYMBOL ]
-
-        if ( standLibItem ) {
-
-            const stand = await loadObject( standLibItem )
-
-            this.placeStand( stand, standLibItem.metadata )
-
-        }
-
-        // TODO could use Promise.all since order is known
-        for ( let key of this.sortedCategoryIds ) {
-
-            const libItem = lib[ key ]
-
-            if ( libItem ) {
-
-                const object = await loadObject( libItem )
-                
-                this.add( key, object, libItem.metadata )
-
-            }
-        }
-
-    }
 
     placeStand( newStand, options = {} ) {
-
-        newStand.traverse( child => {
-            if ( child instanceof Mesh ) {
-                child.castShadow = true;
-                child.receiveShadow = true;
-                if (child.material.color){
-                    child.material.color.set( GRAY )
-                }
-            }
-        } );
-
-        // stand processed successfully;
-        // code below actually adds stand to scene and updates its reference in group manager
         
         const rootCategoryId = this.rootCategory.id        
         
@@ -157,35 +110,6 @@ class SceneManager {
 
         }
 
-
-        const {
-            rotation,
-            position,
-            scale,
-            poseData
-        } = options
-
-        objectToAdd.traverse(function(child) {
-            if (child instanceof Mesh) {
-                child.castShadow = true;
-                child.material.color.set( GRAY );
-            }
-        });
-
-        if (poseData) {
-            objectToAdd.traverse(child => {
-                if (child instanceof Bone) {
-                    const rotation = poseData[child.name];
-                    if (rotation) {
-                        const { x, y, z } = rotation;
-                        child.rotation.set(x, y, z);
-                    }
-                }
-            });
-        }
-
-        // objectToAdd processed sucessfully;
-        // code below actually adds object to scene and updates references in group manager
 
         const category = this.categoriesMap.get( categoryKey )
 
@@ -261,20 +185,20 @@ class SceneManager {
      */
     getParent( parentCategory ) {
         if ( parentCategory ) {
-            const parentBone = this.bonesMap.get( parentCategory.boneName )
+            const parentBone = this.bonesMap.get( parentCategory.attachPoint )
             if ( ! parentBone ) {
-                throw new Error( `Bone with name ${ parentCategory.boneName } not found!` )
+                throw new Error( `Bone with name ${ parentCategory.attachPoint } not found!` )
             } 
 
             return parentBone
 
         } else {
 
-            if ( ! this.stand ) {
-                throw new Error( `You first need to place a stand before adding objects` )
-            }
+            // if ( ! this.stand ) {
+            //     throw new Error( `You first need to place a stand before adding objects` )
+            // }
 
-            return this.stand
+            return this.container
 
         }
     }
@@ -365,11 +289,13 @@ function getChildWithCorrectMatrixWorld( child, parent ) {
  */
 function extractKnownBones( object3d, knownBoneNames ) {
 
+    const knownBoneNamesSet = knownBoneNames instanceof Set ? knownBoneNames : new Set( knownBoneNames )
+
     /** @type { Map< string, Bone > } */
     const extractedBones = new Map
 
     object3d.traverse( element => {
-        if ( element.isBone && knownBoneNames.has( element.name ) ) {
+        if ( element.isBone && knownBoneNamesSet.has( element.name ) ) {
             extractedBones.set( element.name, element )
         }
     } )

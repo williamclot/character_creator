@@ -20,7 +20,7 @@ class App extends Component {
         super( props )
 
         this.state = {
-            loadedObjects: {},
+            loadedObjects: props.objects.oneOfEach,
             
             editMode: false
         }
@@ -31,11 +31,11 @@ class App extends Component {
         // for ( let [ category, data ] of Object.entries( objects.oneOfEach ) ) {
         //     // do smth
         // }
-        const { objects } = this.props
-
-        this.setState({
-            loadedObjects: objects.oneOfEach
-        })
+        
+        // const { objects } = this.props
+        // this.setState({
+        //     loadedObjects: objects.oneOfEach
+        // })
     }
 
     onObjectSelected = ( category, object ) => {
