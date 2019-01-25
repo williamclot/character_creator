@@ -2,6 +2,25 @@
     "byCategory": {
         "ArmR": [
             {
+                "name": "ARM_Cylinder",
+                "download_url": "http://localhost:3000/models/arm-cylinder_R.stl",
+                "extension": "stl",
+                "metadata": {
+                    "pivotPoint": {
+                        "x": 0,
+                        "y": -0.6473597248253875,
+                        "z": 0
+                    },
+                    "attachPoints": {
+                        "ArmR_Hand_R": {
+                            "x": -0.007503608202395894,
+                            "y": 0.6302436985753376,
+                            "z": 0.007801055339016573
+                        }
+                    }
+                }
+            },
+            {
                 "name": "arm-default_arm_R",
                 "download_url": "http://localhost:3000/models/arm-default_arm_R.glb",
                 "extension": "glb"
@@ -29,6 +48,25 @@
         ],
         "ArmL": [
             {
+                "name": "ARM_Cylinder",
+                "download_url": "http://localhost:3000/models/arm-cylinder_L.stl",
+                "extension": "stl",
+                "metadata": {
+                    "pivotPoint": {
+                        "x": 0,
+                        "y": -0.6473597248253875,
+                        "z": 0
+                    },
+                    "attachPoints": {
+                        "ArmL_Hand_L": {
+                            "x": -0.007503608202395894,
+                            "y": 0.6302436985753376,
+                            "z": 0.007801055339016573
+                        }
+                    }
+                }
+            },
+            {
                 "name": "arm-default_arm_L",
                 "download_url": "http://localhost:3000/models/arm-default_arm_L.glb",
                 "extension": "glb"
@@ -55,6 +93,18 @@
             }
         ],
         "HandR": [
+            {
+                "name": "HAND_BOX",
+                "download_url": "http://localhost:3000/models/hand-box_R.stl",
+                "extension": "stl",
+                "metadata": {
+                    "pivotPoint": {
+                        "x": 0.26577398435728505,
+                        "y": 0,
+                        "z": 0
+                    }
+                }
+            },
             {
                 "name": "hand-barbarian_R",
                 "download_url": "http://localhost:3000/models/hand-barbarian_R.glb",
@@ -92,6 +142,18 @@
             }
         ],
         "HandL": [
+            {
+                "name": "HAND_BOX",
+                "download_url": "http://localhost:3000/models/hand-box_L.stl",
+                "extension": "stl",
+                "metadata": {
+                    "pivotPoint": {
+                        "x": 0.26577398435728505,
+                        "y": 0,
+                        "z": 0
+                    }
+                }
+            },
             {
                 "name": "hand-blender_L",
                 "download_url": "http://localhost:3000/models/hand-blender_L.glb",
@@ -214,6 +276,25 @@
         ],
         "LegR": [
             {
+                "name": "LEG_Cylinder",
+                "download_url": "http://localhost:3000/models/leg-cylinder_R.stl",
+                "extension": "stl",
+                "metadata": {
+                    "pivotPoint": {
+                        "x": 0,
+                        "y": -0.6473597248253875,
+                        "z": 0
+                    },
+                    "attachPoints": {
+                        "LegR_Foot_R": {
+                            "x": -0.007503608202395894,
+                            "y": 0.6302436985753376,
+                            "z": 0.007801055339016573
+                        }
+                    }
+                }
+            },
+            {
                 "name": "leg-default_leg_R",
                 "download_url": "http://localhost:3000/models/leg-default_leg_R.glb",
                 "extension": "glb"
@@ -226,6 +307,25 @@
         ],
         "LegL": [
             {
+                "name": "LEG_Cylinder",
+                "download_url": "http://localhost:3000/models/leg-cylinder_L.stl",
+                "extension": "stl",
+                "metadata": {
+                    "pivotPoint": {
+                        "x": 0,
+                        "y": -0.6473597248253875,
+                        "z": 0
+                    },
+                    "attachPoints": {
+                        "LegL_Foot_L": {
+                            "x": -0.007503608202395894,
+                            "y": 0.6302436985753376,
+                            "z": 0.007801055339016573
+                        }
+                    }
+                }
+            },
+            {
                 "name": "leg-default_leg_L",
                 "download_url": "http://localhost:3000/models/leg-default_leg_L.glb",
                 "extension": "glb"
@@ -237,6 +337,18 @@
             }
         ],
         "FootR": [
+            {
+                "name": "FOOT_BOX",
+                "download_url": "http://localhost:3000/models/foot-box_R.stl",
+                "extension": "stl",
+                "metadata": {
+                    "pivotPoint": {
+                        "x": 0.26577398435728505,
+                        "y": 0,
+                        "z": 0
+                    }
+                }
+            },
             {
                 "name": "foot-barbarian_R",
                 "download_url": "http://localhost:3000/models/foot-barbarian_R.glb",
@@ -269,6 +381,18 @@
             }
         ],
         "FootL": [
+            {
+                "name": "FOOT_BOX",
+                "download_url": "http://localhost:3000/models/foot-box_L.stl",
+                "extension": "stl",
+                "metadata": {
+                    "pivotPoint": {
+                        "x": 0.26577398435728505,
+                        "y": 0,
+                        "z": 0
+                    }
+                }
+            },
             {
                 "name": "foot-barbarian_L",
                 "download_url": "http://localhost:3000/models/foot-barbarian_L.glb",
