@@ -204,6 +204,18 @@
                 }
             },
             {
+                "name": "head-sphere",
+                "download_url": "http://localhost:3000/models/head-sphere.stl",
+                "extension": "stl",
+                "metadata": {
+                    "pivotPoint": {    
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
+                }
+            },
+            {
                 "name": "head-muscled_man",
                 "download_url": "http://localhost:3000/models/head-muscled_man.glb",
                 "extension": "glb"
