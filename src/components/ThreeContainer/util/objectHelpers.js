@@ -6,11 +6,13 @@ import {
 import { gltfLoader, stlLoader } from './loaders'
 
 
-export async function get3DObject( objectData ) {
+export async function get3DObject( objectData, poseData ) {
     switch ( objectData.extension ) {
 
         case 'stl': {
-            const geometry = await stlLoader.load( objectData.download_url )
+            const { download_url, metadata } = objectData
+
+            const geometry = await stlLoader.load( download_url )
             const material = new MeshStandardMaterial({
                 color: 0x808080
             })
@@ -19,26 +21,18 @@ export async function get3DObject( objectData ) {
         
             const root = new Object3D
 
-            if ( objectData.metadata ) {
-                const { attachPoints, pivotPoint } = objectData.metadata
+            if ( metadata ) {
+                applyMetadata( mesh, metadata )
 
+                const { attachPoints } = metadata
                 if ( attachPoints ) {
-                    for ( let [ attachPoint, position ] of Object.entries( attachPoints ) ) {
-                        root.add( createBone( attachPoint, position ) )
+                    for ( let [ attachPointName, position ] of Object.entries( attachPoints ) ) {
+                        const rotation = poseData && poseData[ attachPointName ]
+                        root.add( createBone( attachPointName, position, rotation ) )
                     }
                 }
-
-                if ( pivotPoint ) {
-                    const { x, y, z } = pivotPoint
-
-                    // the pivot point represents the distance to position 0;
-                    // the mesh needs to be added at the inverse position
-                    const newPosition = new Vector3( x, y, z )
-                        .negate()
-
-                    mesh.position.copy( newPosition )
-                }
             }
+            
 
             root.add( mesh )
 
@@ -50,6 +44,20 @@ export async function get3DObject( objectData ) {
             const resource = await gltfLoader.load( objectData.download_url )
             const root = resource.scene.children[ 0 ]
 
+            if ( poseData ) {
+                root.traverse( bone => {
+                    if ( bone.isBone ) {
+                        const rotation = poseData[ bone.name ]
+
+                        if ( rotation ) {
+                            const { x, y, z } = rotation
+                            bone.rotation.set( x, y, z )
+                        }
+                    }
+                } )
+
+            }
+
             return root
         }
 
@@ -59,13 +67,36 @@ export async function get3DObject( objectData ) {
     }
 }
 
+function applyMetadata( target, metadata ) {
+    const { position, rotation, scale } = metadata
 
-function createBone( name, position ) {
+    if ( position ) {
+        const { x, y, z } = position
+        target.position.set( x, y, z )
+    }
+
+    if ( rotation ) {
+        const { x, y, z } = rotation
+        target.rotation.set( x, y, z )
+    }
+
+    if ( scale ) {
+        const { x, y, z } = scale
+        target.scale.set( x, y, z )
+    }
+}
+
+function createBone( name, position, rotation ) {
     const { x, y, z } = position
 
     const bone = new Bone
     bone.name = name
     bone.position.set( x, y, z )
+
+    if ( rotation ) {
+        const { x, y, z } = rotation
+        bone.rotation.set( x, y, z )
+    }
     
     return bone
 }

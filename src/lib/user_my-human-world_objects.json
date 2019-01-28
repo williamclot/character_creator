@@ -6,15 +6,15 @@
                 "download_url": "http://localhost:3000/models/arm-cylinder_R.stl",
                 "extension": "stl",
                 "metadata": {
-                    "pivotPoint": {
+                    "position": {
                         "x": 0,
-                        "y": -0.6473597248253875,
+                        "y": 0.6473597248253875,
                         "z": 0
                     },
                     "attachPoints": {
                         "ArmR_Hand_R": {
                             "x": -0.007503608202395894,
-                            "y": 0.6302436985753376,
+                            "y": 1.2776034234,
                             "z": 0.007801055339016573
                         }
                     }
@@ -52,15 +52,15 @@
                 "download_url": "http://localhost:3000/models/arm-cylinder_L.stl",
                 "extension": "stl",
                 "metadata": {
-                    "pivotPoint": {
+                    "position": {
                         "x": 0,
-                        "y": -0.6473597248253875,
+                        "y": 0.6473597248253875,
                         "z": 0
                     },
                     "attachPoints": {
                         "ArmL_Hand_L": {
                             "x": -0.007503608202395894,
-                            "y": 0.6302436985753376,
+                            "y": 1.2776034234,
                             "z": 0.007801055339016573
                         }
                     }
@@ -98,8 +98,8 @@
                 "download_url": "http://localhost:3000/models/hand-box_R.stl",
                 "extension": "stl",
                 "metadata": {
-                    "pivotPoint": {
-                        "x": 0.26577398435728505,
+                    "position": {
+                        "x": -0.26577398435728505,
                         "y": 0,
                         "z": 0
                     }
@@ -147,8 +147,8 @@
                 "download_url": "http://localhost:3000/models/hand-box_L.stl",
                 "extension": "stl",
                 "metadata": {
-                    "pivotPoint": {
-                        "x": 0.26577398435728505,
+                    "position": {
+                        "x": -0.26577398435728505,
                         "y": 0,
                         "z": 0
                     }
@@ -196,9 +196,9 @@
                 "download_url": "http://localhost:3000/models/head-box_with_neck.stl",
                 "extension": "stl",
                 "metadata": {
-                    "pivotPoint": {    
+                    "position": {    
                         "x": 0,
-                        "y": -0.6111557443726947,
+                        "y": 0.6111557443726947,
                         "z": 0
                     }
                 }
@@ -208,7 +208,7 @@
                 "download_url": "http://localhost:3000/models/head-sphere.stl",
                 "extension": "stl",
                 "metadata": {
-                    "pivotPoint": {    
+                    "position": {    
                         "x": 0,
                         "y": 0,
                         "z": 0
@@ -292,15 +292,15 @@
                 "download_url": "http://localhost:3000/models/leg-cylinder_R.stl",
                 "extension": "stl",
                 "metadata": {
-                    "pivotPoint": {
+                    "position": {
                         "x": 0,
-                        "y": -0.6473597248253875,
+                        "y": 0.6473597248253875,
                         "z": 0
                     },
                     "attachPoints": {
                         "LegR_Foot_R": {
                             "x": -0.007503608202395894,
-                            "y": 0.6302436985753376,
+                            "y": 1.2776034234,
                             "z": 0.007801055339016573
                         }
                     }
@@ -323,15 +323,15 @@
                 "download_url": "http://localhost:3000/models/leg-cylinder_L.stl",
                 "extension": "stl",
                 "metadata": {
-                    "pivotPoint": {
+                    "position": {
                         "x": 0,
-                        "y": -0.6473597248253875,
+                        "y": 0.6473597248253875,
                         "z": 0
                     },
                     "attachPoints": {
                         "LegL_Foot_L": {
                             "x": -0.007503608202395894,
-                            "y": 0.6302436985753376,
+                            "y": 1.2776034234,
                             "z": 0.007801055339016573
                         }
                     }
@@ -354,8 +354,8 @@
                 "download_url": "http://localhost:3000/models/foot-box_R.stl",
                 "extension": "stl",
                 "metadata": {
-                    "pivotPoint": {
-                        "x": 0.26577398435728505,
+                    "position": {
+                        "x": -0.26577398435728505,
                         "y": 0,
                         "z": 0
                     }
@@ -398,8 +398,8 @@
                 "download_url": "http://localhost:3000/models/foot-box_L.stl",
                 "extension": "stl",
                 "metadata": {
-                    "pivotPoint": {
-                        "x": 0.26577398435728505,
+                    "position": {
+                        "x": -0.26577398435728505,
                         "y": 0,
                         "z": 0
                     }
