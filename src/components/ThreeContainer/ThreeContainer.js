@@ -48,30 +48,31 @@ class ThreeContainer extends PureComponent {
             window.sceneManager = this.sceneManager
         }
 
-        this.initGroup()
-
         this.renderScene()
+        
+        this.initGroup()
 
     }
 
     componentDidUpdate( prevProps, prevState ) {
-        const { categories, loadedObjects } = this.props
+        const { categories, loadedObjects, poseData } = this.props
         
         const prevObjects = prevProps.loadedObjects
         if ( prevObjects !== loadedObjects ) {
+            console.log('loaded objects changed...')
             const keysToSearch = categories.map( cat => cat.name ) // category names
 
             for ( const key of keysToSearch ) {
                 if ( prevObjects[ key ] !== loadedObjects[ key ] ) {
                     console.log( `key changed: ${key}` )
-                    this.loadObj( key, loadedObjects[ key ] )
+                    this.loadObj( key, loadedObjects[ key ], poseData )
                 }
             }
         }
     }
 
     initGroup = async () => {
-        const { categories, loadedObjects } = this.props
+        const { categories, loadedObjects, poseData } = this.props
 
         this.setState({
             loading: true
@@ -81,14 +82,11 @@ class ThreeContainer extends PureComponent {
         const myKeys = Object.keys( loadedObjects )
         const objectsData = myKeys.map( key => loadedObjects[ key ] )
 
-        // console.log(myKeys)
-        // console.log(objectsData)
-
         /**
          * list of promises that resolve to Object3D
          * @type { Promise<THREE.Object3D>[] }
          */
-        const objectsPromises = objectsData.map( get3DObject )
+        const objectsPromises = objectsData.map( data => get3DObject( data, poseData ) )
 
         for ( const [ index, objectPromise ] of objectsPromises.entries() ) {
             const object3D =  await objectPromise
@@ -104,14 +102,14 @@ class ThreeContainer extends PureComponent {
         }, this.renderScene )
     }
 
-    loadObj = async ( categoryKey, objectData ) => {
+    loadObj = async ( categoryKey, objectData, poseData ) => {
         this.setState({
             loading: true
         })
         
         try {
 
-            const objectToLoad = await get3DObject( objectData )
+            const objectToLoad = await get3DObject( objectData, poseData )
             this.sceneManager.add( categoryKey, objectToLoad )
 
         } catch ( err ) {

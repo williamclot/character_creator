@@ -203,6 +203,19 @@ class SceneManager {
         }
     }
 
+    applyPose( poseData ) {
+        this.container.traverse( bone => {
+            if ( bone.isBone ) {
+                const rotation = poseData[ bone.name ]
+
+                if ( rotation ) {
+                    const { x, y, z } = rotation
+                    bone.rotation.set( x, y, z )
+                }
+            }
+        } )
+    }
+
     resetStand() {
 
         const rootCategoryId = this.rootCategory.id

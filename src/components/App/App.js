@@ -60,7 +60,8 @@ class App extends Component {
     render() {
         const {
             worldData: { name, groups },
-            objects
+            objects,
+            poseData
         } = this.props
 
         const selectedCategory = this.getSelectedCategory()
@@ -91,6 +92,8 @@ class App extends Component {
             <ThreeContainer
                 categories = { categories }
                 loadedObjects = { this.state.loadedObjects }
+                poseData = { poseData }
+
                 width = { window.innerWidth }
                 height = { window.innerHeight }
             />
