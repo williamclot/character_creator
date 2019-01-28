@@ -1,0 +1,18 @@
+.categories-view {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.categories-view .categories-item {
+
+}
+
+.categories-view .categories-item:hover {
+
+}
+
+.categories-view .categories-item.selected {
+
+}

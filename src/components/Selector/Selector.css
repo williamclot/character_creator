@@ -1,11 +1,11 @@
 .selector {
     position: relative;
     
-    background-color: rgba(0, 0, 0, 0.4);
+    /* background-color: rgba(0, 0, 0, 0.4);
     box-shadow: 0px 0px 20px #000000;
     
     border-radius: 20px;
-    padding: 10px;
+    padding: 10px; */
 
     height: 100%;
 

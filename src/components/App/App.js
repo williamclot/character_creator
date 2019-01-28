@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import ThreeContainer from '../ThreeContainer'
-import Categories from '../Categories'
 import Header from '../Header';
 import Selector from '../Selector';
+import { CategoriesView, GroupsView } from '../Categories'
 
 // import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../../config'
 
@@ -64,6 +64,7 @@ class App extends Component {
             poseData
         } = this.props
 
+        const selectedGroup = this.getSelectedGroup()
         const selectedCategory = this.getSelectedCategory()
 
         const selectorData = ( selectedCategory ?
@@ -82,11 +83,18 @@ class App extends Component {
             </Header>
 
             <div className = "editor-panel">
-                <Categories groups = { groups } />
-                <Selector
-                    data = { selectorData }
-                    onObjectSelected = { this.onObjectSelected }
-                />
+
+                <div className = "groups-container">
+                    <GroupsView groups = { groups } />
+                </div>
+                
+                <div className = "selector-container">
+                    <CategoriesView categories = { selectedGroup.categories } />
+                    <Selector
+                        data = { selectorData }
+                        onObjectSelected = { this.onObjectSelected }
+                    />
+                </div>
             </div>
 
             <ThreeContainer

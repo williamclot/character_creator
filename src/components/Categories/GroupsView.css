@@ -3,10 +3,10 @@
     
     
     /* temp */
-    display: flex;
+    /* display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
+    flex-direction: column; */
     /* background-color: aqua; */
 }
 
@@ -51,29 +51,4 @@
 
 .groups-view .groups-item.selected {
     background-color: rgba(34, 94, 71, 0.71);
-}
-
-
-.categories-view {
-
-}
-
-.categories-view .categories-item {
-
-}
-
-.categories-view .categories-item:hover {
-
-}
-
-.categories-view .categories-item.selected {
-
-}
-
-
-
-
-
-.categories-view {
-    background-color: blueviolet;
 }

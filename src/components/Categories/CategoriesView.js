@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 
 import { setCurrentCategory } from '../../actions'
 
+import './CategoriesView.css'
+
 const CategoryItem = props => {
     const {
         category,

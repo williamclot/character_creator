@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 
 import { setCurrentGroup } from '../../actions'
 
+import './GroupsView.css'
+
 const GroupItem = props => {
     const {
         group,
