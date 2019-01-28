@@ -90,34 +90,18 @@ class ThreeContainer extends PureComponent {
          */
         const objectsPromises = objectsData.map( get3DObject )
 
-        const finalPromise = objectsPromises.reduce(
-            async ( loadedSoFar, objectPromise, index ) => {
-                await loadedSoFar
-                
-                const object3D = await objectPromise
-                
-                const categoryKey = myKeys[ index ]
-                // this.group.add( object3D )
-                this.sceneManager.add( categoryKey, object3D )
+        for ( const [ index, objectPromise ] of objectsPromises.entries() ) {
+            const object3D =  await objectPromise
+            const categoryKey = myKeys[ index ]
 
-                console.log('loaded:', categoryKey )
-            },
-            null
-        )
-
-
-
-        try {
-            await finalPromise
-            this.renderScene()
-        } catch ( err ) {
-            console.error( err )
+            this.sceneManager.add( categoryKey, object3D )
             
+            console.log('loaded:', categoryKey )
         }
         
         this.setState({
             loading: false
-        })
+        }, this.renderScene )
     }
 
     loadObj = async ( categoryKey, objectData ) => {
