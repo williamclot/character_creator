@@ -1,0 +1,69 @@
+{
+  "Torso_Hip": null,
+  "Torso_Spine": null,
+  "Torso_Chest": null,
+  "Head_Neck": null,
+  "Torso_Sholder_L": null,
+  "ArmL_UpperArm_L": null,
+  "ArmL_LowerArm_L": null,
+  "HandL_Hand_L": null,
+  "Torso_Sholder_R": null,
+  "ArmR_UpperArm_R": null,
+  "ArmR_LowerArm_R": null,
+  "HandR_Hand_R": null,
+  "LegL_UpperLeg_L": null,
+  "LegL_LowerLeg_L": null,
+  "FootL_Foot_L": null,
+  "LegR_UpperLeg_R": null,
+  "LegR_LowerLeg_R": null,
+  "FootR_Foot_R": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "Torso_Neck": {
+    "x": 0.32015397142581814,
+    "y": 7.562644199227106e-8,
+    "z": 2.8137516895876683e-8
+  },
+  "Torso_UpperArm_L": {
+    "x": -0.020090844432732433,
+    "y": 5.0233914805630795e-8,
+    "z": -0.8415633808747729
+  },
+  "ArmL_Hand_L": {
+    "x": 0.031254002176615656,
+    "y": 0.04971348983529239,
+    "z": 0.1871618372413297
+  },
+  "Torso_UpperArm_R": {
+    "x": -0.020090854433305834,
+    "y": -5.980974371322393e-8,
+    "z": 0.8415633808534752
+  },
+  "ArmR_Hand_R": {
+    "x": 0.16960978686226547,
+    "y": -0.036276422896324274,
+    "z": -0.10570736054554877
+  },
+  "Torso_UpperLeg_L": {
+    "x": -0.225954442027462,
+    "y": -0.002255576471979986,
+    "z": -3.065559506135863
+  },
+  "LegL_Foot_L": {
+    "x": 1.1639885633374873,
+    "y": -0.06525044225289559,
+    "z": -0.03547914545311711
+  },
+  "Torso_UpperLeg_R": {
+    "x": -0.22595871043191387,
+    "y": 0.0022549382250402123,
+    "z": 3.0655578739084013
+  },
+  "LegR_Foot_R": {
+    "x": 1.1639887139887533,
+    "y": 0.06524965468672239,
+    "z": 0.03547912687726631
+  }
+}
