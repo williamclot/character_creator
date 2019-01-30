@@ -60,7 +60,7 @@ class ThreeContainer extends PureComponent {
         const prevObjects = prevProps.loadedObjects
         if ( prevObjects !== loadedObjects ) {
             console.log('loaded objects changed...')
-            const keysToSearch = categories.map( cat => cat.name ) // category names
+            const keysToSearch = this.sceneManager.sortedCategoryIds // category names
 
             for ( const key of keysToSearch ) {
                 if ( prevObjects[ key ] !== loadedObjects[ key ] ) {
@@ -78,8 +78,8 @@ class ThreeContainer extends PureComponent {
             loading: true
         })
 
-        // const myKeys = ['Torso', 'LegL'] // Object.keys( loadedObjects )
-        const myKeys = Object.keys( loadedObjects )
+        const myKeys = this.sceneManager.sortedCategoryIds // Object.keys( loadedObjects )
+        // const myKeys = Object.keys( loadedObjects )
         const objectsData = myKeys.map( key => loadedObjects[ key ] )
 
         /**
