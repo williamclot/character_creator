@@ -1,20 +1,30 @@
 {
-  "name": "character_editor",
+  "name": "mmf-customizer",
   "version": "0.1.0",
   "private": true,
+  "main": "src/components/App/index.js",
   "dependencies": {
     "axios": "^0.18.0",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
+
     "react-redux": "^6.0.0",
-    "react-scripts": "^2.1.3",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
+
     "three": "^0.100.0",
     "three-gltf-loader": "^1.100.0",
     "three-orbitcontrols": "^2.99.1",
     "three-stl-loader": "^1.0.6",
     "toposort": "^2.0.2"
+  },
+  "devDependencies": {
+    "react-scripts": "^2.1.3",
+
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
+  },
+  "peerDependencies": {
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
   },
   "scripts": {
     "start": "react-scripts start",
