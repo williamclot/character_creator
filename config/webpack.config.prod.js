@@ -3,6 +3,8 @@ const { appPath } = require('./paths')
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
+process.env.NODE_ENV = 'production'
+
 module.exports = {
     entry: './src/index.js',
     output: {
