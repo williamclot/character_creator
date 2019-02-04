@@ -9,10 +9,12 @@
 
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "rm -rf dist/ && webpack --config config/webpack.config.prod.js",
+    "build": "node scripts/build.js",
     "test": "node scripts/test.js", 
+    
+    "lib": "rm -rf dist/ && webpack --config config/webpackModule.config.js",
 
-    "prepare": "npm run build"
+    "prepare": "npm run lib"
   },
 
   "dependencies": {

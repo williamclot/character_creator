@@ -1,15 +1,14 @@
-const path = require('path')
-const { appPath } = require('./paths')
+const { appIndexJs, appDist } = require('./paths')
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 process.env.NODE_ENV = 'production'
 
 module.exports = {
-    entry: './src/index.js',
+    entry: appIndexJs,
     output: {
         filename: 'index.js',
-        path: path.resolve(appPath, 'dist'),
+        path: appDist,
 
         library: 'ReactCustomizer',
         libraryTarget: 'umd'
@@ -42,6 +41,6 @@ module.exports = {
 
     externals: {
         react: 'react',
-        // 'react-dom': 'react-dom'
+        'react-dom': 'react-dom'
     }
 }
