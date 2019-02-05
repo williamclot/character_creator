@@ -78,6 +78,15 @@ class App extends Component {
 
         return <div className = "app">
 
+            <ThreeContainer
+                categories = { categories }
+                loadedObjects = { this.state.loadedObjects }
+                poseData = { poseData }
+
+                width = { window.innerWidth }
+                height = { window.innerHeight }
+            />
+
             <Header>
                 <h1>{ name }</h1>
             </Header>
@@ -96,15 +105,6 @@ class App extends Component {
                     />
                 </div>
             </div>
-
-            <ThreeContainer
-                categories = { categories }
-                loadedObjects = { this.state.loadedObjects }
-                poseData = { poseData }
-
-                width = { window.innerWidth }
-                height = { window.innerHeight }
-            />
 
         </div>
     }

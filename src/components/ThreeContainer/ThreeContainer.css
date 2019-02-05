@@ -1,11 +1,11 @@
 .canvas-container {
     position: absolute;
     top: 0;
-    z-index: -3;
+    /* z-index: -3; */
 }
 
 .canvas-container canvas {
-    z-index: -2;
+    /* z-index: -2; */
 }
 
 .canvas-container.loading canvas {
@@ -13,7 +13,7 @@
 }
 
 .canvas-container .loader {
-    z-index: auto;
+    /* z-index: auto; */
     position: absolute;
     top: 50%;
     left: 50%;
