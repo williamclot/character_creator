@@ -6,7 +6,6 @@ import * as serviceWorker from './serviceWorker';
 import './index.css';
 
 
-// TODO make Provider part of App
 ReactDOM.render(
     <App />,
     document.getElementById('root')
