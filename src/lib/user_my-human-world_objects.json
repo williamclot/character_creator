@@ -67,6 +67,11 @@
                 }
             },
             {
+                "name": "processed:arm-default_arm_L",
+                "download_url": "http://localhost:3000/models/arm-default_arm_L:processed.glb",
+                "extension": "glb"
+            },
+            {
                 "name": "arm-default_arm_L",
                 "download_url": "http://localhost:3000/models/arm-default_arm_L.glb",
                 "extension": "glb"
