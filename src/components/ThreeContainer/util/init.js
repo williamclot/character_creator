@@ -35,8 +35,8 @@ export function initRenderer(canvasElement, size, pixelRatio) {
         antialias: true,
         canvas: canvasElement
     });
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+    // renderer.shadowMap.enabled = true;
+    // renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
     renderer.setSize( size.width, size.height ); // Configure renderer size
 
