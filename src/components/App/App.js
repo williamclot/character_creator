@@ -82,9 +82,6 @@ class App extends Component {
                 categories = { categories }
                 loadedObjects = { this.state.loadedObjects }
                 poseData = { poseData }
-
-                width = { window.innerWidth }
-                height = { window.innerHeight }
             />
 
             <Header>

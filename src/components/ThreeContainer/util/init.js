@@ -28,9 +28,9 @@ export function initCamera() {
 /**
  * 
  * @param {React.DetailedReactHTMLElement} canvasElement 
- * @param {*} pixelRatio 
+ * @param {{ height:number, width: number }} size
  */
-export function initRenderer(canvasElement, pixelRatio = 1) {
+export function initRenderer(canvasElement, size) {
     const renderer = new THREE.WebGLRenderer({
         antialias: true,
         canvas: canvasElement
@@ -38,10 +38,7 @@ export function initRenderer(canvasElement, pixelRatio = 1) {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
-    if (pixelRatio) {
-        renderer.setPixelRatio(window.devicePixelRatio * pixelRatio);
-    }
-    renderer.setSize( canvasElement.width, canvasElement.height ); // Configure renderer size
+    renderer.setSize( size.width, size.height ); // Configure renderer size
 
     return renderer;
 }

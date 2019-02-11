@@ -21,6 +21,12 @@ class ThreeContainer extends PureComponent {
 
     componentDidMount() {
 
+        const canvasSize = {
+            width: this.canvasContainer.clientWidth,
+            height: this.canvasContainer.clientHeight
+        }
+
+
         /** This will contain the group and everything else */
         this.scene = initScene();
     
@@ -34,7 +40,7 @@ class ThreeContainer extends PureComponent {
         
 
         this.camera = initCamera();
-        this.renderer = initRenderer(this.canvas);
+        this.renderer = initRenderer( this.canvas, canvasSize );
         this.orbitControls = initControls(this.camera, this.canvas);
         this.orbitControls.addEventListener( 'change', this.renderScene )
         
@@ -127,7 +133,6 @@ class ThreeContainer extends PureComponent {
     
 
     render() {
-        const { width, height } = this.props
         const { loading: isLoading } = this.state
 
         const className = [
@@ -136,11 +141,12 @@ class ThreeContainer extends PureComponent {
         ].join(' ')
 
         return (
-            <div className = { className }>
+            <div
+                className = { className }
+                ref = { el => this.canvasContainer = el }
+            >
                 <canvas
                     ref = { el => this.canvas = el }
-                    width = { width }
-                    height = { height }
                 />
                 <Loader loading = { isLoading } />
             </div>
