@@ -30,7 +30,7 @@ export function initCamera() {
  * @param {React.DetailedReactHTMLElement} canvasElement 
  * @param {{ height:number, width: number }} size
  */
-export function initRenderer(canvasElement, size) {
+export function initRenderer(canvasElement, size, pixelRatio) {
     const renderer = new THREE.WebGLRenderer({
         antialias: true,
         canvas: canvasElement
@@ -39,6 +39,10 @@ export function initRenderer(canvasElement, size) {
     renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
     renderer.setSize( size.width, size.height ); // Configure renderer size
+
+    if ( pixelRatio ) {
+        renderer.setPixelRatio( pixelRatio )
+    }
 
     return renderer;
 }

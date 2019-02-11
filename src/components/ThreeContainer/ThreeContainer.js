@@ -40,7 +40,7 @@ class ThreeContainer extends PureComponent {
         
 
         this.camera = initCamera();
-        this.renderer = initRenderer( this.canvas, canvasSize );
+        this.renderer = initRenderer( this.canvas, canvasSize, window.devicePixelRatio );
         this.orbitControls = initControls(this.camera, this.canvas);
         this.orbitControls.addEventListener( 'change', this.renderScene )
         
