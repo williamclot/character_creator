@@ -21,7 +21,7 @@ import findMinGeometry from '../util/findMinGeometry'
 class SceneManager {
     /**
      * @param { Object3D } container
-     * @param { { name: string, attachPoints: string[], parent?: { name: string, attachPoint: string } } } categories
+     * @param { [{ name: string, attachPoints: string[], parent?: { name: string, attachPoint: string } }] } categories
      */
     constructor( container, categories ) {
         
