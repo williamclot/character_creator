@@ -45,7 +45,8 @@
 }
 
 .groups-view .groups-item img {
-    /*  */
+    line-height: 60px;
+    color: #ffffff;
 }
 
 
