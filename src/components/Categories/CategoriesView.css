@@ -3,16 +3,35 @@
     align-items: center;
     justify-content: center;
     flex-direction: row;
+    flex-wrap: wrap;
+    /* padding: 5px; */
+
+    border-radius: 10px;
+    background-color: rgba(144, 144, 144, 0.2);
+    border: 1px #a8a8a8 solid;
+    margin: 5px;
 }
 
 .categories-view .categories-item {
-
+    /* width: 50%;
+    height: 100%; */
+    border-radius: 10px;
+    margin: 0 5px;
+    padding: 5px 10px;
+    text-align: center;
+    vertical-align: center;
+    line-height: 30px;
+    font-size: 18px;
+    color: white;
+    background-color: #00000059;
+    cursor: pointer;
 }
-
 .categories-view .categories-item:hover {
-
+    background-color: #3b917b77;
 }
+
 
 .categories-view .categories-item.selected {
+    background-color: #23574a69;
 
 }

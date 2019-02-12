@@ -11,7 +11,7 @@
 
     display: grid;
     grid-row-gap: 10px;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-auto-columns: 1fr;
     grid-template-rows: repeat(auto-fill, minmax(103px, 103px));
     justify-items: center;
@@ -20,7 +20,7 @@
 }
 
 /* Media queries for the number of columns in the selector */
-@media (min-width: 1130px) {
+/* @media (min-width: 1130px) {
     .selector {
         grid-template-columns: 1fr 1fr;
     }
@@ -29,7 +29,7 @@
     .selector {
         grid-template-columns: 1fr 1fr 1fr;
     }
-}
+} */
 
 .selector .selector-item {
     min-height: 100px;
