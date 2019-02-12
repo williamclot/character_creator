@@ -14,6 +14,7 @@
     grid-template-columns: 1fr;
     grid-auto-columns: 1fr;
     grid-template-rows: repeat(auto-fill, minmax(103px, 103px));
+    justify-items: center;
     overflow-y: scroll;
     overflow-x: hidden;
 }
