@@ -21,8 +21,8 @@
                 }
             },
             {
-                "name": "arm-default_arm_R",
-                "download_url": "http://localhost:3000/models/arm-default_arm_R.glb",
+                "name": "processed:arm-default_arm_R",
+                "download_url": "http://localhost:3000/models/processed:arm-default_arm_R.glb",
                 "extension": "glb"
             },
             {
@@ -68,7 +68,7 @@
             },
             {
                 "name": "processed:arm-default_arm_L",
-                "download_url": "http://localhost:3000/models/arm-default_arm_L:processed.glb",
+                "download_url": "http://localhost:3000/models/processed:arm-default_arm_L.glb",
                 "extension": "glb"
             },
             {
@@ -111,8 +111,8 @@
                 }
             },
             {
-                "name": "hand-barbarian_R",
-                "download_url": "http://localhost:3000/models/hand-barbarian_R.glb",
+                "name": "processed:hand-barbarian_R",
+                "download_url": "http://localhost:3000/models/processed:hand-barbarian_R.glb",
                 "extension": "glb"
             },
             {
@@ -236,8 +236,8 @@
                 "extension": "glb"
             },
             {
-                "name": "head-barbarian",
-                "download_url": "http://localhost:3000/models/head-barbarian.glb",
+                "name": "processed:head-barbarian",
+                "download_url": "http://localhost:3000/models/processed:head_barbarian.glb",
                 "extension": "glb"
             },
             {
@@ -317,8 +317,8 @@
                 "extension": "glb"
             },
             {
-                "name": "leg-robot_leg_R",
-                "download_url": "http://localhost:3000/models/leg-robot_leg_R.glb",
+                "name": "processed:leg-robot_leg_R",
+                "download_url": "http://localhost:3000/models/processed:leg-robot_leg_R.glb",
                 "extension": "glb"
             }
         ],
@@ -348,8 +348,8 @@
                 "extension": "glb"
             },
             {
-                "name": "leg-robot_leg_L",
-                "download_url": "http://localhost:3000/models/leg-robot_leg_L.glb",
+                "name": "processed:leg-robot_leg_L",
+                "download_url": "http://localhost:3000/models/processed:leg-robot_leg_L.glb",
                 "extension": "glb"
             }
         ],
@@ -487,8 +487,8 @@
                 "extension": "glb"
             },
             {
-                "name": "torso-default_torso",
-                "download_url": "http://localhost:3000/models/torso-default_torso.glb",
+                "name": "processed:torso-default_torso",
+                "download_url": "http://localhost:3000/models/processed:torso-default_torso.glb",
                 "extension": "glb"
             },
             {
