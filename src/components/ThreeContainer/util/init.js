@@ -20,7 +20,8 @@ export function initCamera() {
     );
 
     // Camera position in space (will be controled by the OrbitControls later on)
-    camera.position.set(0, 2, 4);
+    // place camera such that the X and Y axis are in front
+    camera.position.set(0, 2, -4);
 
     return camera;
 }
