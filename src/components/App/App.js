@@ -10,6 +10,7 @@ import { CategoriesView, GroupsView } from '../Categories'
 // import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../../config'
 import SceneManager from '../ThreeContainer/sceneManager'
 
+import { fetchObjects, get3DObject } from '../../util/objectHelpers';
 import { getCategories } from '../../util/helpers'
 
 import * as defaultProps from '../../lib'
@@ -22,7 +23,7 @@ class App extends Component {
         super( props )
 
         this.state = {
-            loadedObjects: props.objects.oneOfEach,
+            loadedObjects: {},
             
             editMode: false
         }
@@ -33,6 +34,16 @@ class App extends Component {
         this.sceneManager = new SceneManager( container, categories )
     }
 
+    async componentDidMount() {
+        const { objects } = this.props
+
+        const loadedObjects = await fetchObjects( objects.oneOfEach )
+
+        this.setState({
+            loadedObjects
+        })
+    }
+
     componentDidUpdate( prevProps ) {
         if ( prevProps.worldData !== this.props.worldData ) {
             // // need to reset sceneManager
@@ -41,15 +52,15 @@ class App extends Component {
         }
     }
 
-    onObjectSelected = ( category, object ) => {
-        const stateReducer = state => ({
+    onObjectSelected = async ( category, objectData ) => {
+        const object = await get3DObject( objectData )
+        
+        this.setState( state => ({
             loadedObjects: {
                 ...state.loadedObjects,
                 [category]: object
             }
-        })
-
-        this.setState( stateReducer )
+        }))
     }
 
 

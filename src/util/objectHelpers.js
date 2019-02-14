@@ -6,7 +6,35 @@ import {
 import { gltfLoader, stlLoader } from './loaders'
 
 
-export async function get3DObject( objectData, poseData ) {
+/**
+ * @param {{ [key: string]: ObjectData }} objectsData - dictionary with values
+ * containing the name, download url and extension type of 3d objects
+ */
+export const fetchObjects = async objectsData => {
+    /** @type {{ [key: string]: Object3D }} */
+    const objectsToReturn = {}
+
+    const keys = Object.keys( objectsData )
+
+    const promises = keys.map( async key => {
+
+        const object = await get3DObject( objectsData[ key ] )
+        
+        objectsToReturn[ key ] = object
+
+    })
+
+    await Promise.all( promises )
+
+    return objectsToReturn
+}
+
+/**
+ * @param { ObjectData } objectData
+ * @param {{ [key: string]: Rotation }} poseData
+ * @returns { Promise<Object3D> }
+ */
+export const get3DObject = async ( objectData, poseData ) => {
     switch ( objectData.extension ) {
 
         case 'stl': {
@@ -100,3 +128,10 @@ function createBone( name, position, rotation ) {
     
     return bone
 }
+
+/**
+ * @typedef {{ name: string, download_url: string, extension: string }} ObjectData
+ * object with the name, download url and extension type of a 3d object
+ * 
+ * @typedef {{ x: number, y: number, z: number }} Rotation
+ */
