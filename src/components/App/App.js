@@ -13,7 +13,6 @@ import SceneManager from '../ThreeContainer/sceneManager'
 import { fetchObjects, get3DObject } from '../../util/objectHelpers';
 import { getCategories } from '../../util/helpers'
 
-import * as defaultProps from '../../lib'
 import './App.css'
 
 
@@ -119,8 +118,6 @@ class App extends Component {
     }
 
 }
-
-App.defaultProps = defaultProps
 
 export default connect(
     state => ({
