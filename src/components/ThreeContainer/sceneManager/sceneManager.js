@@ -71,6 +71,16 @@ class SceneManager {
         this.bonesMap = new Map;
     }
 
+    getContainer() {
+        return this.container
+    }
+
+    /**
+     * @param { Object3D } container
+     */
+    setContainer( container ) {
+        this.container = container
+    }
 
     placeStand( newStand, options = {} ) {
         

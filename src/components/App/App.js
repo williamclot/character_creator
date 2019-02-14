@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Group } from 'three'
 
 import ThreeContainer from '../ThreeContainer'
 import Header from '../Header';
@@ -7,6 +8,7 @@ import Selector from '../Selector';
 import { CategoriesView, GroupsView } from '../Categories'
 
 // import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../../config'
+import SceneManager from '../ThreeContainer/sceneManager'
 
 import { getCategories } from '../../util/helpers'
 
@@ -24,18 +26,19 @@ class App extends Component {
             
             editMode: false
         }
+
+        const container = new Group
+        const categories = getCategories( props.worldData.groups )
+
+        this.sceneManager = new SceneManager( container, categories )
     }
 
-
-    componentDidMount = async () => {
-        // for ( let [ category, data ] of Object.entries( objects.oneOfEach ) ) {
-        //     // do smth
-        // }
-        
-        // const { objects } = this.props
-        // this.setState({
-        //     loadedObjects: objects.oneOfEach
-        // })
+    componentDidUpdate( prevProps ) {
+        if ( prevProps.worldData !== this.props.worldData ) {
+            // // need to reset sceneManager
+            // const categories = getCategories( this.props.worldData.groups )
+            // this.sceneManager.reset( this.props.categories )
+        }
     }
 
     onObjectSelected = ( category, object ) => {
@@ -74,12 +77,10 @@ class App extends Component {
             } : null
         )
 
-        const categories = getCategories( groups )
-
         return <div className = "app">
 
             <ThreeContainer
-                categories = { categories }
+                sceneManager = { this.sceneManager }
                 loadedObjects = { this.state.loadedObjects }
                 poseData = { poseData }
             />
