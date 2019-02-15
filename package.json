@@ -6,19 +6,16 @@
   "files": [
     "/dist"
   ],
-
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js", 
-    
+    "test": "node scripts/test.js",
     "lib": "rm -rf dist/ && webpack --config config/webpackModule.config.js",
-
     "prepare": "npm run lib"
   },
-
   "dependencies": {
     "axios": "^0.18.0",
+    "classnames": "^2.2.6",
     "react-redux": "^6.0.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
