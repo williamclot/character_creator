@@ -1,0 +1,38 @@
+.wizard-wrapper {
+    position: absolute;
+    background-color: black;
+
+    height: 100%;
+    width: 100%;
+    opacity: .8;
+    visibility: hidden;
+    
+}
+
+.wizard-wrapper.visible {
+    visibility: visible;
+}
+
+.wizard-wrapper .wizard-1 {
+    /* background-color: red; */
+    position: relative;
+
+    top: 3%;
+    height: 95%;
+    width: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 20px;
+}
+
+a {
+    color: blue;
+}
+
+.changeme {
+    color: yellow;
+}
+
+.changemeagain {
+    color: red;
+}

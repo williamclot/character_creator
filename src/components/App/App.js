@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Group } from 'three'
 
 import ThreeContainer from '../ThreeContainer'
+import UploadWizard from '../UploadWizard'
 import Header from '../Header';
 import Selector from '../Selector';
 import { CategoriesView, GroupsView } from '../Categories'
@@ -113,6 +114,8 @@ class App extends Component {
                     />
                 </div>
             </div>
+
+            <UploadWizard visible/>
 
         </div>
     }
