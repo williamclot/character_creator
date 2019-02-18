@@ -9,7 +9,7 @@ import PlaceAttachPoints from './PlaceAttachPoints'
 import './UploadWizard.css'
 import {
     previousStep, nextStep,
-    HIDDEN, UPLOAD_CONFIRM, PLACE_ATTACHPOINTS, ADJUST, COMPLETED
+    UPLOAD_CONFIRM, PLACE_ATTACHPOINTS, ADJUST, COMPLETED
 } from '../../actions/steps'
 
 
