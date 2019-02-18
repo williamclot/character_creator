@@ -24,6 +24,8 @@ class App extends Component {
 
         this.state = {
             loadedObjects: {},
+
+            showUploadWizard: false,
             
             editMode: false
         }
@@ -77,8 +79,7 @@ class App extends Component {
             objects,
             poseData
         } = this.props
-
-        const uploadWizardVisible = true
+        const { showUploadWizard } = this.state
 
         const selectedGroup = this.getSelectedGroup()
         const selectedCategory = this.getSelectedCategory()
@@ -117,8 +118,10 @@ class App extends Component {
                 </div>
             </div>
 
-            { uploadWizardVisible && (
-                <UploadWizard sceneManager = { this.sceneManager } />
+            { showUploadWizard && (
+                <UploadWizard
+                    sceneManager = { this.sceneManager }
+                />
             )}
 
         </div>
