@@ -3,7 +3,7 @@ const initialState = {
     categoryIndex: 0
 }
 
-const selectedCategoryPath = ( state = initialState, action ) => {
+export default ( state = initialState, action ) => {
     switch( action.type ) {
 
         case 'SET_CURRENT_GROUP': {
@@ -26,5 +26,3 @@ const selectedCategoryPath = ( state = initialState, action ) => {
         
     }
 }
-
-export default selectedCategoryPath

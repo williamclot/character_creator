@@ -5,7 +5,7 @@ import {
 
 const initialStep = UPLOAD_CONFIRM
 
-const wizardStepReducer = ( step = initialStep, action ) => {
+export default ( step = initialStep, action ) => {
     switch( action.type ) {
         case actionTypes.NEXT_STEP: switch( step ) {
 
@@ -37,5 +37,3 @@ const wizardStepReducer = ( step = initialStep, action ) => {
         
     }
 }
-
-export default wizardStepReducer
