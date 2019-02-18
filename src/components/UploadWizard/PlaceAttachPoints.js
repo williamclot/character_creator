@@ -7,7 +7,7 @@ const PlaceAttachPoints = ({
 }) => {
     return (
         <div
-            className = {classNames('wizard-step', { visible })}
+            className = {classNames('wizard-step', 'place-attachpoints', { visible })}
         >
             PLACE ATTACH POINTS <br/>
             <button onClick = { previousStep }>previous</button>

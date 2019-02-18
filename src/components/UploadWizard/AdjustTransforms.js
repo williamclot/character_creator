@@ -7,7 +7,7 @@ const AdjustTransforms = ({
 }) => {
     return (
         <div
-            className = {classNames('wizard-step', { visible })}
+            className = {classNames('wizard-step', 'adjust-transforms', { visible })}
         >
             ADJUST POSITION, ROTATION AND SCALE <br/>
             <button onClick = { previousStep }>previous</button>

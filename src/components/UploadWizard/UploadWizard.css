@@ -9,7 +9,6 @@
 
 
 .wizard-container .wizard-step {
-    background-color: red;
     position: absolute;
     visibility: hidden;
 
@@ -24,4 +23,16 @@
 
 .wizard-container .wizard-step.visible {
     visibility: visible;
+}
+
+.wizard-container .wizard-step.upload-confirm {
+    background-color: azure;
+}
+
+.wizard-container .wizard-step.place-attachpoints {
+    background-color: red;
+}
+
+.wizard-container .wizard-step.adjust-transforms{
+    background-color: aqua;
 }

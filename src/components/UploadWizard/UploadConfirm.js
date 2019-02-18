@@ -7,7 +7,7 @@ const UploadConfirm = ({
 }) => {
     return (
         <div
-            className = {classNames('wizard-step', { visible })}
+            className = {classNames('wizard-step', 'upload-confirm', { visible })}
         >
             CONFIRM UPLOAD <br/>
             <button onClick = { previousStep }>previous</button>
