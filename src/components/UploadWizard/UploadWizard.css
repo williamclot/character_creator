@@ -4,18 +4,14 @@
 
     height: 100%;
     width: 100%;
-    opacity: .8;
+    opacity: .8;    
+}
+
+
+.wizard-wrapper .wizard-step {
+    background-color: red;
+    position: absolute;
     visibility: hidden;
-    
-}
-
-.wizard-wrapper.visible {
-    visibility: visible;
-}
-
-.wizard-wrapper .wizard-1 {
-    /* background-color: red; */
-    position: relative;
 
     top: 3%;
     height: 95%;
@@ -25,3 +21,7 @@
     border-radius: 20px;
 }
 
+
+.wizard-wrapper .wizard-step.visible {
+    visibility: visible;
+}

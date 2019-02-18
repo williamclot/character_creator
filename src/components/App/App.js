@@ -78,6 +78,8 @@ class App extends Component {
             poseData
         } = this.props
 
+        const uploadWizardVisible = true
+
         const selectedGroup = this.getSelectedGroup()
         const selectedCategory = this.getSelectedCategory()
 
@@ -115,7 +117,9 @@ class App extends Component {
                 </div>
             </div>
 
-            <UploadWizard visible/>
+            { uploadWizardVisible && (
+                <UploadWizard sceneManager = { this.sceneManager } />
+            )}
 
         </div>
     }
