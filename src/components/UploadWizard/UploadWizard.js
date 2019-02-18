@@ -2,6 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import classNames from 'classnames'
 
+import UploadConfirm from './UploadConfirm'
+import AdjustTransforms from './AdjustTransforms'
+import PlaceAttachPoints from './PlaceAttachPoints'
+
 import './UploadWizard.css'
 import {
     previousStep, nextStep,
@@ -9,60 +13,34 @@ import {
 } from '../../actions/steps'
 
 
-const StepComponent = props => {
-    const { step, onCompleted } = props
+const UploadWizard = props => {
+    const { step, nextStep, previousStep } = props
 
-    return <>
-        <div
-            onClick = { onCompleted }
-            className = { classNames('wizard-step', step === HIDDEN && 'visible' ) }
-        >
-            <h1>Step 1</h1>
+    return (
+        <div className = "wizard-container">
+
+            <UploadConfirm
+                visible = { step === UPLOAD_CONFIRM }
+                previousStep = { previousStep }
+                nextStep = { nextStep }
+            />
+
+            <AdjustTransforms
+                visible = { step === ADJUST }
+                previousStep = { previousStep }
+                nextStep = { nextStep }
+            />
+
+            <PlaceAttachPoints
+                visible = { step === PLACE_ATTACHPOINTS }
+                previousStep = { previousStep }
+                nextStep = { nextStep }
+            />
+
         </div>
-        <div
-            onClick = { onCompleted }
-            className = { classNames('wizard-step', step === UPLOAD_CONFIRM && 'visible' ) }
-        >
-            <h1>Step 2</h1>
-        </div>
-        <div
-            onClick = { onCompleted }
-            className = { classNames('wizard-step', step === PLACE_ATTACHPOINTS && 'visible' ) }
-        >
-            <h1>Step 3</h1>
-        </div>
-        <div
-            onClick = { onCompleted }
-            className = { classNames('wizard-step', step === ADJUST && 'visible' ) }
-        >
-            <h1>Step 4</h1>
-        </div>
-        <div
-            onClick = { onCompleted }
-            className = { classNames('wizard-step', step === COMPLETED && 'visible' ) }
-        >
-            <h1>Step 5</h1>
-        </div>
-    </>
+    )
 }
 
-class UploadWizard extends Component {
-    render() {
-        const {
-            step,                   // state
-            nextStep, previousStep  // dispatch
-        } = this.props
-
-        return (
-            <div className = "wizard-wrapper">
-                <StepComponent
-                    step = { step }
-                    onCompleted = { nextStep }
-                />
-            </div>
-        )
-    }
-}
 
 const mapStateToProps = state => ({
     step: state.step

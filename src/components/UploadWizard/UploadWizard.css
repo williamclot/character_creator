@@ -1,4 +1,4 @@
-.wizard-wrapper {
+.wizard-container {
     position: absolute;
     background-color: black;
 
@@ -8,7 +8,7 @@
 }
 
 
-.wizard-wrapper .wizard-step {
+.wizard-container .wizard-step {
     background-color: red;
     position: absolute;
     visibility: hidden;
@@ -22,6 +22,6 @@
 }
 
 
-.wizard-wrapper .wizard-step.visible {
+.wizard-container .wizard-step.visible {
     visibility: visible;
 }
