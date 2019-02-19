@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Group } from 'three'
+import { Object3D, Group } from 'three'
 
 import ThreeContainer from '../ThreeContainer'
 import UploadWizard from '../UploadWizard'
@@ -12,7 +12,10 @@ import { CategoriesView, GroupsView } from '../Categories'
 import SceneManager from '../ThreeContainer/sceneManager'
 
 import { fetchObjects, get3DObject } from '../../util/objectHelpers';
-import { getCategories } from '../../util/helpers'
+import {
+    getCategories, objectMap,
+    Dict
+} from '../../util/helpers'
 
 import './App.css'
 
@@ -23,12 +26,22 @@ class App extends Component {
         super( props )
 
         this.state = {
-            loadedObjects: {},
+            /**
+             * Mapping from part type to object Id
+             * @type { Dict<string> }
+             */
+            loadedObjectIds: {},
 
             showUploadWizard: false,
             
             editMode: false
         }
+
+        /**
+         * Mapping from object id to object
+         * @type { Dict<Object3D> }
+         */
+        this.loadedObjectsById = {}
 
         const container = new Group
         const categories = getCategories( props.worldData.groups )
@@ -39,10 +52,19 @@ class App extends Component {
     async componentDidMount() {
         const { objects } = this.props
 
-        const loadedObjects = await fetchObjects( objects.oneOfEach )
+        const loadedObjectIds = {}
+
+        const fetchedObjects = await fetchObjects( objects.oneOfEach )
+
+        for ( let key of Object.keys( fetchedObjects ) ) {
+            const curr = fetchedObjects[key]
+
+            this.loadedObjectsById[curr.id] = curr
+            loadedObjectIds[key] = curr.id
+        }
 
         this.setState({
-            loadedObjects
+            loadedObjectIds
         })
     }
 
@@ -55,12 +77,30 @@ class App extends Component {
     }
 
     onObjectSelected = async ( category, objectData ) => {
-        const object = await get3DObject( objectData )
+        let newObject
+        try {
+            newObject = await get3DObject( objectData )
+        } catch ( err ) {
+            console.error(
+                `Something went wrong while loading object of type ${category}:\n`
+                + err )
+            return
+        }
         
+        const { loadedObjectIds } = this.state
+        const currentObjectId = loadedObjectIds[category]
+
+        // delete previous object to make sure it is garbage collected
+        delete this.loadedObjectsById[currentObjectId]
+
+        // store new object
+        this.loadedObjectsById[newObject.id] = newObject
+        
+        // now update the id at the key of the current category
         this.setState( state => ({
-            loadedObjects: {
-                ...state.loadedObjects,
-                [category]: object
+            loadedObjectIds: {
+                ...state.loadedObjectIds,
+                [category]: newObject.id
             }
         }))
     }
@@ -79,7 +119,7 @@ class App extends Component {
             objects,
             poseData
         } = this.props
-        const { showUploadWizard } = this.state
+        const { showUploadWizard, loadedObjectIds } = this.state
 
         const selectedGroup = this.getSelectedGroup()
         const selectedCategory = this.getSelectedCategory()
@@ -91,11 +131,16 @@ class App extends Component {
             } : null
         )
 
+        const loadedObjects = objectMap(
+            loadedObjectIds,
+            id => this.loadedObjectsById[id]
+        )
+
         return <div className = "app">
 
             <ThreeContainer
                 sceneManager = { this.sceneManager }
-                loadedObjects = { this.state.loadedObjects }
+                loadedObjects = { loadedObjects }
                 poseData = { poseData }
             />
 
