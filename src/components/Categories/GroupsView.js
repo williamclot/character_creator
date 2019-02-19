@@ -53,9 +53,9 @@ const mapStateToProps = state => ({
     currentGroupIndex: state.selectedCategoryPath.groupIndex
 })
 
-const mapDispatchToProps = dispatch => ({
-    onGroupClick: index => dispatch( setCurrentGroup( index ) ),
-})
+const mapDispatchToProps = {
+    onGroupClick: setCurrentGroup
+}
 
 export default connect(
     mapStateToProps,
