@@ -7,10 +7,7 @@ import AdjustTransforms from './AdjustTransforms'
 import PlaceAttachPoints from './PlaceAttachPoints'
 
 import './UploadWizard.css'
-import {
-    previousStep, nextStep,
-    UPLOAD_CONFIRM, PLACE_ATTACHPOINTS, ADJUST, COMPLETED
-} from '../../actions/steps'
+import { steps, previousStep, nextStep } from '../../actions/steps'
 
 
 const UploadWizard = props => {
@@ -20,19 +17,19 @@ const UploadWizard = props => {
         <div className = "wizard-container">
 
             <UploadConfirm
-                visible = { step === UPLOAD_CONFIRM }
+                visible = { step === steps.UPLOAD_CONFIRM }
                 previousStep = { previousStep }
                 nextStep = { nextStep }
             />
 
             <AdjustTransforms
-                visible = { step === ADJUST }
+                visible = { step === steps.ADJUST }
                 previousStep = { previousStep }
                 nextStep = { nextStep }
             />
 
             <PlaceAttachPoints
-                visible = { step === PLACE_ATTACHPOINTS }
+                visible = { step === steps.PLACE_ATTACHPOINTS }
                 previousStep = { previousStep }
                 nextStep = { nextStep }
             />

@@ -1,7 +1,6 @@
-import {
-    actionTypes,
-    NOT_STARTED, UPLOAD_CONFIRM, ADJUST, PLACE_ATTACHPOINTS, COMPLETED
-} from '../actions/steps'
+import { actionTypes, steps } from '../actions/steps'
+
+const { NOT_STARTED, UPLOAD_CONFIRM, ADJUST, PLACE_ATTACHPOINTS, COMPLETED } = steps
 
 const initialStep = UPLOAD_CONFIRM
 
@@ -29,6 +28,12 @@ export default ( step = initialStep, action ) => {
 
         case actionTypes.RESET_WIZARD: {
             return initialStep
+        }
+
+        case actionTypes.GO_TO_STEP: {
+            return ( action.step in steps )
+                ? action.step
+                : step
         }
         
         default: {
