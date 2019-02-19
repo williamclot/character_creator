@@ -78,6 +78,7 @@ class App extends Component {
 
     onObjectSelected = async ( category, objectData ) => {
         let newObject
+        
         try {
             newObject = await get3DObject( objectData )
         } catch ( err ) {
