@@ -5,8 +5,6 @@ class ImportButton extends Component {
         this._fileInput = document.createElement( 'input' )
         this._fileInput.type = 'file'
         this._fileInput.addEventListener( 'change', this.handleLoad )
-                
-        this._fileReader = new FileReader
     }
 
     handleLoad = e => {
@@ -16,17 +14,16 @@ class ImportButton extends Component {
             return
         }
 
+        /** @type {File} */
         const file = e.target.files[ 0 ]
 
         if ( !file ) {
             return
         }
 
-        this._fileReader.onload = e => {
-            onFileLoaded( e.target.result, file.name )
-        }
-        
-        this._fileReader.readAsArrayBuffer( file )
+        const objectURL = URL.createObjectURL( file )
+
+        onFileLoaded( objectURL, file.name )
     }
 
     onClick = () => {
