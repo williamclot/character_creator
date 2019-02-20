@@ -60,6 +60,17 @@ class UploadConfirm extends Component {
         // }
     }
 
+    onNextStep = () => {
+        const { nextStep } = this.props
+
+        console.log( 'next step...' )
+        // logic here...
+
+        if ( typeof nextStep === 'function' ) {
+            nextStep()
+        }
+    }
+
     renderScene = () => {
         this.renderer.render( this.scene, this.camera )
     }
@@ -85,7 +96,7 @@ class UploadConfirm extends Component {
                 <canvas ref = { this.canvasRef } />
 
                 <button onClick = { previousStep }>previous</button>
-                <button onClick = { nextStep }>next</button>
+                <button onClick = { this.onNextStep }>next</button>
             </div>
         )
     }
