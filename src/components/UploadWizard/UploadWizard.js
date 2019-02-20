@@ -11,7 +11,21 @@ import { steps, previousStep, nextStep } from '../../actions/steps'
 
 
 const UploadWizard = props => {
-    const { step, nextStep, previousStep } = props
+    const {
+        step, nextStep, previousStep,
+        data
+    } = props
+
+    if ( !data ) {
+        return null
+    }
+
+    const {
+        name, filename, extension,
+        uploadedObject
+    } = data
+
+    console.log(name, filename, extension, uploadedObject)
 
     return (
         <div className = "wizard-container">

@@ -13,7 +13,7 @@ import SceneManager from '../ThreeContainer/sceneManager'
 
 import { fetchObjects, get3DObject } from '../../util/objectHelpers';
 import {
-    getCategories, objectMap,
+    getCategories, objectMap, getNameAndExtension,
     Dict
 } from '../../util/helpers'
 
@@ -33,6 +33,7 @@ class App extends Component {
             loadedObjectIds: {},
 
             showUploadWizard: false,
+            uploadedObjectData: null,
             
             editMode: false
         }
@@ -43,10 +44,18 @@ class App extends Component {
          */
         this.loadedObjectsById = {}
 
+        /** @type { Object3D } */
+        this.uploadedObject = null
+
+        
         const container = new Group
         const categories = getCategories( props.worldData.groups )
 
         this.sceneManager = new SceneManager( container, categories )
+        
+        if ( process.env.NODE_ENV === 'development' ) {
+            window.x = this
+        }
     }
 
     async componentDidMount() {
@@ -106,6 +115,44 @@ class App extends Component {
         }))
     }
 
+    onUpload = async ( objectURL, filename ) => {
+        const { name, extension } = getNameAndExtension( filename )
+
+        let object
+
+        try {
+
+            object = await get3DObject({
+                download_url: objectURL,
+                name,
+                extension
+            })
+
+        } catch ( err ) {
+
+            console.error( err )
+            return
+
+        } finally {
+
+            // cleanup to prevent memory leaks
+            URL.revokeObjectURL( objectURL )
+            
+        }
+        
+        // store object to current class instance
+        this.uploadedObject = object
+
+        this.setState({
+            showUploadWizard: true,
+            uploadedObjectData: {
+                name,
+                filename,
+                extension
+            }
+        })
+    }
+
 
     getSelectedGroup = () => this.props.worldData.groups[ this.props.selectedGroupIndex ]
     getSelectedCategory = () => {
@@ -120,7 +167,10 @@ class App extends Component {
             objects,
             poseData
         } = this.props
-        const { showUploadWizard, loadedObjectIds } = this.state
+        const {
+            loadedObjectIds,
+            showUploadWizard, uploadedObjectData
+        } = this.state
 
         const selectedGroup = this.getSelectedGroup()
         const selectedCategory = this.getSelectedCategory()
@@ -136,6 +186,11 @@ class App extends Component {
             loadedObjectIds,
             id => this.loadedObjectsById[id]
         )
+
+        const wizardData = uploadedObjectData ? {
+            ...uploadedObjectData,
+            uploadedObject: this.uploadedObject
+        } : null
 
         return <div className = "app">
 
@@ -160,6 +215,8 @@ class App extends Component {
                     <Selector
                         data = { selectorData }
                         onObjectSelected = { this.onObjectSelected }
+
+                        onUpload = { this.onUpload }
                     />
                 </div>
             </div>
@@ -167,6 +224,8 @@ class App extends Component {
             { showUploadWizard && (
                 <UploadWizard
                     sceneManager = { this.sceneManager }
+                    
+                    data = { wizardData }
                 />
             )}
 
