@@ -90,7 +90,7 @@ export const get3DObject = async ( objectData, poseData ) => {
         }
 
         default: {
-            return null
+            throw new Error( `Extension '${objectData.extension}' not recognized.` )
         }
     }
 }
