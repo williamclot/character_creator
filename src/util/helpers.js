@@ -21,6 +21,19 @@ export const objectMap = ( object, mapFn ) =>
 
 
 /**
+ * @param { string } filename 
+ */
+export const getNameAndExtension = filename => {
+    const dotIndex = filename.lastIndexOf('.')
+    const hasDot = dotIndex !== -1
+
+    const name = hasDot ? filename.slice( 0, dotIndex )  : filename
+    const extension = filename.slice( dotIndex + 1 )
+
+    return { name, extension }
+}
+
+/**
  * @template T, S
  * @callback Mapper
  * @param { T } value
