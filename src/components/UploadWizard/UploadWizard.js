@@ -12,6 +12,7 @@ import { steps, previousStep, nextStep } from '../../actions/steps'
 
 const UploadWizard = props => {
     const {
+        currentCategory,
         step, nextStep, previousStep,
         data
     } = props
@@ -25,13 +26,18 @@ const UploadWizard = props => {
         uploadedObject
     } = data
 
-    console.log(name, filename, extension, uploadedObject)
+    // console.log(name, filename, extension, uploadedObject)
 
     return (
         <div className = "wizard-container">
 
             <UploadConfirm
                 visible = { step === steps.UPLOAD_CONFIRM }
+
+                currentCategory = { currentCategory }
+                name = { name }
+                uploadedObject = { uploadedObject }
+
                 previousStep = { previousStep }
                 nextStep = { nextStep }
             />

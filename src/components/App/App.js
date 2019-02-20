@@ -137,7 +137,7 @@ class App extends Component {
 
             // cleanup to prevent memory leaks
             URL.revokeObjectURL( objectURL )
-            
+
         }
         
         // store object to current class instance
@@ -224,6 +224,8 @@ class App extends Component {
             { showUploadWizard && (
                 <UploadWizard
                     sceneManager = { this.sceneManager }
+
+                    currentCategory = { selectedCategory }
                     
                     data = { wizardData }
                 />
