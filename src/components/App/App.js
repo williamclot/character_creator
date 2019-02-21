@@ -86,17 +86,20 @@ class App extends Component {
     }
 
     onObjectSelected = async ( category, objectData ) => {
-        let newObject
-        
         try {
-            newObject = await get3DObject( objectData )
+
+            const newObject = await get3DObject( objectData )
+            this.setSelectedObject( category, newObject )
+
         } catch ( err ) {
             console.error(
                 `Something went wrong while loading object of type ${category}:\n`
-                + err )
-            return
+                + err
+            )
         }
-        
+    }
+
+    setSelectedObject = ( category, newObject ) => {
         const { loadedObjectIds } = this.state
         const currentObjectId = loadedObjectIds[category]
 
