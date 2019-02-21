@@ -16,7 +16,18 @@ class UploadWizard extends Component {
         super( props )
 
         this.state = {
-            uploadedObject: null
+
+            // handled by UploadConfirm
+            name: '',
+            uploadedObject: null,
+
+            // handled by AdjustTransforms
+            position: null,
+            rotation: null,
+            scale: null,
+
+            // handled by PlaceAttachPoints
+            attachPoints: null
         }
     }
 
@@ -39,6 +50,7 @@ class UploadWizard extends Component {
             })
 
             this.setState({
+                name,
                 uploadedObject: object
             })
 
@@ -55,22 +67,23 @@ class UploadWizard extends Component {
         }
     }
 
+    onNameChange = e => {
+        this.setState({
+            name: e.target.value
+        })
+    }
+
     render() {
         const {
             currentCategory,
-            step, nextStep, previousStep,
-            data
+            onWizardCanceled, onWizardCompleted,
+            step, nextStep, previousStep
         } = this.props
-    
-        if ( !data ) {
-            return null
-        }
 
-        const { uploadedObject } = this.state
-    
         const {
-            name, filename, extension,
-        } = data
+            name, uploadedObject
+        } = this.state
+    
     
         return (
             <div className = "wizard-container">
@@ -80,11 +93,11 @@ class UploadWizard extends Component {
     
                     currentCategory = { currentCategory }
                     name = { name }
-                    extension = { extension }
+                    onNameChange = { this.onNameChange }
                     uploadedObject = { uploadedObject }
     
-                    previousStep = { previousStep }
-                    nextStep = { nextStep }
+                    onCancel = { onWizardCanceled }
+                    onNext = { nextStep }
                 />
     
                 <AdjustTransforms
