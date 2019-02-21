@@ -60,17 +60,6 @@ class UploadConfirm extends Component {
         }
     }
 
-    onNextStep = () => {
-        const { nextStep } = this.props
-
-        console.log( 'next step...' )
-        // logic here...
-
-        if ( typeof nextStep === 'function' ) {
-            nextStep()
-        }
-    }
-
     renderScene = () => {
         this.renderer.render( this.scene, this.camera )
     }
@@ -80,23 +69,52 @@ class UploadConfirm extends Component {
             visible,
 
             name,
+            onNameChange,
             currentCategory,
         
-            nextStep, previousStep
+            onCancel, onNext
         } = this.props
 
         return (
             <div
                 className = {classNames('wizard-step', 'upload-confirm', { visible })}
             >
-                CONFIRM UPLOAD <br/>
-                <h1> {name} </h1>
-                <h3> {currentCategory.label} </h3>
+                <h2> Add Part </h2>
 
-                <canvas ref = { this.canvasRef } />
+                <span>
+                    Part Name: 
+                    <input
+                        className = "name-input"
+                        type = "text"
+                        value = { name }
+                        onChange = { onNameChange }
+                    />
+                </span>
 
-                <button onClick = { previousStep }>previous</button>
-                <button onClick = { this.onNextStep }>next</button>
+                <h3>
+                    Part Type:
+                    {currentCategory.label}
+                </h3>
+
+                Part Preview: <br />
+                <canvas
+                    className = "preview-canvas"
+                    ref = { this.canvasRef }
+                />
+
+                <div
+                    className = "button"
+                    onClick = { onCancel }
+                >
+                    Cancel
+                </div>
+
+                <div
+                    className = "button"
+                    onClick = { onNext }
+                >
+                    Next
+                </div>
             </div>
         )
     }

@@ -11,13 +11,6 @@
 .wizard-container .wizard-step {
     position: absolute;
     visibility: hidden;
-
-    top: 3%;
-    height: 95%;
-    width: 80%;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 20px;
 }
 
 
@@ -25,9 +18,43 @@
     visibility: visible;
 }
 
+
+
+/* BEGIN UPLOAD CONFIRM */
+
 .wizard-container .wizard-step.upload-confirm {
-    background-color: azure;
+    background-color: #555454;
+
+    top: 50%;
+    left: 50%;
+
+    height: 70%;
+    width: 30%;
+
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+
+    color: white;
 }
+
+.wizard-container .wizard-step.upload-confirm .button {
+    background-color: #2b2b2b;
+
+    width: 50px;
+    height: 30px;
+
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.wizard-container .wizard-step.upload-confirm .button:hover {
+    background-color: #121c1f59;
+    box-shadow: 0px 0px 5px #353535;
+}
+
+/* END UPLOAD CONFIRM */
+
+
 
 .wizard-container .wizard-step.place-attachpoints {
     background-color: red;
