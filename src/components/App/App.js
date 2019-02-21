@@ -37,10 +37,6 @@ class App extends Component {
             
             editMode: false
         }
-
-        /** @type { Object3D } */
-        this.uploadedObject = null
-
         
         const container = new Group
         const categories = getCategories( props.worldData.groups )
@@ -118,15 +114,14 @@ class App extends Component {
 
         }
         
-        // store object to current class instance
-        this.uploadedObject = object
 
         this.setState({
             showUploadWizard: true,
             uploadedObjectData: {
                 name,
                 filename,
-                extension
+                extension,
+                uploadedObject: object
             }
         })
     }
@@ -160,10 +155,6 @@ class App extends Component {
             } : null
         )
 
-        const wizardData = uploadedObjectData ? {
-            ...uploadedObjectData,
-            uploadedObject: this.uploadedObject
-        } : null
 
         return <div className = "app">
 
@@ -200,7 +191,7 @@ class App extends Component {
 
                     currentCategory = { selectedCategory }
                     
-                    data = { wizardData }
+                    data = { uploadedObjectData }
                 />
             )}
 
