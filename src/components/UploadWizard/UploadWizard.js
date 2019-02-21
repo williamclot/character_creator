@@ -9,12 +9,49 @@ import PlaceAttachPoints from './PlaceAttachPoints'
 import './UploadWizard.css'
 import { steps, previousStep, nextStep } from '../../actions/steps'
 
+import { get3DObject } from '../../util/objectHelpers'
+
 class UploadWizard extends Component {
     constructor( props ) {
         super( props )
 
         this.state = {
             uploadedObject: null
+        }
+    }
+
+    async componentDidMount() {
+        const { data } = this.props
+
+        if ( !data ) { return }
+
+        const {
+            name, extension,
+            objectURL
+        } = data
+
+        try {
+
+            const object = await get3DObject({
+                download_url: objectURL,
+                name,
+                extension
+            })
+
+            this.setState({
+                uploadedObject: object
+            })
+
+        } catch ( err ) {
+
+            console.error( err )
+            return
+
+        } finally {
+
+            // cleanup to prevent memory leaks
+            URL.revokeObjectURL( objectURL )
+
         }
     }
 
@@ -28,10 +65,11 @@ class UploadWizard extends Component {
         if ( !data ) {
             return null
         }
+
+        const { uploadedObject } = this.state
     
         const {
             name, filename, extension,
-            objectURL
         } = data
     
         return (
@@ -43,7 +81,7 @@ class UploadWizard extends Component {
                     currentCategory = { currentCategory }
                     name = { name }
                     extension = { extension }
-                    objectURL = { objectURL }
+                    uploadedObject = { uploadedObject }
     
                     previousStep = { previousStep }
                     nextStep = { nextStep }

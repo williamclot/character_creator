@@ -6,7 +6,6 @@ import {
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
 import * as utils from '../ThreeContainer/util/init'
-import { get3DObject } from '../../util/objectHelpers'
 
 class UploadConfirm extends Component {
     constructor( props ) {
@@ -48,46 +47,17 @@ class UploadConfirm extends Component {
 
         this.renderScene()
 
-        this.renderObject()
-    }
-
-    renderObject = async () => {
-        const { name, extension, objectURL } = this.props
-
-
-        let object
-
-        try {
-
-            object = await get3DObject({
-                download_url: objectURL,
-                name,
-                extension
-            })
-
-        } catch ( err ) {
-
-            console.error( err )
-            return
-
-        } finally {
-
-            // cleanup to prevent memory leaks
-            URL.revokeObjectURL( objectURL )
-
-        }
-
-        this.scene.add( object )
-        this.renderScene()
     }
 
     componentDidUpdate( prevProps ) {
-        // const { uploadedObject } = this.props
-        // if ( prevProps.uploadedObject !== uploadedObject ) {
-        //     this.scene.remove( prevProps.uploadedObject )
-        //     this.scene.add( uploadedObject )
-        //     this.renderScene()
-        // }
+        const { uploadedObject } = this.props
+        if ( prevProps.uploadedObject !== uploadedObject ) {
+
+            this.scene.remove( prevProps.uploadedObject )
+            this.scene.add( uploadedObject )
+            this.renderScene()
+
+        }
     }
 
     onNextStep = () => {
