@@ -116,6 +116,23 @@ class App extends Component {
         })
     }
 
+    onWizardCanceled = () => {
+        console.log('wizard canceled')
+
+        this.setState({
+            showUploadWizard: false,
+            uploadedObjectData: null
+        })
+    }
+
+    onWizardCompleted = ( data ) => {
+        console.log('wizard completed')
+
+        this.setState({
+            showUploadWizard: false,
+            uploadedObjectData: null
+        })
+    }
 
     getSelectedGroup = () => this.props.worldData.groups[ this.props.selectedGroupIndex ]
     getSelectedCategory = () => {
