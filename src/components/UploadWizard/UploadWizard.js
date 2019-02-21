@@ -9,54 +9,62 @@ import PlaceAttachPoints from './PlaceAttachPoints'
 import './UploadWizard.css'
 import { steps, previousStep, nextStep } from '../../actions/steps'
 
+class UploadWizard extends Component {
+    constructor( props ) {
+        super( props )
 
-const UploadWizard = props => {
-    const {
-        currentCategory,
-        step, nextStep, previousStep,
-        data
-    } = props
-
-    if ( !data ) {
-        return null
+        this.state = {
+            uploadedObject: null
+        }
     }
 
-    const {
-        name, filename, extension,
-        objectURL
-    } = data
-
-    return (
-        <div className = "wizard-container">
-
-            <UploadConfirm
-                visible = { step === steps.UPLOAD_CONFIRM }
-
-                currentCategory = { currentCategory }
-                name = { name }
-                extension = { extension }
-                objectURL = { objectURL }
-
-                previousStep = { previousStep }
-                nextStep = { nextStep }
-            />
-
-            <AdjustTransforms
-                visible = { step === steps.ADJUST }
-                previousStep = { previousStep }
-                nextStep = { nextStep }
-            />
-
-            <PlaceAttachPoints
-                visible = { step === steps.PLACE_ATTACHPOINTS }
-                previousStep = { previousStep }
-                nextStep = { nextStep }
-            />
-
-        </div>
-    )
+    render() {
+        const {
+            currentCategory,
+            step, nextStep, previousStep,
+            data
+        } = this.props
+    
+        if ( !data ) {
+            return null
+        }
+    
+        const {
+            name, filename, extension,
+            objectURL
+        } = data
+    
+        return (
+            <div className = "wizard-container">
+    
+                <UploadConfirm
+                    visible = { step === steps.UPLOAD_CONFIRM }
+    
+                    currentCategory = { currentCategory }
+                    name = { name }
+                    extension = { extension }
+                    objectURL = { objectURL }
+    
+                    previousStep = { previousStep }
+                    nextStep = { nextStep }
+                />
+    
+                <AdjustTransforms
+                    visible = { step === steps.ADJUST }
+                    previousStep = { previousStep }
+                    nextStep = { nextStep }
+                />
+    
+                <PlaceAttachPoints
+                    visible = { step === steps.PLACE_ATTACHPOINTS }
+                    previousStep = { previousStep }
+                    nextStep = { nextStep }
+                />
+    
+            </div>
+        )
+    }
 }
-
 
 const mapStateToProps = state => ({
     step: state.step
