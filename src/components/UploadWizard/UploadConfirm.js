@@ -29,16 +29,19 @@ class UploadConfirm extends Component {
             0.001,
             1000
         );
-        this.camera.position.set( 0, 1, -1 )
+        this.camera.position.set( 0, .5, -1 )
         this.camera.lookAt( 0, 3, 0 )
         
 
         this.renderer = utils.initRenderer( canvas, { width, height }, window.devicePixelRatio )
 
-        const light = new PointLight( 0xc1c1c1, 1, 100 )
-        light.position.set( 0, 3, -3 )
+        const light1 = new PointLight( 0xc1c1c1, 1, 100 )
+        light1.position.set( -7, -1, -7 )
 
-        this.scene.add( light )
+        const light2 = new PointLight( 0xc1c1c1, 1, 100 )
+        light2.position.set( 7, -1, -7 )
+
+        this.scene.add( light1, light2 )
 
         this.orbitControls = new OrbitControls( this.camera, canvas )
         this.orbitControls.addEventListener( 'change', this.renderScene )
