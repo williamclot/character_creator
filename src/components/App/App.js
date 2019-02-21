@@ -89,31 +89,21 @@ class App extends Component {
         }))
     }
 
-    onUpload = async ( objectURL, filename ) => {
+    onUpload = ( objectURL, filename ) => {
         const { name, extension } = getNameAndExtension( filename )
 
-        let object
+        console.log(name, extension)
 
-        try {
+        const ACCEPTED_EXTENSIONS = [ "stl", "glb" ]
 
-            object = await get3DObject({
-                download_url: objectURL,
-                name,
-                extension
-            })
+        if ( !ACCEPTED_EXTENSIONS.includes( extension ) ) {
 
-        } catch ( err ) {
-
-            console.error( err )
+            console.log( new Error(
+                `Unrecognized extension '${extension}'`
+            ))
             return
 
-        } finally {
-
-            // cleanup to prevent memory leaks
-            URL.revokeObjectURL( objectURL )
-
         }
-        
 
         this.setState({
             showUploadWizard: true,
@@ -121,7 +111,7 @@ class App extends Component {
                 name,
                 filename,
                 extension,
-                uploadedObject: object
+                objectURL
             }
         })
     }

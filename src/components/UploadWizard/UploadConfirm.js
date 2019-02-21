@@ -6,6 +6,7 @@ import {
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
 import * as utils from '../ThreeContainer/util/init'
+import { get3DObject } from '../../util/objectHelpers'
 
 class UploadConfirm extends Component {
     constructor( props ) {
@@ -15,8 +16,6 @@ class UploadConfirm extends Component {
     }
     
     componentDidMount() {
-        const { uploadedObject, name, filename } = this.props
-
         const canvas = this.canvasRef.current
         const { height, width } = canvas.getBoundingClientRect()
 
@@ -44,10 +43,38 @@ class UploadConfirm extends Component {
         this.orbitControls = new OrbitControls( this.camera, canvas )
         this.orbitControls.addEventListener( 'change', this.renderScene )
 
-        if ( uploadedObject ) {
-            this.scene.add( uploadedObject )
+        this.renderScene()
+
+        this.renderObject()
+    }
+
+    renderObject = async () => {
+        const { name, extension, objectURL } = this.props
+
+
+        let object
+
+        try {
+
+            object = await get3DObject({
+                download_url: objectURL,
+                name,
+                extension
+            })
+
+        } catch ( err ) {
+
+            console.error( err )
+            return
+
+        } finally {
+
+            // cleanup to prevent memory leaks
+            URL.revokeObjectURL( objectURL )
+
         }
 
+        this.scene.add( object )
         this.renderScene()
     }
 

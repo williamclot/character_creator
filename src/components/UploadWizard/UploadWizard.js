@@ -23,10 +23,8 @@ const UploadWizard = props => {
 
     const {
         name, filename, extension,
-        uploadedObject
+        objectURL
     } = data
-
-    // console.log(name, filename, extension, uploadedObject)
 
     return (
         <div className = "wizard-container">
@@ -36,7 +34,8 @@ const UploadWizard = props => {
 
                 currentCategory = { currentCategory }
                 name = { name }
-                uploadedObject = { uploadedObject }
+                extension = { extension }
+                objectURL = { objectURL }
 
                 previousStep = { previousStep }
                 nextStep = { nextStep }
