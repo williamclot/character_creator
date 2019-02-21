@@ -199,6 +199,9 @@ class App extends Component {
                     currentCategory = { selectedCategory }
                     
                     data = { uploadedObjectData }
+                    
+                    onWizardCanceled = { this.onWizardCanceled }
+                    onWizardCompleted = { this.onWizardCompleted }
                 />
             )}
 
