@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Object3D, Group } from 'three'
+import { Group } from 'three'
 
 import ThreeContainer from '../ThreeContainer'
 import UploadWizard from '../UploadWizard'
@@ -13,7 +13,7 @@ import SceneManager from '../ThreeContainer/sceneManager'
 
 import { fetchObjects, get3DObject } from '../../util/objectHelpers';
 import {
-    getCategories, objectMap, getNameAndExtension,
+    getCategories, getNameAndExtension,
     Dict
 } from '../../util/helpers'
 
@@ -27,22 +27,16 @@ class App extends Component {
 
         this.state = {
             /**
-             * Mapping from part type to object Id
-             * @type { Dict<string> }
+             * Mapping from part type to threejs object
+             * @type { Dict<Object3D> }
              */
-            loadedObjectIds: {},
+            loadedObjects: {},
 
             showUploadWizard: false,
             uploadedObjectData: null,
             
             editMode: false
         }
-
-        /**
-         * Mapping from object id to object
-         * @type { Dict<Object3D> }
-         */
-        this.loadedObjectsById = {}
 
         /** @type { Object3D } */
         this.uploadedObject = null
@@ -61,19 +55,10 @@ class App extends Component {
     async componentDidMount() {
         const { objects } = this.props
 
-        const loadedObjectIds = {}
-
-        const fetchedObjects = await fetchObjects( objects.oneOfEach )
-
-        for ( let key of Object.keys( fetchedObjects ) ) {
-            const curr = fetchedObjects[key]
-
-            this.loadedObjectsById[curr.id] = curr
-            loadedObjectIds[key] = curr.id
-        }
+        const loadedObjects = await fetchObjects( objects.oneOfEach )
 
         this.setState({
-            loadedObjectIds
+            loadedObjects
         })
     }
 
@@ -100,20 +85,10 @@ class App extends Component {
     }
 
     setSelectedObject = ( category, newObject ) => {
-        const { loadedObjectIds } = this.state
-        const currentObjectId = loadedObjectIds[category]
-
-        // delete previous object to make sure it is garbage collected
-        delete this.loadedObjectsById[currentObjectId]
-
-        // store new object
-        this.loadedObjectsById[newObject.id] = newObject
-        
-        // now update the id at the key of the current category
         this.setState( state => ({
-            loadedObjectIds: {
-                ...state.loadedObjectIds,
-                [category]: newObject.id
+            loadedObjects: {
+                ...state.loadedObjects,
+                [category]: newObject
             }
         }))
     }
@@ -171,7 +146,7 @@ class App extends Component {
             poseData
         } = this.props
         const {
-            loadedObjectIds,
+            loadedObjects,
             showUploadWizard, uploadedObjectData
         } = this.state
 
@@ -183,11 +158,6 @@ class App extends Component {
                 objects:  objects.byCategory[ selectedCategory.name ],
                 currentCategory: selectedCategory.name
             } : null
-        )
-
-        const loadedObjects = objectMap(
-            loadedObjectIds,
-            id => this.loadedObjectsById[id]
         )
 
         const wizardData = uploadedObjectData ? {
