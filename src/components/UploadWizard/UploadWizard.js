@@ -81,7 +81,8 @@ class UploadWizard extends Component {
         } = this.state
     
     
-        return (
+        return <>
+            <div className = "wizard-background" />
             <div className = "wizard-container">
     
                 <UploadConfirm
@@ -112,7 +113,7 @@ class UploadWizard extends Component {
                 />
     
             </div>
-        )
+        </>
     }
 }
 

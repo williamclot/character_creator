@@ -1,4 +1,4 @@
-.wizard-container {
+.wizard-background {
     position: absolute;
     background-color: black;
 
@@ -7,6 +7,11 @@
     opacity: .8;    
 }
 
+.wizard-container {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
 
 .wizard-container .wizard-step {
     position: absolute;
