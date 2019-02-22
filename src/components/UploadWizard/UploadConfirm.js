@@ -16,7 +16,7 @@ class UploadConfirm extends Component {
     
     componentDidMount() {
         const canvas = this.canvasRef.current
-        const { height, width } = canvas.getBoundingClientRect()
+        const { width, height } = canvas.getBoundingClientRect()
 
 
         this.scene = new Scene
@@ -24,7 +24,7 @@ class UploadConfirm extends Component {
 
         this.camera = new PerspectiveCamera(
             75,
-            (window.innerWidth / window.innerHeight),
+            (width / height),
             0.001,
             1000
         );
