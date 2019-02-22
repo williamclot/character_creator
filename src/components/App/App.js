@@ -94,7 +94,7 @@ class App extends Component {
 
         console.log(name, extension)
 
-        const ACCEPTED_EXTENSIONS = [ "stl", "glb" ]
+        const ACCEPTED_EXTENSIONS = [ "stl" ]
 
         if ( !ACCEPTED_EXTENSIONS.includes( extension ) ) {
 

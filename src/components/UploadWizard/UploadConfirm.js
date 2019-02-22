@@ -2,7 +2,8 @@ import React, { Component, createRef } from 'react'
 import classNames from 'classnames'
 
 import {
-    Scene, PerspectiveCamera, WebGLRenderer, PointLight, Color
+    Scene, PerspectiveCamera, WebGLRenderer, PointLight, Color,
+    MeshStandardMaterial, Mesh
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
 import * as utils from '../ThreeContainer/util/init'
@@ -50,11 +51,17 @@ class UploadConfirm extends Component {
     }
 
     componentDidUpdate( prevProps ) {
-        const { uploadedObject } = this.props
-        if ( prevProps.uploadedObject !== uploadedObject ) {
+        const prevGeometry = prevProps.uploadedObjectGeometry
+        const currGeometry = this.props.uploadedObjectGeometry
 
-            this.scene.remove( prevProps.uploadedObject )
-            this.scene.add( uploadedObject )
+        if ( prevGeometry !== currGeometry ) {
+
+            const mesh = new Mesh(
+                currGeometry,
+                new MeshStandardMaterial
+            )
+
+            this.scene.add( mesh )
             this.renderScene()
 
         }

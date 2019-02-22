@@ -9,7 +9,7 @@ import PlaceAttachPoints from './PlaceAttachPoints'
 import './UploadWizard.css'
 import { steps, previousStep, nextStep } from '../../actions/steps'
 
-import { get3DObject } from '../../util/objectHelpers'
+import { stlLoader } from '../../util/loaders'
 
 class UploadWizard extends Component {
     constructor( props ) {
@@ -19,7 +19,7 @@ class UploadWizard extends Component {
 
             // handled by UploadConfirm
             name: '',
-            uploadedObject: null,
+            uploadedObjectGeometry: null,
 
             // handled by AdjustTransforms
             position: null,
@@ -43,15 +43,11 @@ class UploadWizard extends Component {
 
         try {
 
-            const object = await get3DObject({
-                download_url: objectURL,
-                name,
-                extension
-            })
+            const geometry = await stlLoader.load( objectURL )
 
             this.setState({
                 name,
-                uploadedObject: object
+                uploadedObjectGeometry: geometry
             })
 
         } catch ( err ) {
@@ -81,7 +77,7 @@ class UploadWizard extends Component {
         } = this.props
 
         const {
-            name, uploadedObject
+            name, uploadedObjectGeometry
         } = this.state
     
     
@@ -94,7 +90,7 @@ class UploadWizard extends Component {
                     currentCategory = { currentCategory }
                     name = { name }
                     onNameChange = { this.onNameChange }
-                    uploadedObject = { uploadedObject }
+                    uploadedObjectGeometry = { uploadedObjectGeometry }
     
                     onCancel = { onWizardCanceled }
                     onNext = { nextStep }
@@ -103,7 +99,7 @@ class UploadWizard extends Component {
                 <AdjustTransforms
                     visible = { step === steps.ADJUST }
 
-                    uploadedObject = { uploadedObject }
+                    uploadedObjectGeometry = { uploadedObjectGeometry }
 
                     previousStep = { previousStep }
                     nextStep = { nextStep }
