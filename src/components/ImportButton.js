@@ -10,14 +10,17 @@ class ImportButton extends Component {
     handleLoad = e => {
         const { onFileLoaded } = this.props
 
-        if ( typeof onFileLoaded !== 'function' ) {
-            return
-        }
-
         /** @type {File} */
         const file = e.target.files[ 0 ]
 
+        // first reset the value to recognize if same file is uploaded again
+        this._fileInput.value = ''
+
         if ( !file ) {
+            return
+        }
+
+        if ( typeof onFileLoaded !== 'function' ) {
             return
         }
 
