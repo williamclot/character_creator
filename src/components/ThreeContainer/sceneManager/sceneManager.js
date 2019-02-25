@@ -1,4 +1,4 @@
-import { Matrix4, Object3D, Group, Bone, Mesh, Material, Color } from 'three'
+import { Matrix4, Vector3, Object3D, Group, Bone, Mesh, Material, Color } from 'three'
 import topologicalSort from 'toposort'
 import findMinGeometry from '../util/findMinGeometry'
 
@@ -223,6 +223,28 @@ class SceneManager {
                 }
             }
         } )
+    }
+
+    computeGlobalRotation( parentCategory, poseData ) {
+        if ( parentCategory === null ) {
+            return new Vector3 // default to (0, 0, 0)
+        }
+
+        const finalRotation = new Vector3
+
+        let cat = this.categoriesMap.get( parentCategory.name )
+
+        while( cat.parent ) {
+            const attachPointRotation = poseData[ cat.parent.attachPoint ]
+            // rotationsToApply.push( attachPointRotation )
+            const { x, y, z } = attachPointRotation
+
+            finalRotation.add( new Vector3( x, y, z ))
+
+            cat = this.categoriesMap.get( cat.parent.name )
+        }
+
+        return finalRotation
     }
 
     resetStand() {
