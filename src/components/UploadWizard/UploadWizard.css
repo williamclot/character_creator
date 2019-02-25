@@ -39,6 +39,7 @@
 
     border-radius: 5px;
     cursor: pointer;
+    color: white;
 }
 
 .wizard-container .button:hover {
