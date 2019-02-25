@@ -225,18 +225,18 @@ class SceneManager {
         } )
     }
 
-    computeGlobalRotation( parentCategory, poseData ) {
-        if ( parentCategory === null ) {
+    computeGlobalRotation( category, poseData ) {
+        if ( !category ) {
             return new Vector3 // default to (0, 0, 0)
         }
 
         const finalRotation = new Vector3
 
-        let cat = this.categoriesMap.get( parentCategory.name )
+        let cat = this.categoriesMap.get( category.name )
 
         while( cat.parent ) {
             const attachPointRotation = poseData[ cat.parent.attachPoint ]
-            // rotationsToApply.push( attachPointRotation )
+            
             const { x, y, z } = attachPointRotation
 
             finalRotation.add( new Vector3( x, y, z ))
