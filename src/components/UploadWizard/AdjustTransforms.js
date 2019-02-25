@@ -87,9 +87,8 @@ class AdjustTransforms extends Component {
                     ref = { this.canvasRef }
                 />
 
-                <div
-                    className = "canvas-overlay"
-                >
+
+                <div className = "buttons-container">
 
                     <div
                         className = "button"
@@ -105,6 +104,7 @@ class AdjustTransforms extends Component {
                     </div>
 
                 </div>
+
 
             </div>
         )

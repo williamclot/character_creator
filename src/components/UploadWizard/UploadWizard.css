@@ -82,15 +82,18 @@
 }
 
 .wizard-container .wizard-step.adjust-transforms canvas {
-    position: absolute;
+    position: relative;
     width: 100%;
     height: 100%;
 
     border-radius: 20px;
 }
 
-.wizard-container .wizard-step.adjust-transforms .canvas-overlay {
+.wizard-container .wizard-step.adjust-transforms .buttons-container {
+    background-color: blueviolet;
     position: absolute;
+    right: 2%;
+    bottom: 3%;
 }
 
 /* END ADJUST TRANSFORMS */
