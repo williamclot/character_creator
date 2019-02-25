@@ -33,18 +33,24 @@
 
 .wizard-container .button {
     background-color: #2b2b2b;
-
-    width: 50px;
-    height: 30px;
-
-    border-radius: 5px;
-    cursor: pointer;
+    display: inline;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
     color: white;
+    
+    /* width: 50px; */
+    /* height: 30px; */
+    padding: 10px;
+    border-radius: 10px;
+
+    box-shadow: 2px 2px 6px black;
+    cursor: pointer;
 }
 
 .wizard-container .button:hover {
     background-color: #121c1f59;
-    box-shadow: 0px 0px 5px #353535;
+    box-shadow: 2px 2px 5px #353535;
 }
 
 
@@ -54,15 +60,47 @@
     background-color: #555454;
 
 
-    height: 70%;
-    width: 30%;
+    /* height: 70%; */
+    /* width: 30%; */
 
 
     color: white;
+    padding: 10px;
+}
+
+
+.wizard-container .wizard-step.upload-confirm .grid-view {
+    /* background-color: brown; */
+
+    display: grid;
+    grid-template-columns: [label-col] auto [view-col] 1fr;
+    
+    /* justify-items: stretch; */
+    grid-gap: 10px;
+}
+.wizard-container .wizard-step.upload-confirm .grid-view .label {
+    grid-column: label-col;
+    font-style: italic;
+}
+.wizard-container .wizard-step.upload-confirm .grid-view .view {
+    grid-column: view-col
+}
+
+.wizard-container .wizard-step.upload-confirm
+    .grid-view .buttons-container {
+    
+    display: flex;
+    justify-content: center;
+}
+
+.wizard-container .wizard-step.upload-confirm
+    .grid-view .buttons-container .button {
+
+    width: 50%;
+    margin: 10px;
 }
 
 /* END UPLOAD CONFIRM */
-
 
 
 .wizard-container .wizard-step.place-attachpoints {

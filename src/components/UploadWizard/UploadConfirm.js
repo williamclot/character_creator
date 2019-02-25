@@ -88,40 +88,52 @@ class UploadConfirm extends Component {
             >
                 <h2> Add Part </h2>
 
-                <span>
-                    Part Name: 
+                <div className = "grid-view" >
+
+                    <span className = "label" >
+                        Part Name: 
+                    </span>
                     <input
-                        className = "name-input"
+                        className = "view"
                         type = "text"
                         value = { name }
                         onChange = { onNameChange }
                     />
-                </span>
 
-                <h3>
-                    Part Type:
-                    {currentCategory.label}
-                </h3>
 
-                Part Preview: <br />
-                <canvas
-                    className = "preview-canvas"
-                    ref = { this.canvasRef }
-                />
+                    <h3 className = "label" >
+                        Part Type:
+                    </h3>
+                    <span className = "view" >
+                        {currentCategory.label}
+                    </span>
 
-                <div
-                    className = "button"
-                    onClick = { onCancel }
-                >
-                    Cancel
+                    <span className = "label" >
+                        Part Preview:
+                    </span>
+                    <canvas
+                        className = "view"
+                        ref = { this.canvasRef }
+                    />
+                    
+                    <div className = "buttons-container view" >
+                        <div
+                            className = "button"
+                            onClick = { onCancel }
+                        >
+                            Cancel
+                        </div>
+
+                        <div
+                            className = "button"
+                            onClick = { onNext }
+                        >
+                            Next
+                        </div>
+                    </div>
+
                 </div>
 
-                <div
-                    className = "button"
-                    onClick = { onNext }
-                >
-                    Next
-                </div>
             </div>
         )
     }
