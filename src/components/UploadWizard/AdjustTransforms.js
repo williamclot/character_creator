@@ -87,9 +87,25 @@ class AdjustTransforms extends Component {
                     ref = { this.canvasRef }
                 />
 
-                ADJUST POSITION, ROTATION AND SCALE <br/>
-                <button onClick = { previousStep }>previous</button>
-                <button onClick = { nextStep }>next</button>
+                <div
+                    className = "canvas-overlay"
+                >
+
+                    <div
+                        className = "button"
+                        onClick = { previousStep }
+                    >
+                        Back
+                    </div>
+                    <div
+                        className = "button"
+                        onClick = { nextStep }
+                    >
+                        Next
+                    </div>
+
+                </div>
+
             </div>
         )
     }
