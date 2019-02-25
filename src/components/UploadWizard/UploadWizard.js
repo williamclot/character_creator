@@ -73,6 +73,7 @@ class UploadWizard extends Component {
         const {
             currentCategory,
             onWizardCanceled, onWizardCompleted,
+            defaultRotation,
             step, nextStep, previousStep
         } = this.props
 
@@ -99,7 +100,8 @@ class UploadWizard extends Component {
     
                 <AdjustTransforms
                     visible = { step === steps.ADJUST }
-
+                    
+                    defaultRotation = { defaultRotation }
                     uploadedObjectGeometry = { uploadedObjectGeometry }
 
                     previousStep = { previousStep }

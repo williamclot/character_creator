@@ -162,6 +162,8 @@ class App extends Component {
             } : null
         )
 
+        const defaultRotation = this.sceneManager.computeGlobalRotation( selectedCategory, poseData )
+
 
         return <div className = "app">
 
@@ -197,6 +199,7 @@ class App extends Component {
                     sceneManager = { this.sceneManager }
 
                     currentCategory = { selectedCategory }
+                    defaultRotation = { defaultRotation }
                     
                     data = { uploadedObjectData }
                     
