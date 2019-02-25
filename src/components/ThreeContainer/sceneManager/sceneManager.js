@@ -3,21 +3,6 @@ import topologicalSort from 'toposort'
 import findMinGeometry from '../util/findMinGeometry'
 
 /**
- * JS object representing the parent of a category;
- * needs a category name and an attachpoint name from within that category
- * @typedef { Object } Parent
- * @property { string } name
- * @property { string } attachPoint
-*/
-/**
- * Category object
- * @typedef { Object } Category
- * @property { string } name
- * @property { string[] } attachPoints
- * @property { Parent } [parent]
- */
-
-/**
  * An object that holds a reference to a group of 3D objects (_container_).
  * It also needs the categories that define the structure of the objects
  * that need to be added.
@@ -340,4 +325,20 @@ function extractKnownBones( object3d, knownBoneNames ) {
     return extractedBones
 }
 
-export default SceneManager 
+export default SceneManager
+
+
+/**
+ * JS object representing the parent of a category;
+ * needs a category name and an attachpoint name from within that category
+ * @typedef { Object } Parent
+ * @property { string } name
+ * @property { string } attachPoint
+*/
+/**
+ * Category object
+ * @typedef { Object } Category
+ * @property { string } name
+ * @property { string[] } attachPoints
+ * @property { Parent } [parent]
+ */
