@@ -31,6 +31,22 @@
 
 
 
+.wizard-container .button {
+    background-color: #2b2b2b;
+
+    width: 50px;
+    height: 30px;
+
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.wizard-container .button:hover {
+    background-color: #121c1f59;
+    box-shadow: 0px 0px 5px #353535;
+}
+
+
 /* BEGIN UPLOAD CONFIRM */
 
 .wizard-container .wizard-step.upload-confirm {
@@ -44,21 +60,6 @@
     color: white;
 }
 
-.wizard-container .wizard-step.upload-confirm .button {
-    background-color: #2b2b2b;
-
-    width: 50px;
-    height: 30px;
-
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.wizard-container .wizard-step.upload-confirm .button:hover {
-    background-color: #121c1f59;
-    box-shadow: 0px 0px 5px #353535;
-}
-
 /* END UPLOAD CONFIRM */
 
 
@@ -67,6 +68,28 @@
     background-color: red;
 }
 
-.wizard-container .wizard-step.adjust-transforms{
+
+
+/* BEGIN ADJUST TRANSFORMS */
+
+.wizard-container .wizard-step.adjust-transforms {
     background-color: aqua;
+
+    height: 90%;
+    width: 90%;
+
 }
+
+.wizard-container .wizard-step.adjust-transforms canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    border-radius: 20px;
+}
+
+.wizard-container .wizard-step.adjust-transforms .canvas-overlay {
+    position: absolute;
+}
+
+/* END ADJUST TRANSFORMS */
