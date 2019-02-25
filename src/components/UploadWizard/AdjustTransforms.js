@@ -41,7 +41,7 @@ class AdjustTransforms extends Component {
         const light2 = new PointLight( 0xc1c1c1, 1, 100 )
         light2.position.set( 7, -1, -7 )
 
-        this.scene.add( light1, light2 )
+        this.scene.add( light1, light2, utils.initGridHelper() )
 
         this.orbitControls = new OrbitControls( this.camera, canvas )
         this.orbitControls.addEventListener( 'change', this.renderScene )
