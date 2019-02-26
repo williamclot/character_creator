@@ -105,13 +105,19 @@ class App extends Component {
 
         }
 
+        const defaultRotation = this.sceneManager.computeGlobalRotation(
+            this.getSelectedCategory(),
+            this.props.poseData
+        )
+
         this.setState({
             showUploadWizard: true,
             uploadedObjectData: {
                 name,
                 filename,
                 extension,
-                objectURL
+                objectURL,
+                defaultRotation
             }
         })
     }
@@ -162,9 +168,6 @@ class App extends Component {
             } : null
         )
 
-        const defaultRotation = this.sceneManager.computeGlobalRotation( selectedCategory, poseData )
-
-
         return <div className = "app">
 
             <ThreeContainer
@@ -199,7 +202,6 @@ class App extends Component {
                     sceneManager = { this.sceneManager }
 
                     currentCategory = { selectedCategory }
-                    defaultRotation = { defaultRotation }
                     
                     data = { uploadedObjectData }
                     

@@ -71,11 +71,12 @@ class UploadWizard extends Component {
 
     render() {
         const {
-            currentCategory,
+            currentCategory, data,
             onWizardCanceled, onWizardCompleted,
-            defaultRotation,
             step, nextStep, previousStep
         } = this.props
+        const { defaultRotation } = data
+
 
         const {
             name, uploadedObjectGeometry
