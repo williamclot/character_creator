@@ -69,6 +69,18 @@ class UploadWizard extends Component {
         })
     }
 
+    setPosition = pivotPointVector => {
+        console.log( pivotPointVector )
+
+        const { x, y, z } = pivotPointVector.negate() // invert pos
+
+        const computedPos = { x, y, z }
+
+        this.setState({
+            position: computedPos
+        })
+    }
+
     render() {
         const {
             currentCategory, data,
@@ -104,6 +116,7 @@ class UploadWizard extends Component {
                     
                     defaultRotation = { defaultRotation }
                     uploadedObjectGeometry = { uploadedObjectGeometry }
+                    onClick = { this.setPosition }
 
                     previousStep = { previousStep }
                     nextStep = { nextStep }
