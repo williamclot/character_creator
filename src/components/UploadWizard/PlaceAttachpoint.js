@@ -10,7 +10,7 @@ import * as utils from '../ThreeContainer/util/init'
 import { fromEvent } from '../../util/helpers'
 import { sphereFactory } from '../../util/three-helpers'
 
-export default class extends Component {
+export default class PlaceAttachpoint extends Component {
     constructor( props ) {
         super( props )
 
