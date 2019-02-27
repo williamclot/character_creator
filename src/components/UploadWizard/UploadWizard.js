@@ -114,6 +114,7 @@ class UploadWizard extends Component {
                 <AdjustTransforms
                     visible = { step === steps.ADJUST }
                     
+                    currentCategory = { currentCategory }
                     defaultRotation = { defaultRotation }
                     uploadedObjectGeometry = { uploadedObjectGeometry }
                     onClick = { this.setPosition }

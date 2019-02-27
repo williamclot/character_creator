@@ -133,4 +133,21 @@
     bottom: 3%;
 }
 
+.wizard-container .wizard-step.adjust-transforms .title {
+    position: absolute;
+    left: 2%;
+    top: 3%;
+}
+
+.wizard-container .wizard-step.adjust-transforms .info {
+    position: absolute;
+    left: 2%;
+    bottom: 3%;
+
+    color: grey;
+}
+
+.wizard-container .wizard-step.adjust-transforms .info .info-title {
+    font-weight: bold;
+}
 /* END ADJUST TRANSFORMS */

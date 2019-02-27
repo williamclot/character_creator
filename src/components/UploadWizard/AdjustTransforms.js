@@ -74,8 +74,13 @@ class AdjustTransforms extends Component {
     render() {
         const {
             visible,
+            currentCategory,
             nextStep, previousStep
         } = this.props
+
+        const parentName = currentCategory.parent
+            ? currentCategory.parent.className
+            : 'the scene'
 
         return (
             <div
@@ -87,6 +92,19 @@ class AdjustTransforms extends Component {
                     ref = { this.canvasRef }
                 />
 
+                <div className = "title" >
+                    <h4>Place AttachPoint</h4>
+                    <p>Click where this part attaches to {parentName}</p>
+                </div>
+
+                <div className = "info" >
+                    <div className = "info-title" >
+                        Camera Controls
+                    </div>
+                    <span> Scroll: Zoom </span><br/>
+                    <span> Left Click: Rotate </span><br/>
+                    <span> Right Click: Pan </span>
+                </div>
 
                 <div className = "buttons-container">
 
