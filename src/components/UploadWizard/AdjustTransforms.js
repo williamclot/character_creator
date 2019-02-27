@@ -7,9 +7,9 @@ export default ({
 }) => {
     return (
         <div
-            className = {classNames('wizard-step', 'place-attachpoints', { visible })}
+            className = {classNames('wizard-step', 'adjust-transforms', { visible })}
         >
-            PLACE ATTACH POINTS <br/>
+            Adjust :) <br/>
             <button onClick = { previousStep }>previous</button>
             <button onClick = { nextStep }>next</button>
         </div>

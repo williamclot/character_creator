@@ -134,7 +134,7 @@ export default class extends Component {
 
         return (
             <div
-                className = {classNames('wizard-step', 'adjust-transforms', { visible })}
+                className = {classNames('wizard-step', 'place-attachpoint', { visible })}
             >
 
                 <canvas
