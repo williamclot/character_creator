@@ -129,6 +129,9 @@ class UploadWizard extends Component {
     
                 <AdjustTransforms
                     visible = { step === steps.ADJUST }
+
+                    uploadedObjectGeometry = { uploadedObjectGeometry }
+
                     previousStep = { previousStep }
                     nextStep = { nextStep }
                 />
