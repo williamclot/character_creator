@@ -45,6 +45,10 @@ class UploadWizard extends Component {
 
             const geometry = await stlLoader.load( objectURL )
 
+            if ( !geometry.boundingBox ) {
+                geometry.computeBoundingBox()
+            }
+
             this.setState({
                 name,
                 uploadedObjectGeometry: geometry
