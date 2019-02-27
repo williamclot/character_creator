@@ -4,7 +4,7 @@ import classNames from 'classnames'
 
 import UploadConfirm from './UploadConfirm'
 import AdjustTransforms from './AdjustTransforms'
-import PlaceAttachPoints from './PlaceAttachPoints'
+import PlaceAttachpoint from './PlaceAttachpoint'
 
 import './UploadWizard.css'
 import { steps, previousStep, nextStep } from '../../actions/steps'
@@ -26,7 +26,7 @@ class UploadWizard extends Component {
             rotation: null,
             scale: null,
 
-            // handled by PlaceAttachPoints
+            // handled by PlaceAttachpoint
             attachPoints: null
         }
     }
@@ -115,7 +115,7 @@ class UploadWizard extends Component {
                     onNext = { nextStep }
                 />
     
-                <AdjustTransforms
+                <PlaceAttachpoint
                     visible = { step === steps.ADJUST }
                     
                     currentCategory = { currentCategory }
@@ -127,8 +127,8 @@ class UploadWizard extends Component {
                     nextStep = { nextStep }
                 />
     
-                <PlaceAttachPoints
-                    visible = { step === steps.PLACE_ATTACHPOINTS }
+                <AdjustTransforms
+                    visible = { step === steps.PLACE_ATTACHPOINT }
                     previousStep = { previousStep }
                     nextStep = { nextStep }
                 />

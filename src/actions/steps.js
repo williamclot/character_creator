@@ -8,7 +8,7 @@ export const actionTypes = {
 export const steps = {
     NOT_STARTED        : 'NOT_STARTED',
     UPLOAD_CONFIRM     : 'UPLOAD_CONFIRM',
-    PLACE_ATTACHPOINTS : 'PLACE_ATTACHPOINTS',
+    PLACE_ATTACHPOINT : 'PLACE_ATTACHPOINT',
     ADJUST             : 'ADJUST',
     COMPLETED          : 'COMPLETED'
 }
