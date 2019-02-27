@@ -34,6 +34,21 @@ export const getNameAndExtension = filename => {
 }
 
 /**
+ * 
+ * get normalized mouse coordinates
+ * @param { Event } event 
+ */
+export function fromEvent( event ) {
+    const { left, top, width, height } = event.target.getBoundingClientRect()
+
+    return {
+        x: ( event.clientX - left ) / width * 2 - 1,
+        y: - ( event.clientY - top ) / height * 2 + 1
+    }
+}
+
+
+/**
  * @template T, S
  * @callback Mapper
  * @param { T } value

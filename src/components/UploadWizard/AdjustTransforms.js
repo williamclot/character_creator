@@ -3,10 +3,12 @@ import classNames from 'classnames'
 
 import {
     Scene, PerspectiveCamera, WebGLRenderer, PointLight, Color,
-    MeshStandardMaterial, Mesh
+    MeshStandardMaterial, Mesh, Raycaster
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
 import * as utils from '../ThreeContainer/util/init'
+import { fromEvent } from '../../util/helpers'
+import { sphereFactory } from '../../util/three-helpers'
 
 class AdjustTransforms extends Component {
     constructor( props ) {
@@ -19,6 +21,15 @@ class AdjustTransforms extends Component {
         const canvas = this.canvasRef.current
         const { width, height } = canvas.getBoundingClientRect()
 
+        this.defaultMaterial = new MeshStandardMaterial({
+            color: 0xffffff,
+            opacity: .8,
+            transparent: true
+        })
+
+        this.sphere = sphereFactory.buildSphere()
+        // this.sphere = sphereFactory.buildSphere( true )
+        // this.sphere.rotation.setFromVector3( this.props.defaultRotation )
 
         this.scene = new Scene
         this.scene.background = new Color( 0xeeeeee );
@@ -46,6 +57,8 @@ class AdjustTransforms extends Component {
         this.orbitControls = new OrbitControls( this.camera, canvas )
         this.orbitControls.addEventListener( 'change', this.renderScene )
 
+        this.scene.add( this.sphere )
+
         this.renderScene()
 
     }
@@ -58,13 +71,48 @@ class AdjustTransforms extends Component {
 
             const mesh = new Mesh(
                 currGeometry,
-                new MeshStandardMaterial
+                this.defaultMaterial
             )
 
             this.scene.add( mesh )
             this.renderScene()
 
         }
+    }
+
+    onClick = ev => {
+        ev.preventDefault();
+
+        const mouseCoords = fromEvent( ev )
+
+        const raycaster = new Raycaster
+        raycaster.setFromCamera( mouseCoords, this.camera )
+
+        const intersects = raycaster.intersectObject( this.scene, true )
+
+        const intersection = intersects.find( intersect => intersect.object.isMesh )
+
+        if( intersection ) {
+            const { point, face } = intersection
+
+            console.log( point, face.normal )
+
+            this.sphere.position.copy( point )
+
+            this.props.onClick( point.clone() )
+
+            // this.sphere.lookAt( face.normal )
+            // this.sphere.up.copy( face.normal )
+
+            this.renderScene()
+            
+        } else {
+            // if ( this.transformControls.object ) {
+            //     this.transformControls.detach();
+            // }
+            console.log('nothing clicked')
+        }
+
     }
 
     renderScene = () => {
@@ -90,6 +138,7 @@ class AdjustTransforms extends Component {
                 <canvas
                     className = "preview-canvas"
                     ref = { this.canvasRef }
+                    onClick = { this.onClick }
                 />
 
                 <div className = "title" >
