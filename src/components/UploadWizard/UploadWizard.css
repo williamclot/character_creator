@@ -101,14 +101,7 @@
 
 /* END UPLOAD CONFIRM */
 
-
-.wizard-container .wizard-step.adjust-transforms {
-    background-color: red;
-}
-
-
-
-/* BEGIN ADJUST TRANSFORMS */
+/* BEGIN PLACE ATTACHPOINT */
 
 .wizard-container .wizard-step.place-attachpoint {
     background-color: aqua;
@@ -158,4 +151,15 @@
 .wizard-container .wizard-step.place-attachpoint .info .info-title {
     font-weight: bold;
 }
+
+/* END PLACE ATTACHPOINT */
+
+
+
+/* BEGIN ADJUST TRANSFORMS */
+
+.wizard-container .wizard-step.adjust-transforms {
+    background-color: red;
+}
+
 /* END ADJUST TRANSFORMS */
