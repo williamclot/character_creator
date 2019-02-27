@@ -129,7 +129,7 @@ export default class extends Component {
         } = this.props
 
         const parentName = currentCategory.parent
-            ? currentCategory.parent.className
+            ? currentCategory.parent.name
             : 'the scene'
 
         return (
