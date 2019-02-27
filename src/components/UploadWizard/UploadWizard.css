@@ -102,7 +102,7 @@
 /* END UPLOAD CONFIRM */
 
 
-.wizard-container .wizard-step.place-attachpoints {
+.wizard-container .wizard-step.adjust-transforms {
     background-color: red;
 }
 
@@ -110,7 +110,7 @@
 
 /* BEGIN ADJUST TRANSFORMS */
 
-.wizard-container .wizard-step.adjust-transforms {
+.wizard-container .wizard-step.place-attachpoint {
     background-color: aqua;
 
     height: 90%;
@@ -118,7 +118,7 @@
 
 }
 
-.wizard-container .wizard-step.adjust-transforms canvas {
+.wizard-container .wizard-step.place-attachpoint canvas {
     position: relative;
     width: 100%;
     height: 100%;
@@ -126,7 +126,7 @@
     border-radius: 20px;
 }
 
-.wizard-container .wizard-step.adjust-transforms .buttons-container {
+.wizard-container .wizard-step.place-attachpoint .buttons-container {
     position: absolute;
     display: flex;
     justify-content: center;
@@ -134,20 +134,20 @@
     bottom: 3%;
 }
 
-.wizard-container .wizard-step.adjust-transforms
+.wizard-container .wizard-step.place-attachpoint
     .buttons-container .button {
     margin: 0 10px;
     padding-left: 20px;
     padding-right: 20px;
 }
 
-.wizard-container .wizard-step.adjust-transforms .title {
+.wizard-container .wizard-step.place-attachpoint .title {
     position: absolute;
     left: 2%;
     top: 3%;
 }
 
-.wizard-container .wizard-step.adjust-transforms .info {
+.wizard-container .wizard-step.place-attachpoint .info {
     position: absolute;
     left: 2%;
     bottom: 3%;
@@ -155,7 +155,7 @@
     color: grey;
 }
 
-.wizard-container .wizard-step.adjust-transforms .info .info-title {
+.wizard-container .wizard-step.place-attachpoint .info .info-title {
     font-weight: bold;
 }
 /* END ADJUST TRANSFORMS */
