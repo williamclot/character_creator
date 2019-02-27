@@ -116,7 +116,7 @@ class UploadWizard extends Component {
                 />
     
                 <PlaceAttachpoint
-                    visible = { step === steps.ADJUST }
+                    visible = { step === steps.PLACE_ATTACHPOINT }
                     
                     currentCategory = { currentCategory }
                     defaultRotation = { defaultRotation }
@@ -128,7 +128,7 @@ class UploadWizard extends Component {
                 />
     
                 <AdjustTransforms
-                    visible = { step === steps.PLACE_ATTACHPOINT }
+                    visible = { step === steps.ADJUST }
                     previousStep = { previousStep }
                     nextStep = { nextStep }
                 />

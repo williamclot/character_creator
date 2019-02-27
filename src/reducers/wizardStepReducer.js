@@ -9,9 +9,9 @@ export default ( step = initialStep, action ) => {
         case actionTypes.NEXT_STEP: switch( step ) {
 
             case NOT_STARTED        : return UPLOAD_CONFIRM
-            case UPLOAD_CONFIRM     : return PLACE_ATTACHPOINT // ADJUST
-            case PLACE_ATTACHPOINT  : return ADJUST // COMPLETED
-            case ADJUST             : return COMPLETED // PLACE_ATTACHPOINT
+            case UPLOAD_CONFIRM     : return PLACE_ATTACHPOINT
+            case PLACE_ATTACHPOINT  : return ADJUST
+            case ADJUST             : return COMPLETED
             
             default                 : return NOT_STARTED
         }
@@ -19,9 +19,9 @@ export default ( step = initialStep, action ) => {
         case actionTypes.PREVIOUS_STEP: switch( step ) {
 
             case UPLOAD_CONFIRM     : return NOT_STARTED
-            case ADJUST             : return UPLOAD_CONFIRM
-            case PLACE_ATTACHPOINT  : return ADJUST
-            case COMPLETED          : return PLACE_ATTACHPOINT
+            case PLACE_ATTACHPOINT  : return UPLOAD_CONFIRM
+            case ADJUST             : return PLACE_ATTACHPOINT
+            case COMPLETED          : return ADJUST
             
             default                 : return NOT_STARTED
         }
