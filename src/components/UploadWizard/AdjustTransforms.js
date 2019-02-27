@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 import {
     Scene, PerspectiveCamera, WebGLRenderer, PointLight, Color,
-    MeshStandardMaterial, Mesh, Raycaster
+    MeshStandardMaterial, Mesh, Raycaster, Group
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
 import * as utils from '../ThreeContainer/util/init'
@@ -52,7 +52,9 @@ class AdjustTransforms extends Component {
         const light2 = new PointLight( 0xc1c1c1, 1, 100 )
         light2.position.set( 7, -1, -7 )
 
-        this.scene.add( light1, light2, utils.initGridHelper() )
+        this.objectsGroup = new Group
+
+        this.scene.add( light1, light2, this.objectsGroup )
 
         this.orbitControls = new OrbitControls( this.camera, canvas )
         this.orbitControls.addEventListener( 'change', this.renderScene )
@@ -74,7 +76,7 @@ class AdjustTransforms extends Component {
                 this.defaultMaterial
             )
 
-            this.scene.add( mesh )
+            this.objectsGroup.add( mesh )
             this.renderScene()
 
         }
@@ -88,7 +90,7 @@ class AdjustTransforms extends Component {
         const raycaster = new Raycaster
         raycaster.setFromCamera( mouseCoords, this.camera )
 
-        const intersects = raycaster.intersectObject( this.scene, true )
+        const intersects = raycaster.intersectObject( this.objectsGroup, true )
 
         const intersection = intersects.find( intersect => intersect.object.isMesh )
 
