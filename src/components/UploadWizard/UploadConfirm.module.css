@@ -1,0 +1,40 @@
+.uploadConfirm {
+    background-color: #555454;
+
+
+    /* height: 70%; */
+    /* width: 30%; */
+
+
+    color: white;
+    padding: 10px;
+}
+
+.uploadConfirm .gridView {
+    /* background-color: brown; */
+
+    display: grid;
+    grid-template-columns: [label-col] auto [view-col] 1fr;
+    
+    /* justify-items: stretch; */
+    grid-gap: 10px;
+}
+.uploadConfirm .gridView .label {
+    grid-column: label-col;
+    font-style: italic;
+}
+.uploadConfirm .gridView .view {
+    grid-column: view-col
+}
+
+.uploadConfirm .gridView .buttonsContainer {
+    
+    display: flex;
+    justify-content: center;
+}
+
+.uploadConfirm .gridView .buttonsContainer .button {
+
+    width: 50%;
+    margin: 10px;
+}

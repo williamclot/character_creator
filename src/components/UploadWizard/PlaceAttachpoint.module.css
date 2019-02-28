@@ -1,0 +1,46 @@
+
+.placeAttachpoint {
+    background-color: aqua;
+
+    height: 90%;
+    width: 90%;
+
+}
+
+.placeAttachpoint .previewCanvas {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.placeAttachpoint .buttonsContainer {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    right: 2%;
+    bottom: 3%;
+}
+
+.placeAttachpoint .buttonsContainer .button {
+    margin: 0 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.placeAttachpoint .title {
+    position: absolute;
+    left: 2%;
+    top: 3%;
+}
+
+.placeAttachpoint .info {
+    position: absolute;
+    left: 2%;
+    bottom: 3%;
+
+    color: grey;
+}
+
+.placeAttachpoint .info .infoTitle {
+    font-weight: bold;
+}

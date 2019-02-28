@@ -1,0 +1,53 @@
+.wizardBackground {
+    position: absolute;
+    background-color: black;
+
+    height: 100%;
+    width: 100%;
+    opacity: .8;    
+}
+
+.wizardContainer {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.wizardStep {
+    position: absolute;
+    visibility: hidden;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+
+.wizardStep.visible {
+    visibility: visible;
+}
+
+
+.wizardContainer .button {
+    background-color: #2b2b2b;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+    
+    /* width: 50px; */
+    /* height: 30px; */
+    padding: 10px;
+    border-radius: 10px;
+
+    box-shadow: 2px 2px 6px black;
+    cursor: pointer;
+}
+
+.wizardContainer .button:hover {
+    background-color: #121c1f59;
+    box-shadow: 2px 2px 5px #353535;
+}

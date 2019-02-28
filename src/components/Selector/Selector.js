@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import ImportButton from '../ImportButton'
+import ImportButton from './ImportButton'
 
 import './Selector.css'
 
