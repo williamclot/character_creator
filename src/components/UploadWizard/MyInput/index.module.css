@@ -1,4 +1,4 @@
-.input-with-axis {
+.container {
     background-color: red;
     height: 25px;
     display: flex;
@@ -6,7 +6,7 @@
     /* display: inline; */
 }
 
-.input-with-axis .axis {
+.container .axis {
     /* display: inline; */
 
     background-color: #1f1818;
@@ -17,7 +17,7 @@
     border-bottom-left-radius: 10px;
 }
 
-.input-with-axis input {
+.container .input {
     /* display: inline; */
 
     width: 40px;

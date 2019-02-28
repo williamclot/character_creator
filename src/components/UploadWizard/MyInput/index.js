@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
 
-import './MyInput.css'
+import styles from './index.module.css'
 
 export default class NumberInput extends Component {
     constructor( props ) {
@@ -48,12 +48,14 @@ export default class NumberInput extends Component {
         } = this.props
 
         return (
-            <div className = "input-with-axis" >
-                <div className = "axis" >
+            <div className = { styles.container} >
+                <div className = { styles.axis } >
                     { axis }
                 </div>
                 <input
+                    className = { styles.input }
                     type = "text"
+                    
                     value = { value }
                     onChange = { this.onInputChange }
     
