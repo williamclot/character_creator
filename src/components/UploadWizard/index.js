@@ -6,7 +6,8 @@ import UploadConfirm from './UploadConfirm'
 import AdjustTransforms from './AdjustTransforms'
 import PlaceAttachpoint from './PlaceAttachpoint'
 
-import './UploadWizard.css'
+import styles from './index.module.css'
+
 import { steps, previousStep, nextStep } from '../../actions/steps'
 
 import { stlLoader } from '../../util/loaders'
@@ -100,8 +101,8 @@ class UploadWizard extends Component {
     
     
         return <>
-            <div className = "wizard-background" />
-            <div className = "wizard-container">
+            <div className = { styles.wizardBackground } />
+            <div className = { styles.wizardContainer } >
     
                 <UploadConfirm
                     visible = { step === steps.UPLOAD_CONFIRM }

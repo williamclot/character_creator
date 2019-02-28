@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react'
-import classNames from 'classnames'
+import cn from 'classnames'
 
 import {
     Scene, PerspectiveCamera, WebGLRenderer, PointLight, Color,
@@ -11,6 +11,8 @@ import { fromEvent } from '../../util/helpers'
 import { sphereFactory } from '../../util/three-helpers'
 
 import NumberInput from './MyInput'
+import commonStyles from './index.module.css'
+import styles from './AdjustTransforms.module.css'
 
 export default class extends Component {
     constructor( props ) {
@@ -90,27 +92,34 @@ export default class extends Component {
 
     render() {
         const {
-            visible,
+            visible: isVisible,
             currentCategory,
             nextStep, previousStep
         } = this.props
 
+        const className = cn(
+            commonStyles.wizardStep,
+            isVisible && commonStyles.visible,
+            styles.adjustTransforms
+        )
+
+
         return (
             <div
-                className = {classNames('wizard-step', 'adjust-transforms', { visible })}
+                className = { className }
             >
 
                 <canvas
-                    className = "preview-canvas"
+                    className = { styles.previewCanvas}
                     ref = { this.canvasRef }
                     onClick = { this.onClick }
                 />
                 
-                <div className = "side-view">
+                <div className = { styles.sideView } >
 
-                    <div className = "inputs-container">
-                        <div className = "input-group position">
-                            <div className = "label">
+                    <div className = { styles.inputsContainer } >
+                        <div className = {cn( styles.inputGroup, styles.position )} >
+                            <div className = { styles.label } >
                                 Position
                             </div>
                             <div className = "axes" >
@@ -131,24 +140,24 @@ export default class extends Component {
                                 />
                             </div>
                         </div>
-                        <div className = "input-group rotation">
+                        <div className = {cn( styles.inputGroup, styles.rotation )} >
                             ROTATION
                             <input />
                         </div>
-                        <div className = "input-group scale">
+                        <div className = {cn( styles.inputGroup, styles.scale )} >
                             SCALE
                         </div>
                     </div>
                     
-                    <div className = "buttons-container">
+                    <div className = { styles.buttonsContainer } >
                         <div
-                            className = "button"
+                            className = {cn( commonStyles.button, styles.button )}
                             onClick = { previousStep }
                         >
                             Back
                         </div>
                         <div
-                            className = "button"
+                            className = {cn( commonStyles.button, styles.button )}
                             onClick = { nextStep }
                         >
                             Next

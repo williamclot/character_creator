@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react'
-import classNames from 'classnames'
+import cn from 'classnames'
 
 import {
     Scene, PerspectiveCamera, WebGLRenderer, PointLight, Color,
@@ -7,6 +7,9 @@ import {
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
 import * as utils from '../ThreeContainer/util/init'
+
+import commonStyles from './index.module.css'
+import styles from './UploadConfirm.module.css'
 
 class UploadConfirm extends Component {
     constructor( props ) {
@@ -73,7 +76,7 @@ class UploadConfirm extends Component {
 
     render() {
         const {
-            visible,
+            visible: isVisible,
 
             name,
             onNameChange,
@@ -82,50 +85,56 @@ class UploadConfirm extends Component {
             onCancel, onNext
         } = this.props
 
+        const className = cn(
+            commonStyles.wizardStep,
+            isVisible && commonStyles.visible,
+            styles.uploadConfirm
+        )
+
         return (
             <div
-                className = {classNames('wizard-step', 'upload-confirm', { visible })}
+                className = { className }
             >
                 <h2> Add Part </h2>
 
-                <div className = "grid-view" >
+                <div className = { styles.gridView } >
 
-                    <span className = "label" >
+                    <span className = { styles.label } >
                         Part Name: 
                     </span>
                     <input
-                        className = "view"
+                        className = { styles.view }
                         type = "text"
                         value = { name }
                         onChange = { onNameChange }
                     />
 
 
-                    <h3 className = "label" >
+                    <h3 className = { styles.label } >
                         Part Type:
                     </h3>
-                    <span className = "view" >
+                    <span className = { styles.view } >
                         {currentCategory.label}
                     </span>
 
-                    <span className = "label" >
+                    <span className = { styles.label } >
                         Part Preview:
                     </span>
                     <canvas
-                        className = "view"
+                        className = { styles.view }
                         ref = { this.canvasRef }
                     />
                     
-                    <div className = "buttons-container view" >
+                    <div className = {cn( styles.view, styles.buttonsContainer ) } >
                         <div
-                            className = "button"
+                            className = {cn( commonStyles.button, styles.button )}
                             onClick = { onCancel }
                         >
                             Cancel
                         </div>
 
                         <div
-                            className = "button"
+                            className = {cn( commonStyles.button, styles.button )}
                             onClick = { onNext }
                         >
                             Next

@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react'
-import classNames from 'classnames'
+import cn from 'classnames'
 
 import {
     Scene, PerspectiveCamera, WebGLRenderer, PointLight, Color,
@@ -9,6 +9,9 @@ import OrbitControls from 'three-orbitcontrols'
 import * as utils from '../ThreeContainer/util/init'
 import { fromEvent } from '../../util/helpers'
 import { sphereFactory } from '../../util/three-helpers'
+
+import commonStyles from './index.module.css'
+import styles from './PlaceAttachpoint.module.css'
 
 export default class PlaceAttachpoint extends Component {
     constructor( props ) {
@@ -123,7 +126,7 @@ export default class PlaceAttachpoint extends Component {
 
     render() {
         const {
-            visible,
+            visible: isVisible,
             currentCategory,
             nextStep, previousStep
         } = this.props
@@ -132,24 +135,31 @@ export default class PlaceAttachpoint extends Component {
             ? currentCategory.parent.name
             : 'the scene'
 
+        
+        const className = cn(
+            commonStyles.wizardStep,
+            isVisible && commonStyles.visible,
+            styles.placeAttachpoint
+        )
+
         return (
             <div
-                className = {classNames('wizard-step', 'place-attachpoint', { visible })}
+                className = { className }
             >
 
                 <canvas
-                    className = "preview-canvas"
+                    className = { styles.previewCanvas }
                     ref = { this.canvasRef }
                     onClick = { this.onClick }
                 />
 
-                <div className = "title" >
+                <div className = { styles.title } >
                     <h4>Place AttachPoint</h4>
                     <p>Click where this part attaches to {parentName}</p>
                 </div>
 
-                <div className = "info" >
-                    <div className = "info-title" >
+                <div className = { styles.info } >
+                    <div className = { styles.infoTitle } >
                         Camera Controls
                     </div>
                     <span> Scroll: Zoom </span><br/>
@@ -157,16 +167,16 @@ export default class PlaceAttachpoint extends Component {
                     <span> Right Click: Pan </span>
                 </div>
 
-                <div className = "buttons-container">
+                <div className = { styles.buttonsContainer } >
 
                     <div
-                        className = "button"
+                        className = {cn( commonStyles.button, styles.button )}
                         onClick = { previousStep }
                     >
                         Back
                     </div>
                     <div
-                        className = "button"
+                        className = {cn( commonStyles.button, styles.button )}
                         onClick = { nextStep }
                     >
                         Next
