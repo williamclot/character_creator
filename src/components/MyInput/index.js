@@ -36,9 +36,16 @@ export default class NumberInput extends Component {
     }
 
     onInputChange = e => {
-        const value = Number.parseFloat( e.target.value )
+        const value = e.target.value
 
-        this.props.onChange( value )
+        const computedValue = ( value === '' )
+            ? 0
+            : Number.parseFloat( value )
+        
+        console.log(computedValue)
+        if ( !Number.isNaN( computedValue ) ) {
+            this.props.onChange( computedValue )
+        }
     }
 
     render() {
