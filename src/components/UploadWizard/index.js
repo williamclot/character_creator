@@ -23,9 +23,17 @@ class UploadWizard extends Component {
             uploadedObjectGeometry: null,
 
             // handled by AdjustTransforms
-            position: null,
-            rotation: null,
-            scale: null,
+            position: {
+                x: 0,
+                y: 0,
+                z: 0
+            },
+            rotation: {
+                x: 0,
+                y: 0,
+                z: 0
+            },
+            scale: 1,
 
             // handled by PlaceAttachpoint
             attachPoints: null
@@ -80,6 +88,18 @@ class UploadWizard extends Component {
         })
     }
 
+    setRotation = rotation => {
+        this.setState({
+            rotation
+        })
+    }
+
+    setScale = scale => {
+        this.setState({
+            scale
+        })
+    }
+
     render() {
         const {
             currentCategory, data,
@@ -90,7 +110,8 @@ class UploadWizard extends Component {
 
 
         const {
-            name, uploadedObjectGeometry
+            name, uploadedObjectGeometry,
+            position, rotation, scale
         } = this.state
     
     
@@ -125,6 +146,12 @@ class UploadWizard extends Component {
                 <AdjustTransforms
                     visible = { step === steps.ADJUST }
 
+                    position = { position }
+                    rotation = { rotation }
+                    scale = { scale }
+                    onPositionChange = { this.setPosition }
+                    onRotationChange = { this.setRotation }
+                    onScaleChange = { this.setScale }
                     uploadedObjectGeometry = { uploadedObjectGeometry }
 
                     previousStep = { previousStep }

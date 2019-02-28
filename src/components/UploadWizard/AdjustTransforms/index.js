@@ -90,10 +90,71 @@ export default class extends Component {
         this.renderer.render( this.scene, this.camera )
     }
 
+    onPositionXChange = value => {
+        const { position, onPositionChange } = this.props
+
+        onPositionChange({
+            ...position,
+            x: value
+        })
+    }
+
+    onPositionYChange = value => {
+        const { position, onPositionChange } = this.props
+
+        onPositionChange({
+            ...position,
+            y: value
+        })
+    }
+
+    onPositionZChange = value => {
+        const { position, onPositionChange } = this.props
+
+        onPositionChange({
+            ...position,
+            z: value
+        })
+    }
+
+    onRotationXChange = value => {
+        const { rotation, onRotationChange } = this.props
+
+        onRotationChange({
+            ...rotation,
+            x: value
+        })
+    }
+
+    onRotationYChange = value => {
+        const { rotation, onRotationChange } = this.props
+
+        onRotationChange({
+            ...rotation,
+            y: value
+        })
+    }
+
+    onRotationZChange = value => {
+        const { rotation, onRotationChange } = this.props
+
+        onRotationChange({
+            ...rotation,
+            z: value
+        })
+    }
+
+    onScaleChange = value => {
+        this.props.onScaleChange( value )
+    }
+
     render() {
         const {
             visible: isVisible,
             currentCategory,
+
+            position, rotation, scale,
+
             nextStep, previousStep
         } = this.props
 
@@ -125,27 +186,54 @@ export default class extends Component {
                             <div className = { styles.axes } >
                                 <NumberInput
                                     axis = {'X'}
-                                    value = { 999.99 }
-                                    onChange = { console.log }
+                                    value = { position.x }
+                                    onChange = { this.onPositionXChange }
                                 />
                                 <NumberInput
                                     axis = {'Y'}
-                                    value = { 999.99 }
-                                    onChange = { console.log }
+                                    value = { position.y }
+                                    onChange = { this.onPositionYChange }
                                 />
                                 <NumberInput
                                     axis = {'Z'}
-                                    value = { 999.99 }
-                                    onChange = { console.log }
+                                    value = { position.z }
+                                    onChange = { this.onPositionZChange }
                                 />
                             </div>
                         </div>
                         <div className = {cn( styles.inputGroup, styles.rotation )} >
-                            ROTATION
-                            <input />
+                        <div className = { styles.label } >
+                                Rotation
+                            </div>
+                            <div className = { styles.axes } >
+                                <NumberInput
+                                    axis = {'X'}
+                                    value = { rotation.x }
+                                    onChange = { this.onRotationXChange }
+                                />
+                                <NumberInput
+                                    axis = {'Y'}
+                                    value = { rotation.y }
+                                    onChange = { this.onRotationYChange }
+                                />
+                                <NumberInput
+                                    axis = {'Z'}
+                                    value = { rotation.z }
+                                    onChange = { this.onRotationZChange }
+                                />
+                            </div>
                         </div>
                         <div className = {cn( styles.inputGroup, styles.scale )} >
-                            SCALE
+                        <div className = { styles.label } >
+                                Scale
+                            </div>
+                            <div className = { styles.axes } >
+                                <NumberInput
+                                    axis = { null }
+                                    value = { scale }
+                                    onChange = { this.onScaleChange }
+                                />
+                            </div>
                         </div>
                     </div>
                     
