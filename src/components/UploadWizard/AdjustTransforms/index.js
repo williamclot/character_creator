@@ -67,22 +67,67 @@ export default class extends Component {
 
         this.renderScene()
 
+        this.mesh = null
     }
 
     componentDidUpdate( prevProps ) {
+        let shouldRender = false
+
         const prevGeometry = prevProps.uploadedObjectGeometry
         const currGeometry = this.props.uploadedObjectGeometry
 
         if ( prevGeometry !== currGeometry ) {
 
-            const mesh = new Mesh(
+            this.mesh = new Mesh(
                 currGeometry,
                 this.defaultMaterial
             )
 
-            this.objectsGroup.add( mesh )
-            this.renderScene()
+            const { position, rotation, scale } = this.props
+            this.mesh.position.set( position.x, position.y, position.z )
+            this.mesh.rotation.set( rotation.x, rotation.y, rotation.z )
+            this.mesh.scale.setScalar( scale )
 
+            this.objectsGroup.add( this.mesh )
+            
+            shouldRender = true
+        }
+
+        const prevPosition = prevProps.position
+        const thisPosition = this.props.position
+
+        if ( prevPosition !== thisPosition ) {
+
+            const { x, y, z } = thisPosition
+            this.mesh.position.set( x, y, z )
+
+            shouldRender = true
+        }
+
+        const prevRotation = prevProps.rotation
+        const thisRotation = this.props.rotation
+        
+        if ( prevRotation !== thisRotation ) {
+
+            const { x, y, z } = thisRotation
+            this.mesh.rotation.set( x, y, z )
+
+            shouldRender = true
+        }
+
+        const prevScale = prevProps.scale
+        const thisScale = this.props.scale
+
+
+        if ( prevScale !== thisScale ) {
+
+            this.mesh.scale.setScalar( thisScale )
+
+            shouldRender = true
+        }
+
+        if ( shouldRender ) {
+            this.renderScene()
         }
     }
 
