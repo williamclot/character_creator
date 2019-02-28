@@ -47,15 +47,25 @@ export default class NumberInput extends Component {
             axis
         } = this.props
 
+        const hasAxis = Boolean( axis )
+        const inputClassName = classNames(
+            styles.input,
+            !hasAxis && styles.noAxis
+        )
+
         return (
-            <div className = { styles.container} >
-                <div className = { styles.axis } >
-                    { axis }
-                </div>
+            <div className = { styles.container } >
+
+                {hasAxis && (
+                    <div className = { styles.axis } >
+                        { axis }
+                    </div>
+                )}
+
                 <input
-                    className = { styles.input }
+                    className = { inputClassName }
                     type = "text"
-                    
+
                     value = { value }
                     onChange = { this.onInputChange }
     
