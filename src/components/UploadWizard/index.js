@@ -45,10 +45,14 @@ class UploadWizard extends Component {
 
         if ( !data ) { return }
 
+        this.load( data )
+    }
+
+    load = async uploadData => {
         const {
             name, extension,
             objectURL
-        } = data
+        } = uploadData
 
         try {
 
