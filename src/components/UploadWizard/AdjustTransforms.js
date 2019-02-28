@@ -122,7 +122,7 @@ export default class extends Component {
                             <div className = { styles.label } >
                                 Position
                             </div>
-                            <div className = "axes" >
+                            <div className = { styles.axes } >
                                 <NumberInput
                                     axis = {'X'}
                                     value = { 999.99 }
