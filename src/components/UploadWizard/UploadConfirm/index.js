@@ -6,10 +6,10 @@ import {
     MeshStandardMaterial, Mesh
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
-import * as utils from '../ThreeContainer/util/init'
+import * as utils from '../../ThreeContainer/util/init'
 
-import commonStyles from './index.module.css'
-import styles from './UploadConfirm.module.css'
+import commonStyles from '../index.module.css'
+import styles from './index.module.css'
 
 class UploadConfirm extends Component {
     constructor( props ) {

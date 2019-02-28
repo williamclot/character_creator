@@ -6,13 +6,13 @@ import {
     MeshStandardMaterial, Mesh, Raycaster, Group
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
-import * as utils from '../ThreeContainer/util/init'
-import { fromEvent } from '../../util/helpers'
-import { sphereFactory } from '../../util/three-helpers'
+import * as utils from '../../ThreeContainer/util/init'
+import { fromEvent } from '../../../util/helpers'
+import { sphereFactory } from '../../../util/three-helpers'
 
-import NumberInput from './MyInput'
-import commonStyles from './index.module.css'
-import styles from './AdjustTransforms.module.css'
+import NumberInput from '../../MyInput'
+import commonStyles from '../index.module.css'
+import styles from './index.module.css'
 
 export default class extends Component {
     constructor( props ) {

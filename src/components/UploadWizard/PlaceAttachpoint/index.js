@@ -6,12 +6,12 @@ import {
     MeshStandardMaterial, Mesh, Raycaster, Group
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
-import * as utils from '../ThreeContainer/util/init'
-import { fromEvent } from '../../util/helpers'
-import { sphereFactory } from '../../util/three-helpers'
+import * as utils from '../../ThreeContainer/util/init'
+import { fromEvent } from '../../../util/helpers'
+import { sphereFactory } from '../../../util/three-helpers'
 
-import commonStyles from './index.module.css'
-import styles from './PlaceAttachpoint.module.css'
+import commonStyles from '../index.module.css'
+import styles from './index.module.css'
 
 export default class PlaceAttachpoint extends Component {
     constructor( props ) {
