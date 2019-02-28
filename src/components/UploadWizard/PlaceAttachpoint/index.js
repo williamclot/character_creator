@@ -104,7 +104,8 @@ export default class PlaceAttachpoint extends Component {
 
             this.sphere.position.copy( point )
 
-            this.props.onClick( point.clone() )
+            const { x, y, z } = point.clone().negate() // invert pos
+            this.props.onPositionChange({ x, y, z })
 
             // this.sphere.lookAt( face.normal )
             // this.sphere.up.copy( face.normal )
