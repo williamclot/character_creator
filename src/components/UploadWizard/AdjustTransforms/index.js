@@ -62,6 +62,7 @@ export default class AdjustTransforms extends Component {
 
         this.orbitControls = new OrbitControls( this.camera, canvas )
         this.orbitControls.addEventListener( 'change', this.renderScene )
+        this.orbitControls.enableKeys = false
 
         this.scene.add( this.sphere )
 
