@@ -14,7 +14,7 @@ import NumberInput from '../../MyInput'
 import commonStyles from '../index.module.css'
 import styles from './index.module.css'
 
-export default class AdjustTransforms extends Component {
+export default class AdjustAttachpoints extends Component {
     constructor( props ) {
         super( props )
 

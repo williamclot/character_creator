@@ -11,6 +11,8 @@ import styles from './index.module.css'
 import { steps, previousStep, nextStep } from '../../actions/steps'
 
 import { stlLoader } from '../../util/loaders'
+import PlaceOtherAttachpoints from './PlaceOtherAttachpoints';
+import AdjustAttachpoints from './AdjustAttachPoints';
 
 class UploadWizard extends Component {
     constructor( props ) {
@@ -162,6 +164,33 @@ class UploadWizard extends Component {
                     nextStep = { nextStep }
                 />
     
+                <PlaceOtherAttachpoints
+                    visible = { step === steps.PLACE_OTHER_ATTACHPOINTS }
+                                        
+                    currentCategory = { currentCategory }
+                    defaultRotation = { defaultRotation }
+                    uploadedObjectGeometry = { uploadedObjectGeometry }
+                    onPositionChange = { this.setPosition }
+
+                    previousStep = { previousStep }
+                    nextStep = { nextStep }
+                />
+
+                <AdjustAttachpoints
+                    visible = { step === steps.ADJUST_ATTACHPOINTS }
+
+                    position = { position }
+                    rotation = { rotation }
+                    scale = { scale }
+                    onPositionChange = { this.setPosition }
+                    onRotationChange = { this.setRotation }
+                    onScaleChange = { this.setScale }
+                    uploadedObjectGeometry = { uploadedObjectGeometry }
+
+                    previousStep = { previousStep }
+                    nextStep = { nextStep }
+                />
+
             </div>
         </>
     }

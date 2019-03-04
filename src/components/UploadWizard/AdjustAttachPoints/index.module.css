@@ -1,0 +1,62 @@
+
+.adjustTransforms {
+    background-color: rgb(163, 107, 107);
+
+    height: 90%;
+    width: 90%;
+
+}
+
+.adjustTransforms .previewCanvas {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+
+.adjustTransforms .sideView {
+    /* background-color: aquamarine; */
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 25%;
+}
+
+.adjustTransforms .sideView .inputsContainer {
+    background-color: aquamarine;
+    opacity: .8;
+    
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+}
+
+.adjustTransforms .sideView .inputsContainer .inputGroup {
+
+    background-color: beige;
+    margin: 10px;
+}
+
+.adjustTransforms .sideView .inputsContainer .inputGroup .axes {
+    
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(74, 168, 61)
+}
+
+.adjustTransforms .sideView .buttonsContainer {
+
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.adjustTransforms .sideView .buttonsContainer .button {
+    
+    margin: 10px;
+    width: 50%;
+}
