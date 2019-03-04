@@ -6,11 +6,13 @@ export const actionTypes = {
 }
 
 export const steps = {
-    NOT_STARTED        : 'NOT_STARTED',
-    UPLOAD_CONFIRM     : 'UPLOAD_CONFIRM',
-    PLACE_ATTACHPOINT : 'PLACE_ATTACHPOINT',
-    ADJUST             : 'ADJUST',
-    COMPLETED          : 'COMPLETED'
+    NOT_STARTED              : 'NOT_STARTED',
+    UPLOAD_CONFIRM           : 'UPLOAD_CONFIRM',
+    PLACE_ATTACHPOINT        : 'PLACE_ATTACHPOINT',
+    ADJUST                   : 'ADJUST',
+    PLACE_OTHER_ATTACHPOINTS : 'PLACE_OTHER_ATTACHPOINTS',
+    ADJUST_ATTACHPOINTS      : 'ADJUST_ATTACHPOINTS',
+    COMPLETED                : 'COMPLETED'
 }
 
 
