@@ -86,7 +86,7 @@ export default class AdjustTransforms extends Component {
 
             const { position, rotation, scale } = this.props
             this.mesh.position.set( position.x, position.y, position.z )
-            this.mesh.rotation.set( rotation.x, rotation.y, rotation.z )
+            this.objectsGroup.rotation.set( rotation.x, rotation.y, rotation.z )
             this.mesh.scale.setScalar( scale )
 
             this.objectsGroup.add( this.mesh )
@@ -111,7 +111,7 @@ export default class AdjustTransforms extends Component {
         if ( prevRotation !== thisRotation ) {
 
             const { x, y, z } = thisRotation
-            this.mesh.rotation.set( x, y, z )
+            this.objectsGroup.rotation.set( x, y, z )
 
             shouldRender = true
         }
