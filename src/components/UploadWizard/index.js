@@ -132,6 +132,24 @@ class UploadWizard extends Component {
         }))
     }
 
+    onCompleted = () => {
+        const {
+            uploadedObjectGeometry,
+            position, rotation, scale,
+            attachPointsPositions
+        } = this.state
+        
+        const metadata = {
+            position,
+            rotation,
+            scale,
+            attachPoints: attachPointsPositions
+        }
+
+        this.props.onWizardCompleted( uploadedObjectGeometry, metadata )
+        this.props.resetWizard()
+    }
+
     onNext = () => {
         const {
             step,
@@ -148,8 +166,7 @@ class UploadWizard extends Component {
             )
 
             if ( isCompleted ) {
-                resetWizard()
-                onWizardCompleted()
+                this.onCompleted()
             } else {
                 nextStep()
             }
@@ -158,10 +175,7 @@ class UploadWizard extends Component {
 
             const isCompleted = attachPointsToPlace.length === 1 // placed last AP
             if ( isCompleted ) {
-            
-                resetWizard()
-                onWizardCompleted()
-            
+                this.onCompleted()
             } else {
                 
                 goToStep( steps.PLACE_OTHER_ATTACHPOINTS )
