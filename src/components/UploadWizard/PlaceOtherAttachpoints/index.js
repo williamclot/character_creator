@@ -64,7 +64,8 @@ export default class PlaceOtherAttachpoints extends Component {
         this.scene.add( this.sphere )
 
         this.renderScene()
-
+        
+        this.mesh = null
     }
 
     componentDidUpdate( prevProps ) {
@@ -75,12 +76,12 @@ export default class PlaceOtherAttachpoints extends Component {
 
         if ( prevGeometry !== currGeometry ) {
 
-            const mesh = new Mesh(
+            this.mesh = new Mesh(
                 currGeometry,
                 this.defaultMaterial
             )
 
-            this.objectsGroup.add( mesh )
+            this.objectsGroup.add( this.mesh )
             shouldRender = true
         }
 
