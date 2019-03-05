@@ -8,7 +8,7 @@ import PlaceAttachpoint from './PlaceAttachpoint'
 
 import styles from './index.module.css'
 
-import { steps, previousStep, nextStep } from '../../actions/steps'
+import { steps, previousStep, nextStep, goToStep, resetWizard } from '../../actions/steps'
 
 import { stlLoader } from '../../util/loaders'
 import PlaceOtherAttachpoints from './PlaceOtherAttachpoints';
@@ -38,11 +38,28 @@ class UploadWizard extends Component {
             scale: 1,
 
             // handled by PlaceAttachpoint
-            attachPoints: null
+            attachPointsToPlace: props.currentCategory.attachPoints,
+            attachPointsPositions: props.currentCategory.attachPoints.reduce(
+                ( acc, curr ) => {
+                    acc[ curr ] = {
+                        x: 0,
+                        y: 0,
+                        z: 0
+                    }
+                    return acc
+                },
+                {}
+            ),
         }
     }
 
-    async componentDidMount() {
+    componentDidUpdate( prevProps ) {
+        if ( prevProps.data !== this.props.data ) {
+            this.load( this.props.data )
+        }
+    }
+
+    componentDidMount() {
         const { data } = this.props
 
         if ( !data ) { return }
@@ -106,6 +123,60 @@ class UploadWizard extends Component {
         })
     }
 
+    setAttachPointPosition = ( attachPointName, position ) => {
+        this.setState( state => ({
+            attachPointsPositions: {
+                ...state.attachPointsPositions,
+                [attachPointName]: position
+            }
+        }))
+    }
+
+    onNext = () => {
+        const {
+            step,
+            nextStep, resetWizard, goToStep,
+            onWizardCompleted
+        } = this.props
+        const { attachPointsToPlace } = this.state
+
+        if ( step === steps.ADJUST ) {
+
+            const isCompleted = (
+                !attachPointsToPlace ||
+                attachPointsToPlace.length === 0
+            )
+
+            if ( isCompleted ) {
+                resetWizard()
+                onWizardCompleted()
+            } else {
+                nextStep()
+            }
+
+        } else if ( step === steps.ADJUST_ATTACHPOINTS ) {
+
+            const isCompleted = attachPointsToPlace.length === 1 // placed last AP
+            if ( isCompleted ) {
+            
+                resetWizard()
+                onWizardCompleted()
+            
+            } else {
+                
+                goToStep( steps.PLACE_OTHER_ATTACHPOINTS )
+                this.setState( state => ({
+                    attachPointsToPlace: state.attachPointsToPlace.slice( 1 )
+                }))
+
+            }
+        } else {
+
+            nextStep()
+
+        }
+    }
+
     render() {
         const {
             currentCategory, data,
@@ -117,7 +188,8 @@ class UploadWizard extends Component {
 
         const {
             name, uploadedObjectGeometry,
-            position, rotation, scale
+            position, rotation, scale,
+            attachPointsPositions, attachPointsToPlace
         } = this.state
     
     
@@ -134,7 +206,7 @@ class UploadWizard extends Component {
                     uploadedObjectGeometry = { uploadedObjectGeometry }
     
                     onCancel = { onWizardCanceled }
-                    onNext = { nextStep }
+                    onNext = { this.onNext }
                 />
     
                 <PlaceAttachpoint
@@ -144,13 +216,16 @@ class UploadWizard extends Component {
                     defaultRotation = { defaultRotation }
                     uploadedObjectGeometry = { uploadedObjectGeometry }
                     onPositionChange = { this.setPosition }
+                    onRotationChange = { this.setRotation }
 
                     previousStep = { previousStep }
-                    nextStep = { nextStep }
+                    nextStep = { this.onNext }
                 />
     
                 <AdjustTransforms
                     visible = { step === steps.ADJUST }
+                    
+                    currentCategory = { currentCategory }
 
                     position = { position }
                     rotation = { rotation }
@@ -158,37 +233,40 @@ class UploadWizard extends Component {
                     onPositionChange = { this.setPosition }
                     onRotationChange = { this.setRotation }
                     onScaleChange = { this.setScale }
-                    uploadedObjectGeometry = { uploadedObjectGeometry }
 
+                    uploadedObjectGeometry = { uploadedObjectGeometry }
+                    attachPointsPositions = { attachPointsPositions }
+                    attachPointsToPlace = { attachPointsToPlace }
+                    
                     previousStep = { previousStep }
-                    nextStep = { nextStep }
+                    nextStep = { this.onNext }
                 />
     
                 <PlaceOtherAttachpoints
                     visible = { step === steps.PLACE_OTHER_ATTACHPOINTS }
                                         
                     currentCategory = { currentCategory }
-                    defaultRotation = { defaultRotation }
                     uploadedObjectGeometry = { uploadedObjectGeometry }
-                    onPositionChange = { this.setPosition }
+                    
+                    attachPointsPositions = { attachPointsPositions }
+                    attachPointsToPlace = { attachPointsToPlace }
+                    onAttachPointPositionChange = { this.setAttachPointPosition }
 
                     previousStep = { previousStep }
-                    nextStep = { nextStep }
+                    nextStep = { this.onNext }
                 />
 
                 <AdjustAttachpoints
                     visible = { step === steps.ADJUST_ATTACHPOINTS }
 
-                    position = { position }
-                    rotation = { rotation }
-                    scale = { scale }
-                    onPositionChange = { this.setPosition }
-                    onRotationChange = { this.setRotation }
-                    onScaleChange = { this.setScale }
                     uploadedObjectGeometry = { uploadedObjectGeometry }
 
+                    attachPointsPositions = { attachPointsPositions }
+                    attachPointsToPlace = { attachPointsToPlace }
+                    onAttachPointPositionChange = { this.setAttachPointPosition }
+
                     previousStep = { previousStep }
-                    nextStep = { nextStep }
+                    nextStep = { this.onNext }
                 />
 
             </div>
@@ -202,7 +280,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     nextStep,
-    previousStep
+    previousStep,
+    goToStep,
+    resetWizard
 }
 
 export default connect(
