@@ -108,12 +108,14 @@ export default class PlaceAttachpoint extends Component {
 
         if( intersection ) {
             const { point, face } = intersection
-
-            console.log( point, face.normal )
-
+            
             this.sphere.position.copy( point )
 
-            const { x, y, z } = point.clone().negate() // invert pos
+            const globalPosition = this.mesh.worldToLocal( point )
+            const computedPosition = globalPosition.negate() // invert to make behave as pivot
+
+            const { x, y, z } = computedPosition
+
             this.props.onPositionChange({ x, y, z })
 
             // this.sphere.lookAt( face.normal )
