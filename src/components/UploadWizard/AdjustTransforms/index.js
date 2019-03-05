@@ -190,6 +190,10 @@ export default class AdjustTransforms extends Component {
         })
     }
 
+    onScaleChange = value => {
+        this.props.onScaleChange( value )
+    }
+
     render() {
         const {
             visible: isVisible,
