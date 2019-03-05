@@ -81,9 +81,22 @@ class UploadWizard extends Component {
                 geometry.computeBoundingBox()
             }
 
+            const { min, max } = geometry.boundingBox
+
+            const computedScale = 1 / ( max.y - min.y )
+
+            const computedPosition = {
+                x: - ( max.x + min.x ) / 2,
+                y: - ( max.y + min.y ) / 2,
+                z: - ( max.z + min.z ) / 2,
+            }
+
+
             this.setState({
                 name,
-                uploadedObjectGeometry: geometry
+                uploadedObjectGeometry: geometry,
+                scale: computedScale,
+                position: computedPosition
             })
 
         } catch ( err ) {
