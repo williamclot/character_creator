@@ -31,8 +31,7 @@ export default class PlaceOtherAttachpoints extends Component {
         })
 
         this.sphere = sphereFactory.buildSphere()
-        // this.sphere = sphereFactory.buildSphere( true )
-        // this.sphere.rotation.setFromVector3( this.props.defaultRotation )
+        this.sphere.material.color.set( 0xffff00 ) // yellow
 
         this.scene = new Scene
         this.scene.background = new Color( 0xeeeeee );
@@ -69,6 +68,8 @@ export default class PlaceOtherAttachpoints extends Component {
     }
 
     componentDidUpdate( prevProps ) {
+        let shouldRender = false
+
         const prevGeometry = prevProps.uploadedObjectGeometry
         const currGeometry = this.props.uploadedObjectGeometry
 
@@ -80,9 +81,44 @@ export default class PlaceOtherAttachpoints extends Component {
             )
 
             this.objectsGroup.add( mesh )
-            this.renderScene()
-
+            shouldRender = true
         }
+
+        const prevAttachpoints = prevProps.attachPointsPositions
+        const thisAttachPoints = this.props.attachPointsPositions
+
+        if ( prevAttachpoints !== thisAttachPoints ) {
+            for ( let key of Object.keys( thisAttachPoints ) ) {
+                if ( prevAttachpoints[ key ] !== thisAttachPoints[ key ] ) {
+                    const { x, y, z } = thisAttachPoints[ key ]
+                    this.sphere.position.set( x, y, z )
+                    shouldRender = true
+                }
+            }
+        }
+
+        if ( prevProps.attachPointsToPlace !== this.props.attachPointsToPlace ) {
+            const { x, y, z } = this.getPosition()
+            this.sphere.position.set( x, y, z )
+            shouldRender = true
+        }
+
+        if ( shouldRender ) {
+            this.renderScene()
+        }
+    }
+
+    getAttachpoint = () => this.props.attachPointsToPlace[ 0 ]
+    getPosition = () => {
+        const { attachPointsToPlace, attachPointsPositions } = this.props
+
+        if ( attachPointsToPlace.length === 0 ) {
+            return { x: 0, y: 0, z: 0 }
+        }
+
+        const currentAttachPoint = attachPointsToPlace[ 0 ]
+
+        return attachPointsPositions[ currentAttachPoint ]
     }
 
     onClick = ev => {
@@ -104,8 +140,9 @@ export default class PlaceOtherAttachpoints extends Component {
 
             this.sphere.position.copy( point )
 
-            const { x, y, z } = point.clone().negate() // invert pos
-            this.props.onPositionChange({ x, y, z })
+            const { x, y, z } = point
+            const attachPointName = this.getAttachpoint()
+            this.props.onAttachPointPositionChange( attachPointName, { x, y, z })
 
             // this.sphere.lookAt( face.normal )
             // this.sphere.up.copy( face.normal )

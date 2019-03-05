@@ -32,6 +32,8 @@ export default class AdjustAttachpoints extends Component {
         })
 
         this.sphere = sphereFactory.buildSphere()
+        this.sphere.material.color.set( 0xffff00 ) // yellow
+
         // this.sphere = sphereFactory.buildSphere( true )
         // this.sphere.rotation.setFromVector3( this.props.defaultRotation )
 
@@ -83,46 +85,30 @@ export default class AdjustAttachpoints extends Component {
                 this.defaultMaterial
             )
 
-            const { position, rotation, scale } = this.props
-            this.mesh.position.set( position.x, position.y, position.z )
-            this.mesh.rotation.set( rotation.x, rotation.y, rotation.z )
-            this.mesh.scale.setScalar( scale )
+            const { attachPointsToPlace, attachPointsPositions } = this.props
+            const position = attachPointsPositions[ attachPointsToPlace[ 0 ] ]
 
             this.objectsGroup.add( this.mesh )
             
             shouldRender = true
         }
 
-        const prevPosition = prevProps.position
-        const thisPosition = this.props.position
+        const prevAttachpoints = prevProps.attachPointsPositions
+        const thisAttachPoints = this.props.attachPointsPositions
 
-        if ( prevPosition !== thisPosition ) {
-
-            const { x, y, z } = thisPosition
-            this.mesh.position.set( x, y, z )
-
-            shouldRender = true
+        if ( prevAttachpoints !== thisAttachPoints ) {
+            for ( let key of Object.keys( thisAttachPoints ) ) {
+                if ( prevAttachpoints[ key ] !== thisAttachPoints[ key ] ) {
+                    const { x, y, z } = thisAttachPoints[ key ]
+                    this.sphere.position.set( x, y, z )
+                    shouldRender = true
+                }
+            }
         }
 
-        const prevRotation = prevProps.rotation
-        const thisRotation = this.props.rotation
-        
-        if ( prevRotation !== thisRotation ) {
-
-            const { x, y, z } = thisRotation
-            this.mesh.rotation.set( x, y, z )
-
-            shouldRender = true
-        }
-
-        const prevScale = prevProps.scale
-        const thisScale = this.props.scale
-
-
-        if ( prevScale !== thisScale ) {
-
-            this.mesh.scale.setScalar( thisScale )
-
+        if ( prevProps.attachPointsToPlace !== this.props.attachPointsToPlace ) {
+            const { x, y, z } = this.getPosition()
+            this.sphere.position.set( x, y, z )
             shouldRender = true
         }
 
@@ -131,66 +117,51 @@ export default class AdjustAttachpoints extends Component {
         }
     }
 
+    getAttachpoint = () => this.props.attachPointsToPlace[ 0 ]
+    getPosition = () => {
+        const { attachPointsToPlace, attachPointsPositions } = this.props
+
+        if ( attachPointsToPlace.length === 0 ) {
+            return { x: 0, y: 0, z: 0 }
+        }
+
+        const currentAttachPoint = attachPointsToPlace[ 0 ]
+
+        return attachPointsPositions[ currentAttachPoint ]
+    }
+
     renderScene = () => {
         this.renderer.render( this.scene, this.camera )
     }
 
     onPositionXChange = value => {
-        const { position, onPositionChange } = this.props
+        const position = this.getPosition()
+        const attachPointName = this.getAttachpoint()
 
-        onPositionChange({
+        this.props.onAttachPointPositionChange( attachPointName, {
             ...position,
             x: value
         })
     }
 
     onPositionYChange = value => {
-        const { position, onPositionChange } = this.props
+        const position = this.getPosition()
+        const attachPointName = this.getAttachpoint()
 
-        onPositionChange({
+        this.props.onAttachPointPositionChange( attachPointName, {
             ...position,
             y: value
         })
     }
 
     onPositionZChange = value => {
-        const { position, onPositionChange } = this.props
+        const position = this.getPosition()
+        const attachPointName = this.getAttachpoint()
 
-        onPositionChange({
+        this.props.onAttachPointPositionChange( attachPointName, {
             ...position,
             z: value
         })
-    }
-
-    onRotationXChange = value => {
-        const { rotation, onRotationChange } = this.props
-
-        onRotationChange({
-            ...rotation,
-            x: value
-        })
-    }
-
-    onRotationYChange = value => {
-        const { rotation, onRotationChange } = this.props
-
-        onRotationChange({
-            ...rotation,
-            y: value
-        })
-    }
-
-    onRotationZChange = value => {
-        const { rotation, onRotationChange } = this.props
-
-        onRotationChange({
-            ...rotation,
-            z: value
-        })
-    }
-
-    onScaleChange = value => {
-        this.props.onScaleChange( value )
     }
 
     render() {
@@ -198,17 +169,17 @@ export default class AdjustAttachpoints extends Component {
             visible: isVisible,
             currentCategory,
 
-            position, rotation, scale,
-
+            onNextAttachPoint,
             nextStep, previousStep
         } = this.props
+
+        const position = this.getPosition()
 
         const className = cn(
             commonStyles.wizardStep,
             isVisible && commonStyles.visible,
             styles.adjustTransforms
         )
-
 
         return (
             <div
@@ -246,40 +217,7 @@ export default class AdjustAttachpoints extends Component {
                                 />
                             </div>
                         </div>
-                        <div className = {cn( styles.inputGroup, styles.rotation )} >
-                        <div className = { styles.label } >
-                                Rotation
-                            </div>
-                            <div className = { styles.axes } >
-                                <NumberInput
-                                    axis = {'X'}
-                                    value = { rotation.x }
-                                    onChange = { this.onRotationXChange }
-                                />
-                                <NumberInput
-                                    axis = {'Y'}
-                                    value = { rotation.y }
-                                    onChange = { this.onRotationYChange }
-                                />
-                                <NumberInput
-                                    axis = {'Z'}
-                                    value = { rotation.z }
-                                    onChange = { this.onRotationZChange }
-                                />
-                            </div>
-                        </div>
-                        <div className = {cn( styles.inputGroup, styles.scale )} >
-                        <div className = { styles.label } >
-                                Scale
-                            </div>
-                            <div className = { styles.axes } >
-                                <NumberInput
-                                    axis = { null }
-                                    value = { scale }
-                                    onChange = { this.onScaleChange }
-                                />
-                            </div>
-                        </div>
+                        
                     </div>
                     
                     <div className = { styles.buttonsContainer } >
@@ -291,7 +229,7 @@ export default class AdjustAttachpoints extends Component {
                         </div>
                         <div
                             className = {cn( commonStyles.button, styles.button )}
-                            onClick = { nextStep }
+                            onClick = { onNextAttachPoint }
                         >
                             Next
                         </div>
