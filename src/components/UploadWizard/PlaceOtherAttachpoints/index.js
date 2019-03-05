@@ -203,9 +203,8 @@ export default class PlaceOtherAttachpoints extends Component {
             nextStep, previousStep
         } = this.props
 
-        const parentName = currentCategory.parent
-            ? currentCategory.parent.name
-            : 'the scene'
+        const attachPointName = this.getAttachpoint()
+
 
         
         const className = cn(
@@ -226,8 +225,7 @@ export default class PlaceOtherAttachpoints extends Component {
                 />
 
                 <div className = { styles.title } >
-                    <h4>Place AttachPoint-------------</h4>
-                    <p>Click where this part attaches to {parentName}</p>
+                    <h4>Place AttachPoint "{attachPointName}" </h4>
                 </div>
 
                 <div className = { styles.info } >
