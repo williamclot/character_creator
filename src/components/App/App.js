@@ -11,7 +11,7 @@ import { CategoriesView, GroupsView } from '../Categories'
 // import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../../config'
 import SceneManager from '../ThreeContainer/sceneManager'
 
-import { fetchObjects, get3DObject } from '../../util/objectHelpers';
+import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
     getCategories, getNameAndExtension,
     Dict
@@ -131,13 +131,21 @@ class App extends Component {
         })
     }
 
-    onWizardCompleted = ( data ) => {
+    onWizardCompleted = ( geometry, metadata ) => {
         console.log('wizard completed')
+        console.log(metadata)
 
+        const category = this.getSelectedCategory().name
+        const object = getObjectFromGeometry( geometry, metadata )
+        
+
+        this.setSelectedObject( category, object )
         this.setState({
             showUploadWizard: false,
             uploadedObjectData: null
         })
+
+
     }
 
     getSelectedGroup = () => this.props.worldData.groups[ this.props.selectedGroupIndex ]
