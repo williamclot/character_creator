@@ -29,6 +29,33 @@ export const fetchObjects = async objectsData => {
     return objectsToReturn
 }
 
+export const getObjectFromGeometry = ( geometry, metadata, poseData ) => {
+    const material = new MeshStandardMaterial({
+        color: 0x808080
+    })
+
+    const mesh = new Mesh( geometry, material )
+
+    const root = new Object3D
+
+    if ( metadata ) {
+        applyMetadata( mesh, metadata )
+
+        const { attachPoints } = metadata
+        if ( attachPoints ) {
+            for ( let [ attachPointName, position ] of Object.entries( attachPoints ) ) {
+                const rotation = poseData && poseData[ attachPointName ]
+                root.add( createBone( attachPointName, position, rotation ) )
+            }
+        }
+    }
+    
+
+    root.add( mesh )
+
+    return root
+}
+
 /**
  * @param { ObjectData } objectData
  * @param {{ [key: string]: Rotation }} poseData
@@ -41,30 +68,7 @@ export const get3DObject = async ( objectData, poseData ) => {
             const { download_url, metadata } = objectData
 
             const geometry = await stlLoader.load( download_url )
-            const material = new MeshStandardMaterial({
-                color: 0x808080
-            })
-        
-            const mesh = new Mesh( geometry, material )
-        
-            const root = new Object3D
-
-            if ( metadata ) {
-                applyMetadata( mesh, metadata )
-
-                const { attachPoints } = metadata
-                if ( attachPoints ) {
-                    for ( let [ attachPointName, position ] of Object.entries( attachPoints ) ) {
-                        const rotation = poseData && poseData[ attachPointName ]
-                        root.add( createBone( attachPointName, position, rotation ) )
-                    }
-                }
-            }
-            
-
-            root.add( mesh )
-
-            return root
+            return getObjectFromGeometry( geometry, metadata, poseData )
         }
 
         case 'gltf': 
