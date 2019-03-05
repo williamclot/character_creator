@@ -44,7 +44,7 @@ export default class AdjustTransforms extends Component {
             (width / height),
             0.001,
             1000
-        );
+        )
         this.camera.position.set( 0, .5, -1 )
         this.camera.lookAt( 0, 3, 0 )
         

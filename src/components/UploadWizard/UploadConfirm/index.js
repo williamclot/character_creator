@@ -27,7 +27,7 @@ class UploadConfirm extends Component {
         this.material = new MeshStandardMaterial
 
         this.scene = new Scene
-        this.scene.background = new Color( 0xeeeeee );
+        this.scene.background = new Color( 0xeeeeee )
         this.scene.add( this.objectContainer )
 
         this.camera = new PerspectiveCamera(
@@ -35,7 +35,7 @@ class UploadConfirm extends Component {
             (width / height),
             0.001,
             1000
-        );
+        )
         this.camera.position.set( 0, .5, -1 )
         this.camera.lookAt( 0, 3, 0 )
         

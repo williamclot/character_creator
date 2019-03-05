@@ -36,7 +36,7 @@ export default class PlaceOtherAttachpoints extends Component {
         this.sphere.material.color.set( 0xffff00 ) // yellow
         
         this.scene = new Scene
-        this.scene.background = new Color( 0xeeeeee );
+        this.scene.background = new Color( 0xeeeeee )
         this.scene.add( this.objectContainer, this.sphere )
 
 
@@ -45,7 +45,7 @@ export default class PlaceOtherAttachpoints extends Component {
             (width / height),
             0.001,
             1000
-        );
+        )
         this.camera.position.set( 0, .5, -1 )
         this.camera.lookAt( 0, 3, 0 )
         
@@ -62,6 +62,7 @@ export default class PlaceOtherAttachpoints extends Component {
 
         this.orbitControls = new OrbitControls( this.camera, canvas )
         this.orbitControls.addEventListener( 'change', this.renderScene )
+        this.orbitControls.enableKeys = false
 
         this.renderScene()
     }
@@ -167,7 +168,7 @@ export default class PlaceOtherAttachpoints extends Component {
     }
 
     onClick = ev => {
-        ev.preventDefault();
+        ev.preventDefault()
 
         const mouseCoords = fromEvent( ev )
 
