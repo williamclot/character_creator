@@ -3,7 +3,7 @@ import cn from 'classnames'
 
 import {
     Scene, PerspectiveCamera, WebGLRenderer, PointLight, Color,
-    MeshStandardMaterial, Mesh
+    MeshStandardMaterial, Mesh, Group
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
 import * as utils from '../../ThreeContainer/util/init'
@@ -22,9 +22,13 @@ class UploadConfirm extends Component {
         const canvas = this.canvasRef.current
         const { width, height } = canvas.getBoundingClientRect()
 
+        this.objectContainer = new Group
+        this.mesh = null
+        this.material = new MeshStandardMaterial
 
         this.scene = new Scene
         this.scene.background = new Color( 0xeeeeee );
+        this.scene.add( this.objectContainer )
 
         this.camera = new PerspectiveCamera(
             75,
@@ -35,23 +39,22 @@ class UploadConfirm extends Component {
         this.camera.position.set( 0, .5, -1 )
         this.camera.lookAt( 0, 3, 0 )
         
+        this.orbitControls = new OrbitControls( this.camera, canvas )
+        this.orbitControls.addEventListener( 'change', this.renderScene )
+        this.orbitControls.enableKeys = false
 
         this.renderer = utils.initRenderer( canvas, { width, height }, window.devicePixelRatio )
+
 
         const light1 = new PointLight( 0xc1c1c1, 1, 100 )
         light1.position.set( -7, -1, -7 )
 
         const light2 = new PointLight( 0xc1c1c1, 1, 100 )
         light2.position.set( 7, -1, -7 )
-
+        
         this.scene.add( light1, light2 )
 
-        this.orbitControls = new OrbitControls( this.camera, canvas )
-        this.orbitControls.addEventListener( 'change', this.renderScene )
-        this.orbitControls.enableKeys = false
-
         this.renderScene()
-
     }
 
     componentDidUpdate( prevProps ) {
@@ -59,15 +62,27 @@ class UploadConfirm extends Component {
         const currGeometry = this.props.uploadedObjectGeometry
 
         if ( prevGeometry !== currGeometry ) {
+            const oldMesh = this.mesh
 
-            const mesh = new Mesh(
+            this.mesh = new Mesh(
                 currGeometry,
-                new MeshStandardMaterial
+                this.material
             )
 
-            this.scene.add( mesh )
-            this.renderScene()
+            const {
+                position: { x: posX, y: posY, z: posZ },
+                rotation: { x: rotX, y: rotY, z: rotZ },
+                scale
+            } = this.props
 
+            this.mesh.position.set( posX, posY, posZ )
+            this.objectContainer.rotation.set( rotX, rotY, rotZ )
+            this.objectContainer.scale.setScalar( scale )
+
+            this.objectContainer.remove( oldMesh )
+            this.objectContainer.add( this.mesh )
+
+            this.renderScene()
         }
     }
 
