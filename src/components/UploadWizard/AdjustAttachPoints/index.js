@@ -169,7 +169,6 @@ export default class AdjustAttachpoints extends Component {
             visible: isVisible,
             currentCategory,
 
-            onNextAttachPoint,
             nextStep, previousStep
         } = this.props
 
@@ -229,7 +228,7 @@ export default class AdjustAttachpoints extends Component {
                         </div>
                         <div
                             className = {cn( commonStyles.button, styles.button )}
-                            onClick = { onNextAttachPoint }
+                            onClick = { nextStep }
                         >
                             Next
                         </div>

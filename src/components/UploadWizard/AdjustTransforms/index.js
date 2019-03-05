@@ -190,22 +190,6 @@ export default class AdjustTransforms extends Component {
         })
     }
 
-    onNext = () => {
-        const {
-            attachPointsToPlace,
-            shiftAttachPoint,
-            nextStep, switchToAttachPointsMode
-        } = this.props
-
-        const isCompleted = attachPointsToPlace.length <= 1
-
-        if ( isCompleted ) {
-            this.props.onCompleted()
-        } else {
-            nextStep()
-        }
-    }
-
     render() {
         const {
             visible: isVisible,
@@ -304,7 +288,7 @@ export default class AdjustTransforms extends Component {
                         </div>
                         <div
                             className = {cn( commonStyles.button, styles.button )}
-                            onClick = { this.onNext }
+                            onClick = { nextStep }
                         >
                             Next
                         </div>
