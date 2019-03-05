@@ -24,17 +24,21 @@ export default class PlaceOtherAttachpoints extends Component {
         const canvas = this.canvasRef.current
         const { width, height } = canvas.getBoundingClientRect()
 
-        this.defaultMaterial = new MeshStandardMaterial({
+        this.objectContainer = new Group
+        this.mesh = null
+        this.material = new MeshStandardMaterial({
             color: 0xffffff,
             opacity: .8,
             transparent: true
         })
-
+        
         this.sphere = sphereFactory.buildSphere()
         this.sphere.material.color.set( 0xffff00 ) // yellow
-
+        
         this.scene = new Scene
         this.scene.background = new Color( 0xeeeeee );
+        this.scene.add( this.objectContainer, this.sphere )
+
 
         this.camera = new PerspectiveCamera(
             75,
@@ -54,18 +58,12 @@ export default class PlaceOtherAttachpoints extends Component {
         const light2 = new PointLight( 0xc1c1c1, 1, 100 )
         light2.position.set( 7, -1, -7 )
 
-        this.objectsGroup = new Group
-
-        this.scene.add( light1, light2, this.objectsGroup )
+        this.scene.add( light1, light2 )
 
         this.orbitControls = new OrbitControls( this.camera, canvas )
         this.orbitControls.addEventListener( 'change', this.renderScene )
 
-        this.scene.add( this.sphere )
-
         this.renderScene()
-        
-        this.mesh = null
     }
 
     componentDidUpdate( prevProps ) {
@@ -75,13 +73,26 @@ export default class PlaceOtherAttachpoints extends Component {
         const currGeometry = this.props.uploadedObjectGeometry
 
         if ( prevGeometry !== currGeometry ) {
+            const oldMesh = this.mesh
 
             this.mesh = new Mesh(
                 currGeometry,
-                this.defaultMaterial
+                this.material
             )
 
-            this.objectsGroup.add( this.mesh )
+            const {
+                position: { x: posX, y: posY, z: posZ },
+                rotation: { x: rotX, y: rotY, z: rotZ },
+                scale
+            } = this.props
+
+            this.mesh.position.set( posX, posY, posZ )
+            this.objectContainer.rotation.set( rotX, rotY, rotZ )
+            this.objectContainer.scale.setScalar( scale )
+
+            this.objectContainer.remove( oldMesh )
+            this.objectContainer.add( this.mesh )
+            
             shouldRender = true
         }
 
@@ -121,7 +132,7 @@ export default class PlaceOtherAttachpoints extends Component {
         if ( prevRotation !== thisRotation ) {
 
             const { x, y, z } = thisRotation
-            this.objectsGroup.rotation.set( x, y, z )
+            this.objectContainer.rotation.set( x, y, z )
 
             shouldRender = true
         }
@@ -132,7 +143,7 @@ export default class PlaceOtherAttachpoints extends Component {
 
         if ( prevScale !== thisScale ) {
 
-            this.mesh.scale.setScalar( thisScale )
+            this.objectContainer.scale.setScalar( thisScale )
 
             shouldRender = true
         }
@@ -163,7 +174,7 @@ export default class PlaceOtherAttachpoints extends Component {
         const raycaster = new Raycaster
         raycaster.setFromCamera( mouseCoords, this.camera )
 
-        const intersects = raycaster.intersectObject( this.objectsGroup, true )
+        const intersects = raycaster.intersectObject( this.objectContainer, true )
 
         const intersection = intersects.find( intersect => intersect.object.isMesh )
 
