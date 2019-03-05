@@ -247,6 +247,9 @@ class UploadWizard extends Component {
                                         
                     currentCategory = { currentCategory }
                     uploadedObjectGeometry = { uploadedObjectGeometry }
+                    position = { position }
+                    rotation = { rotation }
+                    scale = { scale }
                     
                     attachPointsPositions = { attachPointsPositions }
                     attachPointsToPlace = { attachPointsToPlace }
@@ -260,6 +263,9 @@ class UploadWizard extends Component {
                     visible = { step === steps.ADJUST_ATTACHPOINTS }
 
                     uploadedObjectGeometry = { uploadedObjectGeometry }
+                    position = { position }
+                    rotation = { rotation }
+                    scale = { scale }
 
                     attachPointsPositions = { attachPointsPositions }
                     attachPointsToPlace = { attachPointsToPlace }

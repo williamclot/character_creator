@@ -112,6 +112,39 @@ export default class AdjustAttachpoints extends Component {
             shouldRender = true
         }
 
+        const prevPosition = prevProps.position
+        const thisPosition = this.props.position
+
+        if ( prevPosition !== thisPosition ) {
+
+            const { x, y, z } = thisPosition
+            this.mesh.position.set( x, y, z )
+
+            shouldRender = true
+        }
+
+        const prevRotation = prevProps.rotation
+        const thisRotation = this.props.rotation
+        
+        if ( prevRotation !== thisRotation ) {
+
+            const { x, y, z } = thisRotation
+            this.objectsGroup.rotation.set( x, y, z )
+
+            shouldRender = true
+        }
+
+        const prevScale = prevProps.scale
+        const thisScale = this.props.scale
+
+
+        if ( prevScale !== thisScale ) {
+
+            this.mesh.scale.setScalar( thisScale )
+
+            shouldRender = true
+        }
+
         if ( shouldRender ) {
             this.renderScene()
         }
