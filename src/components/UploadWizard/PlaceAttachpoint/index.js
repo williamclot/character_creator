@@ -88,6 +88,7 @@ export default class PlaceAttachpoint extends Component {
                 scale
             } = this.props
 
+            this.sphere.position.set( 0, 0, 0 )
             this.mesh.position.set( posX, posY, posZ )
             this.objectContainer.rotation.set( rotX, rotY, rotZ )
             this.objectContainer.scale.setScalar( scale )
