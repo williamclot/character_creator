@@ -6,7 +6,6 @@ import {
     MeshStandardMaterial, Mesh, Raycaster, Group
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
-import * as utils from '../../ThreeContainer/util/init'
 import { fromEvent } from '../../../util/helpers'
 import { sphereFactory } from '../../../util/three-helpers'
 
@@ -23,7 +22,6 @@ export default class AdjustTransforms extends Component {
     
     componentDidMount() {
         const canvas = this.canvasRef.current
-        const { width, height } = canvas.getBoundingClientRect()
 
         this.objectContainer = new Group
         this.mesh = null
@@ -41,7 +39,7 @@ export default class AdjustTransforms extends Component {
 
         this.camera = new PerspectiveCamera(
             75,
-            (width / height),
+            1,
             0.001,
             1000
         )
@@ -49,7 +47,10 @@ export default class AdjustTransforms extends Component {
         this.camera.lookAt( 0, 3, 0 )
         
 
-        this.renderer = utils.initRenderer( canvas, { width, height }, window.devicePixelRatio )
+        this.renderer = new WebGLRenderer({
+            antialias: true,
+            canvas
+        })
 
         const light1 = new PointLight( 0xc1c1c1, 1, 100 )
         light1.position.set( -7, -1, -7 )
@@ -73,6 +74,9 @@ export default class AdjustTransforms extends Component {
         const currGeometry = this.props.uploadedObjectGeometry
 
         if ( prevGeometry !== currGeometry ) {
+            this.resetCamera()
+            this.resetRenderer()
+            
             const oldMesh = this.mesh
 
             this.mesh = new Mesh(
@@ -132,6 +136,34 @@ export default class AdjustTransforms extends Component {
         if ( shouldRender ) {
             this.renderScene()
         }
+    }
+
+    resetCamera() {
+        const { width, height } = this.canvasRef.current.getBoundingClientRect()
+
+        this.camera.aspect = width / height
+        this.camera.updateProjectionMatrix()
+    }
+
+    resetRenderer() {
+        const { width, height } = this.canvasRef.current.getBoundingClientRect()
+
+        this.renderer.setSize( width, height )
+        this.renderer.setPixelRatio( width / height )
+    }
+
+    resetCamera() {
+        const { width, height } = this.canvasRef.current.getBoundingClientRect()
+
+        this.camera.aspect = width / height
+        this.camera.updateProjectionMatrix()
+    }
+
+    resetRenderer() {
+        const { width, height } = this.canvasRef.current.getBoundingClientRect()
+
+        this.renderer.setSize( width, height )
+        this.renderer.setPixelRatio( width / height )
     }
 
     renderScene = () => {
