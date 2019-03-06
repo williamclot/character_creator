@@ -205,18 +205,18 @@ class App extends Component {
                 </div>
             </div>
 
-            { showUploadWizard && (
-                <UploadWizard
-                    sceneManager = { this.sceneManager }
+            <UploadWizard
+                visible = { showUploadWizard }
 
-                    currentCategory = { selectedCategory }
-                    
-                    data = { uploadedObjectData }
-                    
-                    onWizardCanceled = { this.onWizardCanceled }
-                    onWizardCompleted = { this.onWizardCompleted }
-                />
-            )}
+                sceneManager = { this.sceneManager }
+
+                currentCategory = { selectedCategory }
+                
+                data = { uploadedObjectData }
+                
+                onWizardCanceled = { this.onWizardCanceled }
+                onWizardCompleted = { this.onWizardCompleted }
+            />
 
         </div>
     }
