@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import classNames from 'classnames'
+import cn from 'classnames'
 
 import UploadConfirm from './UploadConfirm'
 import AdjustTransforms from './AdjustTransforms'
@@ -38,24 +38,17 @@ class UploadWizard extends Component {
             scale: 1,
 
             // handled by PlaceAttachpoint
-            attachPointsToPlace: props.currentCategory.attachPoints,
-            attachPointsPositions: props.currentCategory.attachPoints.reduce(
-                ( acc, curr ) => {
-                    acc[ curr ] = {
-                        x: 0,
-                        y: 0,
-                        z: 0
-                    }
-                    return acc
-                },
-                {}
-            ),
+            attachPointsToPlace: [],
+            attachPointsPositions: {} 
         }
     }
 
     componentDidUpdate( prevProps ) {
-        if ( prevProps.data !== this.props.data ) {
-            this.load( this.props.data )
+        const { data } = this.props
+        if ( prevProps.data !== data ) {
+            if ( data ) {
+                this.load( data )
+            }
         }
     }
 
@@ -91,12 +84,27 @@ class UploadWizard extends Component {
                 z: - ( max.z + min.z ) / 2,
             }
 
+            const computedRotation = { x: 0, y: 0, z: 0 } // cannot make assumptions for rotation
+
+            const attachPoints = this.props.currentCategory.attachPoints
+            const initialAttachPointPositions = {}
+            for ( let attachPoint of attachPoints ) {
+                initialAttachPointPositions[ attachPoint ] = {
+                    x: 0,
+                    y: 0,
+                    z: 0
+                }
+            }
+
 
             this.setState({
                 name,
                 uploadedObjectGeometry: geometry,
+                position: computedPosition,
+                rotation: computedRotation,
                 scale: computedScale,
-                position: computedPosition
+                attachPointsToPlace: attachPoints,
+                attachPointsPositions: initialAttachPointPositions,
             })
 
         } catch ( err ) {
@@ -206,21 +214,24 @@ class UploadWizard extends Component {
 
     render() {
         const {
-            currentCategory, data,
-            onWizardCanceled, onWizardCompleted,
+            visible: isVisible,
+            currentCategory,
+            onWizardCanceled,
             step, nextStep, previousStep
         } = this.props
-        const { defaultRotation } = data
-
 
         const {
             name, uploadedObjectGeometry,
             position, rotation, scale,
             attachPointsPositions, attachPointsToPlace
         } = this.state
+
+        const className = cn(
+            styles.wrapper,
+            isVisible && styles.visible
+        )
     
-    
-        return <>
+        return <div className = { className }>
             <div className = { styles.wizardBackground } />
             <div className = { styles.wizardContainer } >
     
@@ -250,8 +261,6 @@ class UploadWizard extends Component {
                     rotation = { rotation }
                     scale = { scale }
                     onPositionChange = { this.setPosition }
-
-                    defaultRotation = { defaultRotation }
 
                     previousStep = { previousStep }
                     nextStep = { this.onNext }
@@ -313,7 +322,7 @@ class UploadWizard extends Component {
                 />
 
             </div>
-        </>
+        </div>
     }
 }
 
