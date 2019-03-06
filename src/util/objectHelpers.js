@@ -1,5 +1,5 @@
 import {
-    Object3D, Bone, Vector3,
+    Object3D, Bone, Vector3, Group,
     Mesh, MeshStandardMaterial
 } from 'three'
 
@@ -27,33 +27,6 @@ export const fetchObjects = async objectsData => {
     await Promise.all( promises )
 
     return objectsToReturn
-}
-
-export const getObjectFromGeometry = ( geometry, metadata, poseData ) => {
-    const material = new MeshStandardMaterial({
-        color: 0x808080
-    })
-
-    const mesh = new Mesh( geometry, material )
-
-    const root = new Object3D
-
-    if ( metadata ) {
-        applyMetadata( mesh, metadata )
-
-        const { attachPoints } = metadata
-        if ( attachPoints ) {
-            for ( let [ attachPointName, position ] of Object.entries( attachPoints ) ) {
-                const rotation = poseData && poseData[ attachPointName ]
-                root.add( createBone( attachPointName, position, rotation ) )
-            }
-        }
-    }
-    
-
-    root.add( mesh )
-
-    return root
 }
 
 /**
@@ -99,23 +72,48 @@ export const get3DObject = async ( objectData, poseData ) => {
     }
 }
 
-function applyMetadata( target, metadata ) {
-    const { position, rotation, scale } = metadata
+export const getObjectFromGeometry = ( geometry, metadata, poseData ) => {
+    const material = new MeshStandardMaterial({
+        color: 0x808080
+    })
 
-    if ( position ) {
-        const { x, y, z } = position
-        target.position.set( x, y, z )
+    const mesh = new Mesh( geometry, material )
+
+    const objectContainer = new Group
+    objectContainer.add( mesh )
+    
+    const root = new Group
+    root.add( objectContainer )
+
+    if ( metadata ) {
+        const { position, rotation, scale, attachPoints } = metadata
+    
+        if ( position ) {
+            const { x, y, z } = position
+            mesh.position.set( x, y, z )
+        }
+    
+    
+        // TODO rotation and scale set to parent !!!!
+        if ( rotation ) {
+            const { x, y, z } = rotation
+            objectContainer.rotation.set( x, y, z )
+        }
+    
+        if ( scale ) {
+            // scale is number; applies on all axis
+            objectContainer.scale.setScalar( scale )
+        }
+
+        if ( attachPoints ) {
+            for ( let [ attachPointName, position ] of Object.entries( attachPoints ) ) {
+                const rotation = poseData && poseData[ attachPointName ]
+                root.add( createBone( attachPointName, position, rotation ) )
+            }
+        }
     }
 
-    if ( rotation ) {
-        const { x, y, z } = rotation
-        target.rotation.set( x, y, z )
-    }
-
-    if ( scale ) {
-        const { x, y, z } = scale
-        target.scale.set( x, y, z )
-    }
+    return root
 }
 
 function createBone( name, position, rotation ) {
