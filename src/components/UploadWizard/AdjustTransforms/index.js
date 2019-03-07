@@ -96,11 +96,23 @@ export default class AdjustTransforms extends Component {
     }
 
     onTransformChange = throttle( 250, () => {
-        const { x, y, z } = this.mesh.position
+        const { onPositionChange, onRotationChange, onScaleChange } = this.props
 
-        this.props.onPositionChange({
-            x, y, z
-        })
+        switch( this.transformControls.getMode() ) {
+            case 'translate': {
+                onPositionChange( this.mesh.position )
+                break
+            }
+            case 'rotate': {
+                onRotationChange( this.objectContainer.rotation )
+                break
+            }
+            case 'scale': {
+                const scale = this.objectContainer.scale.x // assume scale x, y and z are same
+                onScaleChange( scale )
+                break
+            }
+        }
     })
 
     componentDidUpdate( prevProps ) {
@@ -122,6 +134,7 @@ export default class AdjustTransforms extends Component {
                 this.material
             )
             this.transformControls.attach( this.mesh )
+            this.transformControls.setMode( 'translate' )
 
             const {
                 position: { x: posX, y: posY, z: posZ },
