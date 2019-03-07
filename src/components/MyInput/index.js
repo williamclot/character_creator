@@ -55,8 +55,6 @@ export default class NumberInput extends Component {
             return
         }
 
-        console.log(button)
-
         const { value } = this.state
 
         this.setState({
@@ -115,6 +113,8 @@ export default class NumberInput extends Component {
                 prevPointerY: pointerY
 
             }
+        }, () => {
+            this.props.onChange( this.state.value )
         })
     }
 
