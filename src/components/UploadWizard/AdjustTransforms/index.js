@@ -177,13 +177,6 @@ export default class AdjustTransforms extends Component {
         }
     }
 
-    resetCamera() {
-        const { width, height } = this.canvasRef.current.getBoundingClientRect()
-
-        this.camera.aspect = width / height
-        this.camera.updateProjectionMatrix()
-    }
-
     resetRenderer() {
         const { width, height } = this.canvasRef.current.getBoundingClientRect()
 
@@ -196,13 +189,6 @@ export default class AdjustTransforms extends Component {
 
         this.camera.aspect = width / height
         this.camera.updateProjectionMatrix()
-    }
-
-    resetRenderer() {
-        const { width, height } = this.canvasRef.current.getBoundingClientRect()
-
-        this.renderer.setSize( width, height )
-        this.renderer.setPixelRatio( width / height )
     }
 
     renderScene = () => {
