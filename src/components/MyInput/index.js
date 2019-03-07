@@ -3,37 +3,131 @@ import classNames from 'classnames'
 
 import styles from './index.module.css'
 
+const defaultProps = {
+    precision: 2,
+    step: 1,
+    unit: '',
+    min: -100,
+    max:  100
+}
+
 export default class NumberInput extends Component {
     constructor( props ) {
         super( props )
 
         this.state = {
-            isMouseDown: false
+            value: 0,
+            // displayValue: '0.00',
+
+            distance: 0,
+
+            isMouseDown: false,
+            onMouseDownValue: 0,
+
+            pointerX: 0,
+            pointerY: 0,
+            prevPointerX: 0,
+            prevPointerY: 0,
         }
     }
 
-    onMouseDown = () => {
-        console.log('mouse down')
+    componentDidMount() {
+        console.log('mounted')
+
+        document.addEventListener( 'mouseup', this.onMouseUp )
+        document.addEventListener( 'mousemove', this.onMouseMove )
+    }
+
+    componentWillUnmount() {
+        console.log('unmounted')
+
+        document.removeEventListener( 'mouseup', this.onMouseUp )
+        document.removeEventListener( 'mousemove', this.onMouseMove )
+    }
+
+    onMouseDown = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        const { clientX, clientY, button } = e
+
+        if ( button !== 0 ) { // if not left click
+            return
+        }
+
+        console.log(button)
+
+        const { value } = this.state
+
         this.setState({
-            isMouseDown: true
+            isMouseDown: true,
+
+            distance: 0,
+            onMouseDownValue: value,
+
+            prevPointerX: clientX,
+            prevPointerY: clientY,
+        })
+
+        // remove mousemove and mouseup event listeners
+    }
+
+    onMouseMove = e => {
+        const { isMouseDown } = this.state
+
+        if ( !isMouseDown ) { return }
+
+        const {
+            clientX, clientY,
+            shiftKey: isShiftPressed
+        } = e
+
+
+        this.setState( state => {
+            const { step, min, max } = this.props
+            const {
+                distance,
+                onMouseDownValue,
+                pointerX, pointerY,
+                prevPointerX, prevPointerY,
+            } = state
+
+            const newDistance = distance + (
+                ( pointerX - prevPointerX ) -
+                ( pointerY - prevPointerY )
+            )
+            const newValue = onMouseDownValue + (
+                newDistance / ( isShiftPressed ? 5 : 50 )
+            ) * step
+
+            const computedValue = Math.min( max, Math.max( min, newValue ) )
+
+            return {
+    
+                pointerX: clientX,
+                pointerY: clientY,
+    
+                distance: newDistance,
+
+                value: computedValue,
+
+                prevPointerX: pointerX,
+                prevPointerY: pointerY
+
+            }
         })
     }
 
     onMouseUp = () => {
-        console.log('mouse up')
+        if ( !this.state.isMouseDown ) {
+            return
+        }
+
         this.setState({
-            isMouseDown: false
+            isMouseDown: false,
         })
     }
 
-    onMouseMove = e => {
-
-        const { isMouseDown } = this.state
-
-        if ( isMouseDown ) {
-            console.log('sliding...')
-        }
-    }
 
     onInputChange = e => {
         const value = e.target.value
@@ -50,9 +144,12 @@ export default class NumberInput extends Component {
 
     render() {
         const {
-            value,
+            // value,
             axis
         } = this.props
+        const { value } = this.state
+
+        const formattedValue = Number(value).toFixed(2)
 
         const hasAxis = Boolean( axis )
         const inputClassName = classNames(
@@ -73,14 +170,16 @@ export default class NumberInput extends Component {
                     className = { inputClassName }
                     type = "text"
 
-                    value = { value }
+                    value = { formattedValue }
                     onChange = { this.onInputChange }
     
                     onMouseDown = { this.onMouseDown }
-                    onMouseUp = { this.onMouseUp }
-                    onMouseMove = { this.onMouseMove }
+                    // onMouseUp = { this.onMouseUp }
+                    // onMouseMove = { this.onMouseMove }
                 />
             </div>
         )
     }
 }
+
+NumberInput.defaultProps = defaultProps
