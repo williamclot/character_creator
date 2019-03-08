@@ -19,6 +19,7 @@ class UploadWizard extends Component {
         super( props )
 
         this.state = {
+            isLoading: false,
 
             // handled by UploadConfirm
             name: '',
@@ -65,6 +66,10 @@ class UploadWizard extends Component {
             name, extension,
             objectURL
         } = uploadData
+
+        this.setState({
+            isLoading: true
+        })
 
         try {
 
@@ -116,6 +121,9 @@ class UploadWizard extends Component {
 
             // cleanup to prevent memory leaks
             URL.revokeObjectURL( objectURL )
+            this.setState({
+                isLoading: false
+            })
 
         }
     }
