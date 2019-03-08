@@ -182,7 +182,7 @@ export default class PlaceAttachpoint extends Component {
                 <canvas
                     className = { styles.previewCanvas }
                     ref = { this.canvasRef }
-                    onClick = { this.onClick }
+                    onMouseDown = { this.onClick }
                 />
 
                 <div className = { styles.title } >
