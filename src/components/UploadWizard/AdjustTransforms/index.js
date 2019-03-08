@@ -9,6 +9,9 @@ import OrbitControls from 'three-orbitcontrols'
 import { fromEvent } from '../../../util/helpers'
 import { sphereFactory } from '../../../util/three-helpers'
 
+import TransformControls from 'three-transformcontrols'
+import { throttle } from 'throttle-debounce'
+
 import NumberInput from '../../MyInput'
 import commonStyles from '../index.module.css'
 import styles from './index.module.css'
@@ -18,6 +21,10 @@ export default class AdjustTransforms extends Component {
         super( props )
 
         this.canvasRef = createRef()
+
+        this.state = {
+            isUsingGizmos: false
+        }
     }
     
     componentDidMount() {
@@ -64,11 +71,54 @@ export default class AdjustTransforms extends Component {
         this.orbitControls.addEventListener( 'change', this.renderScene )
         this.orbitControls.enableKeys = false
 
+        this.transformControls = new TransformControls( this.camera, canvas )
+        this.transformControls.addEventListener( 'change', this.renderScene )
+        this.transformControls.addEventListener( 'objectChange', this.onTransformChange )
+
+        this.transformControls.addEventListener( 'mouseDown', this.onTransformMouseDown )
+        this.transformControls.addEventListener( 'mouseUp', this.onTransformMouseUp )
+
+        this.scene.add( this.transformControls )
+
         this.renderScene()
     }
 
+    onTransformMouseDown = () => {
+        this.setState({
+            isUsingGizmos: true
+        })
+    }
+
+    onTransformMouseUp = () => {
+        this.setState({
+            isUsingGizmos: false
+        })
+    }
+
+    onTransformChange = throttle( 250, () => {
+        const { onPositionChange, onRotationChange, onScaleChange } = this.props
+
+        switch( this.transformControls.getMode() ) {
+            case 'translate': {
+                onPositionChange( this.mesh.position )
+                break
+            }
+            case 'rotate': {
+                onRotationChange( this.objectContainer.rotation )
+                break
+            }
+            case 'scale': {
+                const scale = this.objectContainer.scale.x // assume scale x, y and z are same
+                onScaleChange( scale )
+                break
+            }
+        }
+    })
+
     componentDidUpdate( prevProps ) {
         let shouldRender = false
+
+        const { isUsingGizmos } = this.state
 
         const prevGeometry = prevProps.uploadedObjectGeometry
         const currGeometry = this.props.uploadedObjectGeometry
@@ -83,6 +133,8 @@ export default class AdjustTransforms extends Component {
                 currGeometry,
                 this.material
             )
+            this.transformControls.attach( this.mesh )
+            this.transformControls.setMode( 'translate' )
 
             const {
                 position: { x: posX, y: posY, z: posZ },
@@ -103,7 +155,7 @@ export default class AdjustTransforms extends Component {
         const prevPosition = prevProps.position
         const thisPosition = this.props.position
 
-        if ( prevPosition !== thisPosition ) {
+        if ( prevPosition !== thisPosition && !isUsingGizmos ) {
 
             const { x, y, z } = thisPosition
             this.mesh.position.set( x, y, z )
@@ -114,7 +166,7 @@ export default class AdjustTransforms extends Component {
         const prevRotation = prevProps.rotation
         const thisRotation = this.props.rotation
         
-        if ( prevRotation !== thisRotation ) {
+        if ( prevRotation !== thisRotation && !isUsingGizmos ) {
 
             const { x, y, z } = thisRotation
             this.objectContainer.rotation.set( x, y, z )
@@ -126,7 +178,7 @@ export default class AdjustTransforms extends Component {
         const thisScale = this.props.scale
 
 
-        if ( prevScale !== thisScale ) {
+        if ( prevScale !== thisScale && !isUsingGizmos ) {
 
             this.objectContainer.scale.setScalar( thisScale )
 
@@ -138,13 +190,6 @@ export default class AdjustTransforms extends Component {
         }
     }
 
-    resetCamera() {
-        const { width, height } = this.canvasRef.current.getBoundingClientRect()
-
-        this.camera.aspect = width / height
-        this.camera.updateProjectionMatrix()
-    }
-
     resetRenderer() {
         const { width, height } = this.canvasRef.current.getBoundingClientRect()
 
@@ -157,13 +202,6 @@ export default class AdjustTransforms extends Component {
 
         this.camera.aspect = width / height
         this.camera.updateProjectionMatrix()
-    }
-
-    resetRenderer() {
-        const { width, height } = this.canvasRef.current.getBoundingClientRect()
-
-        this.renderer.setSize( width, height )
-        this.renderer.setPixelRatio( width / height )
     }
 
     renderScene = () => {
