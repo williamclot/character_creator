@@ -266,6 +266,21 @@ export default class AdjustTransforms extends Component {
         this.props.onScaleChange( value )
     }
 
+    onModeTranslate = () => {
+        this.transformControls.attach( this.mesh )
+        this.transformControls.setMode( 'translate' )
+    }
+
+    onModeRotate = () => {
+        this.transformControls.attach( this.objectContainer )
+        this.transformControls.setMode( 'rotate' )
+    }
+
+    onModeScale = () => {
+        this.transformControls.attach( this.objectContainer )
+        this.transformControls.setMode( 'scale' )
+    }
+
     render() {
         const {
             visible: isVisible,
