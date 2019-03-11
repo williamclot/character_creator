@@ -81,6 +81,24 @@ class SceneManager {
         this.container = container
     }
 
+    getObject( key ) {
+        return this.loadedObjectsMap.get( key )
+    }
+
+    getObjectByAttachPoint( attachPointName ) {
+        const attachPoint = this.bonesMap.get( attachPointName )
+
+        return attachPoint ? attachPoint.children[ 0 ] : null
+    }
+
+    getParentObject( key ) {
+        const { parent } = this.categoriesMap.get( key )
+
+        if ( !parent ) return null
+
+        return this.loadedObjectsMap.get( parent.name ) || null
+    }
+
     placeStand( newStand, options = {} ) {
         
         const rootCategoryId = this.rootCategory.id        

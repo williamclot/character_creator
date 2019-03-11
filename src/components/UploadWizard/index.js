@@ -25,6 +25,10 @@ class UploadWizard extends Component {
             name: '',
             uploadedObjectGeometry: null,
 
+            currentObject: null,
+            currentObjectParent: null,
+            currentObjectChildren: {},
+
             // handled by AdjustTransforms
             position: {
                 x: 0,
@@ -72,6 +76,7 @@ class UploadWizard extends Component {
         })
 
         try {
+            const { sceneManager, currentCategory } = this.props
 
             const geometry = await stlLoader.load( objectURL )
 
@@ -91,7 +96,7 @@ class UploadWizard extends Component {
 
             const computedRotation = { x: 0, y: 0, z: 0 } // cannot make assumptions for rotation
 
-            const attachPoints = this.props.currentCategory.attachPoints
+            const attachPoints = currentCategory.attachPoints
             const initialAttachPointPositions = {}
             for ( let attachPoint of attachPoints ) {
                 initialAttachPointPositions[ attachPoint ] = {
@@ -100,7 +105,14 @@ class UploadWizard extends Component {
                     z: 0
                 }
             }
-
+            
+            const currentObject = sceneManager.getObject( currentCategory.name )
+            const currentObjectParent = sceneManager.getParentObject( currentCategory.name )
+            const currentObjectChildren = {}
+            for ( let attachPoint of attachPoints ) {
+                currentObjectChildren[ attachPoint ] = sceneManager.getObjectByAttachPoint( attachPoint )
+            }
+            
 
             this.setState({
                 name,
@@ -110,6 +122,9 @@ class UploadWizard extends Component {
                 scale: computedScale,
                 attachPointsToPlace: attachPoints,
                 attachPointsPositions: initialAttachPointPositions,
+                currentObject,
+                currentObjectParent,
+                currentObjectChildren
             })
 
         } catch ( err ) {
@@ -223,13 +238,14 @@ class UploadWizard extends Component {
     render() {
         const {
             visible: isVisible,
-            currentCategory,
+            sceneManager, currentCategory,
             onWizardCanceled,
             step, nextStep, previousStep
         } = this.props
 
         const {
             name, uploadedObjectGeometry,
+            currentObject, currentObjectParent, currentObjectChildren,
             position, rotation, scale,
             attachPointsPositions, attachPointsToPlace
         } = this.state
@@ -278,6 +294,8 @@ class UploadWizard extends Component {
                     visible = { step === steps.ADJUST }
                     
                     currentCategory = { currentCategory }
+                    currentObject = { currentObject }
+                    currentObjectParent = { currentObjectParent }
                     uploadedObjectGeometry = { uploadedObjectGeometry }
 
                     position = { position }
@@ -315,6 +333,7 @@ class UploadWizard extends Component {
                 <AdjustAttachpoints
                     visible = { step === steps.ADJUST_ATTACHPOINTS }
 
+                    currentObjectChildren = { currentObjectChildren }
                     uploadedObjectGeometry = { uploadedObjectGeometry }
 
                     position = { position }
