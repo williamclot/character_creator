@@ -32,6 +32,7 @@ export default class AdjustTransforms extends Component {
 
         this.objectContainer = new Group
         this.mesh = null
+        this.parentMesh = null
         this.material = new MeshStandardMaterial({
             color: 0xffffff,
             opacity: .8,
@@ -151,6 +152,36 @@ export default class AdjustTransforms extends Component {
             this.objectContainer.remove( oldMesh )
             this.objectContainer.add( this.mesh )
             
+            shouldRender = true
+        }
+
+        const prevParentObject = prevProps.currentObjectParent
+        const thisParentObject = this.props.currentObjectParent
+
+        if ( prevParentObject !== thisParentObject ) {
+            const oldParent = this.parentMesh
+            
+            this.scene.remove( oldParent )
+
+            if ( thisParentObject ) {
+                /**
+                 * Assumption: first child is the mesh,
+                 * other children are bones and need to be filtered out
+                 */
+                const firstChild = thisParentObject.children[0]
+
+                this.parentMesh = firstChild.clone()
+
+                const attachPoint = this.props.currentCategory.parent.attachPoint
+                const attachPoints = thisParentObject.userData.metadata.attachPoints
+
+                const { x, y, z } = attachPoints[ attachPoint ]
+                this.parentMesh.position.set( x, y, z ).negate()
+
+                this.scene.add( this.parentMesh )
+
+            }
+
             shouldRender = true
         }
 

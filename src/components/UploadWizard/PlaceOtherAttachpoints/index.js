@@ -179,31 +179,19 @@ export default class PlaceOtherAttachpoints extends Component {
         const raycaster = new Raycaster
         raycaster.setFromCamera( mouseCoords, this.camera )
 
-        const intersects = raycaster.intersectObject( this.objectContainer, true )
+        const intersects = raycaster.intersectObject( this.mesh, true )
 
         const intersection = intersects.find( intersect => intersect.object.isMesh )
 
         if( intersection ) {
             const { point, face } = intersection
 
-            console.log( point, face.normal )
-
-            this.sphere.position.copy( point )
-
             const { x, y, z } = point
             const attachPointName = this.getAttachpoint()
             this.props.onAttachPointPositionChange( attachPointName, { x, y, z })
 
-            // this.sphere.lookAt( face.normal )
-            // this.sphere.up.copy( face.normal )
-
-            this.renderScene()
-            
         } else {
-            // if ( this.transformControls.object ) {
-            //     this.transformControls.detach();
-            // }
-            console.log('nothing clicked')
+            // 
         }
 
     }

@@ -333,6 +333,7 @@ class UploadWizard extends Component {
                 <AdjustAttachpoints
                     visible = { step === steps.ADJUST_ATTACHPOINTS }
 
+                    currentCategory = { currentCategory }
                     currentObjectChildren = { currentObjectChildren }
                     uploadedObjectGeometry = { uploadedObjectGeometry }
 

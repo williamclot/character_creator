@@ -111,6 +111,9 @@ export const getObjectFromGeometry = ( geometry, metadata, poseData ) => {
                 root.add( createBone( attachPointName, position, rotation ) )
             }
         }
+
+        root.userData.metadata = metadata
+        objectContainer.userData.metadata = metadata
     }
 
     return root

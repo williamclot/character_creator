@@ -25,6 +25,7 @@ export default class AdjustAttachpoints extends Component {
 
         this.objectContainer = new Group
         this.mesh = null
+        this.childMesh = null
         this.material = new MeshStandardMaterial({
             color: 0xffffff,
             opacity: .8,
@@ -108,7 +109,10 @@ export default class AdjustAttachpoints extends Component {
             for ( let key of Object.keys( thisAttachPoints ) ) {
                 if ( prevAttachpoints[ key ] !== thisAttachPoints[ key ] ) {
                     const { x, y, z } = thisAttachPoints[ key ]
+                    
                     this.sphere.position.set( x, y, z )
+                    if ( this.childMesh ) this.childMesh.position.set( x, y, z )
+
                     shouldRender = true
                 }
             }
@@ -117,6 +121,19 @@ export default class AdjustAttachpoints extends Component {
         if ( prevProps.attachPointsToPlace !== this.props.attachPointsToPlace ) {
             const { x, y, z } = this.getPosition()
             this.sphere.position.set( x, y, z )
+            
+            const oldChild = this.childMesh
+            this.scene.remove( oldChild )
+            
+            const attachPointName = this.getAttachpoint()
+            const childMesh = this.props.currentObjectChildren[ attachPointName ]
+            
+            if ( childMesh ) {
+                this.childMesh = childMesh.clone()
+                this.childMesh.position.set( x, y, z )
+                this.scene.add( this.childMesh )
+            }
+
             shouldRender = true
         }
 
@@ -243,7 +260,7 @@ export default class AdjustAttachpoints extends Component {
                 <canvas
                     className = { styles.previewCanvas}
                     ref = { this.canvasRef }
-                    onClick = { this.onClick }
+                    // onClick = { this.onClick }
                 />
                 
                 <div className = { styles.sideView } >
