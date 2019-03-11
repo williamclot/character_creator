@@ -100,11 +100,13 @@ export default class AdjustTransforms extends Component {
 
         switch( this.transformControls.getMode() ) {
             case 'translate': {
-                onPositionChange( this.mesh.position )
+                const { x, y, z } = this.mesh.position
+                onPositionChange({ x, y, z })
                 break
             }
             case 'rotate': {
-                onRotationChange( this.objectContainer.rotation )
+                const { x, y, z } = this.objectContainer.rotation
+                onRotationChange({ x, y, z })
                 break
             }
             case 'scale': {
