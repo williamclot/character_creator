@@ -116,6 +116,7 @@ class UploadWizard extends Component {
 
             this.setState({
                 name,
+                objectURL,
                 uploadedObjectGeometry: geometry,
                 position: computedPosition,
                 rotation: computedRotation,
@@ -135,7 +136,7 @@ class UploadWizard extends Component {
         } finally {
 
             // cleanup to prevent memory leaks
-            URL.revokeObjectURL( objectURL )
+            // URL.revokeObjectURL( objectURL )
             this.setState({
                 isLoading: false
             })
@@ -178,6 +179,7 @@ class UploadWizard extends Component {
 
     onCompleted = () => {
         const {
+            name, objectURL,
             uploadedObjectGeometry,
             position, rotation, scale,
             attachPointsPositions
@@ -190,7 +192,12 @@ class UploadWizard extends Component {
             attachPoints: attachPointsPositions
         }
 
-        this.props.onWizardCompleted( uploadedObjectGeometry, metadata )
+        this.props.onWizardCompleted({
+            name,
+            objectURL,
+            metadata,
+            geometry: uploadedObjectGeometry
+        })
         this.props.resetWizard()
     }
 

@@ -32,6 +32,8 @@ class App extends Component {
              */
             loadedObjects: {},
 
+            objectsByCategory: props.objects.byCategory,
+
             showUploadWizard: false,
             uploadedObjectData: null,
             
@@ -131,21 +133,35 @@ class App extends Component {
         })
     }
 
-    onWizardCompleted = ( geometry, metadata ) => {
+    onWizardCompleted = ({ name, objectURL, geometry, metadata }) => {
         console.log('wizard completed')
+        console.log(name)
         console.log(metadata)
 
         const category = this.getSelectedCategory().name
         const object = getObjectFromGeometry( geometry, metadata )
         
-
         this.setSelectedObject( category, object )
-        this.setState({
+        
+        const objectData = {
+            name,
+            download_url: objectURL,
+            extension: 'stl',
+            metadata
+        }
+        
+        this.setState( state => ({
             showUploadWizard: false,
-            uploadedObjectData: null
-        })
+            uploadedObjectData: null,
 
-
+            objectsByCategory: {
+                ...state.objectsByCategory,
+                [category]: [
+                    ...state.objectsByCategory[category],
+                    objectData
+                ]
+            }
+        }))
     }
 
     getSelectedGroup = () => this.props.worldData.groups[ this.props.selectedGroupIndex ]
@@ -158,11 +174,12 @@ class App extends Component {
     render() {
         const {
             worldData: { name, groups },
-            objects,
+            
             poseData
         } = this.props
         const {
             loadedObjects,
+            objectsByCategory,
             showUploadWizard, uploadedObjectData
         } = this.state
 
@@ -171,7 +188,7 @@ class App extends Component {
 
         const selectorData = ( selectedCategory ?
             {
-                objects:  objects.byCategory[ selectedCategory.name ],
+                objects:  objectsByCategory[ selectedCategory.name ],
                 currentCategory: selectedCategory.name
             } : null
         )
