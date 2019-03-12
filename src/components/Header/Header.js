@@ -6,8 +6,10 @@ import MMFTitle from './MMFTitle';
 const Header = props => {
     return (
         <div className = "header">
-            <MMFTitle />
-            { props.children }
+            {/* <MMFTitle /> */}
+            <div className = "title">
+                { props.title }
+            </div>
         </div>
     )
 }

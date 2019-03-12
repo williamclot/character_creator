@@ -202,9 +202,7 @@ class App extends Component {
                 poseData = { poseData }
             />
 
-            <Header>
-                <h1>{ name }</h1>
-            </Header>
+            <Header title = { name } />
 
             <div className = "editor-panel">
 
