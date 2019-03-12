@@ -42,6 +42,7 @@ class UploadConfirm extends Component {
         this.orbitControls.enableKeys = false
 
         this.renderer = new WebGLRenderer({
+            preserveDrawingBuffer: true,
             antialias: true,
             canvas
         })
@@ -107,6 +108,13 @@ class UploadConfirm extends Component {
         this.renderer.render( this.scene, this.camera )
     }
 
+    onNext = () => {
+        const dataURL = this.canvasRef.current.toDataURL( 'image/jpeg' )
+        this.props.setImgDataURL( dataURL )
+
+        this.props.onNext()
+    }
+
     render() {
         const {
             visible: isVisible,
@@ -168,7 +176,7 @@ class UploadConfirm extends Component {
 
                         <div
                             className = {cn( commonStyles.button, styles.button )}
-                            onClick = { onNext }
+                            onClick = { this.onNext }
                         >
                             Next
                         </div>

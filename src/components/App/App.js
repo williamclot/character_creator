@@ -133,7 +133,7 @@ class App extends Component {
         })
     }
 
-    onWizardCompleted = ({ name, objectURL, geometry, metadata }) => {
+    onWizardCompleted = ({ name, objectURL, imgDataURL, geometry, metadata }) => {
         console.log('wizard completed')
         console.log(name)
         console.log(metadata)
@@ -146,6 +146,7 @@ class App extends Component {
         const objectData = {
             name,
             download_url: objectURL,
+            img: imgDataURL,
             extension: 'stl',
             metadata
         }

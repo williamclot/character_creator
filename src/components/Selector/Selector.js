@@ -40,22 +40,23 @@ class Selector extends Component {
         const { objects } = data
 
         const elementDiv = objects.map( ( object, index ) => (
+
 			<div
 				className = "selector-item"
 				key = {object.name}
 				onClick = { () => this.handleClick( object ) }
 			>
-				<div className = "img">
-					<img
-						src = { null }
-						alt = "img"
-					/>
-				</div>
+				<div
+                    className = "img"
+                    style = {{ backgroundImage: `url(${object.img})` }}
+                />
 				<div className = "unselectable item-name">
 					{ object.name }
 				</div>
 			</div>
+
 		)).concat(
+
             <ImportButton
                 className = "selector-item"
                 key = "__add__button__"
@@ -71,6 +72,7 @@ class Selector extends Component {
                     Upload File
                 </div>
             </ImportButton>
+            
         )
 
         return (

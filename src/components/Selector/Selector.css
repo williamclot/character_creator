@@ -54,15 +54,12 @@
 
 .selector .selector-item .img {
     padding: 2px;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
-  
-.selector .selector-item .img img {
-    display: block;
-    margin: auto;
-    max-width: 80px;
-    max-height: 80px;
-}
-
 
 .selector .selector-item .item-name {
     position: absolute;
