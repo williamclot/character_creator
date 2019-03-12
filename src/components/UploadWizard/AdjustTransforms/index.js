@@ -368,7 +368,7 @@ export default class AdjustTransforms extends Component {
                             </div>
                         </div>
                         <div className = {cn( styles.inputGroup, styles.rotation )} >
-                        <div className = { styles.label } >
+                            <div className = { styles.label } >
                                 Rotation
                             </div>
                             <div className = { styles.axes } >
