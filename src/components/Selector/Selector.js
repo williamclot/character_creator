@@ -37,7 +37,7 @@ class Selector extends Component {
             )
         }
 
-        const { objects } = data
+        const { objects, currentCategory } = data
 
         const elementDiv = objects.map( ( object, index ) => (
 
@@ -55,31 +55,22 @@ class Selector extends Component {
 				</div>
 			</div>
 
-		)).concat(
+		))
 
-            <ImportButton
-                className = "selector-item"
-                key = "__add__button__"
-                onFileLoaded = { this.handleUpload }
-            >
-                <div className = "img">
-                    <img
-                        src = { null } // TODO plus button img
-                        alt = "+"
-                    />
-                </div>
-                <div className = "unselectable item-name">
-                    Upload File
-                </div>
-            </ImportButton>
-            
-        )
-
-        return (
+        return <>
             <div className = "selector">
                 { elementDiv }
             </div>
-        )
+
+
+            <ImportButton
+                className = "import-button"
+                key = "__add__button__"
+                onFileLoaded = { this.handleUpload }
+            >
+                Upload { currentCategory }
+            </ImportButton>
+        </>
     }
 }
 
