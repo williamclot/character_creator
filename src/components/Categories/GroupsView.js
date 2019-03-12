@@ -23,7 +23,7 @@ const GroupItem = props => {
             className = { classList.join(' ') }
             onClick = { onClick }
         >
-            <img src = { group.imgPath } alt = { group.name } />
+            <div className = "name" > { group.name } </div>
         </div>
     )
 
