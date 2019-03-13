@@ -1,10 +1,7 @@
 
 .placeAttachpoint {
-    background-color: aqua;
-
     height: 90%;
     width: 90%;
-
 }
 
 .placeAttachpoint .previewCanvas {
