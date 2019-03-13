@@ -213,11 +213,19 @@ class UploadWizard extends Component {
         const {
             step,
             nextStep, resetWizard, goToStep,
-            onWizardCompleted
+            currentCategory
         } = this.props
         const { attachPointsToPlace } = this.state
 
-        if ( step === steps.ADJUST ) {
+        if ( step === steps.UPLOAD_CONFIRM ) {
+
+            if ( !currentCategory.parent ) {
+                goToStep( steps.ADJUST )
+            } else {
+                nextStep()
+            }
+
+        } else if ( step === steps.ADJUST ) {
 
             const isCompleted = (
                 !attachPointsToPlace ||
@@ -247,6 +255,27 @@ class UploadWizard extends Component {
 
             nextStep()
 
+        }
+    }
+
+    onBack = () => {
+        const {
+            step,
+            previousStep, goToStep,
+            currentCategory
+        } = this.props
+        // const { attachPointsToPlace } = this.state
+
+        if ( step === steps.ADJUST ) {
+
+            if ( !currentCategory.parent ) {
+                goToStep( steps.UPLOAD_CONFIRM )
+            } else {
+                previousStep()
+            }
+
+        } else {
+            previousStep()
         }
     }
 
@@ -302,7 +331,7 @@ class UploadWizard extends Component {
                     scale = { scale }
                     onPositionChange = { this.setPosition }
 
-                    previousStep = { previousStep }
+                    previousStep = { this.onBack }
                     nextStep = { this.onNext }
                 />
     
@@ -324,7 +353,7 @@ class UploadWizard extends Component {
                     attachPointsPositions = { attachPointsPositions }
                     attachPointsToPlace = { attachPointsToPlace }
                     
-                    previousStep = { previousStep }
+                    previousStep = { this.onBack }
                     nextStep = { this.onNext }
                 />
     
@@ -342,7 +371,7 @@ class UploadWizard extends Component {
                     attachPointsToPlace = { attachPointsToPlace }
                     onAttachPointPositionChange = { this.setAttachPointPosition }
 
-                    previousStep = { previousStep }
+                    previousStep = { this.onBack }
                     nextStep = { this.onNext }
                 />
 
@@ -361,7 +390,7 @@ class UploadWizard extends Component {
                     attachPointsToPlace = { attachPointsToPlace }
                     onAttachPointPositionChange = { this.setAttachPointPosition }
 
-                    previousStep = { previousStep }
+                    previousStep = { this.onBack }
                     nextStep = { this.onNext }
                 />
 
