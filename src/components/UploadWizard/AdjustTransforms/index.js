@@ -136,8 +136,6 @@ export default class AdjustTransforms extends Component {
                 currGeometry,
                 this.material
             )
-            this.transformControls.attach( this.mesh )
-            this.transformControls.setMode( 'translate' )
 
             const {
                 position: { x: posX, y: posY, z: posZ },
@@ -151,6 +149,9 @@ export default class AdjustTransforms extends Component {
 
             this.objectContainer.remove( oldMesh )
             this.objectContainer.add( this.mesh )
+
+            this.transformControls.attach( this.mesh )
+            this.transformControls.setMode( 'translate' )
             
             shouldRender = true
         }
@@ -238,6 +239,7 @@ export default class AdjustTransforms extends Component {
     }
 
     renderScene = () => {
+        this.transformControls.update()
         this.renderer.render( this.scene, this.camera )
     }
 
