@@ -16,15 +16,13 @@
 .placeAttachpoint .buttonsContainer {
     position: absolute;
     display: flex;
-    justify-content: center;
-    right: 2%;
-    bottom: 3%;
+    justify-content: space-between;
+    right: 5px;
+    bottom: 10px;
 }
 
 .placeAttachpoint .buttonsContainer .button {
     margin: 0 10px;
-    padding-left: 20px;
-    padding-right: 20px;
 }
 
 .placeAttachpoint .title {
