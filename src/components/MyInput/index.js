@@ -148,7 +148,7 @@ export default class NumberInput extends Component {
             const { localValue } = this.state
 
             if ( !isNaN( localValue ) ) {
-                const value = Number.parseFloat( localValue ).toFixed( 3 )
+                const value = Number.parseFloat( localValue )
                 this.props.onChange( value )
             }
 
