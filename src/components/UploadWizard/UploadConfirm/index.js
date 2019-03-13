@@ -22,10 +22,12 @@ class UploadConfirm extends Component {
 
         this.objectContainer = new Group
         this.mesh = null
-        this.material = new MeshStandardMaterial
+        this.material = new MeshStandardMaterial({
+            color: 0xffffff
+        })
 
         this.scene = new Scene
-        this.scene.background = new Color( 0xeeeeee )
+        this.scene.background = new Color( 0x777777 )
         this.scene.add( this.objectContainer )
 
         this.camera = new PerspectiveCamera(
@@ -35,7 +37,9 @@ class UploadConfirm extends Component {
             1000
         )
         this.camera.position.set( 0, .5, -1 )
-        this.camera.lookAt( 0, 3, 0 )
+        this.camera.lookAt( 0, 0, 0 )
+
+        this.scene.add( this.camera )
         
         this.orbitControls = new OrbitControls( this.camera, canvas )
         this.orbitControls.addEventListener( 'change', this.renderScene )
@@ -47,13 +51,17 @@ class UploadConfirm extends Component {
             canvas
         })
 
-        const light1 = new PointLight( 0xc1c1c1, 1, 100 )
-        light1.position.set( -7, -1, -7 )
-
-        const light2 = new PointLight( 0xc1c1c1, 1, 100 )
-        light2.position.set( 7, -1, -7 )
-        
-        this.scene.add( light1, light2 )
+        const lightsPositions = [
+            [-1, -1, 0],
+            [-1,  1, 0],
+            [ 1,  1, 0],
+            [ 1, -1, 0],
+        ]
+        for ( let [x, y, z] of lightsPositions ) {
+            const light = new PointLight( 0xffffff, .5, 100 )
+            light.position.set( x, y, z )
+            this.camera.add( light )
+        }
 
         this.renderScene()
     }
