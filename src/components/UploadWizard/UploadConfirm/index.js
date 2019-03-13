@@ -149,28 +149,27 @@ class UploadConfirm extends Component {
                 <div className = { styles.gridView } >
 
                     <span className = { styles.label } >
-                        Part Name: 
-                    </span>
-                    <input
-                        className = { styles.view }
-                        type = "text"
-                        value = { name }
-                        onChange = { onNameChange }
-                    />
-
-
-                    <h3 className = { styles.label } >
                         Part Type:
-                    </h3>
+                    </span>
                     <span className = { styles.view } >
                         {currentCategory.label}
                     </span>
 
                     <span className = { styles.label } >
+                        Part Name: 
+                    </span>
+                    <input
+                        className = {cn( styles.view, styles.input )}
+                        type = "text"
+                        value = { name }
+                        onChange = { onNameChange }
+                    />
+
+                    <span className = { styles.label } >
                         Part Preview:
                     </span>
                     <canvas
-                        className = { styles.view }
+                        className = {cn( styles.view, styles.canvas )}
                         ref = { this.canvasRef }
                     />
                     
