@@ -1,0 +1,46 @@
+.container {
+    position: relative;
+}
+
+.partTypes {
+    position: relative;
+    
+    padding-right: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.partTypes .item {
+    min-height: 60px;
+    min-width: 60px;
+
+    max-height: 60px;
+    max-width: 60px;
+
+    margin-bottom: 10px;
+    margin-top:10px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 100%;
+    border: none;
+    box-shadow: 0px 0px 10px #000000;
+    transition: background-color .2;
+    cursor: pointer;
+}
+
+.partTypes .item:hover {
+    background-color: rgba(0, 55, 39, 0.31);
+}
+
+.partTypes .item .name {
+    text-align: center;
+    line-height: 60px;
+    color: #ffffff;
+}
+
+
+.partTypes .item.selected {
+    background-color: rgba(34, 94, 71, 0.71);
+}
