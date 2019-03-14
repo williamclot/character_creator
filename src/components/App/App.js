@@ -8,6 +8,7 @@ import Header from '../Header';
 import Selector from '../Selector';
 // import { CategoriesView, GroupsView } from '../Categories'
 import PartTypesView from '../PartTypes'
+import LoadingIndicator from '../LoadingIndicator';
 
 // import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../../config'
 import SceneManager from '../ThreeContainer/sceneManager'
@@ -177,7 +178,9 @@ class App extends Component {
         const {
             worldData: { name, groups },
             
-            poseData
+            poseData,
+
+            isLoading
         } = this.props
         const {
             loadedObjects,
@@ -234,6 +237,7 @@ class App extends Component {
                 onWizardCompleted = { this.onWizardCompleted }
             />
 
+            <LoadingIndicator visible = {isLoading} />
         </div>
     }
 
@@ -242,6 +246,7 @@ class App extends Component {
 export default connect(
     state => ({
         selectedGroupIndex: state.selectedCategoryPath.groupIndex,
-        selectedCategoryIndex: state.selectedCategoryPath.categoryIndex
+        selectedCategoryIndex: state.selectedCategoryPath.categoryIndex,
+        isLoading: state.isLoading
     })
 )( App )

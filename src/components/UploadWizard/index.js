@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 
+import { showLoader, hideLoader } from '../../actions/loader'
+
 import UploadConfirm from './UploadConfirm'
 import AdjustTransforms from './AdjustTransforms'
 import PlaceAttachpoint from './PlaceAttachpoint'
@@ -19,8 +21,6 @@ class UploadWizard extends Component {
         super( props )
 
         this.state = {
-            isLoading: false,
-
             // handled by UploadConfirm
             name: '',
             imgDataURL: null,
@@ -72,9 +72,7 @@ class UploadWizard extends Component {
             objectURL
         } = uploadData
 
-        this.setState({
-            isLoading: true
-        })
+        this.props.showLoader()
 
         try {
             const { sceneManager, currentCategory } = this.props
@@ -138,10 +136,8 @@ class UploadWizard extends Component {
 
             // cleanup to prevent memory leaks
             // URL.revokeObjectURL( objectURL )
-            this.setState({
-                isLoading: false
-            })
-
+            this.props.hideLoader()
+            
         }
     }
 
@@ -407,7 +403,9 @@ const mapDispatchToProps = {
     nextStep,
     previousStep,
     goToStep,
-    resetWizard
+    resetWizard,
+    showLoader,
+    hideLoader
 }
 
 export default connect(
