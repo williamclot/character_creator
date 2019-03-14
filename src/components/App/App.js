@@ -6,7 +6,8 @@ import ThreeContainer from '../ThreeContainer'
 import UploadWizard from '../UploadWizard'
 import Header from '../Header';
 import Selector from '../Selector';
-import { CategoriesView, GroupsView } from '../Categories'
+// import { CategoriesView, GroupsView } from '../Categories'
+import PartTypesView from '../PartTypes'
 
 // import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../../config'
 import SceneManager from '../ThreeContainer/sceneManager'
@@ -207,11 +208,10 @@ class App extends Component {
             <div className = "editor-panel">
 
                 <div className = "groups-container">
-                    <GroupsView groups = { groups } />
+                    <PartTypesView groups = { groups } />
                 </div>
                 
                 <div className = "selector-container">
-                    <CategoriesView categories = { selectedGroup.categories } />
                     <Selector
                         data = { selectorData }
                         onObjectSelected = { this.onObjectSelected }
