@@ -14,6 +14,7 @@
     transform: translateY(-50%);
 
     height: 85%;
+    width: 35%;
 
 
     display: flex;
@@ -43,4 +44,5 @@
     /* padding-bottom: 35px; */
 
     height: 100%;
+    width: 100%;
 }
