@@ -9,6 +9,8 @@ import OrbitControls from 'three-orbitcontrols'
 import { fromEvent } from '../../../util/helpers'
 import { sphereFactory } from '../../../util/three-helpers'
 
+import TransformControls from 'three-transformcontrols'
+
 import NumberInput from '../../MyInput'
 import commonStyles from '../index.module.css'
 import styles from './index.module.css'
@@ -66,7 +68,25 @@ export default class AdjustAttachpoints extends Component {
         this.orbitControls.addEventListener( 'change', this.renderScene )
         this.orbitControls.enableKeys = false
 
+        this.transformControls = new TransformControls( this.camera, canvas )
+        this.transformControls.addEventListener( 'change', this.renderScene )
+        
+        this.transformControls.addEventListener( 'mouseUp', this.onReleaseGizmo )
+
+        this.transformControls.attach( this.sphere )
+        this.transformControls.setMode( 'translate' )
+
+        this.scene.add( this.transformControls )
+
         this.renderScene()
+    }
+
+    onReleaseGizmo = () => {
+        const attachPointName = this.getAttachpoint()
+        
+        const { x, y, z } = this.sphere.position
+
+        this.props.onAttachPointPositionChange( attachPointName, { x, y, z })
     }
 
     componentDidUpdate( prevProps ) {
@@ -111,7 +131,6 @@ export default class AdjustAttachpoints extends Component {
                     const { x, y, z } = thisAttachPoints[ key ]
                     
                     this.sphere.position.set( x, y, z )
-                    if ( this.childMesh ) this.childMesh.position.set( x, y, z )
 
                     shouldRender = true
                 }
@@ -123,15 +142,14 @@ export default class AdjustAttachpoints extends Component {
             this.sphere.position.set( x, y, z )
             
             const oldChild = this.childMesh
-            this.scene.remove( oldChild )
+            this.sphere.remove( oldChild )
             
             const attachPointName = this.getAttachpoint()
             const childMesh = this.props.currentObjectChildren[ attachPointName ]
             
             if ( childMesh ) {
                 this.childMesh = childMesh.clone()
-                this.childMesh.position.set( x, y, z )
-                this.scene.add( this.childMesh )
+                this.sphere.add( this.childMesh )
             }
 
             shouldRender = true
@@ -203,6 +221,7 @@ export default class AdjustAttachpoints extends Component {
     }
 
     renderScene = () => {
+        this.transformControls.update()
         this.renderer.render( this.scene, this.camera )
     }
 
@@ -306,6 +325,12 @@ export default class AdjustAttachpoints extends Component {
                         </div>
                     </div>
 
+                </div>
+
+                <div className = { styles.title } >
+                    <h4>
+                        Position and Resize
+                    </h4>
                 </div>
 
             </div>

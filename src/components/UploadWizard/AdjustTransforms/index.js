@@ -79,6 +79,8 @@ export default class AdjustTransforms extends Component {
         this.transformControls.addEventListener( 'mouseDown', this.onTransformMouseDown )
         this.transformControls.addEventListener( 'mouseUp', this.onTransformMouseUp )
 
+        document.addEventListener( 'keydown', this.onKeyDown )
+
         this.scene.add( this.transformControls )
 
         this.renderScene()
@@ -224,6 +226,10 @@ export default class AdjustTransforms extends Component {
         }
     }
 
+    componentWillUnmount() {
+        document.removeEventListener( 'keydown', this.onKeyDown )
+    }
+
     resetRenderer() {
         const { width, height } = this.canvasRef.current.getBoundingClientRect()
 
@@ -316,6 +322,21 @@ export default class AdjustTransforms extends Component {
         this.transformControls.setMode( 'scale' )
     }
 
+    onKeyDown = (e) => {
+        if ( !this.props.visible ) return
+
+        switch( e.key ) {
+            case 'p': {
+                this.onModeTranslate()
+                break
+            }
+            case 'r': {
+                this.onModeRotate()
+                break
+            }
+        }
+    }
+
     render() {
         const {
             visible: isVisible,
@@ -342,6 +363,7 @@ export default class AdjustTransforms extends Component {
                     className = { styles.previewCanvas}
                     ref = { this.canvasRef }
                     onClick = { this.onClick }
+                    onKeyDown = { this.onKeyDown }
                 />
                 
                 <div className = { styles.sideView } >
@@ -422,6 +444,28 @@ export default class AdjustTransforms extends Component {
 
                 </div>
 
+                <div className = { styles.title } >
+                    <h4>
+                        Position and Resize
+                    </h4>
+                </div>
+
+                <div className = { styles.shortcutButtons } >
+                    <div
+                        className = {cn( commonStyles.button, styles.button )}
+                        onClick = { this.onModeTranslate }
+                    >
+                        P
+                    </div>
+
+                    <div
+                        className = {cn( commonStyles.button, styles.button )}
+                        onClick = { this.onModeRotate }
+                    >
+                        R
+                    </div>
+
+                </div>
             </div>
         )
     }

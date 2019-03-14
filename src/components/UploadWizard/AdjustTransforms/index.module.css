@@ -4,7 +4,6 @@
 
     height: 90%;
     width: 90%;
-
 }
 
 .adjustTransforms .previewCanvas {
@@ -15,7 +14,7 @@
 
 
 .adjustTransforms .sideView {
-    /* background-color: aquamarine; */
+    background-color: rgba(60, 60, 60, 0.3);
     position: absolute;
     right: 0;
     top: 0;
@@ -24,7 +23,6 @@
 }
 
 .adjustTransforms .sideView .inputsContainer {
-    background-color: aquamarine;
     opacity: .8;
     
     height: 100%;
@@ -35,7 +33,6 @@
 
 .adjustTransforms .sideView .inputsContainer .inputGroup {
 
-    background-color: beige;
     margin: 10px;
 }
 
@@ -43,7 +40,6 @@
     
     display: flex;
     justify-content: space-between;
-    background-color: rgb(74, 168, 61)
 }
 
 .adjustTransforms .sideView .buttonsContainer {
@@ -51,12 +47,30 @@
     position: absolute;
     bottom: 0;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     width: 100%;
 }
 
 .adjustTransforms .sideView .buttonsContainer .button {
     
     margin: 10px;
-    width: 50%;
+}
+
+.adjustTransforms .title {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.adjustTransforms .shortcutButtons {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+.adjustTransforms .shortcutButtons .button {
+    height: 25px;
+    width: 25px;
+    padding: 5px;
+    margin: 5px;
 }

@@ -1,5 +1,6 @@
 .uploadConfirm {
-    background-color: #555454;
+    /* background-color: #555454; */
+    background-color: #4c4c4c;
 
 
     /* height: 70%; */
@@ -22,9 +23,26 @@
 .uploadConfirm .gridView .label {
     grid-column: label-col;
     font-style: italic;
+
+    font-weight: bold;
+    text-align: right;
 }
 .uploadConfirm .gridView .view {
-    grid-column: view-col
+    grid-column: view-col;
+    border-radius: 5px;
+}
+
+.uploadConfirm .gridView .view.input {
+    background-color: #777777;
+    border-color: #777777;
+    color: white;
+    padding: 0px 5px;
+}
+
+.uploadConfirm .gridView .view.canvas {
+    width: 250px;
+    height: 200px;
+    /* border-radius: 10px; */
 }
 
 .uploadConfirm .gridView .buttonsContainer {
