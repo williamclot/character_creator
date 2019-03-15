@@ -160,13 +160,18 @@ export default class AdjustTransforms extends Component {
 
         const prevParentObject = prevProps.currentObjectParent
         const thisParentObject = this.props.currentObjectParent
+        const prevCategory = prevProps.currentCategory
+        const thisCategory = this.props.currentCategory
 
-        if ( prevParentObject !== thisParentObject ) {
+        if (
+            prevParentObject !== thisParentObject ||
+            prevCategory !== thisCategory
+        ) {
             const oldParent = this.parentMesh
             
             this.scene.remove( oldParent )
 
-            if ( thisParentObject ) {
+            if ( thisParentObject && thisCategory.parent ) {
                 /**
                  * Assumption: first child is the mesh,
                  * other children are bones and need to be filtered out
@@ -175,7 +180,7 @@ export default class AdjustTransforms extends Component {
 
                 this.parentMesh = firstChild.clone()
 
-                const attachPoint = this.props.currentCategory.parent.attachPoint
+                const attachPoint = thisCategory.parent.attachPoint
                 const attachPoints = thisParentObject.userData.metadata.attachPoints
 
                 const { x, y, z } = attachPoints[ attachPoint ]
