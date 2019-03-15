@@ -421,6 +421,9 @@ export default class AdjustTransforms extends Component {
                                 <NumberInput
                                     axis = { null }
                                     value = { scale }
+                                    step = { scale / 30 }
+                                    min = { 0 }
+                                    precision = { 4 }
                                     onChange = { this.onScaleChange }
                                 />
                             </div>
