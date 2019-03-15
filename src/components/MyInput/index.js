@@ -6,7 +6,8 @@ import styles from './index.module.css'
 const defaultProps = {
     step: 1,
     min: -100,
-    max:  100
+    max:  100,
+    precision: 3
 }
 
 export default class NumberInput extends Component {
@@ -158,12 +159,13 @@ export default class NumberInput extends Component {
 
     render() {
         const {
-            axis
+            axis,
+            precision, min, max, step
         } = this.props
 
         const formattedValue = this.state.isSelected
                 ? this.state.localValue
-                : Number(this.props.value).toFixed(2)
+                : Number(this.props.value).toFixed( precision )
 
         const hasAxis = Boolean( axis )
         const inputClassName = classNames(
@@ -182,7 +184,10 @@ export default class NumberInput extends Component {
 
                 <input
                     className = { inputClassName }
-                    type = "text"
+                    type = "number"
+                    min = { min }
+                    max = { max }
+                    step = { step }
                     ref = { this.inputRef }
 
                     value = { formattedValue }
