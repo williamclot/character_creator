@@ -1,11 +1,5 @@
-.container {
-    position: relative;
-}
-
 .partTypes {
     position: relative;
-    
-    padding-right: 40px;
 
     display: flex;
     align-items: center;

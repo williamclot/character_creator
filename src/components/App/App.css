@@ -28,6 +28,7 @@
 .editor-panel .groups-container {
     position: relative;
 
+    margin-right: 20px;
     height: 100%;
 }
 
