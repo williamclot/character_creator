@@ -2,22 +2,17 @@
     position: relative;
 
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     justify-content: center;
     flex-direction: column;
 }
 
 .partTypes .item {
-    min-height: 60px;
-    min-width: 60px;
-
-    max-height: 60px;
-    max-width: 60px;
-
+    padding: 5px 10px;
     margin-bottom: 10px;
     margin-top:10px;
     background-color: rgba(0, 0, 0, 0.8);
-    border-radius: 100%;
+    border-radius: 5px;
     border: none;
     box-shadow: 0px 0px 10px #000000;
     transition: background-color .2;
@@ -30,7 +25,7 @@
 
 .partTypes .item .name {
     text-align: center;
-    line-height: 60px;
+    /* line-height: 60px; */
     color: #ffffff;
 }
 
