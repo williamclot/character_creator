@@ -15,8 +15,8 @@ import SceneManager from '../ThreeContainer/sceneManager'
 
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
-    getCategories, getNameAndExtension,
-    Dict
+    getCategories, getNameAndExtension, objectMap,
+    Dict,
 } from '../../util/helpers'
 
 import './App.css'
@@ -53,9 +53,12 @@ class App extends Component {
     }
 
     async componentDidMount() {
-        const { objects } = this.props
+        const oneOfEach = objectMap(
+            this.props.objects.byCategory,
+            objectList => objectList[ 0 ]
+        )
 
-        const loadedObjects = await fetchObjects( objects.oneOfEach )
+        const loadedObjects = await fetchObjects( oneOfEach )
 
         this.setState({
             loadedObjects
