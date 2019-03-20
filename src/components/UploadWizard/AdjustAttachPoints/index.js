@@ -9,7 +9,7 @@ import OrbitControls from 'three-orbitcontrols'
 import { fromEvent } from '../../../util/helpers'
 import { sphereFactory } from '../../../util/three-helpers'
 
-import TransformControls from 'three-transformcontrols'
+import TransformControls from '../../../util/transform-controls'
 
 import NumberInput from '../../MyInput'
 import commonStyles from '../index.module.css'
@@ -71,6 +71,7 @@ export default class AdjustAttachpoints extends Component {
         this.transformControls = new TransformControls( this.camera, canvas )
         this.transformControls.addEventListener( 'change', this.renderScene )
         
+        this.transformControls.addEventListener( 'mouseDown', () => this.orbitControls.enabled = false )
         this.transformControls.addEventListener( 'mouseUp', this.onReleaseGizmo )
 
         this.transformControls.attach( this.sphere )
@@ -82,6 +83,8 @@ export default class AdjustAttachpoints extends Component {
     }
 
     onReleaseGizmo = () => {
+        this.orbitControls.enabled = true
+
         const attachPointName = this.getAttachpoint()
         
         const { x, y, z } = this.sphere.position

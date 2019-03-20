@@ -9,7 +9,7 @@ import OrbitControls from 'three-orbitcontrols'
 import { fromEvent } from '../../../util/helpers'
 import { sphereFactory } from '../../../util/three-helpers'
 
-import TransformControls from 'three-transformcontrols'
+import TransformControls from '../../../util/transform-controls'
 import { throttle } from 'throttle-debounce'
 
 import NumberInput from '../../MyInput'
@@ -87,12 +87,14 @@ export default class AdjustTransforms extends Component {
     }
 
     onTransformMouseDown = () => {
+        this.orbitControls.enabled = false
         this.setState({
             isUsingGizmos: true
         })
     }
 
     onTransformMouseUp = () => {
+        this.orbitControls.enabled = true
         this.setState({
             isUsingGizmos: false
         })
