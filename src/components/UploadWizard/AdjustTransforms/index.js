@@ -87,12 +87,14 @@ export default class AdjustTransforms extends Component {
     }
 
     onTransformMouseDown = () => {
+        this.orbitControls.enabled = false
         this.setState({
             isUsingGizmos: true
         })
     }
 
     onTransformMouseUp = () => {
+        this.orbitControls.enabled = true
         this.setState({
             isUsingGizmos: false
         })

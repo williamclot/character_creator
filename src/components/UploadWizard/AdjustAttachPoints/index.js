@@ -71,6 +71,7 @@ export default class AdjustAttachpoints extends Component {
         this.transformControls = new TransformControls( this.camera, canvas )
         this.transformControls.addEventListener( 'change', this.renderScene )
         
+        this.transformControls.addEventListener( 'mouseDown', () => this.orbitControls.enabled = false )
         this.transformControls.addEventListener( 'mouseUp', this.onReleaseGizmo )
 
         this.transformControls.attach( this.sphere )
@@ -82,6 +83,8 @@ export default class AdjustAttachpoints extends Component {
     }
 
     onReleaseGizmo = () => {
+        this.orbitControls.enabled = true
+
         const attachPointName = this.getAttachpoint()
         
         const { x, y, z } = this.sphere.position
