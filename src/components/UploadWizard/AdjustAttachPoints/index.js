@@ -9,7 +9,7 @@ import OrbitControls from 'three-orbitcontrols'
 import { fromEvent } from '../../../util/helpers'
 import { sphereFactory } from '../../../util/three-helpers'
 
-import TransformControls from 'three-transformcontrols'
+import TransformControls from '../../../util/transform-controls'
 
 import NumberInput from '../../MyInput'
 import commonStyles from '../index.module.css'
