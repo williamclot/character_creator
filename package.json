@@ -11,7 +11,7 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "lib": "node scripts/lib.js",
-    "prepare": "npm run lib"
+    "prepare": "node scripts/lib.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
