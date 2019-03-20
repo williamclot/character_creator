@@ -1,5 +1,6 @@
+import * as THREE from 'three';
 
-THREE.TransformControlsPlane = function () {
+function TransformControlsPlane() {
 
 	'use strict';
 
@@ -93,10 +94,12 @@ THREE.TransformControlsPlane = function () {
 
 };
 
-THREE.TransformControlsPlane.prototype = Object.assign( Object.create( THREE.Mesh.prototype ), {
+TransformControlsPlane.prototype = Object.assign( Object.create( THREE.Mesh.prototype ), {
 
-	constructor: THREE.TransformControlsPlane,
+	constructor: TransformControlsPlane,
 
 	isTransformControlsPlane: true
 
 } );
+
+export default TransformControlsPlane;

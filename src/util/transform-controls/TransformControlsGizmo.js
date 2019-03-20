@@ -1,5 +1,6 @@
+import * as THREE from 'three';
 
-THREE.TransformControlsGizmo = function () {
+function TransformControlsGizmo() {
 
 	'use strict';
 
@@ -740,10 +741,12 @@ THREE.TransformControlsGizmo = function () {
 
 };
 
-THREE.TransformControlsGizmo.prototype = Object.assign( Object.create( THREE.Object3D.prototype ), {
+TransformControlsGizmo.prototype = Object.assign( Object.create( THREE.Object3D.prototype ), {
 
-	constructor: THREE.TransformControlsGizmo,
+	constructor: TransformControlsGizmo,
 
 	isTransformControlsGizmo: true
 
 } );
+
+export default TransformControlsGizmo;

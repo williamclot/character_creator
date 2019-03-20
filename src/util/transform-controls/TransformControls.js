@@ -1,4 +1,8 @@
-THREE.TransformControls = function ( camera, domElement ) {
+import * as THREE from 'three';
+import TransformControlsGizmo from './TransformControlsGizmo';
+import TransformControlsPlane from './TransformControlsPlane';
+
+function TransformControls( camera, domElement ) {
 
 	THREE.Object3D.call( this );
 
@@ -6,10 +10,10 @@ THREE.TransformControls = function ( camera, domElement ) {
 
 	this.visible = false;
 
-	var _gizmo = new THREE.TransformControlsGizmo();
+	var _gizmo = new TransformControlsGizmo();
 	this.add( _gizmo );
 
-	var _plane = new THREE.TransformControlsPlane();
+	var _plane = new TransformControlsPlane();
 	this.add( _plane );
 
 	var scope = this;
@@ -594,10 +598,12 @@ THREE.TransformControls = function ( camera, domElement ) {
 
 };
 
-THREE.TransformControls.prototype = Object.assign( Object.create( THREE.Object3D.prototype ), {
+TransformControls.prototype = Object.assign( Object.create( THREE.Object3D.prototype ), {
 
-  constructor: THREE.TransformControls,
+  constructor: TransformControls,
 
   isTransformControls: true
 
 } );
+
+export default TransformControls;
