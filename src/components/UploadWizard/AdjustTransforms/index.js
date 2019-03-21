@@ -375,9 +375,12 @@ export default class AdjustTransforms extends Component {
                 />
 
                 <div className = { styles.title } >
-                    <h4>
+                    <h2>
                         Position and Resize
-                    </h4>
+                    </h2>
+                    <p>
+                        Rotate Part to face the camera.
+                    </p>
                 </div>
 
                 <div className = { styles.shortcutButtons } >
