@@ -80,6 +80,10 @@ module.exports = {
 
     mode: 'production',
     
+    optimization: {
+        minimize: false
+    },
+    
     devtool: 'source-map',
 
     module: {
