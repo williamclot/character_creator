@@ -20,6 +20,7 @@
     /* justify-items: stretch; */
     grid-gap: 10px;
 }
+
 .uploadConfirm .gridView .label {
     grid-column: label-col;
     font-style: italic;
@@ -27,6 +28,13 @@
     font-weight: bold;
     text-align: right;
 }
+
+.uploadConfirm .gridView .label .previewInstructions {
+    max-width: 160px;
+    font-size: smaller;
+    color: #a2a2a2;
+}
+
 .uploadConfirm .gridView .view {
     grid-column: view-col;
     border-radius: 5px;

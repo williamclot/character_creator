@@ -165,9 +165,14 @@ class UploadConfirm extends Component {
                         onChange = { onNameChange }
                     />
 
-                    <span className = { styles.label } >
-                        Part Preview:
-                    </span>
+                    <div className = { styles.label }>
+                        <span>
+                            Part Preview Icon
+                        </span>
+                        <p className = { styles.previewInstructions } >
+                            (Set the Icon by dragging to rotate the part)
+                        </p>
+                    </div>
                     <canvas
                         className = {cn( styles.view, styles.canvas )}
                         ref = { this.canvasRef }
