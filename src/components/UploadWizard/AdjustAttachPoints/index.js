@@ -224,7 +224,6 @@ export default class AdjustAttachpoints extends Component {
     }
 
     renderScene = () => {
-        this.transformControls.update()
         this.renderer.render( this.scene, this.camera )
     }
 
