@@ -371,6 +371,29 @@ export default class AdjustTransforms extends Component {
                     onClick = { this.onClick }
                     onKeyDown = { this.onKeyDown }
                 />
+
+                <div className = { styles.title } >
+                    <h4>
+                        Position and Resize
+                    </h4>
+                </div>
+
+                <div className = { styles.shortcutButtons } >
+                    <div
+                        className = {cn( commonStyles.button, styles.button )}
+                        onClick = { this.onModeTranslate }
+                    >
+                        P
+                    </div>
+
+                    <div
+                        className = {cn( commonStyles.button, styles.button )}
+                        onClick = { this.onModeRotate }
+                    >
+                        R
+                    </div>
+
+                </div>
                 
                 <div className = { styles.sideView } >
 
@@ -453,28 +476,6 @@ export default class AdjustTransforms extends Component {
 
                 </div>
 
-                <div className = { styles.title } >
-                    <h4>
-                        Position and Resize
-                    </h4>
-                </div>
-
-                <div className = { styles.shortcutButtons } >
-                    <div
-                        className = {cn( commonStyles.button, styles.button )}
-                        onClick = { this.onModeTranslate }
-                    >
-                        P
-                    </div>
-
-                    <div
-                        className = {cn( commonStyles.button, styles.button )}
-                        onClick = { this.onModeRotate }
-                    >
-                        R
-                    </div>
-
-                </div>
             </div>
         )
     }
