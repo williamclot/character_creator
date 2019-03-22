@@ -96,7 +96,9 @@ class App extends Component {
         }))
     }
 
-    onUpload = ( filename, objectURL ) => {
+    onUpload = ( categoryName, filename, objectURL ) => {
+        const partType = this.sceneManager.categoriesMap.get( categoryName )
+
         const { name, extension } = getNameAndExtension( filename )
 
         console.log(name, extension)
@@ -120,6 +122,7 @@ class App extends Component {
         this.setState({
             showUploadWizard: true,
             uploadedObjectData: {
+                partType,
                 name,
                 filename,
                 extension,
@@ -231,8 +234,6 @@ class App extends Component {
                 visible = { showUploadWizard }
 
                 sceneManager = { this.sceneManager }
-
-                currentCategory = { selectedCategory }
                 
                 data = { uploadedObjectData }
                 

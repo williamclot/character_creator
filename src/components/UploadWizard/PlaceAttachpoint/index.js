@@ -163,10 +163,11 @@ export default class PlaceAttachpoint extends Component {
             nextStep, previousStep
         } = this.props
 
-        const parentName = currentCategory.parent
-            ? currentCategory.parent.name
-            : 'the scene'
-
+        const parentName = currentCategory
+            ? currentCategory.parent
+                ? currentCategory.parent.name
+                : 'the scene'
+            : ''
         
         const className = cn(
             commonStyles.wizardStep,
