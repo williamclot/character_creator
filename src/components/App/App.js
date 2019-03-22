@@ -96,7 +96,7 @@ class App extends Component {
         }))
     }
 
-    onUpload = ( objectURL, filename ) => {
+    onUpload = ( filename, objectURL ) => {
         const { name, extension } = getNameAndExtension( filename )
 
         console.log(name, extension)

@@ -22,7 +22,7 @@ class Selector extends Component {
         const { onUpload } = this.props
 
         if ( typeof onUpload === 'function' ) {
-            onUpload( objectURL, fileName )
+            onUpload( fileName, objectURL )
         }
     }
 
