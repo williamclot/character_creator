@@ -7,6 +7,8 @@ import {
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
 
+import Tutorial from '../Tutorial'
+
 import commonStyles from '../index.module.css'
 import styles from './index.module.css'
 
@@ -15,6 +17,10 @@ class UploadConfirm extends Component {
         super( props )
 
         this.canvasRef = createRef()
+
+        this.state = {
+            tutorialHidden: true
+        }
     }
     
     componentDidMount() {
@@ -123,6 +129,12 @@ class UploadConfirm extends Component {
         this.props.onNext()
     }
 
+    toggleTutorial = () => {
+        this.setState( state => ({
+            tutorialHidden: !state.tutorialHidden
+        }))
+    }
+
     render() {
         const {
             visible: isVisible,
@@ -133,69 +145,89 @@ class UploadConfirm extends Component {
         
             onCancel, onNext
         } = this.props
+        const { tutorialHidden } = this.state
 
         const className = cn(
             commonStyles.wizardStep,
             isVisible && commonStyles.visible,
-            styles.uploadConfirm
+            styles.container
         )
 
         return (
-            <div
-                className = { className }
-            >
-                <h2> Add Part </h2>
+            <div className = { className } >
+                <div
+                    className = { styles.uploadConfirm }
+                >
+                    <h2> Add Part </h2>
 
-                <div className = { styles.gridView } >
+                    <div className = { styles.gridView } >
 
-                    <span className = { styles.label } >
-                        Part Type:
-                    </span>
-                    <span className = { styles.view } >
-                        {currentCategory.label}
-                    </span>
-
-                    <span className = { styles.label } >
-                        Part Name: 
-                    </span>
-                    <input
-                        className = {cn( styles.view, styles.input )}
-                        type = "text"
-                        value = { name }
-                        onChange = { onNameChange }
-                    />
-
-                    <div className = { styles.label }>
-                        <span>
-                            Part Preview Icon
+                        <span className = { styles.label } >
+                            Part Type
+                            <span
+                                className = { styles.questionMark }
+                                onClick = { this.toggleTutorial }
+                            >?</span>
                         </span>
-                        <p className = { styles.previewInstructions } >
-                            (Set the Icon by dragging to rotate the part)
-                        </p>
-                    </div>
-                    <canvas
-                        className = {cn( styles.view, styles.canvas )}
-                        ref = { this.canvasRef }
-                    />
-                    
-                    <div className = {cn( styles.view, styles.buttonsContainer ) } >
-                        <div
-                            className = {cn( commonStyles.button, styles.button )}
-                            onClick = { onCancel }
-                        >
-                            Cancel
+                        <span className = { styles.view } >
+                            {currentCategory.label}
+                        </span>
+
+                        <span className = { styles.label } >
+                            Part Name
+                        </span>
+                        <input
+                            className = {cn( styles.view, styles.input )}
+                            type = "text"
+                            value = { name }
+                            onChange = { onNameChange }
+                        />
+
+                        <div className = { styles.label }>
+                            <span>
+                                Part Preview Icon
+                            </span>
+                            <p className = { styles.previewInstructions } >
+                                (Set the Icon by dragging to rotate the part)
+                            </p>
+                        </div>
+                        <div className = {cn( styles.view, styles.canvasContainer )} >
+                            <canvas
+                                className = { styles.canvas }
+                                ref = { this.canvasRef }
+                            />
+
+                            <div className = { styles.canvasTitle } > { name } </div>
+                        </div>
+                        
+                        <div className = {cn( styles.view, styles.buttonsContainer ) } >
+                            <div
+                                className = {cn( commonStyles.button, styles.button )}
+                                onClick = { onCancel }
+                            >
+                                Cancel
+                            </div>
+
+                            <div
+                                className = {cn( commonStyles.button, styles.button )}
+                                onClick = { this.onNext }
+                            >
+                                Next
+                            </div>
                         </div>
 
-                        <div
-                            className = {cn( commonStyles.button, styles.button )}
-                            onClick = { this.onNext }
-                        >
-                            Next
-                        </div>
                     </div>
 
                 </div>
 
+                <div
+                    className = {cn(
+                        styles.tutorial,
+                        tutorialHidden && styles.hidden
+                    )}
+                >
+                    <Tutorial />
+                </div>
             </div>
         )
     }
