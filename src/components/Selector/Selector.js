@@ -18,7 +18,7 @@ class Selector extends Component {
         onObjectSelected( data.currentCategory, object )
     }
 
-    handleUpload = ( objectURL, fileName ) => {
+    handleUpload = ( fileName, objectURL ) => {
         const { onUpload } = this.props
 
         if ( typeof onUpload === 'function' ) {
