@@ -191,10 +191,14 @@ class UploadConfirm extends Component {
                                 (Set the Icon by dragging to rotate the part)
                             </p>
                         </div>
-                        <canvas
-                            className = {cn( styles.view, styles.canvas )}
-                            ref = { this.canvasRef }
-                        />
+                        <div className = {cn( styles.view, styles.canvasContainer )} >
+                            <canvas
+                                className = { styles.canvas }
+                                ref = { this.canvasRef }
+                            />
+
+                            <div className = { styles.canvasTitle } > { name } </div>
+                        </div>
                         
                         <div className = {cn( styles.view, styles.buttonsContainer ) } >
                             <div

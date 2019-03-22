@@ -31,7 +31,7 @@
     grid-gap: 10px;
 }
 
-.uploadConfirm .gridView .label {
+.label {
     grid-column: label-col;
     font-style: italic;
 
@@ -39,7 +39,7 @@
     text-align: right;
 }
 
-.uploadConfirm .gridView .label .questionMark {
+.label .questionMark {
     color: #4c4c4c;
     background-color: white;
     display: inline-block;
@@ -51,37 +51,53 @@
     margin-left: 5px;
 }
 
-.uploadConfirm .gridView .label .previewInstructions {
+.label .previewInstructions {
     max-width: 160px;
     font-size: smaller;
     color: #a2a2a2;
 }
 
-.uploadConfirm .gridView .view {
+.view {
     grid-column: view-col;
     border-radius: 5px;
 }
 
-.uploadConfirm .gridView .view.input {
+.view.input {
     background-color: #777777;
     border-color: #777777;
     color: white;
     padding: 0px 5px;
 }
 
-.uploadConfirm .gridView .view.canvas {
+.view.canvasContainer {
+    border-radius: unset;
+    
+}
+.canvasContainer .canvas {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     width: 250px;
     height: 200px;
-    /* border-radius: 10px; */
+}
+.canvasContainer .canvasTitle {
+    background-color: rgba(15, 15, 15, 1);
+    text-align: center;
+    line-height: 15px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 10px;
+
+    /* dunno why there is a 5px gap before it, so remove it */
+    margin-top: -5px;
 }
 
-.uploadConfirm .gridView .buttonsContainer {
+.buttonsContainer {
     
     display: flex;
     justify-content: center;
 }
 
-.uploadConfirm .gridView .buttonsContainer .button {
+.buttonsContainer .button {
 
     width: 50%;
     margin: 10px;
