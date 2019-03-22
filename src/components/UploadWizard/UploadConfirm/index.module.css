@@ -1,12 +1,22 @@
+.container {
+    display: flex;
+    align-items: center;
+
+    border-radius: unset;
+}
+
+.tutorial {
+    margin-left: 15px;
+}
+.tutorial.hidden {
+    display: none;
+}
+
 .uploadConfirm {
-    /* background-color: #555454; */
     background-color: #4c4c4c;
+    border-radius: 20px;
 
-
-    /* height: 70%; */
-    /* width: 30%; */
-
-
+    width: 420px;
     color: white;
     padding: 10px;
 }
@@ -27,6 +37,18 @@
 
     font-weight: bold;
     text-align: right;
+}
+
+.uploadConfirm .gridView .label .questionMark {
+    color: #4c4c4c;
+    background-color: white;
+    display: inline-block;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    cursor: pointer;
+    margin-left: 5px;
 }
 
 .uploadConfirm .gridView .label .previewInstructions {
