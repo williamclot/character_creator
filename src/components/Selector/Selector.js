@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import ImportButton from './ImportButton'
+import ImportButton from '../ImportButton'
 
 import './Selector.css'
 
@@ -68,7 +68,7 @@ class Selector extends Component {
                 key = "__add__button__"
                 onFileLoaded = { this.handleUpload }
             >
-                Upload { currentCategory }
+                Add new { currentCategory }
             </ImportButton>
         </>
     }
