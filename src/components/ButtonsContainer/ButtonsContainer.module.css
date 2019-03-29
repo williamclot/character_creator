@@ -2,14 +2,36 @@
     position: absolute;
     left: 30px;
     bottom: 30px;
+    /* display: flex; */
 }
 
-.uploadButton {
-    width: unset;
+.menu {
+
+}
+
+.menuHeader {
+
+}
+
+.menuBody {
+    display: none;
+
+    position: absolute;
+    left: 100%;
+    bottom: 0;
+
+    margin: 0 15px;
+}
+.menuBody.visible {
+    display: block;
+}
+
+.button {
+    width: 200px;
     
     font-weight: bold;
 }
-.uploadButton .triangle {
+.button .triangle {
     display: inline-block;
     width: 0px;
     height: 0px;
@@ -17,4 +39,16 @@
     border-bottom: 10px solid transparent;
     border-left: 10px solid white;
     margin: 0 5px;
+}
+
+.button.disabled {
+    color: grey;
+    pointer-events: none;
+}
+
+.separator {
+    background-color: white;
+    border-radius: 1px;
+    width: 100%;
+    height: 1px;
 }

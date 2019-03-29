@@ -1,21 +1,61 @@
-import React, { useState } from 'react'
+import React from 'react'
 import cn from 'classnames'
 
-import ButtonWithArrow from './ButtonWithArrow'
+import ImportButton from '../ImportButton'
+import Button, { ButtonWithArrow } from './Button'
+import ListWithSeparator from './ListWithSeparator'
+import Menu from './Menu';
 
+import sharedStyles from '../../shared-styles/button.module.css'
 import styles from './ButtonsContainer.module.css'
 
+const ButtonsContainer = ({ categories, onUpload }) => {
 
-const ButtonsContainer = (props) => {
-    // const [visible, setVisible] = useState(false)
+    const addNewPartButton = <ButtonWithArrow> Add new Part </ButtonWithArrow>
+    const existingPartTypeButton = <ButtonWithArrow> Existing Part Type </ButtonWithArrow>
+    const separator = <div className = { styles.separator } />
 
-    return <div className = {styles.container}>
-        <ButtonWithArrow
-            onClick = { () => {window.alert('asd')} }
-        >
-            Add new Part
-        </ButtonWithArrow>
-    </div>
+    return (
+        <div className = {styles.container}>
+
+            <Menu header = { addNewPartButton } >
+                <ListWithSeparator separator = { separator } >
+
+                    <Menu header = { existingPartTypeButton } >
+                        <ListWithSeparator separator = { separator } >
+
+                            {categories.map( category => (
+                                <ImportButton
+                                    className = {cn(
+                                        sharedStyles.button,
+                                        styles.button
+                                    )}
+                                    key = { category.name }
+
+                                    onFileLoaded = {( filename, objectURL ) =>
+                                        onUpload(
+                                            category.name,
+                                            filename,
+                                            objectURL
+                                        )
+                                    }
+                                >
+                                    {category.name}
+                                </ImportButton>
+                            ))}
+
+                        </ListWithSeparator>
+                    </Menu>
+
+                    <Button className = { styles.disabled }>
+                        New Part Type
+                    </Button>
+
+                </ListWithSeparator>
+            </Menu>
+
+        </div>
+    )
 }
 
 export default ButtonsContainer

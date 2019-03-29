@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Children, cloneElement } from 'react'
 
 const ListWithSeparator = ({
     className,
@@ -6,19 +6,20 @@ const ListWithSeparator = ({
     separator,
     ...props
 }) => {
-    const [head, tail] = children
-
-    const separatedChildren = tail.reduce(
-        (prev, curr) => prev.concat( separator, curr ),
-        [head]
-    )
+    const [head, ...tail] = children
 
     return (
         <div
             className = { className }
             { ...props }
         >
-            { separatedChildren }
+            { head }
+            { Children.map(tail, ( child, index ) => (
+                <>
+                    { cloneElement(separator, { key: index }) }
+                    { child }
+                </>
+            ))}
         </div>
     )
 }
