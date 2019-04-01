@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import ImportButton from './ImportButton'
+import ImportButton from '../ImportButton'
 
 import './Selector.css'
 
@@ -18,11 +18,11 @@ class Selector extends Component {
         onObjectSelected( data.currentCategory, object )
     }
 
-    handleUpload = ( objectURL, fileName ) => {
-        const { onUpload } = this.props
+    handleUpload = ( fileName, objectURL ) => {
+        const { data, onUpload } = this.props
 
         if ( typeof onUpload === 'function' ) {
-            onUpload( objectURL, fileName )
+            onUpload( data.currentCategory, fileName, objectURL )
         }
     }
 
@@ -68,7 +68,7 @@ class Selector extends Component {
                 key = "__add__button__"
                 onFileLoaded = { this.handleUpload }
             >
-                Upload { currentCategory }
+                Add new { currentCategory }
             </ImportButton>
         </>
     }

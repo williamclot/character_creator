@@ -170,7 +170,7 @@ class UploadConfirm extends Component {
                             >?</span>
                         </span>
                         <span className = { styles.view } >
-                            {currentCategory.label}
+                            { currentCategory && currentCategory.label }
                         </span>
 
                         <span className = { styles.label } >

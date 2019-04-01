@@ -9,6 +9,7 @@ import Selector from '../Selector';
 // import { CategoriesView, GroupsView } from '../Categories'
 import PartTypesView from '../PartTypes'
 import LoadingIndicator from '../LoadingIndicator';
+import ButtonsContainer from '../ButtonsContainer';
 
 // import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../../config'
 import SceneManager from '../ThreeContainer/sceneManager'
@@ -96,7 +97,9 @@ class App extends Component {
         }))
     }
 
-    onUpload = ( objectURL, filename ) => {
+    onUpload = ( categoryName, filename, objectURL ) => {
+        const partType = this.sceneManager.categoriesMap.get( categoryName )
+
         const { name, extension } = getNameAndExtension( filename )
 
         console.log(name, extension)
@@ -120,6 +123,7 @@ class App extends Component {
         this.setState({
             showUploadWizard: true,
             uploadedObjectData: {
+                partType,
                 name,
                 filename,
                 extension,
@@ -227,12 +231,15 @@ class App extends Component {
                 </div>
             </div>
 
+            <ButtonsContainer
+                categories = { getCategories(groups) }
+                onUpload = { this.onUpload }
+            />
+
             <UploadWizard
                 visible = { showUploadWizard }
 
                 sceneManager = { this.sceneManager }
-
-                currentCategory = { selectedCategory }
                 
                 data = { uploadedObjectData }
                 

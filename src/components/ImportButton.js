@@ -26,7 +26,7 @@ class ImportButton extends Component {
 
         const objectURL = URL.createObjectURL( file )
 
-        onFileLoaded( objectURL, file.name )
+        onFileLoaded( file.name, objectURL )
     }
 
     onClick = () => {
