@@ -52,9 +52,9 @@ const mapStateToProps = state => ({
     currentCategoryIndex: state.selectedCategoryPath.categoryIndex
 })
 
-const mapDispatchToProps = dispatch => ({
-    onCategoryClick: index => dispatch( setCurrentCategory( index ) )
-})
+const mapDispatchToProps = {
+    onCategoryClick: setCurrentCategory
+}
 
 export default connect(
     mapStateToProps,

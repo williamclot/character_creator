@@ -1,3 +1,5 @@
+export { previousStep, nextStep } from './steps'
+
 export const setCurrentGroup = groupIndex => ({
     type: 'SET_CURRENT_GROUP',
     index: groupIndex

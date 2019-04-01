@@ -57,6 +57,8 @@ export function initControls(camera, canvas) {
     // controls.maxPolarAngle = Math.PI / 2 - 0.1;
     // controls.enablePan = false;
 
+    controls.enableKeys = false
+
     return controls;
 }
 

@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 
+import ImportButton from '../ImportButton'
+
 import './Selector.css'
 
 class Selector extends Component {
     constructor( props ) {
         super( props )
-
-        // console.log(props.objects)
     }
 
     handleClick = object => {
@@ -16,6 +16,14 @@ class Selector extends Component {
         } = this.props
 
         onObjectSelected( data.currentCategory, object )
+    }
+
+    handleUpload = ( fileName, objectURL ) => {
+        const { data, onUpload } = this.props
+
+        if ( typeof onUpload === 'function' ) {
+            onUpload( data.currentCategory, fileName, objectURL )
+        }
     }
 
     render() {
@@ -29,31 +37,40 @@ class Selector extends Component {
             )
         }
 
-        const { objects } = data
+        const { objects, currentCategory } = data
 
         const elementDiv = objects.map( ( object, index ) => (
+
 			<div
 				className = "selector-item"
 				key = {object.name}
 				onClick = { () => this.handleClick( object ) }
 			>
-				<div className = "img">
-					<img
-						src = { null }
-						alt = "img"
-					/>
-				</div>
+				<div
+                    className = "img"
+                    style = {{ backgroundImage: `url(${object.img})` }}
+                />
 				<div className = "unselectable item-name">
 					{ object.name }
 				</div>
 			</div>
+
 		))
 
-        return (
+        return <>
             <div className = "selector">
                 { elementDiv }
             </div>
-        )
+
+
+            <ImportButton
+                className = "import-button"
+                key = "__add__button__"
+                onFileLoaded = { this.handleUpload }
+            >
+                Add new { currentCategory }
+            </ImportButton>
+        </>
     }
 }
 

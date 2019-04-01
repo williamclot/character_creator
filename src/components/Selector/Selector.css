@@ -10,13 +10,21 @@
     height: 100%;
 
     display: grid;
-    grid-row-gap: 10px;
+    /* grid-row-gap: 10px; */
     grid-template-columns: 1fr 1fr;
     grid-auto-columns: 1fr;
     grid-template-rows: repeat(auto-fill, minmax(103px, 103px));
     justify-items: center;
     overflow-y: scroll;
     overflow-x: hidden;
+
+    margin: 5px;
+
+    row-gap: 10px;
+    column-gap: 10px;
+
+    /* min-width: 150px;
+    max-width: 300px; */
 }
 
 /* Media queries for the number of columns in the selector */
@@ -32,19 +40,22 @@
 } */
 
 .selector .selector-item {
-    min-height: 100px;
+    /* min-height: 100px;
     max-height: 100px;
     min-width: 100px;
-    max-width: 100px;
+    max-width: 100px; */
     /* display: inline; */
+
+    height: 100%;
+    width: 100%;
     border-radius: 10px;
     background-color: #00000059;
     align-items: center;
     cursor: pointer;
     overflow: hidden;
     position: relative;
-    margin-left:5px;
-    margin-right:5px;
+    /* margin-left:5px;
+    margin-right:5px; */
 }
 
 .selector .selector-item:hover {
@@ -54,15 +65,13 @@
 
 .selector .selector-item .img {
     padding: 2px;
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #767676;
 }
-  
-.selector .selector-item .img img {
-    display: block;
-    margin: auto;
-    max-width: 80px;
-    max-height: 80px;
-}
-
 
 .selector .selector-item .item-name {
     position: absolute;
@@ -79,6 +88,24 @@
     font-size: 10px;
 }
 
+.import-button {
+    background-color: #2b2b2b;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+    
+    margin: 10px;
+    padding: 10px;
+
+    border-radius: 10px;
+    box-shadow: 2px 2px 6px black;
+    cursor: pointer;
+}
+
+.import-button:hover {
+    background-color: #121c1f59;
+    box-shadow: 2px 2px 5px #353535;
+}
 
 .selector::-webkit-scrollbar-track {
     background: none;

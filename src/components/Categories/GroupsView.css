@@ -44,7 +44,8 @@
     background-color: rgba(0, 55, 39, 0.31);
 }
 
-.groups-view .groups-item img {
+.groups-view .groups-item .name {
+    text-align: center;
     line-height: 60px;
     color: #ffffff;
 }

@@ -6,26 +6,24 @@
   "files": [
     "/dist"
   ],
-
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js", 
-    
-    "lib": "rm -rf dist/ && webpack --config config/webpackModule.config.js",
-
-    "prepare": "npm run lib"
+    "test": "node scripts/test.js",
+    "lib": "node scripts/lib.js",
+    "prepare": "node scripts/lib.js"
   },
-
   "dependencies": {
     "axios": "^0.18.0",
+    "classnames": "^2.2.6",
     "react-redux": "^6.0.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
-    "three": "^0.100.0",
+    "three": "^0.102.0",
     "three-gltf-loader": "^1.100.0",
     "three-orbitcontrols": "^2.99.1",
     "three-stl-loader": "^1.0.6",
+    "throttle-debounce": "^2.1.0",
     "toposort": "^2.0.2"
   },
   "devDependencies": {
@@ -84,8 +82,8 @@
     "workbox-webpack-plugin": "3.6.3"
   },
   "peerDependencies": {
-    "react": ">=0.14.0 <17.0.0",
-    "react-dom": ">=0.14.0 <17.0.0"
+    "react": ">=16.6.3 <17.0.0",
+    "react-dom": ">=16.6.3 <17.0.0"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -1,7 +1,6 @@
-import { Matrix4, Object3D, Group, Bone, Mesh, Material, Color } from 'three'
+import { Matrix4, Vector3, Object3D, Group, Bone, Mesh, Material, Color } from 'three'
 import topologicalSort from 'toposort'
 import findMinGeometry from '../util/findMinGeometry'
-
 
 /**
  * An object that holds a reference to a group of 3D objects (_container_).
@@ -21,7 +20,7 @@ import findMinGeometry from '../util/findMinGeometry'
 class SceneManager {
     /**
      * @param { Object3D } container
-     * @param { [{ name: string, attachPoints: string[], parent?: { name: string, attachPoint: string } }] } categories
+     * @param { Category[] } categories
      */
     constructor( container, categories ) {
         
@@ -49,7 +48,7 @@ class SceneManager {
 
         /**
          * A mapping from category ID to category data
-         * @type { Map< string, Category > }
+         * @type { Map<string, Category> }
          */
         this.categoriesMap = categories.reduce(
             ( categoriesMap, category ) => categoriesMap.set( category.name, category ),
@@ -57,13 +56,13 @@ class SceneManager {
         )
 
         /**
-         * @type { Map< string, Object3D > }
+         * @type { Map<string, Object3D> }
          * used to keep track of loaded objects
          */
         this.loadedObjectsMap = new Map
 
         /**
-         * @type { Map< string, Bone > }
+         * @type { Map<string, Bone> }
          *  used to keep track of Bone objects within each loaded object
          * 
          * Note: assumes bone names are unique
@@ -71,6 +70,34 @@ class SceneManager {
         this.bonesMap = new Map;
     }
 
+    getContainer() {
+        return this.container
+    }
+
+    /**
+     * @param { Object3D } container
+     */
+    setContainer( container ) {
+        this.container = container
+    }
+
+    getObject( key ) {
+        return this.loadedObjectsMap.get( key )
+    }
+
+    getObjectByAttachPoint( attachPointName ) {
+        const attachPoint = this.bonesMap.get( attachPointName )
+
+        return attachPoint ? attachPoint.children[ 0 ] : null
+    }
+
+    getParentObject( key ) {
+        const { parent } = this.categoriesMap.get( key )
+
+        if ( !parent ) return null
+
+        return this.loadedObjectsMap.get( parent.name ) || null
+    }
 
     placeStand( newStand, options = {} ) {
         
@@ -180,7 +207,7 @@ class SceneManager {
     }
 
     /**
-     * @param { ParentCategory } parentCategory 
+     * @param { Category } parentCategory 
      * @returns - the parent bone of the category or the group if the category is the root
      */
     getParent( parentCategory ) {
@@ -214,6 +241,29 @@ class SceneManager {
                 }
             }
         } )
+    }
+
+    computeGlobalRotation( category, poseData ) {
+        const finalRotation = new Vector3 // default to (0, 0, 0)
+
+        if ( !category || !poseData ) {
+            return finalRotation
+        }
+
+        let cat = this.categoriesMap.get( category.name )
+
+        while( cat && cat.parent ) {
+            const attachPointRotation = poseData[ cat.parent.attachPoint ]
+
+            if ( attachPointRotation ) {
+                const { x, y, z } = attachPointRotation
+                finalRotation.add( new Vector3( x, y, z ))
+            }
+
+            cat = this.categoriesMap.get( cat.parent.name )
+        }
+
+        return finalRotation
     }
 
     resetStand() {
@@ -316,4 +366,20 @@ function extractKnownBones( object3d, knownBoneNames ) {
     return extractedBones
 }
 
-export default SceneManager 
+export default SceneManager
+
+
+/**
+ * JS object representing the parent of a category;
+ * needs a category name and an attachpoint name from within that category
+ * @typedef { Object } Parent
+ * @property { string } name
+ * @property { string } attachPoint
+*/
+/**
+ * Category object
+ * @typedef { Object } Category
+ * @property { string } name
+ * @property { string[] } attachPoints
+ * @property { Parent } [parent]
+ */

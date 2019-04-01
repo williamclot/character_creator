@@ -14,6 +14,7 @@
     transform: translateY(-50%);
 
     height: 85%;
+    width: 350px;
 
 
     display: flex;
@@ -27,6 +28,7 @@
 .editor-panel .groups-container {
     position: relative;
 
+    margin-right: 20px;
     height: 100%;
 }
 
@@ -43,4 +45,5 @@
     /* padding-bottom: 35px; */
 
     height: 100%;
+    width: 100%;
 }
