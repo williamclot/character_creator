@@ -70,7 +70,22 @@
 
 .adjustTransforms .shortcutButtons .button {
     height: 25px;
-    width: 25px;
+    width: 150px;
     padding: 5px;
     margin: 5px;
 }
+.adjustTransforms .shortcutButtons .scaleButton {
+    /* width | style | color */
+    border: thick solid #2b2b2b;
+    border-radius: 10px;
+
+    font-weight: bold;
+    text-align: center;
+}
+
+.adjustTransforms .shortcutButtons .inlineButton {
+    display: inline-block;
+    height: 25px;
+    width: 25px;
+    padding: 5px;
+    margin: 5px;}

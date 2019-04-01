@@ -315,6 +315,20 @@ export default class AdjustTransforms extends Component {
         this.props.onScaleChange( value )
     }
 
+    incrementScale = () => {
+        const currentScale = this.props.scale
+        const step = currentScale / 30
+        const scale = currentScale + step
+        this.props.onScaleChange( scale )
+    }
+
+    decrementScale = () => {
+        const currentScale = this.props.scale
+        const step = currentScale / 30
+        const scale = currentScale - step
+        this.props.onScaleChange( scale )
+    }
+
     onModeTranslate = () => {
         this.transformControls.attach( this.mesh )
         this.transformControls.setMode( 'translate' )
@@ -388,14 +402,30 @@ export default class AdjustTransforms extends Component {
                         className = {cn( commonStyles.button, styles.button )}
                         onClick = { this.onModeTranslate }
                     >
-                        P
+                        Position
                     </div>
 
                     <div
                         className = {cn( commonStyles.button, styles.button )}
                         onClick = { this.onModeRotate }
                     >
-                        R
+                        Rotation
+                    </div>
+
+                    <div className = { styles.scaleButton } >
+                        Scale
+                        <span
+                            className = {cn( commonStyles.button, styles.inlineButton )}
+                            onClick = { this.incrementScale }
+                        >
+                            +
+                        </span>
+                        <span
+                            className = {cn( commonStyles.button, styles.inlineButton )}
+                            onClick = { this.decrementScale }
+                        >
+                            -
+                        </span>
                     </div>
 
                 </div>
