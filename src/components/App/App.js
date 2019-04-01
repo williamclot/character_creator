@@ -68,10 +68,6 @@ class App extends Component {
     }
 
     async postObject( partTypeId, object ) {
-        const authorizedHeaders = {
-            'Authorization': "Bearer 123456"
-        }
-
         const fileBlob = (await axios.get(
             object.download_url,
             {
@@ -122,10 +118,7 @@ class App extends Component {
 
         const res = await axios.post(
             `${API_ENDPOINT}/object`,
-            data,
-            {
-                headers: authorizedHeaders
-            }
+            data
         )
 
         console.log(res.status)
@@ -149,8 +142,7 @@ class App extends Component {
                 {
                     params: {
                         upload_id: file.upload_id
-                    },
-                    headers: authorizedHeaders
+                    }
                 }
             ),
             axios.post(
@@ -159,8 +151,7 @@ class App extends Component {
                 {
                     params: {
                         upload_id: image.upload_id
-                    },
-                    headers: authorizedHeaders
+                    }
                 }
             )
         ])
