@@ -142,12 +142,12 @@ class App extends Component {
         })
     }
 
-    onWizardCompleted = ({ name, objectURL, imgDataURL, geometry, metadata }) => {
+    onWizardCompleted = (partType, { name, objectURL, imgDataURL, geometry, metadata }) => {
         console.log('wizard completed')
         console.log(name)
         console.log(metadata)
 
-        const category = this.getSelectedCategory().name
+        const category = partType.name
         const object = getObjectFromGeometry( geometry, metadata )
         
         this.setSelectedObject( category, object )
