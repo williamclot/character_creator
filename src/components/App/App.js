@@ -68,22 +68,25 @@ class App extends Component {
     }
 
     async postObject( partTypeId, object ) {
-        const fileBlob = (await axios.get(
-            object.download_url,
+        const getBlob = url => axios.get(
+            url,
             {
                 responseType: 'blob'
             }
-        )).data
-
-        const imageBlob = new Blob([object.img])
+        )
+        
+        const [{ data: fileBlob }, { data: imageBlob }] = await Promise.all([
+            getBlob( object.download_url ),
+            getBlob( object.img )
+        ])
 
         console.log('---------')
         console.log(fileBlob, imageBlob)
 
         const data = {
             "name": object.name,
-            "description": "string",
-            "visibility": 0,
+            // "description": "string",
+            // "visibility": 0,
             // "how_to": "string",
             // "dimensions": "string",
             // "time_to_do_from": 0,
@@ -91,14 +94,10 @@ class App extends Component {
             // "support_free": true,
             // "filament_quantity": "string",
             // "client_url": "string",
-            "tags": "customizer",
+            // "tags": "customizer",
+            "brand": null,
             "licenses": [],
-            // "licenses": [
-            //   {
-            //     "type": "string",
-            //     "value": true
-            //   }
-            // ],
+            
             "files": [
               {
                 "filename": `${object.name}.${object.extension}`,
@@ -112,8 +111,7 @@ class App extends Component {
               }
             ],
 
-            "customizer_part_type_id": partTypeId,
-            "brand": null
+            "customizer_part_type_id": partTypeId
         }
 
         const res = await axios.post(
