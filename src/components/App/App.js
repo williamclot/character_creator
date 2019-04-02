@@ -111,7 +111,8 @@ class App extends Component {
               }
             ],
 
-            "customizer_part_type_id": partTypeId
+            "customizer_part_type_id": partTypeId,
+            "customizer_metadata": object.metadata
         }
 
         const res = await axios.post(
