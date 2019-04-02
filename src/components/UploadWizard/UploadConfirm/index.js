@@ -122,11 +122,18 @@ class UploadConfirm extends Component {
         this.renderer.render( this.scene, this.camera )
     }
 
-    onNext = () => {
-        const dataURL = this.canvasRef.current.toDataURL( 'image/jpeg' )
-        this.props.setImgDataURL( dataURL )
+    saveImage = () => new Promise(( resolve, reject ) => {
+        this.canvasRef.current.toBlob( blob => resolve(blob), 'image/jpeg' )
+    })
 
+    onNext = async () => {
         this.props.onNext()
+
+        const imgBlob = await this.saveImage()
+        
+        const objectURL = URL.createObjectURL( imgBlob )
+
+        this.props.setImgDataURL( objectURL )
     }
 
     toggleTutorial = () => {
