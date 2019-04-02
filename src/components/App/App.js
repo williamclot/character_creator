@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Group } from 'three'
+import axios from 'axios'
 
 import ThreeContainer from '../ThreeContainer'
 import UploadWizard from '../UploadWizard'
@@ -11,7 +12,7 @@ import PartTypesView from '../PartTypes'
 import LoadingIndicator from '../LoadingIndicator';
 import ButtonsContainer from '../ButtonsContainer';
 
-// import { apiEndpoint, accessToken, requestConfig, userName, customizerName } from '../../config'
+import { API_ENDPOINT } from '../../env'
 import SceneManager from '../ThreeContainer/sceneManager'
 
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
@@ -64,6 +65,100 @@ class App extends Component {
         this.setState({
             loadedObjects
         })
+    }
+
+    async postObject( partTypeId, object ) {
+        const getBlob = url => axios.get(
+            url,
+            {
+                responseType: 'blob'
+            }
+        )
+        
+        const [{ data: fileBlob }, { data: imageBlob }] = await Promise.all([
+            getBlob( object.download_url ),
+            getBlob( object.img )
+        ])
+
+        console.log('---------')
+        console.log(fileBlob, imageBlob)
+
+        const data = {
+            "name": object.name,
+            // "description": "string",
+            // "visibility": 0,
+            // "how_to": "string",
+            // "dimensions": "string",
+            // "time_to_do_from": 0,
+            // "time_to_do_to": 0,
+            // "support_free": true,
+            // "filament_quantity": "string",
+            // "client_url": "string",
+            // "tags": "customizer",
+            "brand": null,
+            "licenses": [],
+            
+            "files": [
+              {
+                "filename": `${object.name}.${object.extension}`,
+                "size": fileBlob.size
+              }
+            ],
+            "images": [
+              {
+                "filename": `${object.name}.jpg`,
+                "size": imageBlob.size
+              }
+            ],
+
+            "customizer_part_type_id": partTypeId,
+            "customizer_metadata": object.metadata
+        }
+
+        const res = await axios.post(
+            `${API_ENDPOINT}/object`,
+            data
+        )
+
+        console.log(res.status)
+
+        if ( res.status !== 200 )
+            throw new Error('Not OK')
+
+        const { files, images } = res.data
+
+        const file = files[ 0 ]
+        const image = images[ 0 ]
+
+        console.log(file)
+        console.log(image)
+        console.log('-----')
+
+        const [fileRes, imgRes] = await Promise.all([
+            axios.post(
+                `${API_ENDPOINT}/file`,
+                fileBlob,
+                {
+                    params: {
+                        upload_id: file.upload_id
+                    }
+                }
+            ),
+            axios.post(
+                `${API_ENDPOINT}/image`,
+                imageBlob,
+                {
+                    params: {
+                        upload_id: image.upload_id
+                    }
+                }
+            )
+        ])
+
+        console.log('responses:')
+        console.log(fileRes)
+        console.log(imgRes)
+        console.log('----- SUCCESS ------')
     }
 
     componentDidUpdate( prevProps ) {
@@ -142,12 +237,12 @@ class App extends Component {
         })
     }
 
-    onWizardCompleted = ({ name, objectURL, imgDataURL, geometry, metadata }) => {
+    onWizardCompleted = (partType, { name, objectURL, imgDataURL, geometry, metadata }) => {
         console.log('wizard completed')
         console.log(name)
         console.log(metadata)
 
-        const category = this.getSelectedCategory().name
+        const category = partType.name
         const object = getObjectFromGeometry( geometry, metadata )
         
         this.setSelectedObject( category, object )
@@ -172,6 +267,12 @@ class App extends Component {
                 ]
             }
         }))
+
+        try {
+            this.postObject( partType.id, objectData )
+        } catch ( err ) {
+            console.error( err )
+        }
     }
 
     getSelectedGroup = () => this.props.worldData.groups[ this.props.selectedGroupIndex ]

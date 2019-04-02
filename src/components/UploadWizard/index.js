@@ -186,6 +186,7 @@ class UploadWizard extends Component {
 
     onCompleted = () => {
         const {
+            partType,
             name, objectURL, imgDataURL,
             uploadedObjectGeometry,
             position, rotation, scale,
@@ -199,7 +200,7 @@ class UploadWizard extends Component {
             attachPoints: attachPointsPositions
         }
 
-        this.props.onWizardCompleted({
+        this.props.onWizardCompleted(partType, {
             name,
             objectURL,
             imgDataURL,
