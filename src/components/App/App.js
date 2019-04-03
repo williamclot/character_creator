@@ -86,7 +86,7 @@ class App extends Component {
         const data = {
             "name": object.name,
             // "description": "string",
-            // "visibility": 0,
+            "visibility": 0,
             // "how_to": "string",
             // "dimensions": "string",
             // "time_to_do_from": 0,
