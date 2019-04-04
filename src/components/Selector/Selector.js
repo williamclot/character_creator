@@ -43,7 +43,7 @@ class Selector extends Component {
 
 			<div
 				className = "selector-item"
-				key = {object.name}
+				key = { object.id || object.name }
 				onClick = { () => this.handleClick( object ) }
 			>
 				<div
