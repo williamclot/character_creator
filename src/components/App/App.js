@@ -12,7 +12,6 @@ import PartTypesView from '../PartTypes'
 import LoadingIndicator from '../LoadingIndicator';
 import ButtonsContainer from '../ButtonsContainer';
 
-import { API_ENDPOINT } from '../../env'
 import SceneManager from '../ThreeContainer/sceneManager'
 
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
@@ -68,6 +67,8 @@ class App extends Component {
     }
 
     async postObject( partTypeId, object ) {
+        const { API_ENDPOINT } = this.props.env
+
         const getBlob = url => axios.get(
             url,
             {
