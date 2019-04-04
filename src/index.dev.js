@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom';
 
 import App from './components/App';
 import * as initialProps from './lib'
+import * as env from './env'
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 
 
 ReactDOM.render(
-    <App { ...initialProps } />,
+    <App { ...initialProps } env = { env } />,
     document.getElementById('root')
 );
 
