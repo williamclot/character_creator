@@ -71,8 +71,8 @@ export default class AdjustTransforms extends Component {
         this.orbitControls = new OrbitControls( this.camera, canvas )
         this.orbitControls.addEventListener( 'change', this.renderScene )
         this.orbitControls.enableKeys = false
-        this.orbitControls.enableRotate = false
-        this.orbitControls.enablePan = false
+        // this.orbitControls.enableRotate = false
+        // this.orbitControls.enablePan = false
 
         this.transformControls = new TransformControls( this.camera, canvas )
         this.transformControls.addEventListener( 'change', this.renderScene )
@@ -193,6 +193,10 @@ export default class AdjustTransforms extends Component {
                 this.scene.add( this.parentMesh )
 
             }
+
+            const enableCameraControls = Boolean( thisCategory.parent )
+            this.orbitControls.enableRotate = enableCameraControls
+            this.orbitControls.enablePan = enableCameraControls
 
             shouldRender = true
         }
