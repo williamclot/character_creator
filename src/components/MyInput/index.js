@@ -7,7 +7,13 @@ const defaultProps = {
     step: 1,
     min: -100,
     max:  100,
-    precision: 3
+    precision: 3,
+
+    /** @type { Formatter } */
+    formatter: {
+        format: number => number,
+        parse: text => text
+    }
 }
 
 export default class NumberInput extends Component {
@@ -204,3 +210,24 @@ export default class NumberInput extends Component {
 }
 
 NumberInput.defaultProps = defaultProps
+
+
+/**
+ * @typedef { Object } Formatter
+ * @property { FormatFunction<number> } format
+ * @property { ParseFunction<number> } parse
+ */
+
+/**
+ * @template T
+ * @callback FormatFunction
+ * @param { T } value
+ * @returns { string }
+ */
+
+/**
+ * @template T
+ * @callback ParseFunction
+ * @param { string } value
+ * @returns { T }
+ */
