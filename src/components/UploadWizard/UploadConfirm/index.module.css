@@ -68,6 +68,9 @@
     color: white;
     padding: 0px 5px;
 }
+.view.input:focus {
+    background-color: grey;
+}
 
 .view.canvasContainer {
     border-radius: unset;

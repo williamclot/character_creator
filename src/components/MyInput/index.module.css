@@ -25,9 +25,13 @@
     color: white;
     border: none;
     /* margin: 2px; */
+    padding: 0;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     cursor: col-resize;
+}
+.container .input:focus {
+    background-color: grey;
 }
 
 .container .input.noAxis {
