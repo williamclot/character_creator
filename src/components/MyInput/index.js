@@ -20,7 +20,6 @@ export default class NumberInput extends Component {
 
             distance: 0,
 
-            isMouseDown: false,
             onMouseDownValue: 0,
 
             pointerX: 0,
@@ -33,8 +32,8 @@ export default class NumberInput extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener( 'mouseup', this.onMouseUp )
-        document.addEventListener( 'mousemove', this.onMouseMove )
+        // document.addEventListener( 'mouseup', this.onMouseUp )
+        // document.addEventListener( 'mousemove', this.onMouseMove )
     }
 
     componentWillUnmount() {
@@ -47,14 +46,15 @@ export default class NumberInput extends Component {
             return
         }
 
+        document.addEventListener( 'mouseup', this.onMouseUp )
+        document.addEventListener( 'mousemove', this.onMouseMove )
+
         e.preventDefault()
         e.stopPropagation()
 
         const { clientX, clientY } = e
 
         this.setState({
-            isMouseDown: true,
-
             distance: 0,
             onMouseDownValue: this.props.value,
 
@@ -64,9 +64,6 @@ export default class NumberInput extends Component {
     }
 
     onMouseMove = e => {
-        const { isMouseDown } = this.state
-
-        if ( !isMouseDown ) { return }
 
         const {
             clientX, clientY,
@@ -106,17 +103,16 @@ export default class NumberInput extends Component {
         })
     }
 
-    onMouseUp = () => {
-        if ( !this.state.isMouseDown ) {
-            return
-        }
+    onClick = e => e.preventDefault()
 
-        this.setState({
-            isMouseDown: false,
-        })
+    onMouseUp = () => {
+
 
         this.inputRef.current.focus()
         this.inputRef.current.select()
+
+        document.removeEventListener( 'mouseup', this.onMouseUp )
+        document.removeEventListener( 'mousemove', this.onMouseMove )
     }
 
 
