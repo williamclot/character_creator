@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import classNames from 'classnames'
+import cn from 'classnames'
 
 import NormalInput from './NormalInput'
 import DraggableInput from './DraggableInput';
@@ -51,7 +51,7 @@ export default class NumberInput extends Component {
 
 
         const hasAxis = Boolean( axis )
-        const inputClassName = classNames(
+        const inputClassName = cn(
             styles.input,
             !hasAxis && styles.noAxis
         )
@@ -67,7 +67,7 @@ export default class NumberInput extends Component {
 
                 {this.state.isSelected ?
                     <NormalInput
-                        className = { inputClassName }
+                        className = {cn( inputClassName, styles.normalInput )}
                         onBlur = { this.handleBlur }
         
                         value = { value }
@@ -79,7 +79,7 @@ export default class NumberInput extends Component {
                     />
                     :
                     <DraggableInput
-                        className = { inputClassName }
+                        className = {cn( inputClassName, styles.draggableInput )}
                         onClick = { this.handleClick }
 
                         value = { value }
