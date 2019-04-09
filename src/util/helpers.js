@@ -47,6 +47,19 @@ export function fromEvent( event ) {
     }
 }
 
+export const radiansToDegreesFormatter = {
+    format: number => {
+        // const degreeSign = String.fromCharCode(176)
+        // return `${value}${degreeSign}`
+        
+        return number * ( 180 / Math.PI )
+    },
+    parse: text => {
+        const number = Number.parseFloat( text )
+        return number / ( 180 / Math.PI )
+    }
+}
+
 
 /**
  * @template T, S
