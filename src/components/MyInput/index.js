@@ -1,7 +1,11 @@
 import React, { Component, createRef } from 'react'
 import classNames from 'classnames'
 
+import Input from './Input'
+
 import styles from './index.module.css'
+
+const LEFT_MOUSE_BUTTON = 0
 
 const defaultProps = {
     step: 1,
@@ -21,153 +25,91 @@ export default class NumberInput extends Component {
         super( props )
 
         this.state = {
-            isSelected: false,
-            localValue: '',
-
-            distance: 0,
-
-            onMouseDownValue: 0,
-
-            pointerX: 0,
-            pointerY: 0,
-            prevPointerX: 0,
-            prevPointerY: 0,
+            isSelected: false
         }
 
-        this.inputRef = createRef()
-    }
+        this.prevPointer = null
+        this.distance = null
+        this.startValue = null
 
-    componentDidMount() {
-        // document.addEventListener( 'mouseup', this.onMouseUp )
-        // document.addEventListener( 'mousemove', this.onMouseMove )
     }
 
     componentWillUnmount() {
+        // in case component is unmounted during drag
         document.removeEventListener( 'mouseup', this.onMouseUp )
         document.removeEventListener( 'mousemove', this.onMouseMove )
     }
 
-    onMouseDown = (e) => {
-        if ( e.button !== 0 ) { // if not left click
-            return
+    onMouseDown = event => {
+        if ( event.button !== LEFT_MOUSE_BUTTON ) return
+
+        event.preventDefault()
+
+        this.prevPointer = {
+            x: event.clientX,
+            y: event.clientY,
         }
+        this.distance = 0
+        this.startValue = this.props.value
 
         document.addEventListener( 'mouseup', this.onMouseUp )
         document.addEventListener( 'mousemove', this.onMouseMove )
-
-        e.preventDefault()
-        e.stopPropagation()
-
-        const { clientX, clientY } = e
-
-        this.setState({
-            distance: 0,
-            onMouseDownValue: this.props.value,
-
-            prevPointerX: clientX,
-            prevPointerY: clientY,
-        })
     }
 
-    onMouseMove = e => {
+    onMouseMove = event => {
+        const { step, min, max } = this.props
 
         const {
             clientX, clientY,
             shiftKey: isShiftPressed
-        } = e
+        } = event
 
-        const { step, min, max } = this.props
         const {
-            distance,
-            onMouseDownValue,
-            pointerX, pointerY,
-            prevPointerX, prevPointerY,
-        } = this.state
+            x: prevX,
+            y: prevY
+        } = this.prevPointer
 
-        const newDistance = distance + (
-            ( pointerX - prevPointerX ) -
-            ( pointerY - prevPointerY )
-        )
-        const newValue = onMouseDownValue + (
-            newDistance / ( isShiftPressed ? 5 : 50 )
-        ) * step
+        const deltaX = clientX - prevX
+        const deltaY = clientY - prevY
 
-        const computedValue = Math.min( max, Math.max( min, newValue ) )
+        this.distance += ( deltaX - deltaY )
 
-        this.props.onChange( computedValue )
+        const dividingFactor = isShiftPressed ? 5 : 50
+        const normalizedDistance = ( this.distance / dividingFactor )
 
-        this.setState({
+        const value = this.startValue + normalizedDistance * step
+        
+        const clampedValue = Math.min( max, Math.max( min, value ) )
 
-            pointerX: clientX,
-            pointerY: clientY,
+        this.props.onChange( clampedValue )
 
-            distance: newDistance,
-
-            prevPointerX: pointerX,
-            prevPointerY: pointerY
-
-        })
+        this.prevPointer = {
+            x: clientX,
+            y: clientY
+        }
     }
 
-    onClick = e => e.preventDefault()
-
     onMouseUp = () => {
+        const totalDistanceMoved = Math.abs( this.distance )
 
-
-        this.inputRef.current.focus()
-        this.inputRef.current.select()
+        if ( totalDistanceMoved < 2 ) {
+            console.log('normal click')
+        }
 
         document.removeEventListener( 'mouseup', this.onMouseUp )
         document.removeEventListener( 'mousemove', this.onMouseMove )
     }
 
 
-    onInputChange = e => {
-        this.setState({
-            localValue: e.target.value
-        })
-    }
-
-    onFocus = () => {
-        this.setState({
-            isSelected: true,
-            localValue: this.props.value
-        })
-    }
-
-    onBlur = () => {
-        this.setState({
-            isSelected: false,
-        })
-    }
-
-    onDoubleClick = () => {
-        this.inputRef.current.focus()
-        this.inputRef.current.select()
-    }
-
-    onKeyDown = e => {
-        if ( e.key === 'Enter' ) {
-            const { localValue } = this.state
-
-            if ( !isNaN( localValue ) ) {
-                const value = Number.parseFloat( localValue )
-                this.props.onChange( value )
-            }
-
-            this.inputRef.current.blur()
-        }
-    }
-
     render() {
         const {
-            axis,
-            precision, min, max, step
+            axis, value,
+            precision, min, max, step,
+            formatter
         } = this.props
 
-        const formattedValue = this.state.isSelected
-                ? this.state.localValue
-                : Number(this.props.value).toFixed( precision )
+        const formattedValue = formatter.format( value )
+        const fixedValue = Number(formattedValue).toFixed( precision )
 
         const hasAxis = Boolean( axis )
         const inputClassName = classNames(
@@ -184,26 +126,13 @@ export default class NumberInput extends Component {
                     </div>
                 )}
 
-                <input
+                <span
                     className = { inputClassName }
-                    type = "number"
-                    min = { min }
-                    max = { max }
-                    step = { step }
-                    ref = { this.inputRef }
-
-                    value = { formattedValue }
-                    onChange = { this.onInputChange }
-                    onDoubleClick = { this.onDoubleClick }
-                    onKeyDown = { this.onKeyDown }
-    
-                    onFocus = { this.onFocus }
-                    onBlur = { this.onBlur }
-
                     onMouseDown = { this.onMouseDown }
-                    // onMouseUp = { this.onMouseUp }
-                    // onMouseMove = { this.onMouseMove }
-                />
+                >
+                    {fixedValue}
+                </span>
+
             </div>
         )
     }
