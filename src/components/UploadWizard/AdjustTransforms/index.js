@@ -6,7 +6,7 @@ import {
     MeshStandardMaterial, Mesh, Raycaster, Group
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
-import { fromEvent } from '../../../util/helpers'
+import { radiansToDegreesFormatter } from '../../../util/helpers'
 import { sphereFactory } from '../../../util/three-helpers'
 
 import TransformControls from '../../../util/transform-controls'
@@ -468,16 +468,28 @@ export default class AdjustTransforms extends Component {
                                     axis = {'X'}
                                     value = { rotation.x }
                                     onChange = { this.onRotationXChange }
+                                    formatter = { radiansToDegreesFormatter }
+                                    min = { -Infinity }
+                                    max = { Infinity }
+                                    precision = { 0 }
                                 />
                                 <NumberInput
                                     axis = {'Y'}
                                     value = { rotation.y }
                                     onChange = { this.onRotationYChange }
+                                    formatter = { radiansToDegreesFormatter }
+                                    min = { -Infinity }
+                                    max = { Infinity }
+                                    precision = { 0 }
                                 />
                                 <NumberInput
                                     axis = {'Z'}
                                     value = { rotation.z }
                                     onChange = { this.onRotationZChange }
+                                    formatter = { radiansToDegreesFormatter }
+                                    min = { -Infinity }
+                                    max = { Infinity }
+                                    precision = { 0 }
                                 />
                             </div>
                         </div>
