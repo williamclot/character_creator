@@ -66,6 +66,19 @@ class App extends Component {
         })
     }
 
+    async deleteObject( objectId ) {
+        const { env, csrfToken } = this.props
+
+        axios.delete(
+            `${env.API_ENDPOINT}/objects/${objectId}`,
+            {
+                params: {
+                    _csrf_token: csrfToken
+                }
+            }
+        )
+    }
+
     async postObject( partTypeId, object ) {
         const { API_ENDPOINT } = this.props.env
 
