@@ -10,7 +10,12 @@ const _stlLoader = new STLLoader
 
 const promisified_gltfLoader = {
     load: function( url ) {
-        return new Promise( ( resolve, reject ) => _gltfLoader.load( url, resolve, null, reject ) )
+        return new Promise( ( resolve, reject ) => {
+            _gltfLoader.load( url, resolve, null, reject )
+
+            // timeout after 2 secs
+            setTimeout(reject, 2000, new Error('Timed out'))
+        })
     },
     parse: function( data, path ) {
         return new Promise( ( resolve, reject ) => _gltfLoader.parse( data, path, resolve, reject ) )
@@ -19,7 +24,12 @@ const promisified_gltfLoader = {
 
 const promisified_stlLoader = {
     load: function( url ) {
-        return new Promise( ( resolve, reject ) => _stlLoader.load( url, resolve, null, reject ) )
+        return new Promise( ( resolve, reject ) => {
+            _stlLoader.load( url, resolve, null, reject )
+
+            // timeout after 2 secs
+            setTimeout(reject, 2000, new Error('Timed out'))
+        })
     },
     parse: function( data ) {
         return Promise.resolve( _stlLoader.parse( data ) )
