@@ -88,6 +88,14 @@
     font-size: 10px;
 }
 
+.selector .selector-item .selector-item-menu {
+    background-color: #ff0000;
+    padding: 5px;
+    cursor: pointer;
+    color: white;
+    z-index: 100;
+}
+
 .import-button {
     background-color: #2b2b2b;
     font-weight: bold;

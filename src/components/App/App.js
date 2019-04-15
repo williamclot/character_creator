@@ -66,7 +66,7 @@ class App extends Component {
         })
     }
 
-    async deleteObject( objectId ) {
+    handleDeleteObject = async ( objectId ) => {
         const { env, csrfToken } = this.props
 
         axios.delete(
@@ -340,6 +340,7 @@ class App extends Component {
                         <Selector
                             data = { selectorData }
                             onObjectSelected = { this.onObjectSelected }
+                            onDelete = { this.handleDeleteObject }
 
                             onUpload = { this.onUpload }
                         />

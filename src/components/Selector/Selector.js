@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 
+import ContextMenu from './ContextMenu'
 import ImportButton from '../ImportButton'
 
 import './Selector.css'
@@ -26,6 +27,16 @@ class Selector extends Component {
         }
     }
 
+    handleDelete = object => {
+        const { onDelete } = this.props
+
+        const answer = window.confirm( `Are you sure you want to delete ${object.name}?` )
+
+        if ( answer && typeof onDelete === 'function' ) {
+            onDelete( object.id )
+        }
+    }
+
     render() {
         const { data } = this.props
 
@@ -39,23 +50,36 @@ class Selector extends Component {
 
         const { objects, currentCategory } = data
 
-        const elementDiv = objects.map( ( object, index ) => (
+        const elementDiv = objects.map( ( object, index ) => {
+            const menuItems = (
+                <div
+                    className = "selector-item-menu"
+                    onMouseDown = { () => this.handleDelete( object ) }
+                >
+                    Delete Object
+                </div>
+            )
 
-			<div
-				className = "selector-item"
-				key = { object.id || object.name }
-				onClick = { () => this.handleClick( object ) }
-			>
-				<div
-                    className = "img"
-                    style = {{ backgroundImage: `url(${object.img})` }}
-                />
-				<div className = "unselectable item-name">
-					{ object.name }
-				</div>
-			</div>
+            return (
+                <ContextMenu
+                    className = "selector-item"
+                    onClick = { () => this.handleClick( object ) }
 
-		))
+                    menuItems = { menuItems }
+                    key = { object.id || object.name }
+                    disabled // uncomment this to enable
+                >
+                    <div
+                        className = "img"
+                        style = {{ backgroundImage: `url(${object.img})` }}
+                    />
+                    <div className = "unselectable item-name">
+                        { object.name }
+                    </div>
+                </ContextMenu>
+            )
+        })
+
 
         return <>
             <div className = "selector">
