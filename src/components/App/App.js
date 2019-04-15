@@ -195,6 +195,8 @@ class App extends Component {
     }
 
     onObjectSelected = async ( category, objectData ) => {
+        this.props.showLoader()
+
         try {
 
             const newObject = await get3DObject( objectData )
@@ -206,6 +208,8 @@ class App extends Component {
                 + err
             )
         }
+
+        this.props.hideLoader()
     }
 
     setSelectedObject = ( category, newObject ) => {
