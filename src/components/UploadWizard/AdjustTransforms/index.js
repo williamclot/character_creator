@@ -156,8 +156,8 @@ export default class AdjustTransforms extends Component {
             this.objectContainer.remove( oldMesh )
             this.objectContainer.add( this.mesh )
 
-            this.transformControls.attach( this.mesh )
-            this.transformControls.setMode( 'translate' )
+            this.transformControls.attach( this.objectContainer )
+            this.transformControls.setMode( 'rotate' )
             
             shouldRender = true
         }

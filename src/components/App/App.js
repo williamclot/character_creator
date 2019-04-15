@@ -66,6 +66,19 @@ class App extends Component {
         })
     }
 
+    handleDeleteObject = async ( objectId ) => {
+        const { env, csrfToken } = this.props
+
+        axios.delete(
+            `${env.API_ENDPOINT}/objects/${objectId}`,
+            {
+                params: {
+                    _csrf_token: csrfToken
+                }
+            }
+        )
+    }
+
     async postObject( partTypeId, object ) {
         const { API_ENDPOINT } = this.props.env
 
@@ -317,20 +330,23 @@ class App extends Component {
 
             <Header title = { name } />
 
-            <div className = "editor-panel">
+            <div className = "editor-panel-container">
+                <div className = "editor-panel">
+                    <div className = "groups-container">
+                        <PartTypesView groups = { groups } />
+                    </div>
+                    
+                    <div className = "selector-container">
+                        <Selector
+                            data = { selectorData }
+                            onObjectSelected = { this.onObjectSelected }
+                            onDelete = { this.handleDeleteObject }
 
-                <div className = "groups-container">
-                    <PartTypesView groups = { groups } />
+                            onUpload = { this.onUpload }
+                        />
+                    </div>
                 </div>
-                
-                <div className = "selector-container">
-                    <Selector
-                        data = { selectorData }
-                        onObjectSelected = { this.onObjectSelected }
 
-                        onUpload = { this.onUpload }
-                    />
-                </div>
             </div>
 
             <ButtonsContainer
