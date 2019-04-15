@@ -12,6 +12,8 @@ import PartTypesView from '../PartTypes'
 import LoadingIndicator from '../LoadingIndicator';
 import ButtonsContainer from '../ButtonsContainer';
 
+import { showLoader, hideLoader } from '../../actions/loader'
+
 import SceneManager from '../ThreeContainer/sceneManager'
 
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
@@ -54,16 +56,25 @@ class App extends Component {
     }
 
     async componentDidMount() {
-        const oneOfEach = objectMap(
-            this.props.objects.byCategory,
-            objectList => objectList[ 0 ]
-        )
+        this.props.showLoader()
 
-        const loadedObjects = await fetchObjects( oneOfEach )
+        try {
+            const oneOfEach = objectMap(
+                this.props.objects.byCategory,
+                objectList => objectList[ 0 ]
+            )
 
-        this.setState({
-            loadedObjects
-        })
+            const loadedObjects = await fetchObjects( oneOfEach )
+
+            this.setState({
+                loadedObjects
+            })
+
+        } catch ( err ) {
+            console.error( err )
+        }
+        
+        this.props.hideLoader()
     }
 
     handleDeleteObject = async ( objectId ) => {
@@ -376,5 +387,9 @@ export default connect(
         selectedGroupIndex: state.selectedCategoryPath.groupIndex,
         selectedCategoryIndex: state.selectedCategoryPath.categoryIndex,
         isLoading: state.isLoading
+    }),
+    ({
+        showLoader,
+        hideLoader
     })
 )( App )
