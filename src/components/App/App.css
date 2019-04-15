@@ -6,23 +6,24 @@
     height: 100%;
 }
 
-.editor-panel {
-    position: absolute;
+.editor-panel-container {
+    /* Used only to center child vertically */
     right: 50px;
-
-    top: 50%;
-    transform: translateY(-50%);
-
-    height: 85%;
     width: 350px;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 
+.editor-panel {
+    height: 85%;
+    width: 100%;
 
     display: flex;
     align-items: center;
     justify-content: center;
-    /* flex-direction: column; */
-
-    /* background-color: blue; */
 }
 
 .editor-panel .groups-container {

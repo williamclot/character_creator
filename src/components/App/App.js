@@ -330,20 +330,22 @@ class App extends Component {
 
             <Header title = { name } />
 
-            <div className = "editor-panel">
+            <div className = "editor-panel-container">
+                <div className = "editor-panel">
+                    <div className = "groups-container">
+                        <PartTypesView groups = { groups } />
+                    </div>
+                    
+                    <div className = "selector-container">
+                        <Selector
+                            data = { selectorData }
+                            onObjectSelected = { this.onObjectSelected }
 
-                <div className = "groups-container">
-                    <PartTypesView groups = { groups } />
+                            onUpload = { this.onUpload }
+                        />
+                    </div>
                 </div>
-                
-                <div className = "selector-container">
-                    <Selector
-                        data = { selectorData }
-                        onObjectSelected = { this.onObjectSelected }
 
-                        onUpload = { this.onUpload }
-                    />
-                </div>
             </div>
 
             <ButtonsContainer
