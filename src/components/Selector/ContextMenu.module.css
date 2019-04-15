@@ -1,0 +1,7 @@
+.menuBody {
+    display: none;
+    position: fixed;
+}
+.menuBody.visible {
+    display: block;
+}
