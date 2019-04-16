@@ -1,8 +1,10 @@
-import babel from 'rollup-plugin-babel';
-import resolve from 'rollup-plugin-node-resolve';
-import images from 'rollup-plugin-image-files';
-import autoExternal from 'rollup-plugin-auto-external';
-import postcss from 'rollup-plugin-postcss';
+import babel from 'rollup-plugin-babel'
+import resolve from 'rollup-plugin-node-resolve'
+import images from 'rollup-plugin-image-files'
+import autoExternal from 'rollup-plugin-auto-external'
+import postcss from 'rollup-plugin-postcss'
+
+import pkg from './package.json'
 
 export default {
 	input: 'src/index.js',
@@ -22,8 +24,15 @@ export default {
 			exclude: 'node_modules/**'
 		}),
 	],
-	output: {
-		format: 'es',
-		file: 'dist/es-module.js',
-	}
+	output: [
+		/*
+			Currently, the target environment knows how to handle es,
+			so until another target is needed, es will be the only output
+		*/
+		{
+			file: pkg.module,
+			format: 'es'
+		},
+
+	]
 };
