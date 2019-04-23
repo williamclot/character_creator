@@ -27,10 +27,19 @@ class Selector extends Component {
         }
     }
 
-    handleDelete = object => {
+    handleDelete = ( object, isLastElement ) => {
         const { onDelete } = this.props
 
-        const answer = window.confirm( `Are you sure you want to delete ${object.name}?` )
+        const messages = [ `Are you sure you want to delete ${object.name}?` ]
+
+        if ( isLastElement ) {
+            messages.push(
+                'This is the only part left for this part type.',
+                'If you delete this part, your model might not load next time!'
+            )
+        }
+
+        const answer = window.confirm( messages.join('\n') )
 
         if ( answer && typeof onDelete === 'function' ) {
             onDelete( object.id )
@@ -50,13 +59,13 @@ class Selector extends Component {
 
         const { objects, currentCategory } = data
 
-        const elementDiv = objects.map( ( object, index ) => {
+        const elementDiv = objects.map( ( object, index, objectsArray ) => {
             const menuItems = (
                 <div
                     className = "selector-item-menu"
-                    onMouseDown = { () => this.handleDelete( object ) }
+                    onMouseDown = { () => this.handleDelete( object, objectsArray.length === 1 ) }
                 >
-                    Delete Object
+                    Delete Part
                 </div>
             )
 
