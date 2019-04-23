@@ -79,15 +79,32 @@ class App extends Component {
 
     handleDeleteObject = async ( objectId ) => {
         const { env, csrfToken } = this.props
+        const currentCategory = this.getSelectedCategory().name
 
-        axios.delete(
-            `${env.API_ENDPOINT}/objects/${objectId}`,
-            {
-                params: {
-                    _csrf_token: csrfToken
+        try {
+            const res = await axios.delete(
+                `${env.API_ENDPOINT}/objects/${objectId}`,
+                {
+                    params: {
+                        _csrf_token: csrfToken
+                    }
                 }
+            )
+
+            if ( res.status !== 204 ) {
+                throw new Error('Delete Failed')
             }
-        )
+    
+            this.setState(state => ({
+                objectsByCategory: {
+                    ...state.objectsByCategory,
+                    [currentCategory]: state.objectsByCategory[currentCategory].filter( object => object.id !== objectId )
+                }
+            }))
+            
+        } catch {
+            console.error(`Failed to delete object with id ${objectId}`)
+        }
     }
 
     async postObject( partTypeId, object ) {
@@ -150,14 +167,10 @@ class App extends Component {
         if ( res.status !== 200 )
             throw new Error('Not OK')
 
-        const { files, images } = res.data
+        const { files, images, id } = res.data
 
         const file = files[ 0 ]
         const image = images[ 0 ]
-
-        console.log(file)
-        console.log(image)
-        console.log('-----')
 
         const [fileRes, imgRes] = await Promise.all([
             axios.post(
@@ -180,10 +193,7 @@ class App extends Component {
             )
         ])
 
-        console.log('responses:')
-        console.log(fileRes)
-        console.log(imgRes)
-        console.log('----- SUCCESS ------')
+        return id
     }
 
     componentDidUpdate( prevProps ) {
@@ -266,7 +276,7 @@ class App extends Component {
         })
     }
 
-    onWizardCompleted = (partType, { name, objectURL, imgDataURL, geometry, metadata }) => {
+    onWizardCompleted = async (partType, { name, objectURL, imgDataURL, geometry, metadata }) => {
         console.log('wizard completed')
         console.log(name)
         console.log(metadata)
@@ -275,7 +285,11 @@ class App extends Component {
         const object = getObjectFromGeometry( geometry, metadata )
         
         this.setSelectedObject( category, object )
-        
+        this.setState({
+            showUploadWizard: false,
+            uploadedObjectData: null,
+        })
+                
         const objectData = {
             name,
             download_url: objectURL,
@@ -283,25 +297,21 @@ class App extends Component {
             extension: 'stl',
             metadata
         }
+
+        const id = await this.postObject( partType.id, objectData )
         
         this.setState( state => ({
-            showUploadWizard: false,
-            uploadedObjectData: null,
-
             objectsByCategory: {
                 ...state.objectsByCategory,
                 [category]: [
                     ...state.objectsByCategory[category],
-                    objectData
+                    {
+                        id,
+                        ...objectData
+                    }
                 ]
             }
         }))
-
-        try {
-            this.postObject( partType.id, objectData )
-        } catch ( err ) {
-            console.error( err )
-        }
     }
 
     getSelectedGroup = () => this.props.worldData.groups[ this.props.selectedGroupIndex ]

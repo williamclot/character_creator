@@ -67,7 +67,6 @@ class Selector extends Component {
 
                     menuItems = { menuItems }
                     key = { object.id || object.name }
-                    disabled // uncomment this to enable
                 >
                     <div
                         className = "img"
