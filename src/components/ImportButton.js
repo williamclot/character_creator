@@ -5,6 +5,12 @@ class ImportButton extends Component {
         this._fileInput = document.createElement( 'input' )
         this._fileInput.type = 'file'
         this._fileInput.addEventListener( 'change', this.handleLoad )
+
+        const { accept } = this.props
+
+        if ( accept ) {
+            this._fileInput.accept = accept
+        }
     }
 
     handleLoad = e => {
