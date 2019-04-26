@@ -73,10 +73,17 @@
     background-color: grey;
 }
 
-.canvasContainer .canvas {
+.canvasContainer .canvas,.img {
     width: 250px;
     height: 200px;
 }
+.canvasContainer .canvas {
+    display: none;
+}
+.canvasContainer .canvas.visible {
+    display: block;
+}
+
 .canvasContainer .canvasTitle {
     background-color: rgba(15, 15, 15, 1);
     text-align: center;

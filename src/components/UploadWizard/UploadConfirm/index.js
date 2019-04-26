@@ -8,9 +8,13 @@ import {
 import OrbitControls from 'three-orbitcontrols'
 
 import Tutorial from '../Tutorial'
+import ImportButton from '../../ImportButton'
 
 import commonStyles from '../index.module.css'
 import styles from './index.module.css'
+import PreviewText from './PreviewText';
+import PreviewFile from './PreviewFile';
+import Delimiter from './Delimiter';
 
 class UploadConfirm extends Component {
     constructor( props ) {
@@ -19,7 +23,9 @@ class UploadConfirm extends Component {
         this.canvasRef = createRef()
 
         this.state = {
-            tutorialHidden: true
+            tutorialHidden: true,
+
+            img: null
         }
     }
     
@@ -129,17 +135,73 @@ class UploadConfirm extends Component {
     onNext = async () => {
         this.props.onNext()
 
-        const imgBlob = await this.saveImage()
-        
-        const objectURL = URL.createObjectURL( imgBlob )
+        const { img } = this.state
 
-        this.props.setImgDataURL( objectURL )
+        if ( img ) {
+
+            this.props.setImgDataURL( img.objectURL )
+
+        } else {
+
+            const imgBlob = await this.saveImage()
+        
+            const objectURL = URL.createObjectURL( imgBlob )
+    
+            this.props.setImgDataURL( objectURL )
+
+        }
     }
 
     toggleTutorial = () => {
         this.setState( state => ({
             tutorialHidden: !state.tutorialHidden
         }))
+    }
+
+    handleFileLoaded = ( filename, objectURL ) => {
+        console.log(filename)
+
+        this.setState({
+            img: {
+                filename,
+                objectURL
+            }
+        })
+    }
+
+    handleRemoveImage = () =>  {
+        console.log('image removed')
+
+        const { img } = this.state
+
+        if ( img ) URL.revokeObjectURL( img.objectURL )
+
+        this.setState({
+            img: null
+        })
+    }
+
+    renderPreview() {
+        const { img } = this.state
+
+        const showImage = Boolean(img)
+        const showCanvas = !showImage
+
+        return (
+            <>
+                {showImage && (
+                    <img
+                        className = { styles.img }
+                        src = { img.objectURL }
+                    />
+                )}
+
+                <canvas
+                    className = {cn( styles.canvas, showCanvas && styles.visible )}
+                    ref = { this.canvasRef }
+                />
+            </>
+        )
     }
 
     render() {
@@ -152,7 +214,9 @@ class UploadConfirm extends Component {
         
             onCancel, onNext
         } = this.props
-        const { tutorialHidden } = this.state
+        const { tutorialHidden, img } = this.state
+
+        const showImage = Boolean(img)
 
         const className = cn(
             commonStyles.wizardStep,
@@ -194,15 +258,41 @@ class UploadConfirm extends Component {
                             <span>
                                 Part Preview Icon
                             </span>
+                        </div>
+
+                        <div className = { styles.view }>
+                            
+                            {showImage ? (
+                                <PreviewFile
+                                    filename = { img.filename }
+                                    onRemove = { this.handleRemoveImage }
+                                />
+                            ) : (
+                                <ImportButton
+                                    className = { styles.ImportButton }
+                                    onFileLoaded = { this.handleFileLoaded }
+                                    accept = "image/png, image/jpeg"
+                                >
+                                    <PreviewText />
+                                </ImportButton>
+
+                            )}
+                        </div>
+
+                        {!showImage && (
+                            <div className = { styles.view }>
+                                <Delimiter />
+                            </div>
+                        )}
+
+                        <div className = { styles.label }>
                             <p className = { styles.previewInstructions } >
                                 (Set the Icon by dragging to rotate the part)
                             </p>
                         </div>
                         <div className = {cn( styles.view, styles.canvasContainer )} >
-                            <canvas
-                                className = { styles.canvas }
-                                ref = { this.canvasRef }
-                            />
+
+                            {this.renderPreview()}
 
                             <div className = { styles.canvasTitle } > { name } </div>
                         </div>
