@@ -59,7 +59,8 @@
 
 .view {
     grid-column: view-col;
-    border-radius: 5px;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .view.input {
@@ -72,22 +73,21 @@
     background-color: grey;
 }
 
-.view.canvasContainer {
-    border-radius: unset;
-    
-}
-.canvasContainer .canvas {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+.canvasContainer .canvas,.img {
     width: 250px;
     height: 200px;
 }
+.canvasContainer .canvas {
+    display: none;
+}
+.canvasContainer .canvas.visible {
+    display: block;
+}
+
 .canvasContainer .canvasTitle {
     background-color: rgba(15, 15, 15, 1);
     text-align: center;
     line-height: 15px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
     padding: 10px;
 
     /* dunno why there is a 5px gap before it, so remove it */

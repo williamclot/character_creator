@@ -22,6 +22,8 @@ import {
     Dict,
 } from '../../util/helpers'
 
+import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants'
+
 import './App.css'
 
 
@@ -238,9 +240,7 @@ class App extends Component {
 
         console.log(name, extension)
 
-        const ACCEPTED_EXTENSIONS = [ "stl" ]
-
-        if ( !ACCEPTED_EXTENSIONS.includes( extension ) ) {
+        if ( !ACCEPTED_OBJECT_FILE_EXTENSIONS.includes( extension ) ) {
 
             console.log( new Error(
                 `Unrecognized extension '${extension}'`

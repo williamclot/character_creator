@@ -1,0 +1,18 @@
+.wrapper {
+    background-color: #767676;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.description {
+    font-style: italic;
+    color: #bbbbbb;
+    padding: 5px;
+}
+
+.main {
+    background-color: #0f0f0f;
+    font-weight: bold;
+    padding: 5px;
+}

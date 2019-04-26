@@ -6,6 +6,8 @@ import Button, { ButtonWithArrow } from './Button'
 import ListWithSeparator from './ListWithSeparator'
 import Menu from './Menu';
 
+import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants';
+
 import sharedStyles from '../../shared-styles/button.module.css'
 import styles from './ButtonsContainer.module.css'
 
@@ -39,6 +41,7 @@ const ButtonsContainer = ({ categories, onUpload }) => {
                                             objectURL
                                         )
                                     }
+                                    accept = { ACCEPTED_OBJECT_FILE_EXTENSIONS.map( extension => `.${extension}` ).join(',') }
                                 >
                                     {category.name}
                                 </ImportButton>
