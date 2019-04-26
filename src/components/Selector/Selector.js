@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import ContextMenu from './ContextMenu'
 import ImportButton from '../ImportButton'
 
+import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants'
+
 import './Selector.css'
 
 class Selector extends Component {
@@ -99,6 +101,7 @@ class Selector extends Component {
                 className = "import-button"
                 key = "__add__button__"
                 onFileLoaded = { this.handleUpload }
+                accept = { ACCEPTED_OBJECT_FILE_EXTENSIONS.map( extension => `.${extension}` ).join(',') }
             >
                 Add new { currentCategory }
             </ImportButton>
