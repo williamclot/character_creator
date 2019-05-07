@@ -188,7 +188,7 @@ export default class PlaceAttachpoint extends Component {
 
                 <div className = { styles.title } >
                     <h4>Place AttachPoint</h4>
-                    <p>Click where this part attaches to {parentName}</p>
+                    <p>Click roughly where this part attaches to {parentName}</p>
                 </div>
 
                 <div className = { styles.info } >
