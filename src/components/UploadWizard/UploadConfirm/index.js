@@ -147,7 +147,7 @@ class UploadConfirm extends Component {
 
         if ( img ) {
 
-            this.props.setImgDataURL( img.objectURL )
+            this.props.setImage( img.objectURL )
 
             this.setState({
                 img: null
@@ -158,7 +158,7 @@ class UploadConfirm extends Component {
         
             const objectURL = URL.createObjectURL( imgBlob )
     
-            this.props.setImgDataURL( objectURL )
+            this.props.setImage( objectURL )
 
         }
     }

@@ -25,7 +25,7 @@ class UploadWizard extends Component {
 
             // handled by UploadConfirm
             name: '',
-            imgDataURL: null,
+            imageSrc: null,
             uploadedObjectGeometry: null,
 
             currentObject: null,
@@ -151,9 +151,9 @@ class UploadWizard extends Component {
         })
     }
 
-    setImgDataURL = dataURL => {
+    setImage = src => {
         this.setState({
-            imgDataURL: dataURL
+            imageSrc: src
         })
     }
 
@@ -187,7 +187,7 @@ class UploadWizard extends Component {
     onCompleted = () => {
         const {
             partType,
-            name, objectURL, imgDataURL,
+            name, objectURL, imageSrc,
             uploadedObjectGeometry,
             position, rotation, scale,
             attachPointsPositions
@@ -203,7 +203,7 @@ class UploadWizard extends Component {
         this.props.onWizardCompleted(partType, {
             name,
             objectURL,
-            imgDataURL,
+            imageSrc,
             metadata,
             geometry: uploadedObjectGeometry
         })
@@ -314,7 +314,7 @@ class UploadWizard extends Component {
                     rotation = { rotation }
                     scale = { scale }
                     onNameChange = { this.onNameChange }
-                    setImgDataURL = { this.setImgDataURL }
+                    setImage = { this.setImage }
     
                     onCancel = { onWizardCanceled }
                     onNext = { this.onNext }
