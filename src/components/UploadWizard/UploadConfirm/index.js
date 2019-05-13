@@ -132,6 +132,14 @@ class UploadConfirm extends Component {
         this.canvasRef.current.toBlob( blob => resolve(blob), 'image/jpeg' )
     })
 
+    handleCancel = () => {
+        this.setState({
+            img: null
+        })
+
+        this.props.onCancel()
+    }
+
     onNext = async () => {
         this.props.onNext()
 
@@ -141,6 +149,9 @@ class UploadConfirm extends Component {
 
             this.props.setImgDataURL( img.objectURL )
 
+            this.setState({
+                img: null
+            })
         } else {
 
             const imgBlob = await this.saveImage()
@@ -211,8 +222,6 @@ class UploadConfirm extends Component {
             name,
             onNameChange,
             currentCategory,
-        
-            onCancel, onNext
         } = this.props
         const { tutorialHidden, img } = this.state
 
@@ -300,7 +309,7 @@ class UploadConfirm extends Component {
                         <div className = {cn( styles.view, styles.buttonsContainer ) } >
                             <div
                                 className = {cn( commonStyles.button, styles.button )}
-                                onClick = { onCancel }
+                                onClick = { this.handleCancel }
                             >
                                 Cancel
                             </div>
