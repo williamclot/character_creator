@@ -133,6 +133,7 @@ class UploadWizard extends Component {
 
         } catch ( err ) {
 
+            this.props.onWizardCanceled()
             console.error( err )
             return
 
