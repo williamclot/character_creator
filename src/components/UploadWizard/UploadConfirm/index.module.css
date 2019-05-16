@@ -16,7 +16,7 @@
     background-color: #4c4c4c;
     border-radius: 20px;
 
-    width: 420px;
+    /* width: 420px; */
     color: white;
     padding: 10px;
 }
@@ -73,18 +73,20 @@
     background-color: grey;
 }
 
-.canvasContainer .canvas,.img {
-    width: 250px;
-    height: 200px;
-}
-.canvasContainer .canvas {
-    display: none;
-}
-.canvasContainer .canvas.visible {
-    display: block;
+.previewContaier {
+    /* width: 350px;
+    height: 350px; */
 }
 
-.canvasContainer .canvasTitle {
+.previewContaier .canvas, .img {
+    /* width: 250px;
+    height: 200px; */
+
+    width: 350px;
+    height: 350px;
+}
+
+.previewContaier .canvasTitle {
     background-color: rgba(15, 15, 15, 1);
     text-align: center;
     line-height: 15px;

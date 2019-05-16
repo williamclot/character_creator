@@ -1,26 +1,22 @@
-import React, { Component, createRef } from 'react'
+import React, { Component } from 'react'
 import cn from 'classnames'
-
-import {
-    Scene, PerspectiveCamera, WebGLRenderer, PointLight, Color,
-    MeshStandardMaterial, Mesh, Group
-} from 'three'
-import OrbitControls from 'three-orbitcontrols'
 
 import Tutorial from '../Tutorial'
 import ImportButton from '../../ImportButton'
 
-import commonStyles from '../index.module.css'
-import styles from './index.module.css'
 import PreviewText from './PreviewText';
 import PreviewFile from './PreviewFile';
 import Delimiter from './Delimiter';
+import CanvasContainer from '../../CanvasContainer'
+
+import threeUtils from './three'
+
+import commonStyles from '../index.module.css'
+import styles from './index.module.css'
 
 class UploadConfirm extends Component {
     constructor( props ) {
         super( props )
-
-        this.canvasRef = createRef()
 
         this.state = {
             tutorialHidden: true,
@@ -31,107 +27,27 @@ class UploadConfirm extends Component {
     }
     
     componentDidMount() {
-        const canvas = this.canvasRef.current
+        const {
+            uploadedObjectGeometry,
+            position,
+            rotation,
+            scale
+        } = this.props
 
-        this.objectContainer = new Group
-        this.mesh = null
-        this.material = new MeshStandardMaterial({
-            color: 0xffffff
+        threeUtils.resetRendererSize()
+
+        threeUtils.addObject( uploadedObjectGeometry, {
+            position,
+            rotation,
+            scale
         })
 
-        this.scene = new Scene
-        this.scene.background = new Color( 0x777777 )
-        this.scene.add( this.objectContainer )
-
-        this.camera = new PerspectiveCamera(
-            75,
-            1,
-            0.001,
-            1000
-        )
-        this.camera.position.set( 0, .5, -1 )
-        this.camera.lookAt( 0, 0, 0 )
-
-        this.scene.add( this.camera )
-        
-        this.orbitControls = new OrbitControls( this.camera, canvas )
-        this.orbitControls.addEventListener( 'change', this.renderScene )
-        this.orbitControls.enableKeys = false
-
-        this.renderer = new WebGLRenderer({
-            preserveDrawingBuffer: true,
-            antialias: true,
-            canvas
-        })
-
-        const lightsPositions = [
-            [-1, -1, 0],
-            [-1,  1, 0],
-            [ 1,  1, 0],
-            [ 1, -1, 0],
-        ]
-        for ( let [x, y, z] of lightsPositions ) {
-            const light = new PointLight( 0xffffff, .5, 100 )
-            light.position.set( x, y, z )
-            this.camera.add( light )
-        }
-
-        this.renderScene()
+        threeUtils.renderScene()
     }
 
-    componentDidUpdate( prevProps ) {
-        const prevGeometry = prevProps.uploadedObjectGeometry
-        const currGeometry = this.props.uploadedObjectGeometry
-
-        if ( prevGeometry !== currGeometry ) {
-            this.resetCamera()
-            this.resetRenderer()
-            
-            const oldMesh = this.mesh
-
-            this.mesh = new Mesh(
-                currGeometry,
-                this.material
-            )
-
-            const {
-                position: { x: posX, y: posY, z: posZ },
-                rotation: { x: rotX, y: rotY, z: rotZ },
-                scale
-            } = this.props
-
-            this.mesh.position.set( posX, posY, posZ )
-            this.objectContainer.rotation.set( rotX, rotY, rotZ )
-            this.objectContainer.scale.setScalar( scale )
-
-            this.objectContainer.remove( oldMesh )
-            this.objectContainer.add( this.mesh )
-
-            this.renderScene()
-        }
+    componentWillUnmount() {
+        threeUtils.clearObjects()
     }
-
-    resetCamera() {
-        const { width, height } = this.canvasRef.current.getBoundingClientRect()
-
-        this.camera.aspect = width / height
-        this.camera.updateProjectionMatrix()
-    }
-
-    resetRenderer() {
-        const { width, height } = this.canvasRef.current.getBoundingClientRect()
-
-        this.renderer.setSize( width, height )
-        this.renderer.setPixelRatio( width / height )
-    }
-
-    renderScene = () => {
-        this.renderer.render( this.scene, this.camera )
-    }
-
-    saveImage = () => new Promise(( resolve, reject ) => {
-        this.canvasRef.current.toBlob( blob => resolve(blob), 'image/jpeg' )
-    })
 
     handleCancel = () => {
         this.props.onCancel()
@@ -157,7 +73,7 @@ class UploadConfirm extends Component {
 
         } else {
 
-            const imgBlob = await this.saveImage()
+            const imgBlob = await threeUtils.saveImage()
         
             const objectURL = URL.createObjectURL( imgBlob )
     
@@ -173,8 +89,6 @@ class UploadConfirm extends Component {
     }
 
     handleFileLoaded = ( filename, objectURL ) => {
-        console.log(filename)
-
         this.setState({
             img: {
                 filename,
@@ -199,29 +113,24 @@ class UploadConfirm extends Component {
         const { img } = this.state
 
         const showImage = Boolean(img)
-        const showCanvas = !showImage
 
         return (
-            <>
-                {showImage && (
-                    <img
-                        className = { styles.img }
-                        src = { img.objectURL }
-                    />
-                )}
-
-                <canvas
-                    className = {cn( styles.canvas, showCanvas && styles.visible )}
-                    ref = { this.canvasRef }
+            showImage ? (
+                <img
+                    className = { styles.img }
+                    src = { img.objectURL }
                 />
-            </>
+            ) : (
+                <CanvasContainer
+                    className = { styles.canvas }
+                    domElement = { threeUtils.getCanvas() }
+                />
+            )
         )
     }
 
     render() {
         const {
-            visible: isVisible,
-
             currentCategory,
         } = this.props
         const {
@@ -234,7 +143,6 @@ class UploadConfirm extends Component {
 
         const className = cn(
             commonStyles.wizardStep,
-            isVisible && commonStyles.visible,
             styles.container
         )
 
@@ -304,7 +212,7 @@ class UploadConfirm extends Component {
                                 (Set the Icon by dragging to rotate the part)
                             </p>
                         </div>
-                        <div className = {cn( styles.view, styles.canvasContainer )} >
+                        <div className = {cn( styles.view, styles.previewContaier )} >
 
                             {this.renderPreview()}
 
