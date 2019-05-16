@@ -128,9 +128,9 @@ class UploadWizard extends Component {
         }
     }
 
-    onNameChange = e => {
+    onNameChange = name => {
         this.setState({
-            name: e.target.value
+            name
         })
     }
 

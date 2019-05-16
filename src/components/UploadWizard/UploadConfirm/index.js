@@ -25,6 +25,7 @@ class UploadConfirm extends Component {
         this.state = {
             tutorialHidden: true,
 
+            name: props.name,
             img: null
         }
     }
@@ -133,32 +134,34 @@ class UploadConfirm extends Component {
     })
 
     handleCancel = () => {
-        this.setState({
-            img: null
-        })
-
         this.props.onCancel()
     }
 
-    onNext = async () => {
-        this.props.onNext()
+    handleNameChange = e => {
+        this.setState({
+            name: e.target.value
+        })
+    }
 
-        const { img } = this.state
+    handleNext = async () => {
+        const { onNameChange, setImage, onNext } = this.props
+        const { name, img } = this.state
+
+        onNameChange( name )
+
+        onNext()
 
         if ( img ) {
 
-            this.props.setImage( img.objectURL )
+            setImage( img.objectURL )
 
-            this.setState({
-                img: null
-            })
         } else {
 
             const imgBlob = await this.saveImage()
         
             const objectURL = URL.createObjectURL( imgBlob )
     
-            this.props.setImage( objectURL )
+            setImage( objectURL )
 
         }
     }
@@ -219,11 +222,13 @@ class UploadConfirm extends Component {
         const {
             visible: isVisible,
 
-            name,
-            onNameChange,
             currentCategory,
         } = this.props
-        const { tutorialHidden, img } = this.state
+        const {
+            tutorialHidden,
+            name,
+            img,
+        } = this.state
 
         const showImage = Boolean(img)
 
@@ -260,7 +265,7 @@ class UploadConfirm extends Component {
                             className = {cn( styles.view, styles.input )}
                             type = "text"
                             value = { name }
-                            onChange = { onNameChange }
+                            onChange = { this.handleNameChange }
                         />
 
                         <div className = { styles.label }>
@@ -316,7 +321,7 @@ class UploadConfirm extends Component {
 
                             <div
                                 className = {cn( commonStyles.button, styles.button )}
-                                onClick = { this.onNext }
+                                onClick = { this.handleNext }
                             >
                                 Next
                             </div>
