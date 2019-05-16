@@ -79,6 +79,18 @@ class App extends Component {
         this.props.hideLoader()
     }
 
+    get3dObject = ( key ) => {
+        return this.sceneManager.getObject( key )
+    }
+
+    getParent3dObject = ( key ) => {
+        return this.sceneManager.getParentObject( key )
+    }
+
+    get3dObjectByAttachPoint = ( attachPointName ) => {
+        return this.sceneManager.getObjectByAttachPoint( attachPointName )
+    }
+
     handleDeleteObject = async ( objectId ) => {
         const { env, csrfToken } = this.props
         const currentCategory = this.getSelectedCategory().name
@@ -381,8 +393,10 @@ class App extends Component {
 
             <UploadWizard
                 visible = { showUploadWizard }
+                    getObject = { this.get3dObject }
+                    getParentObject = { this.getParent3dObject }
+                    getObjectByAttachPoint = { this.get3dObjectByAttachPoint }
 
-                sceneManager = { this.sceneManager }
                 
                 data = { uploadedObjectData }
                 

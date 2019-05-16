@@ -78,8 +78,6 @@ class UploadWizard extends Component {
         this.props.showLoader()
 
         try {
-            const { sceneManager } = this.props
-
             const geometry = await stlLoader.load( objectURL )
 
             if ( !geometry.boundingBox ) {
@@ -108,11 +106,11 @@ class UploadWizard extends Component {
                 }
             }
             
-            const currentObject = sceneManager.getObject( partType.name )
-            const currentObjectParent = sceneManager.getParentObject( partType.name )
+            const currentObject = this.props.getObject( partType.name )
+            const currentObjectParent = this.props.getParentObject( partType.name )
             const currentObjectChildren = {}
             for ( let attachPoint of attachPoints ) {
-                currentObjectChildren[ attachPoint ] = sceneManager.getObjectByAttachPoint( attachPoint )
+                currentObjectChildren[ attachPoint ] = this.props.getObjectByAttachPoint( attachPoint )
             }
             
 
