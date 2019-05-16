@@ -391,18 +391,18 @@ class App extends Component {
                 onUpload = { this.onUpload }
             />
 
-            <UploadWizard
-                visible = { showUploadWizard }
+            {showUploadWizard && (
+                <UploadWizard
                     getObject = { this.get3dObject }
                     getParentObject = { this.getParent3dObject }
                     getObjectByAttachPoint = { this.get3dObjectByAttachPoint }
 
-                
-                data = { uploadedObjectData }
-                
-                onWizardCanceled = { this.onWizardCanceled }
-                onWizardCompleted = { this.onWizardCompleted }
-            />
+                    data = { uploadedObjectData }
+                    
+                    onWizardCanceled = { this.onWizardCanceled }
+                    onWizardCompleted = { this.onWizardCompleted }
+                />
+            )}
 
             <LoadingIndicator visible = {isLoading} />
         </div>
