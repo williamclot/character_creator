@@ -21,7 +21,6 @@
 
 .wizardStep {
     position: absolute;
-    visibility: hidden;
 
     top: 50%;
     left: 50%;
@@ -30,12 +29,6 @@
     border-radius: 20px;
     overflow: hidden;
 }
-
-
-.wizardStep.visible {
-    visibility: visible;
-}
-
 
 .wizardContainer .button {
     background-color: #2b2b2b;
