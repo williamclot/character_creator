@@ -14,7 +14,7 @@ const sphere = sphereFactory.buildSphere()
 
 const scene = new Scene
 scene.background = new Color( 0xeeeeee )
-scene.add( objectContainer, sphere, ...lights )
+scene.add( objectContainer, sphere )
 
 const camera = new PerspectiveCamera(
     75,
@@ -24,6 +24,9 @@ const camera = new PerspectiveCamera(
 )
 camera.position.set( 0, .5, -1 )
 camera.lookAt( 0, 3, 0 )
+camera.add( ...lights )
+
+scene.add( camera )
 
 
 const renderer = new WebGLRenderer({

@@ -26,9 +26,10 @@ const camera = new PerspectiveCamera(
 )
 camera.position.set( 0, .5, -1 )
 camera.lookAt( 0, 3, 0 )
+camera.add( ...lights )
 
+scene.add( camera )
 
-scene.add( ...lights )
 
 const objectContainer = new Group
 
