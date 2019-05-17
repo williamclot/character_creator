@@ -1,15 +1,9 @@
-import React, { Component, createRef } from 'react'
+import React, { Component } from 'react'
 import cn from 'classnames'
 
-import {
-    Scene, PerspectiveCamera, WebGLRenderer, PointLight, Color,
-    MeshStandardMaterial, Mesh, Raycaster, Group
-} from 'three'
-import OrbitControls from 'three-orbitcontrols'
-import { fromEvent } from '../../../util/helpers'
-import { sphereFactory } from '../../../util/three-helpers'
+import CanvasContainer from '../../CanvasContainer'
 
-import TransformControls from '../../../util/transform-controls'
+import threeUtils from './three'
 
 import NumberInput from '../../MyInput'
 import commonStyles from '../index.module.css'
@@ -19,79 +13,67 @@ export default class AdjustAttachpoints extends Component {
     constructor( props ) {
         super( props )
 
-        this.canvasRef = createRef()
+        const { currentAttachPoint, attachPointsPositions } = props
+        const { x: posX, y: posY, z: posZ } = attachPointsPositions[ currentAttachPoint ] || { x: 0, y: 0, z: 0 }
+
+        this.state = {
+            posX,
+            posY,
+            posZ,
+        }
     }
     
     componentDidMount() {
-        const canvas = this.canvasRef.current
+        const {
+            currentObjectChild,
+            uploadedObjectGeometry,
+            position,
+            rotation,
+            scale,
+        } = this.props
+        const { posX, posY, posZ } = this.state
 
-        this.objectContainer = new Group
-        this.mesh = null
-        this.childMesh = null
-        this.material = new MeshStandardMaterial({
-            color: 0xffffff,
-            opacity: .8,
-            transparent: true
+        threeUtils.resetRendererSize()
+
+        threeUtils.addObject( uploadedObjectGeometry, {
+            position,
+            rotation,
+            scale
         })
 
-        this.sphere = sphereFactory.buildSphere()
-        this.sphere.material.color.set( 0xffff00 ) // yellow
+        const childPosition = {
+            x: posX,
+            y: posY,
+            z: posZ,
+        }
 
-        this.scene = new Scene
-        this.scene.background = new Color( 0xeeeeee )
-        this.scene.add( this.objectContainer, this.sphere )
-
-        this.camera = new PerspectiveCamera(
-            75,
-            1,
-            0.001,
-            1000
-        )
-        this.camera.position.set( 0, .5, -1 )
-        this.camera.lookAt( 0, 3, 0 )
+        threeUtils.setSpherePosition( childPosition )
         
+        const hasChild = Boolean( currentObjectChild )
 
-        this.renderer = new WebGLRenderer({
-            antialias: true,
-            canvas
-        })
+        if ( hasChild ) {
+            /**
+             * TODO: get directly from sceneManager
+             * 
+             * Assumption: first child is the group containing the mesh,
+             * other children are bones and need to be filtered out
+             */
+            const childMesh = currentObjectChild.children[0]
+            threeUtils.addChildObject( childMesh, childPosition )
+        }
 
-        const light1 = new PointLight( 0xc1c1c1, 1, 100 )
-        light1.position.set( -7, -1, -7 )
+        threeUtils.renderScene()
 
-        const light2 = new PointLight( 0xc1c1c1, 1, 100 )
-        light2.position.set( 7, -1, -7 )
-
-        this.scene.add( light1, light2 )
-
-        this.orbitControls = new OrbitControls( this.camera, canvas )
-        this.orbitControls.addEventListener( 'change', this.renderScene )
-        this.orbitControls.enableKeys = false
-
-        this.transformControls = new TransformControls( this.camera, canvas )
-        this.transformControls.addEventListener( 'change', this.renderScene )
-        
-        this.transformControls.addEventListener( 'mouseDown', () => this.orbitControls.enabled = false )
-        this.transformControls.addEventListener( 'mouseUp', this.onReleaseGizmo )
-
-        this.transformControls.attach( this.sphere )
-        this.transformControls.setMode( 'translate' )
-
-        this.scene.add( this.transformControls )
-
-        this.renderScene()
+        threeUtils.addEventListener( 'translate', this.handleGizmoPositionChange )
     }
 
-    onReleaseGizmo = () => {
-        this.orbitControls.enabled = true
+    componentWillUnmount() {
+        threeUtils.clearObjects()
 
-        const attachPointName = this.getAttachpoint()
-        
-        const { x, y, z } = this.sphere.position
-
-        this.props.onAttachPointPositionChange( attachPointName, { x, y, z })
+        threeUtils.removeEventListener( 'translate', this.handleGizmoPositionChange )
     }
 
+    /*
     componentDidUpdate( prevProps ) {
         let shouldRender = false
 
@@ -157,119 +139,88 @@ export default class AdjustAttachpoints extends Component {
 
             shouldRender = true
         }
-
-        const prevPosition = prevProps.position
-        const thisPosition = this.props.position
-
-        if ( prevPosition !== thisPosition ) {
-
-            const { x, y, z } = thisPosition
-            this.mesh.position.set( x, y, z )
-
-            shouldRender = true
-        }
-
-        const prevRotation = prevProps.rotation
-        const thisRotation = this.props.rotation
-        
-        if ( prevRotation !== thisRotation ) {
-
-            const { x, y, z } = thisRotation
-            this.objectContainer.rotation.set( x, y, z )
-
-            shouldRender = true
-        }
-
-        const prevScale = prevProps.scale
-        const thisScale = this.props.scale
-
-
-        if ( prevScale !== thisScale ) {
-
-            this.objectContainer.scale.setScalar( thisScale )
-
-            shouldRender = true
-        }
-
-        if ( shouldRender ) {
-            this.renderScene()
-        }
     }
+    */
 
-    getAttachpoint = () => this.props.attachPointsToPlace[ 0 ]
-    getPosition = () => {
-        const { attachPointsToPlace, attachPointsPositions } = this.props
-
-        if ( attachPointsToPlace.length === 0 ) {
-            return { x: 0, y: 0, z: 0 }
-        }
-
-        const currentAttachPoint = attachPointsToPlace[ 0 ]
-
-        return attachPointsPositions[ currentAttachPoint ]
-    }
-
-    resetCamera() {
-        const { width, height } = this.canvasRef.current.getBoundingClientRect()
-
-        this.camera.aspect = width / height
-        this.camera.updateProjectionMatrix()
-    }
-
-    resetRenderer() {
-        const { width, height } = this.canvasRef.current.getBoundingClientRect()
-
-        this.renderer.setSize( width, height )
-        this.renderer.setPixelRatio( width / height )
-    }
-
-    renderScene = () => {
-        this.renderer.render( this.scene, this.camera )
+    handleGizmoPositionChange = ({ position: { x: posX, y: posY, z: posZ } }) => {
+        this.setState({
+            posX,
+            posY,
+            posZ
+        })
     }
 
     onPositionXChange = value => {
-        const position = this.getPosition()
-        const attachPointName = this.getAttachpoint()
-
-        this.props.onAttachPointPositionChange( attachPointName, {
-            ...position,
-            x: value
+        this.setState({
+            posX: value
         })
+
+        threeUtils.setSpherePosition({
+            x: value,
+            y: this.state.posY,
+            z: this.state.posZ,
+        })
+
+        threeUtils.renderScene()
     }
 
     onPositionYChange = value => {
-        const position = this.getPosition()
-        const attachPointName = this.getAttachpoint()
-
-        this.props.onAttachPointPositionChange( attachPointName, {
-            ...position,
-            y: value
+        this.setState({
+            posY: value
         })
+
+        threeUtils.setSpherePosition({
+            x: this.state.posX,
+            y: value,
+            z: this.state.posZ,
+        })
+
+        threeUtils.renderScene()
     }
 
     onPositionZChange = value => {
-        const position = this.getPosition()
-        const attachPointName = this.getAttachpoint()
-
-        this.props.onAttachPointPositionChange( attachPointName, {
-            ...position,
-            z: value
+        this.setState({
+            posZ: value
         })
+
+        threeUtils.setSpherePosition({
+            x: this.state.posX,
+            y: this.state.posY,
+            z: value,
+        })
+
+        threeUtils.renderScene()
+    }
+
+    handleNext = () => {
+        const {
+            currentAttachPoint,
+            onAttachPointPositionChange,
+            nextStep,
+        } = this.props
+        const {
+            posX, posY, posZ,
+        } = this.state
+
+        onAttachPointPositionChange( currentAttachPoint, {
+            x: posX,
+            y: posY,
+            z: posZ,
+        })
+
+        nextStep()
     }
 
     render() {
         const {
-            visible: isVisible,
-            currentCategory,
+            // currentCategory,
 
-            nextStep, previousStep
+            previousStep
         } = this.props
-
-        const position = this.getPosition()
+        const { posX, posY, posZ } = this.state
 
         const className = cn(
             commonStyles.wizardStep,
-            isVisible && commonStyles.visible,
             styles.adjustTransforms
         )
 
@@ -278,10 +229,9 @@ export default class AdjustAttachpoints extends Component {
                 className = { className }
             >
 
-                <canvas
+                <CanvasContainer
                     className = { styles.previewCanvas}
-                    ref = { this.canvasRef }
-                    // onClick = { this.onClick }
+                    domElement = { threeUtils.getCanvas() }
                 />
                 
                 <div className = { styles.sideView } >
@@ -294,17 +244,17 @@ export default class AdjustAttachpoints extends Component {
                             <div className = { styles.axes } >
                                 <NumberInput
                                     axis = {'X'}
-                                    value = { position.x }
+                                    value = { posX }
                                     onChange = { this.onPositionXChange }
                                 />
                                 <NumberInput
                                     axis = {'Y'}
-                                    value = { position.y }
+                                    value = { posY }
                                     onChange = { this.onPositionYChange }
                                 />
                                 <NumberInput
                                     axis = {'Z'}
-                                    value = { position.z }
+                                    value = { posZ }
                                     onChange = { this.onPositionZChange }
                                 />
                             </div>
@@ -321,7 +271,7 @@ export default class AdjustAttachpoints extends Component {
                         </div>
                         <div
                             className = {cn( commonStyles.button, styles.button )}
-                            onClick = { nextStep }
+                            onClick = { this.handleNext }
                         >
                             Next
                         </div>

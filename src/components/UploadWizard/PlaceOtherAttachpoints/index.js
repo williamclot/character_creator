@@ -1,13 +1,11 @@
-import React, { Component, createRef } from 'react'
+import React, { Component } from 'react'
 import cn from 'classnames'
 
-import {
-    Scene, PerspectiveCamera, WebGLRenderer, PointLight, Color,
-    MeshStandardMaterial, Mesh, Raycaster, Group
-} from 'three'
-import OrbitControls from 'three-orbitcontrols'
 import { fromEvent } from '../../../util/helpers'
-import { sphereFactory } from '../../../util/three-helpers'
+
+import CanvasContainer from '../../CanvasContainer'
+
+import threeUtils from './three'
 
 import commonStyles from '../index.module.css'
 import styles from './index.module.css'
@@ -16,218 +14,87 @@ export default class PlaceOtherAttachpoints extends Component {
     constructor( props ) {
         super( props )
 
-        this.canvasRef = createRef()
-    }
-    
-    componentDidMount() {
-        const canvas = this.canvasRef.current
+        const { currentAttachPoint, attachPointsPositions } = props
+        const position = attachPointsPositions[ currentAttachPoint ] || { x: 0, y: 0, z: 0 }
 
-        this.objectContainer = new Group
-        this.mesh = null
-        this.material = new MeshStandardMaterial({
-            color: 0xffffff,
-            opacity: .8,
-            transparent: true
-        })
-        
-        this.sphere = sphereFactory.buildSphere()
-        this.sphere.material.color.set( 0xffff00 ) // yellow
-        
-        this.scene = new Scene
-        this.scene.background = new Color( 0xeeeeee )
-        this.scene.add( this.objectContainer, this.sphere )
-
-
-        this.camera = new PerspectiveCamera(
-            75,
-            1,
-            0.001,
-            1000
-        )
-        this.camera.position.set( 0, .5, -1 )
-        this.camera.lookAt( 0, 3, 0 )
-        
-
-        this.renderer = new WebGLRenderer({
-            antialias: true,
-            canvas
-        })
-        
-        const light1 = new PointLight( 0xc1c1c1, 1, 100 )
-        light1.position.set( -7, -1, -7 )
-
-        const light2 = new PointLight( 0xc1c1c1, 1, 100 )
-        light2.position.set( 7, -1, -7 )
-
-        this.scene.add( light1, light2 )
-
-        this.orbitControls = new OrbitControls( this.camera, canvas )
-        this.orbitControls.addEventListener( 'change', this.renderScene )
-        this.orbitControls.enableKeys = false
-
-        this.renderScene()
-    }
-
-    componentDidUpdate( prevProps ) {
-        let shouldRender = false
-
-        const prevGeometry = prevProps.uploadedObjectGeometry
-        const currGeometry = this.props.uploadedObjectGeometry
-
-        if ( prevGeometry !== currGeometry ) {
-            this.resetCamera()
-            this.resetRenderer()
-            
-            const oldMesh = this.mesh
-
-            this.mesh = new Mesh(
-                currGeometry,
-                this.material
-            )
-
-            const {
-                position: { x: posX, y: posY, z: posZ },
-                rotation: { x: rotX, y: rotY, z: rotZ },
-                scale
-            } = this.props
-
-            this.mesh.position.set( posX, posY, posZ )
-            this.objectContainer.rotation.set( rotX, rotY, rotZ )
-            this.objectContainer.scale.setScalar( scale )
-
-            this.objectContainer.remove( oldMesh )
-            this.objectContainer.add( this.mesh )
-            
-            shouldRender = true
+        this.state = {
+            position,
         }
 
-        const prevAttachpoints = prevProps.attachPointsPositions
-        const thisAttachPoints = this.props.attachPointsPositions
+        this.mouseDownPosition = null
+    }
 
-        if ( prevAttachpoints !== thisAttachPoints ) {
-            for ( let key of Object.keys( thisAttachPoints ) ) {
-                if ( prevAttachpoints[ key ] !== thisAttachPoints[ key ] ) {
-                    const { x, y, z } = thisAttachPoints[ key ]
-                    this.sphere.position.set( x, y, z )
-                    shouldRender = true
-                }
+    componentDidMount() {
+        const {
+            uploadedObjectGeometry,
+            position,
+            rotation,
+            scale,
+        } = this.props
+
+        threeUtils.resetRendererSize()
+
+        threeUtils.addObject( uploadedObjectGeometry, {
+            position,
+            rotation,
+            scale,
+        })
+
+        threeUtils.setSpherePosition( this.state.position )
+
+        threeUtils.renderScene()
+    }
+
+    componentWillUnmount() {
+        threeUtils.clearObjects()
+    }
+
+    handleMouseDown = event => {
+        this.mouseDownPosition = fromEvent( event )
+    }
+
+    handleMouseUp = event => {
+        const mouseUpPosition = fromEvent( event )
+        
+        const deltaX = mouseUpPosition.x - this.mouseDownPosition.x
+        const deltaY = mouseUpPosition.y - this.mouseDownPosition.y
+
+        const distance = Math.sqrt( deltaX ** 2 + deltaY ** 2 ) // euclidean distance
+
+        if ( distance < .001 ) { // counts as click
+            
+            // use value when mouse is pressed (not when released)
+            const intersection = threeUtils.rayCast( this.mouseDownPosition )
+
+            if ( intersection ) {
+                threeUtils.setSpherePosition( intersection )
+
+                this.setState({
+                    position: intersection
+                })
+
+                threeUtils.renderScene()
             }
         }
-
-        if ( prevProps.attachPointsToPlace !== this.props.attachPointsToPlace ) {
-            const { x, y, z } = this.getPosition()
-            this.sphere.position.set( x, y, z )
-            shouldRender = true
-        }
-
-        const prevPosition = prevProps.position
-        const thisPosition = this.props.position
-
-        if ( prevPosition !== thisPosition ) {
-
-            const { x, y, z } = thisPosition
-            this.mesh.position.set( x, y, z )
-
-            shouldRender = true
-        }
-
-        const prevRotation = prevProps.rotation
-        const thisRotation = this.props.rotation
-        
-        if ( prevRotation !== thisRotation ) {
-
-            const { x, y, z } = thisRotation
-            this.objectContainer.rotation.set( x, y, z )
-
-            shouldRender = true
-        }
-
-        const prevScale = prevProps.scale
-        const thisScale = this.props.scale
-
-
-        if ( prevScale !== thisScale ) {
-
-            this.objectContainer.scale.setScalar( thisScale )
-
-            shouldRender = true
-        }
-
-        if ( shouldRender ) {
-            this.renderScene()
-        }
     }
 
-    getAttachpoint = () => this.props.attachPointsToPlace[ 0 ]
-    getPosition = () => {
-        const { attachPointsToPlace, attachPointsPositions } = this.props
+    handleNext = () => {
+        const { currentAttachPoint, onAttachPointPositionChange, nextStep } = this.props
+        const { position } = this.state
 
-        if ( attachPointsToPlace.length === 0 ) {
-            return { x: 0, y: 0, z: 0 }
-        }
-
-        const currentAttachPoint = attachPointsToPlace[ 0 ]
-
-        return attachPointsPositions[ currentAttachPoint ]
-    }
-
-    onClick = ev => {
-        ev.preventDefault()
-
-        const mouseCoords = fromEvent( ev )
-
-        const raycaster = new Raycaster
-        raycaster.setFromCamera( mouseCoords, this.camera )
-
-        const intersects = raycaster.intersectObject( this.mesh, true )
-
-        const intersection = intersects.find( intersect => intersect.object.isMesh )
-
-        if( intersection ) {
-            const { point, face } = intersection
-
-            const { x, y, z } = point
-            const attachPointName = this.getAttachpoint()
-            this.props.onAttachPointPositionChange( attachPointName, { x, y, z })
-
-        } else {
-            // 
-        }
-
-    }
-
-    resetCamera() {
-        const { width, height } = this.canvasRef.current.getBoundingClientRect()
-
-        this.camera.aspect = width / height
-        this.camera.updateProjectionMatrix()
-    }
-
-    resetRenderer() {
-        const { width, height } = this.canvasRef.current.getBoundingClientRect()
-
-        this.renderer.setSize( width, height )
-        this.renderer.setPixelRatio( width / height )
-    }
-
-    renderScene = () => {
-        this.renderer.render( this.scene, this.camera )
+        onAttachPointPositionChange( currentAttachPoint, position )
+        nextStep()
     }
 
     render() {
         const {
-            visible: isVisible,
             currentCategory,
+            currentAttachPoint,
             nextStep, previousStep
         } = this.props
-
-        const attachPointName = this.getAttachpoint()
-
-
         
         const className = cn(
             commonStyles.wizardStep,
-            isVisible && commonStyles.visible,
             styles.placeAttachpoint
         )
 
@@ -236,15 +103,16 @@ export default class PlaceOtherAttachpoints extends Component {
                 className = { className }
             >
 
-                <canvas
+                <CanvasContainer
                     className = { styles.previewCanvas }
-                    ref = { this.canvasRef }
-                    onClick = { this.onClick }
+                    domElement = { threeUtils.getCanvas() }
+                    onMouseDown = { this.handleMouseDown }
+                    onMouseUp = { this.handleMouseUp }
                 />
 
                 <div className = { styles.title } >
                     <h4>Place AttachPoint</h4>
-                    <p>Click roughly where this part attaches to {attachPointName}</p>
+                    <p>Click roughly where this part attaches to {currentAttachPoint}</p>
                 </div>
 
                 <div className = { styles.info } >
@@ -266,7 +134,7 @@ export default class PlaceOtherAttachpoints extends Component {
                     </div>
                     <div
                         className = {cn( commonStyles.button, styles.button )}
-                        onClick = { nextStep }
+                        onClick = { this.handleNext }
                     >
                         Next
                     </div>

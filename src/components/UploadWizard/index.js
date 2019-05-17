@@ -25,7 +25,7 @@ class UploadWizard extends Component {
 
             // handled by UploadConfirm
             name: '',
-            imgDataURL: null,
+            imageSrc: null,
             uploadedObjectGeometry: null,
 
             currentObject: null,
@@ -51,35 +51,17 @@ class UploadWizard extends Component {
         }
     }
 
-    componentDidUpdate( prevProps ) {
+    async componentDidMount() {
         const { data } = this.props
-        if ( prevProps.data !== data ) {
-            if ( data ) {
-                this.load( data )
-            }
-        }
-    }
-
-    componentDidMount() {
-        const { data } = this.props
-
-        if ( !data ) { return }
-
-        this.load( data )
-    }
-
-    load = async uploadData => {
         const {
             partType,
             name, extension,
             objectURL
-        } = uploadData
+        } = data
 
         this.props.showLoader()
 
         try {
-            const { sceneManager } = this.props
-
             const geometry = await stlLoader.load( objectURL )
 
             if ( !geometry.boundingBox ) {
@@ -108,11 +90,11 @@ class UploadWizard extends Component {
                 }
             }
             
-            const currentObject = sceneManager.getObject( partType.name )
-            const currentObjectParent = sceneManager.getParentObject( partType.name )
+            const currentObject = this.props.getObject( partType.name )
+            const currentObjectParent = this.props.getParentObject( partType.name )
             const currentObjectChildren = {}
             for ( let attachPoint of attachPoints ) {
-                currentObjectChildren[ attachPoint ] = sceneManager.getObjectByAttachPoint( attachPoint )
+                currentObjectChildren[ attachPoint ] = this.props.getObjectByAttachPoint( attachPoint )
             }
             
 
@@ -133,6 +115,7 @@ class UploadWizard extends Component {
 
         } catch ( err ) {
 
+            this.props.onWizardCanceled()
             console.error( err )
             return
 
@@ -145,15 +128,15 @@ class UploadWizard extends Component {
         }
     }
 
-    onNameChange = e => {
+    onNameChange = name => {
         this.setState({
-            name: e.target.value
+            name
         })
     }
 
-    setImgDataURL = dataURL => {
+    setImage = src => {
         this.setState({
-            imgDataURL: dataURL
+            imageSrc: src
         })
     }
 
@@ -187,7 +170,7 @@ class UploadWizard extends Component {
     onCompleted = () => {
         const {
             partType,
-            name, objectURL, imgDataURL,
+            name, objectURL, imageSrc,
             uploadedObjectGeometry,
             position, rotation, scale,
             attachPointsPositions
@@ -203,7 +186,7 @@ class UploadWizard extends Component {
         this.props.onWizardCompleted(partType, {
             name,
             objectURL,
-            imgDataURL,
+            imageSrc,
             metadata,
             geometry: uploadedObjectGeometry
         })
@@ -278,12 +261,10 @@ class UploadWizard extends Component {
         }
     }
 
-    render() {
+    renderWizardStep() {
         const {
-            visible: isVisible,
-            sceneManager,
             onWizardCanceled,
-            step, nextStep, previousStep
+            step,
         } = this.props
 
         const {
@@ -294,18 +275,11 @@ class UploadWizard extends Component {
             attachPointsPositions, attachPointsToPlace
         } = this.state
 
-        const className = cn(
-            styles.wrapper,
-            isVisible && styles.visible
-        )
-    
-        return <div className = { className }>
-            <div className = { styles.wizardBackground } />
-            <div className = { styles.wizardContainer } >
-    
-                <UploadConfirm
-                    visible = { step === steps.UPLOAD_CONFIRM }
+        const currentAttachPoint = attachPointsToPlace.length !== 0 ? attachPointsToPlace[ 0 ] : null
 
+        switch ( step ) {
+            case steps.UPLOAD_CONFIRM: return (
+                <UploadConfirm
                     currentCategory = { partType }
                     uploadedObjectGeometry = { uploadedObjectGeometry }
 
@@ -314,15 +288,15 @@ class UploadWizard extends Component {
                     rotation = { rotation }
                     scale = { scale }
                     onNameChange = { this.onNameChange }
-                    setImgDataURL = { this.setImgDataURL }
+                    setImage = { this.setImage }
     
                     onCancel = { onWizardCanceled }
                     onNext = { this.onNext }
                 />
-    
+            )
+
+            case steps.PLACE_ATTACHPOINT: return (
                 <PlaceAttachpoint
-                    visible = { step === steps.PLACE_ATTACHPOINT }
-                    
                     currentCategory = { partType }
                     uploadedObjectGeometry = { uploadedObjectGeometry }
 
@@ -334,10 +308,10 @@ class UploadWizard extends Component {
                     previousStep = { this.onBack }
                     nextStep = { this.onNext }
                 />
-    
+            )
+
+            case steps.ADJUST: return (
                 <AdjustTransforms
-                    visible = { step === steps.ADJUST }
-                    
                     currentCategory = { partType }
                     currentObject = { currentObject }
                     currentObjectParent = { currentObjectParent }
@@ -349,17 +323,14 @@ class UploadWizard extends Component {
                     onPositionChange = { this.setPosition }
                     onRotationChange = { this.setRotation }
                     onScaleChange = { this.setScale }
-
-                    attachPointsPositions = { attachPointsPositions }
-                    attachPointsToPlace = { attachPointsToPlace }
                     
                     previousStep = { this.onBack }
                     nextStep = { this.onNext }
                 />
-    
+            )
+
+            case steps.PLACE_OTHER_ATTACHPOINTS: return (
                 <PlaceOtherAttachpoints
-                    visible = { step === steps.PLACE_OTHER_ATTACHPOINTS }
-                                        
                     currentCategory = { partType }
                     uploadedObjectGeometry = { uploadedObjectGeometry }
 
@@ -367,35 +338,49 @@ class UploadWizard extends Component {
                     rotation = { rotation }
                     scale = { scale }
                     
+                    currentAttachPoint = { currentAttachPoint }
                     attachPointsPositions = { attachPointsPositions }
-                    attachPointsToPlace = { attachPointsToPlace }
                     onAttachPointPositionChange = { this.setAttachPointPosition }
 
                     previousStep = { this.onBack }
                     nextStep = { this.onNext }
                 />
+            )
 
+            case steps.ADJUST_ATTACHPOINTS: return (
                 <AdjustAttachpoints
-                    visible = { step === steps.ADJUST_ATTACHPOINTS }
-
                     currentCategory = { partType }
-                    currentObjectChildren = { currentObjectChildren }
+                    currentObjectChild = { currentObjectChildren[ currentAttachPoint ] }
                     uploadedObjectGeometry = { uploadedObjectGeometry }
 
                     position = { position }
                     rotation = { rotation }
                     scale = { scale }
 
+                    currentAttachPoint = { currentAttachPoint }
                     attachPointsPositions = { attachPointsPositions }
-                    attachPointsToPlace = { attachPointsToPlace }
                     onAttachPointPositionChange = { this.setAttachPointPosition }
 
                     previousStep = { this.onBack }
                     nextStep = { this.onNext }
                 />
+            )
+        }
+    }
 
+    render() {
+        const hasLoaded = Boolean( this.state.uploadedObjectGeometry )
+
+        if ( !hasLoaded ) return null
+    
+        return (
+            <div className = { styles.wrapper }>
+                <div className = { styles.wizardBackground } />
+                <div className = { styles.wizardContainer } >
+                    {this.renderWizardStep()}
+                </div>
             </div>
-        </div>
+        )
     }
 }
 

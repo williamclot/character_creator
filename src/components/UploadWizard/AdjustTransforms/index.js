@@ -1,16 +1,11 @@
 import React, { Component, createRef } from 'react'
 import cn from 'classnames'
 
-import {
-    Scene, PerspectiveCamera, WebGLRenderer, PointLight, Color,
-    MeshStandardMaterial, Mesh, Raycaster, Group
-} from 'three'
-import OrbitControls from 'three-orbitcontrols'
 import { radiansToDegreesFormatter } from '../../../util/helpers'
-import { sphereFactory } from '../../../util/three-helpers'
 
-import TransformControls from '../../../util/transform-controls'
-import { throttle } from 'throttle-debounce'
+import CanvasContainer from '../../CanvasContainer'
+
+import threeUtils from './three'
 
 import NumberInput from '../../MyInput'
 import commonStyles from '../index.module.css'
@@ -22,335 +17,309 @@ export default class AdjustTransforms extends Component {
 
         this.canvasRef = createRef()
 
+        const {
+            position,
+            rotation,
+            scale
+        } = props
+
         this.state = {
-            isUsingGizmos: false
+            isUsingGizmos: false,
+
+            posX: position.x,
+            posY: position.y,
+            posZ: position.z,
+
+            rotX: rotation.x,
+            rotY: rotation.y,
+            rotZ: rotation.z,
+
+            scale,
         }
     }
     
     componentDidMount() {
-        const canvas = this.canvasRef.current
+        const {
+            currentCategory,
+            currentObjectParent,
+            uploadedObjectGeometry,
+            position,
+            rotation,
+            scale,
+        } = this.props
 
-        this.objectContainer = new Group
-        this.mesh = null
-        this.parentMesh = null
-        this.material = new MeshStandardMaterial({
-            color: 0xffffff,
-            opacity: .8,
-            transparent: true
+        threeUtils.resetRendererSize()
+
+        threeUtils.addObject( uploadedObjectGeometry, {
+            position,
+            rotation,
+            scale
         })
 
-        this.sphere = sphereFactory.buildSphere()
 
-        this.scene = new Scene
-        this.scene.background = new Color( 0xeeeeee )
-        this.scene.add( this.objectContainer, this.sphere )
+        const hasParent = Boolean( currentCategory.parent && currentObjectParent )
 
-        this.camera = new PerspectiveCamera(
-            75,
-            1,
-            0.001,
-            1000
-        )
-        this.camera.position.set( 0, .5, -1 )
-        this.camera.lookAt( 0, 3, 0 )
+        if ( hasParent ) {
+            /**
+             * TODO: get directly from sceneManager
+             * 
+             * Assumption: first child is the group containing the mesh,
+             * other children are bones and need to be filtered out
+             */
+            const parentMesh = currentObjectParent.children[0]
+
+
+            const attachPoint = currentCategory.parent.attachPoint
+            const attachPoints = currentObjectParent.userData.metadata.attachPoints // TODO get from props
+
+            const { x, y, z } = attachPoints[ attachPoint ]
+
+            threeUtils.addParent( parentMesh, { x, y, z } )
+        }
+
+        threeUtils.setControlsEnabled( hasParent )
+
+        threeUtils.renderScene()
         
-
-        this.renderer = new WebGLRenderer({
-            antialias: true,
-            canvas
-        })
-
-        const light1 = new PointLight( 0xc1c1c1, 1, 100 )
-        light1.position.set( -7, -1, -7 )
-
-        const light2 = new PointLight( 0xc1c1c1, 1, 100 )
-        light2.position.set( 7, -1, -7 )
-
-        this.scene.add( light1, light2 )
-
-        this.orbitControls = new OrbitControls( this.camera, canvas )
-        this.orbitControls.addEventListener( 'change', this.renderScene )
-        this.orbitControls.enableKeys = false
-        // this.orbitControls.enableRotate = false
-        // this.orbitControls.enablePan = false
-
-        this.transformControls = new TransformControls( this.camera, canvas )
-        this.transformControls.addEventListener( 'change', this.renderScene )
-        this.transformControls.addEventListener( 'objectChange', this.onTransformChange )
-
-        this.transformControls.addEventListener( 'mouseDown', this.onTransformMouseDown )
-        this.transformControls.addEventListener( 'mouseUp', this.onTransformMouseUp )
 
         document.addEventListener( 'keydown', this.onKeyDown )
 
-        this.scene.add( this.transformControls )
-
-        this.renderScene()
-    }
-
-    onTransformMouseDown = () => {
-        this.orbitControls.enabled = false
-        this.setState({
-            isUsingGizmos: true
-        })
-    }
-
-    onTransformMouseUp = () => {
-        this.orbitControls.enabled = true
-        this.setState({
-            isUsingGizmos: false
-        })
-    }
-
-    onTransformChange = throttle( 250, () => {
-        const { onPositionChange, onRotationChange, onScaleChange } = this.props
-
-        switch( this.transformControls.getMode() ) {
-            case 'translate': {
-                const { x, y, z } = this.mesh.position
-                onPositionChange({ x, y, z })
-                break
-            }
-            case 'rotate': {
-                const { x, y, z } = this.objectContainer.rotation
-                onRotationChange({ x, y, z })
-                break
-            }
-            case 'scale': {
-                const scale = this.objectContainer.scale.x // assume scale x, y and z are same
-                onScaleChange( scale )
-                break
-            }
-        }
-    })
-
-    componentDidUpdate( prevProps ) {
-        let shouldRender = false
-
-        const { isUsingGizmos } = this.state
-
-        const prevGeometry = prevProps.uploadedObjectGeometry
-        const currGeometry = this.props.uploadedObjectGeometry
-
-        if ( prevGeometry !== currGeometry ) {
-            this.resetCamera()
-            this.resetRenderer()
-            
-            const oldMesh = this.mesh
-
-            this.mesh = new Mesh(
-                currGeometry,
-                this.material
-            )
-
-            const {
-                position: { x: posX, y: posY, z: posZ },
-                rotation: { x: rotX, y: rotY, z: rotZ },
-                scale
-            } = this.props
-
-            this.mesh.position.set( posX, posY, posZ )
-            this.objectContainer.rotation.set( rotX, rotY, rotZ )
-            this.objectContainer.scale.setScalar( scale )
-
-            this.objectContainer.remove( oldMesh )
-            this.objectContainer.add( this.mesh )
-
-            this.transformControls.attach( this.objectContainer )
-            this.transformControls.setMode( 'rotate' )
-            
-            shouldRender = true
-        }
-
-        const prevParentObject = prevProps.currentObjectParent
-        const thisParentObject = this.props.currentObjectParent
-        const prevCategory = prevProps.currentCategory
-        const thisCategory = this.props.currentCategory
-
-        if (
-            prevParentObject !== thisParentObject ||
-            prevCategory !== thisCategory
-        ) {
-            const oldParent = this.parentMesh
-            
-            this.scene.remove( oldParent )
-
-            if ( thisParentObject && thisCategory.parent ) {
-                /**
-                 * Assumption: first child is the mesh,
-                 * other children are bones and need to be filtered out
-                 */
-                const firstChild = thisParentObject.children[0]
-
-                this.parentMesh = firstChild.clone()
-
-                const attachPoint = thisCategory.parent.attachPoint
-                const attachPoints = thisParentObject.userData.metadata.attachPoints
-
-                const { x, y, z } = attachPoints[ attachPoint ]
-                this.parentMesh.position.set( x, y, z ).negate()
-
-                this.scene.add( this.parentMesh )
-
-            }
-
-            const enableCameraControls = Boolean( thisCategory.parent )
-            this.orbitControls.enableRotate = enableCameraControls
-            this.orbitControls.enablePan = enableCameraControls
-
-            shouldRender = true
-        }
-
-        const prevPosition = prevProps.position
-        const thisPosition = this.props.position
-
-        if ( prevPosition !== thisPosition && !isUsingGizmos ) {
-
-            const { x, y, z } = thisPosition
-            this.mesh.position.set( x, y, z )
-
-            shouldRender = true
-        }
-
-        const prevRotation = prevProps.rotation
-        const thisRotation = this.props.rotation
+        threeUtils.addEventListener( 'translate', this.handleGizmoPositionChange )
+        threeUtils.addEventListener( 'rotate', this.handleGizmoRotationChange )
+        threeUtils.addEventListener( 'scale', this.handleGizmoScaleChange )
         
-        if ( prevRotation !== thisRotation && !isUsingGizmos ) {
-
-            const { x, y, z } = thisRotation
-            this.objectContainer.rotation.set( x, y, z )
-
-            shouldRender = true
-        }
-
-        const prevScale = prevProps.scale
-        const thisScale = this.props.scale
-
-
-        if ( prevScale !== thisScale && !isUsingGizmos ) {
-
-            this.objectContainer.scale.setScalar( thisScale )
-
-            shouldRender = true
-        }
-
-        if ( shouldRender ) {
-            this.renderScene()
-        }
     }
 
     componentWillUnmount() {
         document.removeEventListener( 'keydown', this.onKeyDown )
+
+        threeUtils.removeEventListener( 'translate', this.handleGizmoPositionChange )
+        threeUtils.removeEventListener( 'rotate', this.handleGizmoRotationChange )
+        threeUtils.removeEventListener( 'scale', this.handleGizmoScaleChange )
+
+        threeUtils.clearObjects()
     }
 
-    resetRenderer() {
-        const { width, height } = this.canvasRef.current.getBoundingClientRect()
+    /*
+    componentDidUpdate( prevProps, prevState ) {
+        console.log('updateeeee')
+        let shouldRender = false
+        let positionChanged = false
+        let rotationChanged = false
+        let scaleChanged = false
 
-        this.renderer.setSize( width, height )
-        this.renderer.setPixelRatio( width / height )
+        if ( prevState.posX !== this.state.posX ) {
+            positionChanged = true
+        }
+
+        if ( prevState.posY !== this.state.posY ) {
+            positionChanged = true
+        }
+
+        if ( prevState.posZ !== this.state.posZ ) {
+            positionChanged = true
+        }
+
+        if ( prevState.rotX !== this.state.rotX ) {
+            rotationChanged = true
+        }
+
+        if ( prevState.rotY !== this.state.rotY ) {
+            rotationChanged = true
+        }
+
+        if ( prevState.rotZ !== this.state.rotZ ) {
+            rotationChanged = true
+        }
+
+        if ( prevState.scale !== this.state.scale ) {
+            scaleChanged = true
+        }
+
+        if ( positionChanged ) {
+            shouldRender = true
+            threeUtils.setPosition({
+                x: this.state.posX,
+                y: this.state.posY,
+                z: this.state.posZ,
+            })
+        }
+        
+        if ( rotationChanged ) {
+            shouldRender = true
+            threeUtils.setRotation({
+                x: this.state.rotX,
+                y: this.state.rotY,
+                z: this.state.rotZ,
+            })
+        }
+
+        if ( scaleChanged ) {
+            shouldRender = true
+            threeUtils.setScale( this.state.scale )
+        }
+
+        if ( shouldRender ) {
+            threeUtils.renderScene()
+        }
+    }
+    */
+
+    handleGizmoPositionChange = ({ position: { x: posX, y: posY, z: posZ } }) => {
+        this.setState({
+            posX,
+            posY,
+            posZ
+        })
     }
 
-    resetCamera() {
-        const { width, height } = this.canvasRef.current.getBoundingClientRect()
-
-        this.camera.aspect = width / height
-        this.camera.updateProjectionMatrix()
+    handleGizmoRotationChange = ({ rotation: { x: rotX, y: rotY, z: rotZ } }) => {
+        this.setState({
+            rotX,
+            rotY,
+            rotZ
+        })
     }
 
-    renderScene = () => {
-        this.renderer.render( this.scene, this.camera )
+    handleGizmoScaleChange = ({ scale }) => {
+        this.setState({
+            scale
+        })
     }
 
     onPositionXChange = value => {
-        const { position, onPositionChange } = this.props
-
-        onPositionChange({
-            ...position,
-            x: value
+        this.setState({
+            posX: value
         })
+
+        threeUtils.setPosition({
+            x: value,
+            y: this.state.posY,
+            z: this.state.posZ,
+        })
+
+        threeUtils.renderScene()
     }
 
     onPositionYChange = value => {
-        const { position, onPositionChange } = this.props
-
-        onPositionChange({
-            ...position,
-            y: value
+        this.setState({
+            posY: value
         })
+
+        threeUtils.setPosition({
+            x: this.state.posX,
+            y: value,
+            z: this.state.posZ,
+        })
+
+        threeUtils.renderScene()
     }
 
     onPositionZChange = value => {
-        const { position, onPositionChange } = this.props
-
-        onPositionChange({
-            ...position,
-            z: value
+        this.setState({
+            posZ: value
         })
+
+        threeUtils.setPosition({
+            x: this.state.posX,
+            y: this.state.posY,
+            z: value,
+        })
+
+        threeUtils.renderScene()
     }
 
     onRotationXChange = value => {
-        const { rotation, onRotationChange } = this.props
-
-        onRotationChange({
-            ...rotation,
-            x: value
+        this.setState({
+            rotX: value
         })
+
+        threeUtils.setRotation({
+            x: value,
+            y: this.state.rotY,
+            z: this.state.rotZ,
+        })
+
+        threeUtils.renderScene()
     }
 
     onRotationYChange = value => {
-        const { rotation, onRotationChange } = this.props
-
-        onRotationChange({
-            ...rotation,
-            y: value
+        this.setState({
+            rotY: value
         })
+
+        threeUtils.setRotation({
+            x: this.state.rotX,
+            y: value,
+            z: this.state.rotZ,
+        })
+
+        threeUtils.renderScene()
     }
 
     onRotationZChange = value => {
-        const { rotation, onRotationChange } = this.props
-
-        onRotationChange({
-            ...rotation,
-            z: value
+        this.setState({
+            rotZ: value
         })
+
+        threeUtils.setRotation({
+            x: this.state.rotX,
+            y: this.state.rotY,
+            z: value,
+        })
+
+        threeUtils.renderScene()
     }
 
     onScaleChange = value => {
-        this.props.onScaleChange( value )
+        this.setState({
+            scale: value
+        })
+
+        threeUtils.setScale( value )
+
+        threeUtils.renderScene()
     }
 
-    incrementScale = () => {
-        const currentScale = this.props.scale
+    handleIncrementScale = () => {
+        const currentScale = this.state.scale
         const step = currentScale / 30
         const scale = currentScale + step
-        this.props.onScaleChange( scale )
+        
+        this.setState({
+            scale
+        })
+
+        threeUtils.setScale( scale )
+        threeUtils.renderScene()
     }
 
-    decrementScale = () => {
-        const currentScale = this.props.scale
+    handleDecrementScale = () => {
+        const currentScale = this.state.scale
         const step = currentScale / 30
         const scale = currentScale - step
-        this.props.onScaleChange( scale )
+        
+        this.setState({
+            scale
+        })
+
+        threeUtils.setScale( scale )
+        threeUtils.renderScene()
     }
 
     onModeTranslate = () => {
-        this.transformControls.attach( this.mesh )
-        this.transformControls.setMode( 'translate' )
+        threeUtils.setGizmoModeTranslate()
     }
 
     onModeRotate = () => {
-        this.transformControls.attach( this.objectContainer )
-        this.transformControls.setMode( 'rotate' )
+        threeUtils.setGizmoModeRotate()
     }
 
     onModeScale = () => {
-        this.transformControls.attach( this.objectContainer )
-        this.transformControls.setMode( 'scale' )
+        threeUtils.setGizmoModeScale()
     }
 
     onKeyDown = (e) => {
-        if ( !this.props.visible ) return
-
         switch( e.key ) {
             case 'p': {
                 this.onModeTranslate()
@@ -363,32 +332,59 @@ export default class AdjustTransforms extends Component {
         }
     }
 
+    handleNext = () => {
+        const {
+            onPositionChange,
+            onRotationChange,
+            onScaleChange,
+            nextStep,
+        } = this.props
+        const {
+            posX, posY, posZ,
+            rotX, rotY, rotZ,
+            scale,
+        } = this.state
+
+        onPositionChange({
+            x: posX,
+            y: posY,
+            z: posZ,
+        })
+        onRotationChange({
+            x: rotX,
+            y: rotY,
+            z: rotZ,
+        })        
+        onScaleChange( scale )
+
+        nextStep()
+    }
+
     render() {
         const {
-            visible: isVisible,
             currentCategory,
-
-            position, rotation, scale,
 
             nextStep, previousStep
         } = this.props
+        const {
+            posX, posY, posZ,
+            rotX, rotY, rotZ,
+            scale,
+        } = this.state
 
         const className = cn(
             commonStyles.wizardStep,
-            isVisible && commonStyles.visible,
             styles.adjustTransforms
         )
-
 
         return (
             <div
                 className = { className }
             >
 
-                <canvas
-                    className = { styles.previewCanvas}
-                    ref = { this.canvasRef }
-                    onClick = { this.onClick }
+                <CanvasContainer
+                    className = { styles.previewCanvas }
+                    domElement = { threeUtils.getCanvas() }
                     onKeyDown = { this.onKeyDown }
                 />
 
@@ -420,13 +416,13 @@ export default class AdjustTransforms extends Component {
                         Scale
                         <span
                             className = {cn( commonStyles.button, styles.inlineButton )}
-                            onClick = { this.incrementScale }
+                            onClick = { this.handleIncrementScale }
                         >
                             +
                         </span>
                         <span
                             className = {cn( commonStyles.button, styles.inlineButton )}
-                            onClick = { this.decrementScale }
+                            onClick = { this.handleDecrementScale }
                         >
                             -
                         </span>
@@ -444,17 +440,17 @@ export default class AdjustTransforms extends Component {
                             <div className = { styles.axes } >
                                 <NumberInput
                                     axis = {'X'}
-                                    value = { position.x }
+                                    value = { posX }
                                     onChange = { this.onPositionXChange }
                                 />
                                 <NumberInput
                                     axis = {'Y'}
-                                    value = { position.y }
+                                    value = { posY }
                                     onChange = { this.onPositionYChange }
                                 />
                                 <NumberInput
                                     axis = {'Z'}
-                                    value = { position.z }
+                                    value = { posZ }
                                     onChange = { this.onPositionZChange }
                                 />
                             </div>
@@ -466,7 +462,7 @@ export default class AdjustTransforms extends Component {
                             <div className = { styles.axes } >
                                 <NumberInput
                                     axis = {'X'}
-                                    value = { rotation.x }
+                                    value = { rotX }
                                     onChange = { this.onRotationXChange }
                                     formatter = { radiansToDegreesFormatter }
                                     min = { -Infinity }
@@ -475,7 +471,7 @@ export default class AdjustTransforms extends Component {
                                 />
                                 <NumberInput
                                     axis = {'Y'}
-                                    value = { rotation.y }
+                                    value = { rotY }
                                     onChange = { this.onRotationYChange }
                                     formatter = { radiansToDegreesFormatter }
                                     min = { -Infinity }
@@ -484,7 +480,7 @@ export default class AdjustTransforms extends Component {
                                 />
                                 <NumberInput
                                     axis = {'Z'}
-                                    value = { rotation.z }
+                                    value = { rotZ }
                                     onChange = { this.onRotationZChange }
                                     formatter = { radiansToDegreesFormatter }
                                     min = { -Infinity }
@@ -519,7 +515,7 @@ export default class AdjustTransforms extends Component {
                         </div>
                         <div
                             className = {cn( commonStyles.button, styles.button )}
-                            onClick = { nextStep }
+                            onClick = { this.handleNext }
                         >
                             Next
                         </div>
