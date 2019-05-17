@@ -13,8 +13,8 @@ const promisified_gltfLoader = {
         return new Promise( ( resolve, reject ) => {
             _gltfLoader.load( url, resolve, null, reject )
 
-            // timeout after 2 secs
-            setTimeout(reject, 2000, new Error('Timed out'))
+            // timeout after 10 secs
+            setTimeout(reject, 10000, new Error('Timed out'))
         })
     },
     parse: function( data, path ) {
@@ -27,8 +27,8 @@ const promisified_stlLoader = {
         return new Promise( ( resolve, reject ) => {
             _stlLoader.load( url, resolve, null, reject )
 
-            // timeout after 2 secs
-            setTimeout(reject, 2000, new Error('Timed out'))
+            // timeout after 10 secs
+            setTimeout(reject, 10000, new Error('Timed out'))
         })
     },
     parse: function( data ) {
