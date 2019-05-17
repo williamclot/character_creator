@@ -72,72 +72,37 @@ export default class AdjustAttachpoints extends Component {
 
         threeUtils.removeEventListener( 'translate', this.handleGizmoPositionChange )
     }
-
+    
     /*
-    componentDidUpdate( prevProps ) {
+    componentDidUpdate( prevProps, prevState ) {
+        console.log('updateeeee')
         let shouldRender = false
+        let positionChanged = false
 
-        const prevGeometry = prevProps.uploadedObjectGeometry
-        const currGeometry = this.props.uploadedObjectGeometry
-
-        if ( prevGeometry !== currGeometry ) {
-            this.resetCamera()
-            this.resetRenderer()
-            
-            const oldMesh = this.mesh
-
-            this.mesh = new Mesh(
-                currGeometry,
-                this.material
-            )
-
-            const {
-                position: { x: posX, y: posY, z: posZ },
-                rotation: { x: rotX, y: rotY, z: rotZ },
-                scale
-            } = this.props
-
-            this.mesh.position.set( posX, posY, posZ )
-            this.objectContainer.rotation.set( rotX, rotY, rotZ )
-            this.objectContainer.scale.setScalar( scale )
-
-            this.objectContainer.remove( oldMesh )
-            this.objectContainer.add( this.mesh )
-            
-            shouldRender = true
+        if ( prevState.posX !== this.state.posX ) {
+            positionChanged = true
         }
 
-        const prevAttachpoints = prevProps.attachPointsPositions
-        const thisAttachPoints = this.props.attachPointsPositions
-
-        if ( prevAttachpoints !== thisAttachPoints ) {
-            for ( let key of Object.keys( thisAttachPoints ) ) {
-                if ( prevAttachpoints[ key ] !== thisAttachPoints[ key ] ) {
-                    const { x, y, z } = thisAttachPoints[ key ]
-                    
-                    this.sphere.position.set( x, y, z )
-
-                    shouldRender = true
-                }
-            }
+        if ( prevState.posY !== this.state.posY ) {
+            positionChanged = true
         }
 
-        if ( prevProps.attachPointsToPlace !== this.props.attachPointsToPlace ) {
-            const { x, y, z } = this.getPosition()
-            this.sphere.position.set( x, y, z )
-            
-            const oldChild = this.childMesh
-            this.sphere.remove( oldChild )
-            
-            const attachPointName = this.getAttachpoint()
-            const childMesh = this.props.currentObjectChildren[ attachPointName ]
-            
-            if ( childMesh ) {
-                this.childMesh = childMesh.clone()
-                this.sphere.add( this.childMesh )
-            }
+        if ( prevState.posZ !== this.state.posZ ) {
+            positionChanged = true
+        }
 
+
+        if ( positionChanged ) {
             shouldRender = true
+            threeUtils.setPosition({
+                x: this.state.posX,
+                y: this.state.posY,
+                z: this.state.posZ,
+            })
+        }
+        
+        if ( shouldRender ) {
+            threeUtils.renderScene()
         }
     }
     */
