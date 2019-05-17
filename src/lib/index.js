@@ -1,4 +1,4 @@
-import { byCategory, allCategories } from './user_my-human-world_objects.json'
+import { byCategory, allCategories } from './user_my-human-world_objects'
 
 export { default as worldData } from './user_my-human-world.json'
 
@@ -7,7 +7,7 @@ export { default as poseData } from './user_my-human-world_default-pose.json'
 
 const oneOfEach = allCategories.reduce(
     ( acc, category ) => {
-        acc[ category ] = byCategory[ category ][ 0 ] // select first
+        acc[ category ] = byCategory[ category ] && byCategory[ category ][ 0 ] // select first
         return acc
     },
     {}
