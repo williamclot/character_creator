@@ -17,7 +17,6 @@ import SceneManager from '../ThreeContainer/sceneManager'
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
     getCategories, getNameAndExtension, objectMap,
-    Dict,
 } from '../../util/helpers'
 
 import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants'
@@ -33,7 +32,6 @@ class App extends Component {
         this.state = {
             /**
              * Mapping from part type to threejs object
-             * @type { Dict<Object3D> }
              */
             loadedObjects: {},
 
