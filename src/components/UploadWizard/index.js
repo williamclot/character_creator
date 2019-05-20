@@ -1,17 +1,15 @@
 import React, { Component } from 'react'
-import cn from 'classnames'
 
 import UploadConfirm from './UploadConfirm'
-import AdjustTransforms from './AdjustTransforms'
 import PlaceAttachpoint from './PlaceAttachpoint'
-
-import styles from './index.module.css'
-
-import { steps } from './wizardSteps'
-
-import { stlLoader } from '../../util/loaders'
+import AdjustTransforms from './AdjustTransforms'
 import PlaceOtherAttachpoints from './PlaceOtherAttachpoints';
 import AdjustAttachpoints from './AdjustAttachPoints';
+
+import { steps } from './wizardSteps'
+import { stlLoader } from '../../util/loaders'
+
+import styles from './index.module.css'
 
 class UploadWizard extends Component {
     constructor( props ) {
