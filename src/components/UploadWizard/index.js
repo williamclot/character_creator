@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import cn from 'classnames'
-
-import { showLoader, hideLoader } from '../../actions/loader'
 
 import UploadConfirm from './UploadConfirm'
 import AdjustTransforms from './AdjustTransforms'
@@ -417,12 +414,5 @@ class UploadWizard extends Component {
     }
 }
 
-const mapDispatchToProps = {
-    showLoader,
-    hideLoader
-}
 
-export default connect(
-    null,
-    mapDispatchToProps
-)( UploadWizard )
+export default UploadWizard

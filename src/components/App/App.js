@@ -12,8 +12,6 @@ import PartTypesView from '../PartTypes'
 import LoadingIndicator from '../LoadingIndicator';
 import ButtonsContainer from '../ButtonsContainer';
 
-import { showLoader, hideLoader } from '../../actions/loader'
-
 import SceneManager from '../ThreeContainer/sceneManager'
 
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
@@ -44,7 +42,9 @@ class App extends Component {
             showUploadWizard: false,
             uploadedObjectData: null,
             
-            editMode: false
+            editMode: false,
+
+            isLoading: false,
         }
         
         const container = new Group
@@ -58,7 +58,7 @@ class App extends Component {
     }
 
     async componentDidMount() {
-        this.props.showLoader()
+        this.showLoader()
 
         try {
             const oneOfEach = objectMap(
@@ -76,7 +76,19 @@ class App extends Component {
             console.error( err )
         }
         
-        this.props.hideLoader()
+        this.hideLoader()
+    }
+
+    showLoader = () => {
+        this.setState({
+            isLoading: true
+        })
+    }
+
+    hideLoader = () => {
+        this.setState({
+            isLoading: false
+        })
     }
 
     get3dObject = ( key ) => {
@@ -219,7 +231,7 @@ class App extends Component {
     }
 
     onObjectSelected = async ( category, objectData ) => {
-        this.props.showLoader()
+        this.showLoader()
 
         try {
 
@@ -233,7 +245,7 @@ class App extends Component {
             )
         }
 
-        this.props.hideLoader()
+        this.hideLoader()
     }
 
     setSelectedObject = ( category, newObject ) => {
@@ -336,12 +348,10 @@ class App extends Component {
     render() {
         const {
             worldData: { name, groups },
-            
             poseData,
-
-            isLoading
         } = this.props
         const {
+            isLoading,
             loadedObjects,
             objectsByCategory,
             showUploadWizard, uploadedObjectData
@@ -399,6 +409,8 @@ class App extends Component {
 
                     data = { uploadedObjectData }
                     
+                    showLoader = { this.showLoader }
+                    hideLoader = { this.hideLoader }
                     onWizardCanceled = { this.onWizardCanceled }
                     onWizardCompleted = { this.onWizardCompleted }
                 />
@@ -414,10 +426,5 @@ export default connect(
     state => ({
         selectedGroupIndex: state.selectedCategoryPath.groupIndex,
         selectedCategoryIndex: state.selectedCategoryPath.categoryIndex,
-        isLoading: state.isLoading
-    }),
-    ({
-        showLoader,
-        hideLoader
     })
 )( App )
