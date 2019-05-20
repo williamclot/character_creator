@@ -10,7 +10,7 @@ import PlaceAttachpoint from './PlaceAttachpoint'
 
 import styles from './index.module.css'
 
-import { steps, previousStep, nextStep, goToStep, resetWizard } from '../../actions/steps'
+import { steps } from './wizardSteps'
 
 import { stlLoader } from '../../util/loaders'
 import PlaceOtherAttachpoints from './PlaceOtherAttachpoints';
@@ -21,6 +21,8 @@ class UploadWizard extends Component {
         super( props )
 
         this.state = {
+            currentWizardStep: steps.UPLOAD_CONFIRM,
+
             partType: null,
 
             // handled by UploadConfirm
@@ -137,6 +139,13 @@ class UploadWizard extends Component {
         }
     }
 
+    goToStep = step => {
+        this.setState({
+            currentWizardStep: step
+        })
+    }
+
+
     onNameChange = name => {
         this.setState({
             name
@@ -199,84 +208,99 @@ class UploadWizard extends Component {
             metadata,
             geometry: uploadedObjectGeometry
         })
-        this.props.resetWizard()
     }
 
     onNext = () => {
         const {
-            step,
-            nextStep, resetWizard, goToStep
-        } = this.props
-        const { partType, attachPointsToPlace } = this.state
+            currentWizardStep,
+            partType, attachPointsToPlace
+        } = this.state
 
-        if ( step === steps.UPLOAD_CONFIRM ) {
+        switch(currentWizardStep) {
+            case steps.UPLOAD_CONFIRM: {
+                const hasParent = Boolean( partType.parent )
 
-            if ( !partType.parent ) {
-                goToStep( steps.ADJUST )
-            } else {
-                nextStep()
+                if ( !hasParent ) {
+                    this.goToStep( steps.ADJUST )
+                } else {
+                    this.goToStep( steps.PLACE_ATTACHPOINT )
+                }
+
+                break
             }
-
-        } else if ( step === steps.ADJUST ) {
-
-            const isCompleted = (
-                !attachPointsToPlace ||
-                attachPointsToPlace.length === 0
-            )
-
-            if ( isCompleted ) {
-                this.onCompleted()
-            } else {
-                nextStep()
+            case steps.PLACE_ATTACHPOINT: {
+                this.goToStep( steps.ADJUST )
+                break
             }
+            case steps.ADJUST: {
+                const attachPointsLeftToPlace = ( attachPointsToPlace && attachPointsToPlace.length !== 0 )
 
-        } else if ( step === steps.ADJUST_ATTACHPOINTS ) {
+                if ( attachPointsLeftToPlace ) {
+                    this.goToStep( steps.PLACE_OTHER_ATTACHPOINTS )
+                } else {
+                    this.onCompleted()
+                }
 
-            const isCompleted = attachPointsToPlace.length === 1 // placed last AP
-            if ( isCompleted ) {
-                this.onCompleted()
-            } else {
-                
-                goToStep( steps.PLACE_OTHER_ATTACHPOINTS )
-                this.setState( state => ({
-                    attachPointsToPlace: state.attachPointsToPlace.slice( 1 )
-                }))
-
+                break
             }
-        } else {
+            case steps.PLACE_OTHER_ATTACHPOINTS: {
+                this.goToStep( steps.ADJUST_ATTACHPOINTS )
+                break
+            }
+            case steps.ADJUST_ATTACHPOINTS: {
+                const placedLastAttachpoint = attachPointsToPlace.length === 1
 
-            nextStep()
+                if ( placedLastAttachpoint ) {
+                    this.onCompleted()
+                } else {
+                    this.setState( state => ({
+                        attachPointsToPlace: state.attachPointsToPlace.slice( 1 )
+                    }))
+                    this.goToStep( steps.PLACE_OTHER_ATTACHPOINTS )
+                }
 
+                break
+            }
         }
     }
 
     onBack = () => {
-        const {
-            step,
-            previousStep, goToStep
-        } = this.props
-        const { partType } = this.state
+        const { partType, currentWizardStep } = this.state
 
-        if ( step === steps.ADJUST ) {
-
-            if ( !partType.parent ) {
-                goToStep( steps.UPLOAD_CONFIRM )
-            } else {
-                previousStep()
+        switch(currentWizardStep) {
+            case steps.ADJUST_ATTACHPOINTS: {
+                this.goToStep( steps.PLACE_OTHER_ATTACHPOINTS )
+                break
             }
+            case steps.PLACE_OTHER_ATTACHPOINTS: {
+                this.goToStep( steps.ADJUST )
+                break
+            }
+            case steps.ADJUST: {
+                const hasParent = Boolean(partType.parent)
 
-        } else {
-            previousStep()
+                if ( !hasParent ) {
+                    this.goToStep( steps.UPLOAD_CONFIRM )
+                } else {
+                    this.goToStep( steps.PLACE_ATTACHPOINT )
+                }
+
+                break
+            }
+            case steps.PLACE_ATTACHPOINT: {
+                this.goToStep( steps.UPLOAD_CONFIRM )
+                break
+            }
         }
     }
 
     renderWizardStep() {
         const {
             onWizardCanceled,
-            step,
         } = this.props
 
         const {
+            currentWizardStep,
             partType,
             name, uploadedObjectGeometry,
             currentObject, currentObjectParent, currentObjectChildren,
@@ -286,7 +310,7 @@ class UploadWizard extends Component {
 
         const currentAttachPoint = attachPointsToPlace.length !== 0 ? attachPointsToPlace[ 0 ] : null
 
-        switch ( step ) {
+        switch ( currentWizardStep ) {
             case steps.UPLOAD_CONFIRM: return (
                 <UploadConfirm
                     currentCategory = { partType }
@@ -393,20 +417,12 @@ class UploadWizard extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    step: state.step
-})
-
 const mapDispatchToProps = {
-    nextStep,
-    previousStep,
-    goToStep,
-    resetWizard,
     showLoader,
     hideLoader
 }
 
 export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )( UploadWizard )
