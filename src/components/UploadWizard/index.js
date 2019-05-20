@@ -291,6 +291,21 @@ class UploadWizard extends Component {
         }
     }
 
+    render() {
+        const hasLoaded = Boolean( this.state.uploadedObjectGeometry )
+
+        if ( !hasLoaded ) return null
+    
+        return (
+            <div className = { styles.wrapper }>
+                <div className = { styles.wizardBackground } />
+                <div className = { styles.wizardContainer } >
+                    {this.renderWizardStep()}
+                </div>
+            </div>
+        )
+    }
+
     renderWizardStep() {
         const {
             onWizardCanceled,
@@ -396,21 +411,6 @@ class UploadWizard extends Component {
                 />
             )
         }
-    }
-
-    render() {
-        const hasLoaded = Boolean( this.state.uploadedObjectGeometry )
-
-        if ( !hasLoaded ) return null
-    
-        return (
-            <div className = { styles.wrapper }>
-                <div className = { styles.wizardBackground } />
-                <div className = { styles.wizardContainer } >
-                    {this.renderWizardStep()}
-                </div>
-            </div>
-        )
     }
 }
 
