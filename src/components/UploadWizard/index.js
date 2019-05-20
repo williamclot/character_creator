@@ -52,14 +52,23 @@ class UploadWizard extends Component {
     }
 
     async componentDidMount() {
-        const { data } = this.props
+        const {
+            data,
+            getObject,
+            getParentObject,
+            getObjectByAttachPoint,
+            onWizardCanceled,
+            showLoader,
+            hideLoader,
+        } = this.props
+        
         const {
             partType,
             name, extension,
             objectURL
         } = data
 
-        this.props.showLoader()
+        showLoader()
 
         try {
             const geometry = await stlLoader.load( objectURL )
@@ -90,11 +99,11 @@ class UploadWizard extends Component {
                 }
             }
             
-            const currentObject = this.props.getObject( partType.name )
-            const currentObjectParent = this.props.getParentObject( partType.name )
+            const currentObject = getObject( partType.name )
+            const currentObjectParent = getParentObject( partType.name )
             const currentObjectChildren = {}
             for ( let attachPoint of attachPoints ) {
-                currentObjectChildren[ attachPoint ] = this.props.getObjectByAttachPoint( attachPoint )
+                currentObjectChildren[ attachPoint ] = getObjectByAttachPoint( attachPoint )
             }
             
 
@@ -115,7 +124,7 @@ class UploadWizard extends Component {
 
         } catch ( err ) {
 
-            this.props.onWizardCanceled()
+            onWizardCanceled()
             console.error( err )
             return
 
@@ -123,7 +132,7 @@ class UploadWizard extends Component {
 
             // cleanup to prevent memory leaks
             // URL.revokeObjectURL( objectURL )
-            this.props.hideLoader()
+            hideLoader()
             
         }
     }
