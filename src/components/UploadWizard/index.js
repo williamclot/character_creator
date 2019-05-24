@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import UploadConfirm from './UploadConfirm'
+import GlobalPositioning from './GlobalPositioning'
 import PlaceAttachpoint from './PlaceAttachpoint'
 import AdjustTransforms from './AdjustTransforms'
 import PlaceOtherAttachpoints from './PlaceOtherAttachpoints';
@@ -213,6 +214,10 @@ class UploadWizard extends Component {
 
         switch(currentWizardStep) {
             case steps.UPLOAD_CONFIRM: {
+                this.goToStep( steps.GLOBAL_POSITIONING )
+                break
+            }
+            case steps.GLOBAL_POSITIONING: {
                 const hasParent = Boolean( partType.parent )
 
                 if ( !hasParent ) {
@@ -275,7 +280,7 @@ class UploadWizard extends Component {
                 const hasParent = Boolean(partType.parent)
 
                 if ( !hasParent ) {
-                    this.goToStep( steps.UPLOAD_CONFIRM )
+                    this.goToStep( steps.GLOBAL_POSITIONING )
                 } else {
                     this.goToStep( steps.PLACE_ATTACHPOINT )
                 }
@@ -283,11 +288,28 @@ class UploadWizard extends Component {
                 break
             }
             case steps.PLACE_ATTACHPOINT: {
+                this.goToStep( steps.GLOBAL_POSITIONING )
+                break
+            }
+            case steps.GLOBAL_POSITIONING: {
                 this.goToStep( steps.UPLOAD_CONFIRM )
                 break
             }
         }
     }
+
+    handleGlobalPositioningConfirm = () => {
+        const { attachPointsToPlace } = this.state
+        
+        const attachPointsLeftToPlace = ( attachPointsToPlace && attachPointsToPlace.length !== 0 )
+
+        if ( attachPointsLeftToPlace ) {
+            this.goToStep( steps.PLACE_OTHER_ATTACHPOINTS )
+        } else {
+            this.onCompleted()
+        }
+    }
+
 
     render() {
         const hasLoaded = Boolean( this.state.uploadedObjectGeometry )
@@ -335,6 +357,22 @@ class UploadWizard extends Component {
     
                     onCancel = { onWizardCanceled }
                     onNext = { this.onNext }
+                />
+            )
+
+            case steps.GLOBAL_POSITIONING: return (
+                <GlobalPositioning
+                    uploadedObjectGeometry = { uploadedObjectGeometry }
+                    currentObject = { currentObject }
+                    currentObjectParent = { currentObjectParent }
+                    
+                    onPositionChange = { this.setPosition }
+                    onRotationChange = { this.setRotation }
+                    onScaleChange = { this.setScale }
+
+                    previousStep = { this.onBack }
+                    nextStep = { this.onNext }
+                    onConfirm = { this.handleGlobalPositioningConfirm }
                 />
             )
 
