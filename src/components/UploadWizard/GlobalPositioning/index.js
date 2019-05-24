@@ -90,13 +90,7 @@ export default class GlobalPositioning extends Component {
             })
             onScaleChange( 1 )
 
-            // onConfirm will might call the onWizardCompleted function
-            // which takes everything from the wizard state and 
-            // uses those values to generate the metadata;
-            // we need to wait for state to be updated before calling onConfirm
-            setTimeout(() => {
-                onConfirm()
-            })
+            onConfirm()
         } else {
             nextStep()
         }
