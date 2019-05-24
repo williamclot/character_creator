@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import UploadConfirm from './UploadConfirm'
+import GlobalPositioning from './GlobalPositioning'
 import PlaceAttachpoint from './PlaceAttachpoint'
 import AdjustTransforms from './AdjustTransforms'
 import PlaceOtherAttachpoints from './PlaceOtherAttachpoints';
@@ -134,6 +135,33 @@ class UploadWizard extends Component {
         }
     }
 
+    componentDidUpdate() {
+        if ( this.state.currentWizardStep === steps.COMPLETED ) {
+            const {
+                partType,
+                name, objectURL, imageSrc,
+                uploadedObjectGeometry,
+                position, rotation, scale,
+                attachPointsPositions
+            } = this.state
+            
+            const metadata = {
+                position,
+                rotation,
+                scale,
+                attachPoints: attachPointsPositions
+            }
+    
+            this.props.onWizardCompleted(partType, {
+                name,
+                objectURL,
+                imageSrc,
+                metadata,
+                geometry: uploadedObjectGeometry
+            })
+        }
+    }
+
     goToStep = step => {
         this.setState({
             currentWizardStep: step
@@ -180,31 +208,6 @@ class UploadWizard extends Component {
         }))
     }
 
-    onCompleted = () => {
-        const {
-            partType,
-            name, objectURL, imageSrc,
-            uploadedObjectGeometry,
-            position, rotation, scale,
-            attachPointsPositions
-        } = this.state
-        
-        const metadata = {
-            position,
-            rotation,
-            scale,
-            attachPoints: attachPointsPositions
-        }
-
-        this.props.onWizardCompleted(partType, {
-            name,
-            objectURL,
-            imageSrc,
-            metadata,
-            geometry: uploadedObjectGeometry
-        })
-    }
-
     onNext = () => {
         const {
             currentWizardStep,
@@ -213,6 +216,10 @@ class UploadWizard extends Component {
 
         switch(currentWizardStep) {
             case steps.UPLOAD_CONFIRM: {
+                this.goToStep( steps.GLOBAL_POSITIONING )
+                break
+            }
+            case steps.GLOBAL_POSITIONING: {
                 const hasParent = Boolean( partType.parent )
 
                 if ( !hasParent ) {
@@ -233,7 +240,7 @@ class UploadWizard extends Component {
                 if ( attachPointsLeftToPlace ) {
                     this.goToStep( steps.PLACE_OTHER_ATTACHPOINTS )
                 } else {
-                    this.onCompleted()
+                    this.goToStep( steps.COMPLETED )
                 }
 
                 break
@@ -246,7 +253,7 @@ class UploadWizard extends Component {
                 const placedLastAttachpoint = attachPointsToPlace.length === 1
 
                 if ( placedLastAttachpoint ) {
-                    this.onCompleted()
+                    this.goToStep( steps.COMPLETED )
                 } else {
                     this.setState( state => ({
                         attachPointsToPlace: state.attachPointsToPlace.slice( 1 )
@@ -275,7 +282,7 @@ class UploadWizard extends Component {
                 const hasParent = Boolean(partType.parent)
 
                 if ( !hasParent ) {
-                    this.goToStep( steps.UPLOAD_CONFIRM )
+                    this.goToStep( steps.GLOBAL_POSITIONING )
                 } else {
                     this.goToStep( steps.PLACE_ATTACHPOINT )
                 }
@@ -283,16 +290,34 @@ class UploadWizard extends Component {
                 break
             }
             case steps.PLACE_ATTACHPOINT: {
+                this.goToStep( steps.GLOBAL_POSITIONING )
+                break
+            }
+            case steps.GLOBAL_POSITIONING: {
                 this.goToStep( steps.UPLOAD_CONFIRM )
                 break
             }
         }
     }
 
+    handleGlobalPositioningConfirm = () => {
+        const { attachPointsToPlace } = this.state
+        
+        const attachPointsLeftToPlace = ( attachPointsToPlace && attachPointsToPlace.length !== 0 )
+
+        if ( attachPointsLeftToPlace ) {
+            this.goToStep( steps.PLACE_OTHER_ATTACHPOINTS )
+        } else {
+            this.goToStep( steps.COMPLETED )
+        }
+    }
+
+
     render() {
         const hasLoaded = Boolean( this.state.uploadedObjectGeometry )
+        const isCompleted = this.state.currentWizardStep === steps.COMPLETED
 
-        if ( !hasLoaded ) return null
+        if ( !hasLoaded || isCompleted ) return null
     
         return (
             <div className = { styles.wrapper }>
@@ -335,6 +360,22 @@ class UploadWizard extends Component {
     
                     onCancel = { onWizardCanceled }
                     onNext = { this.onNext }
+                />
+            )
+
+            case steps.GLOBAL_POSITIONING: return (
+                <GlobalPositioning
+                    uploadedObjectGeometry = { uploadedObjectGeometry }
+                    currentObject = { currentObject }
+                    currentObjectParent = { currentObjectParent }
+                    
+                    onPositionChange = { this.setPosition }
+                    onRotationChange = { this.setRotation }
+                    onScaleChange = { this.setScale }
+
+                    previousStep = { this.onBack }
+                    nextStep = { this.onNext }
+                    onConfirm = { this.handleGlobalPositioningConfirm }
                 />
             )
 
