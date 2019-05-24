@@ -3,7 +3,7 @@ const lib = {
         "Torso": [
             {
                 "name": "Cylinder",
-                "download_url": process.env.PUBLIC_URL + "http://localhost:3000/models/cylinder.stl",
+                "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
                 "extension": "stl",
                 "metadata": {
                     "scale": 3,
@@ -38,7 +38,7 @@ const lib = {
             },
             {
                 "name": "CUBE TORSO",
-                "download_url": process.env.PUBLIC_URL + "http://localhost:3000/models/cube.stl",
+                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
                 "metadata": {
                     "attachPoints": {
@@ -74,7 +74,7 @@ const lib = {
         "Head": [
             {
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "http://localhost:3000/models/cube.stl",
+                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
                 "metadata": {
                     "scale": .4
@@ -84,7 +84,7 @@ const lib = {
         "ArmR": [
             {
                 "name": "Cylinder",
-                "download_url": process.env.PUBLIC_URL + "http://localhost:3000/models/cylinder.stl",
+                "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
                 "extension": "stl",
                 "metadata": {
                     
@@ -112,7 +112,7 @@ const lib = {
             },
             {
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "http://localhost:3000/models/cube.stl",
+                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
                 "metadata": {
                     "attachPoints": {
@@ -128,7 +128,7 @@ const lib = {
         "ArmL": [
             {
                 "name": "Cylinder",
-                "download_url": process.env.PUBLIC_URL + "http://localhost:3000/models/cylinder.stl",
+                "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
                 "extension": "stl",
                 "metadata": {
                     
@@ -156,7 +156,7 @@ const lib = {
             },
             {
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "http://localhost:3000/models/cube.stl",
+                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
                 "metadata": {
                     "attachPoints": {
@@ -172,7 +172,7 @@ const lib = {
         "HandR": [
             {
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "http://localhost:3000/models/cube.stl",
+                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
                 "metadata": {
                     "scale": .4
@@ -182,7 +182,7 @@ const lib = {
         "HandL": [
             {
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "http://localhost:3000/models/cube.stl",
+                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
                 "metadata": {
                     "scale": .4
@@ -192,7 +192,7 @@ const lib = {
         "LegR": [
             {
                 "name": "Cylinder",
-                "download_url": process.env.PUBLIC_URL + "http://localhost:3000/models/cylinder.stl",
+                "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
                 "extension": "stl",
                 "metadata": {
                     "position": {
@@ -217,7 +217,7 @@ const lib = {
             },
             {
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "http://localhost:3000/models/cube.stl",
+                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
                 "metadata": {
                     "attachPoints": {
@@ -233,7 +233,7 @@ const lib = {
         "LegL": [
             {
                 "name": "Cylinder",
-                "download_url": process.env.PUBLIC_URL + "http://localhost:3000/models/cylinder.stl",
+                "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
                 "extension": "stl",
                 "metadata": {
                     "position": {
@@ -258,7 +258,7 @@ const lib = {
             },
             {
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "http://localhost:3000/models/cube.stl",
+                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
                 "metadata": {
                     "attachPoints": {
@@ -274,7 +274,7 @@ const lib = {
         "FootR": [
             {
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "http://localhost:3000/models/cube.stl",
+                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
                 "metadata": {
                     "scale": .4
@@ -284,7 +284,7 @@ const lib = {
         "FootL": [
             {
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "http://localhost:3000/models/cube.stl",
+                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
                 "metadata": {
                     "scale": .4
@@ -305,18 +305,18 @@ const lib = {
         "FootL"
     ],
     "poses": [
-        // "http://localhost:3000/models/pose-dab.json",
-        // "http://localhost:3000/models/pose-default.json",
-        // "http://localhost:3000/models/pose-egypt.json",
-        // "http://localhost:3000/models/pose-gedan_barai.json",
-        // "http://localhost:3000/models/pose-king_kong.json",
-        // "http://localhost:3000/models/pose-running.json",
-        // "http://localhost:3000/models/pose-test.json"
+        // "/models/pose-dab.json",
+        // "/models/pose-default.json",
+        // "/models/pose-egypt.json",
+        // "/models/pose-gedan_barai.json",
+        // "/models/pose-king_kong.json",
+        // "/models/pose-running.json",
+        // "/models/pose-test.json"
     ],
     "stand": [
-        // "http://localhost:3000/models/stand-circle.glb",
-        // "http://localhost:3000/models/stand-hexagone.glb",
-        // "http://localhost:3000/models/stand-scaled"
+        // "/models/stand-circle.glb",
+        // "/models/stand-hexagone.glb",
+        // "/models/stand-scaled"
     ]
 }
 
