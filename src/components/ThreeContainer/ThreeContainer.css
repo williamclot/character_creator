@@ -13,19 +13,3 @@
     max-width: 100%;
     max-height: 100%;
 }
-
-.canvas-container.loading canvas {
-    filter: blur(1.5px);
-}
-
-.canvas-container .loader {
-    /* z-index: auto; */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    visibility: hidden;
-}
-
-.canvas-container .loader.loading {
-    visibility: visible;
-}
