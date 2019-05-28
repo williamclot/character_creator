@@ -1,8 +1,5 @@
 import React from 'react'
 import cn from 'classnames'
-import { connect } from 'react-redux'
-
-import { setCurrentGroup, setCurrentCategory } from '../../actions'
 
 import styles from './index.module.css'
 
@@ -30,50 +27,22 @@ const PartType = props => {
 }
 
 const PartTypes = ({
-    groups,
-    currentGroupIndex, currentCategoryIndex,
-    onGroupClick, onCategoryClick,
+    partTypes,
+    selectedPartTypeId,
+    onPartTypeSelected,
 }) => {
-
-    const partTypes = groups.reduce( ( partTypes, group, groupIndex ) => (
-        partTypes.concat( group.categories.map( ( partType, categoryIndex ) => {
-            const isSelected = (
-                groupIndex === currentGroupIndex &&
-                categoryIndex === currentCategoryIndex
-            )
-            const onClick = () => {
-                onGroupClick( groupIndex )
-                onCategoryClick( categoryIndex )
-            }
-
-            return <PartType
-                key = { partType.name }
-                partType = { partType }
-                onClick = { onClick }
-                selected = { isSelected }
-            />
-        }))
-    ), [])
-
     return (
         <div className = {styles.partTypes}>
-            {partTypes}
+            {partTypes.map( partType => (
+                <PartType
+                    key = { partType.id }
+                    partType = { partType }
+                    onClick = { () => onPartTypeSelected( partType.id ) }
+                    selected = { partType.id === selectedPartTypeId }
+                />
+            ))}
         </div>
     )
 }
 
-
-const mapStateToProps = state => ({
-    currentGroupIndex: state.selectedCategoryPath.groupIndex,
-    currentCategoryIndex: state.selectedCategoryPath.categoryIndex
-})
-
-const mapDispatchToProps = {
-    onGroupClick: setCurrentGroup,
-    onCategoryClick: setCurrentCategory
-}
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)( PartTypes )
+export default PartTypes

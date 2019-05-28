@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import { Group } from 'three'
 import axios from 'axios'
 
@@ -29,7 +28,12 @@ class App extends Component {
     constructor( props ) {
         super( props )
 
+        const partTypes = getCategories( props.worldData.groups )
+        const selectedPartTypeId = partTypes[0] && partTypes[0].id
+
         this.state = {
+            partTypes,
+            selectedPartTypeId,
             /**
              * Mapping from part type to threejs object
              */
@@ -46,9 +50,8 @@ class App extends Component {
         }
         
         const container = new Group
-        const categories = getCategories( props.worldData.groups )
 
-        this.sceneManager = new SceneManager( container, categories )
+        this.sceneManager = new SceneManager( container, partTypes )
         
         if ( process.env.NODE_ENV === 'development' ) {
             window.x = this
@@ -103,7 +106,7 @@ class App extends Component {
 
     handleDeleteObject = async ( objectId ) => {
         const { env, csrfToken } = this.props
-        const currentCategory = this.getSelectedCategory().name
+        const currentCategory = this.getSelectedPartType().name
 
         try {
             const res = await axios.delete(
@@ -272,7 +275,7 @@ class App extends Component {
         }
 
         const defaultRotation = this.sceneManager.computeGlobalRotation(
-            this.getSelectedCategory(),
+            this.getSelectedPartType(),
             this.props.poseData
         )
 
@@ -336,27 +339,34 @@ class App extends Component {
         }))
     }
 
-    getSelectedGroup = () => this.props.worldData.groups[ this.props.selectedGroupIndex ]
-    getSelectedCategory = () => {
-        const selectedGroup = this.getSelectedGroup()
-        return selectedGroup && selectedGroup.categories[ this.props.selectedCategoryIndex ]
+    getSelectedPartType = () => {
+        const { partTypes, selectedPartTypeId } = this.state
+
+        return partTypes.find( partType => partType.id === selectedPartTypeId )
+    }
+
+
+    handlePartTypeSelected = id => {
+        this.setState({
+            selectedPartTypeId: id
+        })
     }
 
 
     render() {
         const {
-            worldData: { name, groups },
+            worldData: { name },
             poseData,
         } = this.props
         const {
             isLoading,
+            partTypes, selectedPartTypeId,
             loadedObjects,
             objectsByCategory,
             showUploadWizard, uploadedObjectData
         } = this.state
 
-        const selectedGroup = this.getSelectedGroup()
-        const selectedCategory = this.getSelectedCategory()
+        const selectedCategory = this.getSelectedPartType()
 
         const selectorData = ( selectedCategory ?
             {
@@ -378,7 +388,11 @@ class App extends Component {
             <div className = "editor-panel-container">
                 <div className = "editor-panel">
                     <div className = "groups-container">
-                        <PartTypesView groups = { groups } />
+                        <PartTypesView
+                            partTypes = { partTypes }
+                            selectedPartTypeId = { selectedPartTypeId }
+                            onPartTypeSelected = { this.handlePartTypeSelected }
+                        />
                     </div>
                     
                     <div className = "selector-container">
@@ -395,7 +409,7 @@ class App extends Component {
             </div>
 
             <ButtonsContainer
-                categories = { getCategories(groups) }
+                categories = { partTypes }
                 onUpload = { this.onUpload }
             />
 
@@ -420,9 +434,4 @@ class App extends Component {
 
 }
 
-export default connect(
-    state => ({
-        selectedGroupIndex: state.selectedCategoryPath.groupIndex,
-        selectedCategoryIndex: state.selectedCategoryPath.categoryIndex,
-    })
-)( App )
+export default App
