@@ -6,7 +6,6 @@ import ThreeContainer from '../ThreeContainer'
 import UploadWizard from '../UploadWizard'
 import Header from '../Header';
 import Selector from '../Selector';
-// import { CategoriesView, GroupsView } from '../Categories'
 import PartTypesView from '../PartTypes'
 import LoadingIndicator from '../LoadingIndicator';
 import ButtonsContainer from '../ButtonsContainer';
