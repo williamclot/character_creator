@@ -1,4 +1,5 @@
 const paths = require('./paths')
+const pkg = require('../package.json')
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
@@ -270,8 +271,8 @@ module.exports = {
         })
     ],
 
-    externals: {
-        react: 'react',
-        'react-dom': 'react-dom'
-    }
+    externals: [
+        ...Object.keys(pkg.dependencies || {}),
+        ...Object.keys(pkg.peerDependencies || {})
+    ],
 }
