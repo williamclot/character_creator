@@ -28,10 +28,20 @@ class App extends Component {
         super( props )
 
         const partTypes = getCategories( props.worldData.groups )
-        const selectedPartTypeId = partTypes[0] && partTypes[0].id
+
+        const partTypesById = partTypes.reduce( ( byId, partType ) => ({
+            ...byId,
+            [partType.id]: partType
+        }), {} )
+
+        const allPartTypeIds = partTypes.map( partType => partType.id )
+
+        const selectedPartTypeId = allPartTypeIds[ 0 ]
 
         this.state = {
-            partTypes,
+            partTypesById,
+            allPartTypeIds,
+
             selectedPartTypeId,
             /**
              * Mapping from part type to threejs object
@@ -338,10 +348,16 @@ class App extends Component {
         }))
     }
 
-    getSelectedPartType = () => {
-        const { partTypes, selectedPartTypeId } = this.state
+    getPartTypesArray = () => {
+        const { partTypesById, allPartTypeIds } = this.state
 
-        return partTypes.find( partType => partType.id === selectedPartTypeId )
+        return allPartTypeIds.map( id => partTypesById[ id ] )
+    }
+
+    getSelectedPartType = () => {
+        const { partTypesById, selectedPartTypeId } = this.state
+
+        return partTypesById[ selectedPartTypeId ]
     }
 
 
@@ -359,12 +375,13 @@ class App extends Component {
         } = this.props
         const {
             isLoading,
-            partTypes, selectedPartTypeId,
+            selectedPartTypeId,
             loadedObjects,
             objectsByCategory,
             showUploadWizard, uploadedObjectData
         } = this.state
 
+        const partTypes = this.getPartTypesArray()
         const selectedCategory = this.getSelectedPartType()
 
         const selectorData = ( selectedCategory ?
