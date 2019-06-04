@@ -30,7 +30,7 @@ class SceneManager {
 
         const categoriesWithParent = categories.filter( cat => cat.parent )
         const edges = categoriesWithParent.map(
-            ({ name, parent }) => [ parent.name, name ]
+            ({ id, parent }) => [ parent.id, id ]
         )
 
         /**
@@ -51,7 +51,7 @@ class SceneManager {
          * @type { Map<string, Category> }
          */
         this.categoriesMap = categories.reduce(
-            ( categoriesMap, category ) => categoriesMap.set( category.name, category ),
+            ( categoriesMap, category ) => categoriesMap.set( category.id, category ),
             new Map
         )
 

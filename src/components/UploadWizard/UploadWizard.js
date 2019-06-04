@@ -97,8 +97,8 @@ class UploadWizard extends Component {
                 }
             }
             
-            const currentObject = getObject( partType.name )
-            const currentObjectParent = getParentObject( partType.name )
+            const currentObject = getObject( partType.id )
+            const currentObjectParent = getParentObject( partType.id )
             const currentObjectChildren = {}
             for ( let attachPoint of attachPoints ) {
                 currentObjectChildren[ attachPoint ] = getObjectByAttachPoint( attachPoint )

@@ -1,6 +1,6 @@
 const lib = {
-    "byCategory": {
-        "Torso": [
+    "byPartTypeId": {
+        95: [ // Torso
             {
                 "name": "Cylinder",
                 "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
@@ -71,7 +71,7 @@ const lib = {
                 }
             },
         ],
-        "Head": [
+        96: [ // Head
             {
                 "name": "CUBE",
                 "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
@@ -81,7 +81,7 @@ const lib = {
                 }
             },  
         ],
-        "ArmR": [
+        98: [ // ArmR
             {
                 "name": "Cylinder",
                 "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
@@ -125,7 +125,7 @@ const lib = {
                 }
             },
         ],
-        "ArmL": [
+        97: [ // ArmL
             {
                 "name": "Cylinder",
                 "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
@@ -169,7 +169,7 @@ const lib = {
                 }
             },
         ],
-        "HandR": [
+        100: [ // HandR
             {
                 "name": "CUBE",
                 "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
@@ -179,7 +179,7 @@ const lib = {
                 }
             },  
         ],
-        "HandL": [
+        99: [ // HandL
             {
                 "name": "CUBE",
                 "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
@@ -189,7 +189,7 @@ const lib = {
                 }
             },  
         ],
-        "LegR": [
+        102: [ // LegR
             {
                 "name": "Cylinder",
                 "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
@@ -230,7 +230,7 @@ const lib = {
                 }
             },
         ],
-        "LegL": [
+        101: [ // LegL
             {
                 "name": "Cylinder",
                 "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
@@ -271,7 +271,7 @@ const lib = {
                 }
             },
         ],
-        "FootR": [
+        104: [ // FootR
             {
                 "name": "CUBE",
                 "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
@@ -281,7 +281,7 @@ const lib = {
                 }
             },  
         ],
-        "FootL": [
+        103: [ // FootL
             {
                 "name": "CUBE",
                 "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
@@ -292,17 +292,17 @@ const lib = {
             },  
         ]
     },
-    "allCategories": [
-        "Torso",
-        "Head",
-        "ArmR",
-        "ArmL",
-        "HandR",
-        "HandL",
-        "LegR",
-        "LegL",
-        "FootR",
-        "FootL"
+    "allPartTypeIds": [
+        95,
+        96,
+        98,
+        97,
+        100,
+        99,
+        102,
+        101,
+        104,
+        103
     ],
     "poses": [
         // "/models/pose-dab.json",
@@ -320,9 +320,9 @@ const lib = {
     ]
 }
 
-const { byCategory, allCategories } = lib
+const { byPartTypeId, allPartTypeIds } = lib
 
 export {
-    byCategory,
-    allCategories
+    byPartTypeId,
+    allPartTypeIds
 }
