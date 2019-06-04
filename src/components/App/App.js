@@ -300,7 +300,7 @@ class App extends Component {
         })
     }
 
-    onWizardCompleted = async (partType, { name, objectURL, imgDataURL, geometry, metadata }) => {
+    onWizardCompleted = async (partType, { name, objectURL, imageSrc, geometry, metadata }) => {
         console.log('wizard completed')
         console.log(name)
         console.log(metadata)
@@ -317,7 +317,7 @@ class App extends Component {
         const objectData = {
             name,
             download_url: objectURL,
-            img: imgDataURL,
+            img: imageSrc,
             extension: 'stl',
             metadata
         }
