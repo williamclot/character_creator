@@ -7,7 +7,7 @@ import OrbitControls from 'three-orbitcontrols'
 import TransformControls from '../../../../util/transform-controls'
 import { sphereFactory } from '../../../../util/three-helpers'
 
-import lights from './lights'
+import { createLights } from '../../../../util/three-helpers';
 
 const objectContainer = new Group
 
@@ -29,7 +29,7 @@ const camera = new PerspectiveCamera(
 )
 camera.position.set( 0, .5, -1 )
 camera.lookAt( 0, 3, 0 )
-camera.add( ...lights )
+camera.add( ...createLights() )
 
 scene.add( camera )
 

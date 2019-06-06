@@ -2,7 +2,8 @@ import {
     Geometry, SphereGeometry, CylinderBufferGeometry,
     LineBasicMaterial, MeshStandardMaterial,
     Mesh, Line,
-    Vector3, 
+    Vector3,
+    PointLight,
 } from 'three'
 
 export const sphereFactory = {
@@ -44,3 +45,19 @@ export const sphereFactory = {
         return sphere
     }
 }
+
+const defaultLightPositions = [
+    [-1, -1, 0],
+    [-1,  1, 0],
+    [ 1,  1, 0],
+    [ 1, -1, 0],
+]
+
+export const createLights = ( lightPositions = defaultLightPositions ) => {
+    return lightPositions.map( ([x, y, z]) => {
+        const light = new PointLight( 0xffffff, .3 )
+        light.position.set( x, y, z )
+        return light
+    })
+}
+
