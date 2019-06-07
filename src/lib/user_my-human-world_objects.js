@@ -2,6 +2,7 @@ const lib = {
     "byPartTypeId": {
         95: [ // Torso
             {
+                "id": 1,
                 "name": "Cylinder",
                 "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
                 "extension": "stl",
@@ -37,6 +38,7 @@ const lib = {
                 }
             },
             {
+                "id": 2,
                 "name": "CUBE TORSO",
                 "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
@@ -73,6 +75,7 @@ const lib = {
         ],
         96: [ // Head
             {
+                "id": 3,
                 "name": "CUBE",
                 "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
@@ -83,6 +86,7 @@ const lib = {
         ],
         98: [ // ArmR
             {
+                "id": 4,
                 "name": "Cylinder",
                 "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
                 "extension": "stl",
@@ -111,6 +115,7 @@ const lib = {
                 }
             },
             {
+                "id": 5,
                 "name": "CUBE",
                 "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
@@ -127,6 +132,7 @@ const lib = {
         ],
         97: [ // ArmL
             {
+                "id": 6,
                 "name": "Cylinder",
                 "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
                 "extension": "stl",
@@ -155,6 +161,7 @@ const lib = {
                 }
             },
             {
+                "id": 7,
                 "name": "CUBE",
                 "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
@@ -171,6 +178,7 @@ const lib = {
         ],
         100: [ // HandR
             {
+                "id": 8,
                 "name": "CUBE",
                 "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
@@ -181,6 +189,7 @@ const lib = {
         ],
         99: [ // HandL
             {
+                "id": 9,
                 "name": "CUBE",
                 "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
@@ -191,6 +200,7 @@ const lib = {
         ],
         102: [ // LegR
             {
+                "id": 10,
                 "name": "Cylinder",
                 "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
                 "extension": "stl",
@@ -216,6 +226,7 @@ const lib = {
                 }
             },
             {
+                "id": 11,
                 "name": "CUBE",
                 "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
@@ -232,6 +243,7 @@ const lib = {
         ],
         101: [ // LegL
             {
+                "id": 12,
                 "name": "Cylinder",
                 "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
                 "extension": "stl",
@@ -257,6 +269,7 @@ const lib = {
                 }
             },
             {
+                "id": 13,
                 "name": "CUBE",
                 "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
@@ -273,6 +286,7 @@ const lib = {
         ],
         104: [ // FootR
             {
+                "id": 14,
                 "name": "CUBE",
                 "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
@@ -283,6 +297,7 @@ const lib = {
         ],
         103: [ // FootL
             {
+                "id": 15,
                 "name": "CUBE",
                 "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
                 "extension": "stl",
