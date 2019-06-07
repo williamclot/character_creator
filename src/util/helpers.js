@@ -5,6 +5,28 @@ export const getCategories = groups => {
     )
 }
 
+export const getObjects = objects => {
+    const { byPartTypeId, allPartTypeIds } = objects
+
+    const byId = {}
+    const allIds = []
+
+    for ( const partTypeId of allPartTypeIds ) { // or Object.keys(byPartTypeId)
+        for ( const object of byPartTypeId[ partTypeId ] ) {
+            allIds.push( object.id )
+            byId[ object.id ] = {
+                ...object,
+                partTypeId
+            }
+        }
+    }
+
+    return {
+        byId,
+        allIds
+    }
+}
+
 /**
  * Calls a defined callback function on each property of an object,
  * and returns a new object that contains the results.

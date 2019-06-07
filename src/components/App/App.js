@@ -14,7 +14,7 @@ import SceneManager from '../ThreeContainer/sceneManager'
 
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
-    getCategories, getNameAndExtension, objectMap,
+    getCategories, getObjects, getNameAndExtension,
 } from '../../util/helpers'
 
 import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants'
@@ -28,6 +28,7 @@ class App extends Component {
         super( props )
 
         const partTypes = getCategories( props.worldData.groups )
+        const objects = getObjects( props.objects )
 
         const partTypesById = partTypes.reduce( ( byId, partType ) => ({
             ...byId,
@@ -48,7 +49,7 @@ class App extends Component {
              */
             loadedObjects: {},
 
-            objectsByPartTypeId: props.objects.byPartTypeId,
+            objects,
 
             showUploadWizard: false,
             uploadedObjectData: null,
@@ -71,10 +72,10 @@ class App extends Component {
         this.showLoader()
 
         try {
-            const oneOfEach = objectMap(
-                this.state.objectsByPartTypeId,
-                objectList => objectList[ 0 ]
-            )
+            const oneOfEach = this.state.allPartTypeIds.reduce( (byPartTypeId, partTypeId) => ({
+                ...byPartTypeId,
+                [partTypeId]: this.getObjectsByPartTypeId( partTypeId )[0]
+            }), {} )
 
             const loadedObjects = await fetchObjects( oneOfEach )
 
@@ -130,13 +131,8 @@ class App extends Component {
             if ( res.status !== 204 ) {
                 throw new Error('Delete Failed')
             }
-    
-            this.setState(state => ({
-                objectsByPartTypeId: {
-                    ...state.objectsByPartTypeId,
-                    [selectedPartType.id]: state.objectsByPartTypeId[selectedPartType.id].filter( object => object.id !== objectId )
-                }
-            }))
+
+            this.removeObject( objectId )
             
         } catch {
             console.error(`Failed to delete object with id ${objectId}`)
@@ -317,8 +313,10 @@ class App extends Component {
         console.log(metadata)
 
         const object = getObjectFromGeometry( geometry, metadata )
+
+        const partTypeId = partType.id
         
-        this.setSelectedObject( partType.id, object )
+        this.setSelectedObject( partTypeId, object )
         this.setState({
             showUploadWizard: false,
             uploadedObjectData: null,
@@ -332,20 +330,16 @@ class App extends Component {
             metadata
         }
 
-        const id = await this.postObject( partType.id, objectData )
-        
-        this.setState( state => ({
-            objectsByPartTypeId: {
-                ...state.objectsByPartTypeId,
-                [partType.id]: [
-                    ...state.objectsByPartTypeId[partType.id],
-                    {
-                        id,
-                        ...objectData
-                    }
-                ]
-            }
-        }))
+        const id = await this.postObject( partTypeId, objectData )
+
+        const objectToAdd = {
+            ...objectData,
+            id,
+            partTypeId
+        }
+
+        this.addObject( objectToAdd )
+
     }
 
     getPartTypesArray = () => {
@@ -360,6 +354,48 @@ class App extends Component {
         return partTypesById[ selectedPartTypeId ]
     }
 
+    addObject = ( objectToAdd ) => {
+        const addReducer = ( objects, objectToAdd ) => {
+            return {
+                byId: {
+                    ...objects.byId,
+                    [ objectToAdd.id ]: objectToAdd
+                },
+                allIds: [
+                    ...objects.allIds,
+                    objectToAdd.id
+                ]
+            }
+        }
+
+        this.setState( state => ({
+            objects: addReducer( state.objects, objectToAdd )
+        }))
+    }
+
+    removeObject = ( objectToDeleteId ) => {
+        const removeReducer = ( objects, idToRemove ) => {
+            const { [idToRemove]: removedItem, ...remainingItems } = objects.byId
+            const remainingIds = objects.allIds.filter( objectId => objectId !== idToRemove )
+
+            return {
+                byId: remainingItems,
+                allIds: remainingIds
+            }
+        }
+
+        this.setState( state => ({
+            objects: removeReducer( state.objects, objectToDeleteId )
+        }))
+    }
+
+    getObjectsByPartTypeId = partTypeId => {
+        const { byId, allIds } = this.state.objects
+
+        const objects = allIds.map( id => byId[ id ] )
+
+        return objects.filter( object => object.partTypeId === partTypeId )
+    }
 
     handlePartTypeSelected = id => {
         this.setState({
@@ -377,7 +413,6 @@ class App extends Component {
             isLoading,
             selectedPartTypeId,
             loadedObjects,
-            objectsByPartTypeId,
             showUploadWizard, uploadedObjectData
         } = this.state
 
@@ -386,7 +421,7 @@ class App extends Component {
 
         const selectorData = ( selectedPartType ?
             {
-                objects:  objectsByPartTypeId[ selectedPartType.id ],
+                objects:  this.getObjectsByPartTypeId(selectedPartType.id),
                 currentPartType: selectedPartType
             } : null
         )
