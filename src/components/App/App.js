@@ -16,6 +16,7 @@ import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/obj
 import {
     getPartTypes, getObjects, getNameAndExtension,
 } from '../../util/helpers'
+import MmfApi from '../../util/api';
 
 import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants'
 
@@ -50,6 +51,8 @@ class App extends Component {
         const container = new Group
 
         this.sceneManager = new SceneManager( container, this.getPartTypesArray() )
+
+        this.api = new MmfApi( props.env.API_ENDPOINT )
         
         if ( process.env.NODE_ENV === 'development' ) {
             window.x = this
@@ -109,23 +112,12 @@ class App extends Component {
     }
 
     handleDeleteObject = async ( objectId ) => {
-        const { env, csrfToken } = this.props
+        const { csrfToken } = this.props
         const selectedPartType = this.getSelectedPartType()
 
         try {
-            const res = await axios.delete(
-                `${env.API_ENDPOINT}/objects/${objectId}`,
-                {
-                    params: {
-                        _csrf_token: csrfToken
-                    }
-                }
-            )
-
-            if ( res.status !== 204 ) {
-                throw new Error('Delete Failed')
-            }
-
+            
+            await this.api.deleteObject( objectId, csrfToken )
             this.removeObject( objectId )
             
         } catch {
@@ -133,94 +125,6 @@ class App extends Component {
         }
     }
 
-    async postObject( partTypeId, object ) {
-        const { API_ENDPOINT } = this.props.env
-
-        const getBlob = url => axios.get(
-            url,
-            {
-                responseType: 'blob'
-            }
-        )
-        
-        const [{ data: fileBlob }, { data: imageBlob }] = await Promise.all([
-            getBlob( object.download_url ),
-            getBlob( object.img )
-        ])
-
-        console.log('---------')
-        console.log(fileBlob, imageBlob)
-
-        const data = {
-            "name": object.name,
-            // "description": "string",
-            "visibility": 0,
-            // "how_to": "string",
-            // "dimensions": "string",
-            // "time_to_do_from": 0,
-            // "time_to_do_to": 0,
-            // "support_free": true,
-            // "filament_quantity": "string",
-            // "client_url": "string",
-            // "tags": "customizer",
-            "brand": null,
-            "licenses": [],
-            
-            "files": [
-              {
-                "filename": `${object.name}.${object.extension}`,
-                "size": fileBlob.size
-              }
-            ],
-            "images": [
-              {
-                "filename": `${object.name}.jpg`,
-                "size": imageBlob.size
-              }
-            ],
-
-            "customizer_part_type_id": partTypeId,
-            "customizer_metadata": object.metadata
-        }
-
-        const res = await axios.post(
-            `${API_ENDPOINT}/object`,
-            data
-        )
-
-        console.log(res.status)
-
-        if ( res.status !== 200 )
-            throw new Error('Not OK')
-
-        const { files, images, id } = res.data
-
-        const file = files[ 0 ]
-        const image = images[ 0 ]
-
-        const [fileRes, imgRes] = await Promise.all([
-            axios.post(
-                `${API_ENDPOINT}/file`,
-                fileBlob,
-                {
-                    params: {
-                        upload_id: file.upload_id
-                    }
-                }
-            ),
-            axios.post(
-                `${API_ENDPOINT}/image`,
-                imageBlob,
-                {
-                    params: {
-                        upload_id: image.upload_id
-                    }
-                }
-            )
-        ])
-
-        return id
-    }
 
     componentDidUpdate( prevProps ) {
         if ( prevProps.worldData !== this.props.worldData ) {
@@ -312,15 +216,15 @@ class App extends Component {
             download_url: objectURL,
             img: imageSrc,
             extension: 'stl',
-            metadata
+            metadata,
+            partTypeId,
         }
 
-        const id = await this.postObject( partTypeId, objectData )
+        const id = await this.api.postObject( objectData )
 
         const objectToAdd = {
             ...objectData,
             id,
-            partTypeId
         }
 
         this.addObject( objectToAdd )
