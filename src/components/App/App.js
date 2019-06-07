@@ -220,14 +220,18 @@ class App extends Component {
             partTypeId,
         }
 
-        const id = await this.api.postObject( objectData )
-
-        const objectToAdd = {
-            ...objectData,
-            id,
+        try {
+            const id = await this.api.postObject( objectData )
+    
+            const objectToAdd = {
+                ...objectData,
+                id,
+            }
+    
+            this.addObject( objectToAdd )
+        } catch {
+            console.error(`Failed to upload object '${name}'`)
         }
-
-        this.addObject( objectToAdd )
 
     }
 
