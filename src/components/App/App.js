@@ -43,7 +43,6 @@ class App extends Component {
 
             objects,
 
-            showUploadWizard: false,
             uploadedObjectData: null,
             
             editMode: false,
@@ -278,7 +277,6 @@ class App extends Component {
         )
 
         this.setState({
-            showUploadWizard: true,
             uploadedObjectData: {
                 partType,
                 name,
@@ -294,7 +292,6 @@ class App extends Component {
         console.log('wizard canceled')
 
         this.setState({
-            showUploadWizard: false,
             uploadedObjectData: null
         })
     }
@@ -310,7 +307,6 @@ class App extends Component {
         
         this.setSelectedObject( partTypeId, object )
         this.setState({
-            showUploadWizard: false,
             uploadedObjectData: null,
         })
                 
@@ -405,8 +401,10 @@ class App extends Component {
             isLoading,
             selectedPartTypeId,
             loadedObjects,
-            showUploadWizard, uploadedObjectData
+            uploadedObjectData,
         } = this.state
+
+        const showUploadWizard = Boolean( uploadedObjectData )
 
         const partTypes = this.getPartTypesArray()
         const selectedPartType = this.getSelectedPartType()
