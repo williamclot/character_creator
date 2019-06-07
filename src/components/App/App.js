@@ -14,7 +14,7 @@ import SceneManager from '../ThreeContainer/sceneManager'
 
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
-    getCategories, getObjects, getNameAndExtension,
+    getPartTypes, getObjects, getNameAndExtension,
 } from '../../util/helpers'
 
 import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants'
@@ -27,21 +27,13 @@ class App extends Component {
     constructor( props ) {
         super( props )
 
-        const partTypes = getCategories( props.worldData.groups )
+        const partTypes = getPartTypes( props.worldData )
         const objects = getObjects( props.objects )
 
-        const partTypesById = partTypes.reduce( ( byId, partType ) => ({
-            ...byId,
-            [partType.id]: partType
-        }), {} )
-
-        const allPartTypeIds = partTypes.map( partType => partType.id )
-
-        const selectedPartTypeId = allPartTypeIds[ 0 ]
+        const selectedPartTypeId = partTypes.allIds[ 0 ]
 
         this.state = {
-            partTypesById,
-            allPartTypeIds,
+            partTypes,
 
             selectedPartTypeId,
             /**
@@ -61,7 +53,7 @@ class App extends Component {
         
         const container = new Group
 
-        this.sceneManager = new SceneManager( container, partTypes )
+        this.sceneManager = new SceneManager( container, this.getPartTypesArray() )
         
         if ( process.env.NODE_ENV === 'development' ) {
             window.x = this
@@ -72,7 +64,7 @@ class App extends Component {
         this.showLoader()
 
         try {
-            const oneOfEach = this.state.allPartTypeIds.reduce( (byPartTypeId, partTypeId) => ({
+            const oneOfEach = this.state.partTypes.allIds.reduce( (byPartTypeId, partTypeId) => ({
                 ...byPartTypeId,
                 [partTypeId]: this.getObjectsByPartTypeId( partTypeId )[0]
             }), {} )
@@ -245,7 +237,7 @@ class App extends Component {
             this.setSelectedObject( partTypeId, newObject )
 
         } catch ( err ) {
-            const partType = this.state.partTypesById[ partTypeId ]
+            const partType = this.state.partTypes.byId[ partTypeId ]
             console.error(
                 `Something went wrong while loading object of type ${partType.name}:\n`
                 + err
@@ -265,7 +257,7 @@ class App extends Component {
     }
 
     onUpload = ( partTypeId, filename, objectURL ) => {
-        const partType = this.state.partTypesById[ partTypeId ]
+        const partType = this.state.partTypes.byId[ partTypeId ]
 
         const { name, extension } = getNameAndExtension( filename )
 
@@ -343,15 +335,15 @@ class App extends Component {
     }
 
     getPartTypesArray = () => {
-        const { partTypesById, allPartTypeIds } = this.state
+        const { partTypes } = this.state
 
-        return allPartTypeIds.map( id => partTypesById[ id ] )
+        return partTypes.allIds.map( id => partTypes.byId[ id ] )
     }
 
     getSelectedPartType = () => {
-        const { partTypesById, selectedPartTypeId } = this.state
+        const { partTypes, selectedPartTypeId } = this.state
 
-        return partTypesById[ selectedPartTypeId ]
+        return partTypes.byId[ selectedPartTypeId ]
     }
 
     addObject = ( objectToAdd ) => {
