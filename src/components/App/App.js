@@ -13,7 +13,7 @@ import SceneManager from '../ThreeContainer/sceneManager'
 
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
-    getPartTypes, getObjects, getNameAndExtension,
+    getPartTypes, getObjects, getNameAndExtension, objectMap,
 } from '../../util/helpers'
 import MmfApi from '../../util/api';
 
@@ -39,6 +39,9 @@ class App extends Component {
              * Mapping from part type to threejs object
              */
             loadedObjects: {},
+
+            /** Mapping from partType id to selected object id */
+            selectedParts: {},
 
             uploadedObjectData: null,
             
@@ -68,9 +71,11 @@ class App extends Component {
             }), {} )
 
             const loadedObjects = await fetchObjects( oneOfEach )
+            const selectedParts = objectMap( oneOfEach, object => object.id )
 
             this.setState({
-                loadedObjects
+                loadedObjects,
+                selectedParts,
             })
 
         } catch ( err ) {
@@ -120,11 +125,20 @@ class App extends Component {
         return partTypes.byId[ selectedPartTypeId ]
     }
 
-    setSelectedObject( partTypeId, newObject ) {
+    setSelected3dObject( partTypeId, newObject ) {
         this.setState( state => ({
             loadedObjects: {
                 ...state.loadedObjects,
                 [partTypeId]: newObject
+            }
+        }))
+    }
+
+    setSelectedObjectId( partTypeId, objectId ) {
+        this.setState( state => ({
+            selectedParts: {
+                ...state.selectedParts,
+                [partTypeId]: objectId
             }
         }))
     }
@@ -197,7 +211,8 @@ class App extends Component {
         try {
 
             const newObject = await get3DObject( objectData )
-            this.setSelectedObject( partTypeId, newObject )
+            this.setSelected3dObject( partTypeId, newObject )
+            this.setSelectedObjectId( partTypeId, objectData.id )
 
         } catch ( err ) {
             const partType = this.state.partTypes.byId[ partTypeId ]
@@ -257,7 +272,7 @@ class App extends Component {
 
         const partTypeId = partType.id
         
-        this.setSelectedObject( partTypeId, object )
+        this.setSelected3dObject( partTypeId, object )
         this.setState({
             uploadedObjectData: null,
         })
@@ -280,6 +295,7 @@ class App extends Component {
             }
     
             this.addObject( objectToAdd )
+            this.setSelectedObjectId( partTypeId, id )
         } catch {
             console.error(`Failed to upload object '${name}'`)
         }
