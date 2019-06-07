@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Group } from 'three'
-import axios from 'axios'
 
 import ThreeContainer from '../ThreeContainer'
 import UploadWizard from '../UploadWizard'
