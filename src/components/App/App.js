@@ -81,16 +81,12 @@ class App extends Component {
         this.hideLoader()
     }
 
-    showLoader = () => {
-        this.setState({
-            isLoading: true
-        })
-    }
-
-    hideLoader = () => {
-        this.setState({
-            isLoading: false
-        })
+    componentDidUpdate( prevProps ) {
+        if ( prevProps.worldData !== this.props.worldData ) {
+            // // need to reset sceneManager
+            // const categories = getCategories( this.props.worldData.groups )
+            // this.sceneManager.reset( this.props.categories )
+        }
     }
 
     get3dObject = ( key ) => {
@@ -111,30 +107,92 @@ class App extends Component {
         return this.sceneManager.getObjectByAttachPoint( attachPointName )
     }
 
-    handleDeleteObject = async ( objectId ) => {
-        const { csrfToken } = this.props
-        const selectedPartType = this.getSelectedPartType()
+    /* ------------------------------------------------------------------------- */
 
-        try {
-            
-            await this.api.deleteObject( objectId, csrfToken )
-            this.removeObject( objectId )
-            
-        } catch {
-            console.error(`Failed to delete object with id ${objectId}`)
+    getPartTypesArray() {
+        const { partTypes } = this.state
+
+        return partTypes.allIds.map( id => partTypes.byId[ id ] )
+    }
+
+    getSelectedPartType() {
+        const { partTypes, selectedPartTypeId } = this.state
+
+        return partTypes.byId[ selectedPartTypeId ]
+    }
+
+    setSelectedObject( partTypeId, newObject ) {
+        this.setState( state => ({
+            loadedObjects: {
+                ...state.loadedObjects,
+                [partTypeId]: newObject
+            }
+        }))
+    }
+
+    addObject( objectToAdd ) {
+        const addReducer = ( objects, objectToAdd ) => {
+            return {
+                byId: {
+                    ...objects.byId,
+                    [ objectToAdd.id ]: objectToAdd
+                },
+                allIds: [
+                    ...objects.allIds,
+                    objectToAdd.id
+                ]
+            }
         }
+
+        this.setState( state => ({
+            objects: addReducer( state.objects, objectToAdd )
+        }))
+    }
+
+    removeObject( objectToDeleteId ) {
+        const removeReducer = ( objects, idToRemove ) => {
+            const { [idToRemove]: removedItem, ...remainingItems } = objects.byId
+            const remainingIds = objects.allIds.filter( objectId => objectId !== idToRemove )
+
+            return {
+                byId: remainingItems,
+                allIds: remainingIds
+            }
+        }
+
+        this.setState( state => ({
+            objects: removeReducer( state.objects, objectToDeleteId )
+        }))
+    }
+
+    getObjectsByPartTypeId( partTypeId ) {
+        const { byId, allIds } = this.state.objects
+
+        const objects = allIds.map( id => byId[ id ] )
+
+        return objects.filter( object => object.partTypeId === partTypeId )
     }
 
 
-    componentDidUpdate( prevProps ) {
-        if ( prevProps.worldData !== this.props.worldData ) {
-            // // need to reset sceneManager
-            // const categories = getCategories( this.props.worldData.groups )
-            // this.sceneManager.reset( this.props.categories )
-        }
+    showLoader = () => {
+        this.setState({
+            isLoading: true
+        })
     }
 
-    onObjectSelected = async ( partTypeId, objectData ) => {
+    hideLoader = () => {
+        this.setState({
+            isLoading: false
+        })
+    }
+
+    handlePartTypeSelected = id => {
+        this.setState({
+            selectedPartTypeId: id
+        })
+    }
+
+    handleObjectSelected = async ( partTypeId, objectData ) => {
         this.showLoader()
 
         try {
@@ -153,27 +211,27 @@ class App extends Component {
         this.hideLoader()
     }
 
-    setSelectedObject = ( partTypeId, newObject ) => {
-        this.setState( state => ({
-            loadedObjects: {
-                ...state.loadedObjects,
-                [partTypeId]: newObject
-            }
-        }))
+    handleDeleteObject = async ( objectId ) => {
+        const { csrfToken } = this.props
+
+        try {
+            
+            await this.api.deleteObject( objectId, csrfToken )
+            this.removeObject( objectId )
+            
+        } catch {
+            console.error(`Failed to delete object with id ${objectId}`)
+        }
     }
 
-    onUpload = ( partTypeId, filename, objectURL ) => {
+    handleUpload = ( partTypeId, filename, objectURL ) => {
         const partType = this.state.partTypes.byId[ partTypeId ]
 
         const { name, extension } = getNameAndExtension( filename )
 
-        console.log(name, extension)
-
         if ( !ACCEPTED_OBJECT_FILE_EXTENSIONS.includes( extension ) ) {
 
-            console.log( new Error(
-                `Unrecognized extension '${extension}'`
-            ))
+            console.error( `Unrecognized extension '${extension}'` )
             return
 
         }
@@ -189,19 +247,13 @@ class App extends Component {
         })
     }
 
-    onWizardCanceled = () => {
-        console.log('wizard canceled')
-
+    handleWizardCanceled = () => {
         this.setState({
             uploadedObjectData: null
         })
     }
 
-    onWizardCompleted = async (partType, { name, objectURL, imageSrc, geometry, metadata }) => {
-        console.log('wizard completed')
-        console.log(name)
-        console.log(metadata)
-
+    handleWizardCompleted = async (partType, { name, objectURL, imageSrc, geometry, metadata }) => {
         const object = getObjectFromGeometry( geometry, metadata )
 
         const partTypeId = partType.id
@@ -234,68 +286,6 @@ class App extends Component {
         }
 
     }
-
-    getPartTypesArray = () => {
-        const { partTypes } = this.state
-
-        return partTypes.allIds.map( id => partTypes.byId[ id ] )
-    }
-
-    getSelectedPartType = () => {
-        const { partTypes, selectedPartTypeId } = this.state
-
-        return partTypes.byId[ selectedPartTypeId ]
-    }
-
-    addObject = ( objectToAdd ) => {
-        const addReducer = ( objects, objectToAdd ) => {
-            return {
-                byId: {
-                    ...objects.byId,
-                    [ objectToAdd.id ]: objectToAdd
-                },
-                allIds: [
-                    ...objects.allIds,
-                    objectToAdd.id
-                ]
-            }
-        }
-
-        this.setState( state => ({
-            objects: addReducer( state.objects, objectToAdd )
-        }))
-    }
-
-    removeObject = ( objectToDeleteId ) => {
-        const removeReducer = ( objects, idToRemove ) => {
-            const { [idToRemove]: removedItem, ...remainingItems } = objects.byId
-            const remainingIds = objects.allIds.filter( objectId => objectId !== idToRemove )
-
-            return {
-                byId: remainingItems,
-                allIds: remainingIds
-            }
-        }
-
-        this.setState( state => ({
-            objects: removeReducer( state.objects, objectToDeleteId )
-        }))
-    }
-
-    getObjectsByPartTypeId = partTypeId => {
-        const { byId, allIds } = this.state.objects
-
-        const objects = allIds.map( id => byId[ id ] )
-
-        return objects.filter( object => object.partTypeId === partTypeId )
-    }
-
-    handlePartTypeSelected = id => {
-        this.setState({
-            selectedPartTypeId: id
-        })
-    }
-
 
     render() {
         const {
@@ -344,10 +334,10 @@ class App extends Component {
                     <div className = "selector-container">
                         <Selector
                             data = { selectorData }
-                            onObjectSelected = { this.onObjectSelected }
+                            onObjectSelected = { this.handleObjectSelected }
                             onDelete = { this.handleDeleteObject }
 
-                            onUpload = { this.onUpload }
+                            onUpload = { this.handleUpload }
                         />
                     </div>
                 </div>
@@ -356,7 +346,7 @@ class App extends Component {
 
             <ButtonsContainer
                 partTypes = { partTypes }
-                onUpload = { this.onUpload }
+                onUpload = { this.handleUpload }
             />
 
             {showUploadWizard && (
@@ -369,8 +359,8 @@ class App extends Component {
                     
                     showLoader = { this.showLoader }
                     hideLoader = { this.hideLoader }
-                    onWizardCanceled = { this.onWizardCanceled }
-                    onWizardCompleted = { this.onWizardCompleted }
+                    onWizardCanceled = { this.handleWizardCanceled }
+                    onWizardCompleted = { this.handleWizardCompleted }
                 />
             )}
 
