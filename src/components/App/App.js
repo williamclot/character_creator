@@ -125,6 +125,14 @@ class App extends Component {
         return partTypes.byId[ selectedPartTypeId ]
     }
 
+    getObjectsByPartTypeId( partTypeId ) {
+        const { byId, allIds } = this.state.objects
+
+        const objects = allIds.map( id => byId[ id ] )
+
+        return objects.filter( object => object.partTypeId === partTypeId )
+    }
+
     setSelected3dObject( partTypeId, newObject ) {
         this.setState( state => ({
             loadedObjects: {
@@ -178,14 +186,7 @@ class App extends Component {
         }))
     }
 
-    getObjectsByPartTypeId( partTypeId ) {
-        const { byId, allIds } = this.state.objects
-
-        const objects = allIds.map( id => byId[ id ] )
-
-        return objects.filter( object => object.partTypeId === partTypeId )
-    }
-
+    /* bound methods below */
 
     showLoader = () => {
         this.setState({
