@@ -14,7 +14,7 @@ import SceneManager from '../ThreeContainer/sceneManager'
 
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
-    getCategories, getNameAndExtension, objectMap,
+    getPartTypes, getObjects, getNameAndExtension,
 } from '../../util/helpers'
 
 import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants'
@@ -27,30 +27,29 @@ class App extends Component {
     constructor( props ) {
         super( props )
 
-        const partTypes = getCategories( props.worldData.groups )
-        const selectedPartTypeId = partTypes[0] && partTypes[0].id
+        const partTypes = getPartTypes( props.worldData )
+        const objects = getObjects( props.objects )
 
         this.state = {
             partTypes,
-            selectedPartTypeId,
+            objects,
+
+            selectedPartTypeId: partTypes.allIds[ 0 ] || null,
             /**
              * Mapping from part type to threejs object
              */
             loadedObjects: {},
 
-            objectsByCategory: props.objects.byCategory,
-
-            showUploadWizard: false,
             uploadedObjectData: null,
             
-            editMode: false,
+            // editMode: false,
 
             isLoading: false,
         }
         
         const container = new Group
 
-        this.sceneManager = new SceneManager( container, partTypes )
+        this.sceneManager = new SceneManager( container, this.getPartTypesArray() )
         
         if ( process.env.NODE_ENV === 'development' ) {
             window.x = this
@@ -61,10 +60,10 @@ class App extends Component {
         this.showLoader()
 
         try {
-            const oneOfEach = objectMap(
-                this.props.objects.byCategory,
-                objectList => objectList[ 0 ]
-            )
+            const oneOfEach = this.state.partTypes.allIds.reduce( (byPartTypeId, partTypeId) => ({
+                ...byPartTypeId,
+                [partTypeId]: this.getObjectsByPartTypeId( partTypeId )[0]
+            }), {} )
 
             const loadedObjects = await fetchObjects( oneOfEach )
 
@@ -105,7 +104,7 @@ class App extends Component {
 
     handleDeleteObject = async ( objectId ) => {
         const { env, csrfToken } = this.props
-        const currentCategory = this.getSelectedPartType().name
+        const selectedPartType = this.getSelectedPartType()
 
         try {
             const res = await axios.delete(
@@ -120,13 +119,8 @@ class App extends Component {
             if ( res.status !== 204 ) {
                 throw new Error('Delete Failed')
             }
-    
-            this.setState(state => ({
-                objectsByCategory: {
-                    ...state.objectsByCategory,
-                    [currentCategory]: state.objectsByCategory[currentCategory].filter( object => object.id !== objectId )
-                }
-            }))
+
+            this.removeObject( objectId )
             
         } catch {
             console.error(`Failed to delete object with id ${objectId}`)
@@ -230,17 +224,18 @@ class App extends Component {
         }
     }
 
-    onObjectSelected = async ( category, objectData ) => {
+    onObjectSelected = async ( partTypeId, objectData ) => {
         this.showLoader()
 
         try {
 
             const newObject = await get3DObject( objectData )
-            this.setSelectedObject( category, newObject )
+            this.setSelectedObject( partTypeId, newObject )
 
         } catch ( err ) {
+            const partType = this.state.partTypes.byId[ partTypeId ]
             console.error(
-                `Something went wrong while loading object of type ${category}:\n`
+                `Something went wrong while loading object of type ${partType.name}:\n`
                 + err
             )
         }
@@ -248,17 +243,17 @@ class App extends Component {
         this.hideLoader()
     }
 
-    setSelectedObject = ( category, newObject ) => {
+    setSelectedObject = ( partTypeId, newObject ) => {
         this.setState( state => ({
             loadedObjects: {
                 ...state.loadedObjects,
-                [category]: newObject
+                [partTypeId]: newObject
             }
         }))
     }
 
-    onUpload = ( categoryName, filename, objectURL ) => {
-        const partType = this.sceneManager.categoriesMap.get( categoryName )
+    onUpload = ( partTypeId, filename, objectURL ) => {
+        const partType = this.state.partTypes.byId[ partTypeId ]
 
         const { name, extension } = getNameAndExtension( filename )
 
@@ -279,7 +274,6 @@ class App extends Component {
         )
 
         this.setState({
-            showUploadWizard: true,
             uploadedObjectData: {
                 partType,
                 name,
@@ -295,7 +289,6 @@ class App extends Component {
         console.log('wizard canceled')
 
         this.setState({
-            showUploadWizard: false,
             uploadedObjectData: null
         })
     }
@@ -305,12 +298,12 @@ class App extends Component {
         console.log(name)
         console.log(metadata)
 
-        const category = partType.name
         const object = getObjectFromGeometry( geometry, metadata )
+
+        const partTypeId = partType.id
         
-        this.setSelectedObject( category, object )
+        this.setSelectedObject( partTypeId, object )
         this.setState({
-            showUploadWizard: false,
             uploadedObjectData: null,
         })
                 
@@ -322,28 +315,72 @@ class App extends Component {
             metadata
         }
 
-        const id = await this.postObject( partType.id, objectData )
-        
-        this.setState( state => ({
-            objectsByCategory: {
-                ...state.objectsByCategory,
-                [category]: [
-                    ...state.objectsByCategory[category],
-                    {
-                        id,
-                        ...objectData
-                    }
-                ]
-            }
-        }))
+        const id = await this.postObject( partTypeId, objectData )
+
+        const objectToAdd = {
+            ...objectData,
+            id,
+            partTypeId
+        }
+
+        this.addObject( objectToAdd )
+
+    }
+
+    getPartTypesArray = () => {
+        const { partTypes } = this.state
+
+        return partTypes.allIds.map( id => partTypes.byId[ id ] )
     }
 
     getSelectedPartType = () => {
         const { partTypes, selectedPartTypeId } = this.state
 
-        return partTypes.find( partType => partType.id === selectedPartTypeId )
+        return partTypes.byId[ selectedPartTypeId ]
     }
 
+    addObject = ( objectToAdd ) => {
+        const addReducer = ( objects, objectToAdd ) => {
+            return {
+                byId: {
+                    ...objects.byId,
+                    [ objectToAdd.id ]: objectToAdd
+                },
+                allIds: [
+                    ...objects.allIds,
+                    objectToAdd.id
+                ]
+            }
+        }
+
+        this.setState( state => ({
+            objects: addReducer( state.objects, objectToAdd )
+        }))
+    }
+
+    removeObject = ( objectToDeleteId ) => {
+        const removeReducer = ( objects, idToRemove ) => {
+            const { [idToRemove]: removedItem, ...remainingItems } = objects.byId
+            const remainingIds = objects.allIds.filter( objectId => objectId !== idToRemove )
+
+            return {
+                byId: remainingItems,
+                allIds: remainingIds
+            }
+        }
+
+        this.setState( state => ({
+            objects: removeReducer( state.objects, objectToDeleteId )
+        }))
+    }
+
+    getObjectsByPartTypeId = partTypeId => {
+        const { byId, allIds } = this.state.objects
+
+        const objects = allIds.map( id => byId[ id ] )
+
+        return objects.filter( object => object.partTypeId === partTypeId )
+    }
 
     handlePartTypeSelected = id => {
         this.setState({
@@ -359,18 +396,20 @@ class App extends Component {
         } = this.props
         const {
             isLoading,
-            partTypes, selectedPartTypeId,
+            selectedPartTypeId,
             loadedObjects,
-            objectsByCategory,
-            showUploadWizard, uploadedObjectData
+            uploadedObjectData,
         } = this.state
 
-        const selectedCategory = this.getSelectedPartType()
+        const showUploadWizard = Boolean( uploadedObjectData )
 
-        const selectorData = ( selectedCategory ?
+        const partTypes = this.getPartTypesArray()
+        const selectedPartType = this.getSelectedPartType()
+
+        const selectorData = ( selectedPartType ?
             {
-                objects:  objectsByCategory[ selectedCategory.name ],
-                currentCategory: selectedCategory.name
+                objects:  this.getObjectsByPartTypeId(selectedPartType.id),
+                currentPartType: selectedPartType
             } : null
         )
 
@@ -408,7 +447,7 @@ class App extends Component {
             </div>
 
             <ButtonsContainer
-                categories = { partTypes }
+                partTypes = { partTypes }
                 onUpload = { this.onUpload }
             />
 

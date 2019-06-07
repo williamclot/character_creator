@@ -11,7 +11,7 @@ import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants';
 import sharedStyles from '../../shared-styles/button.module.css'
 import styles from './ButtonsContainer.module.css'
 
-const ButtonsContainer = ({ categories, onUpload }) => {
+const ButtonsContainer = ({ partTypes, onUpload }) => {
 
     const addNewPartButton = <ButtonWithArrow> Add new Part </ButtonWithArrow>
     const existingPartTypeButton = <ButtonWithArrow> Existing Part Type </ButtonWithArrow>
@@ -26,24 +26,24 @@ const ButtonsContainer = ({ categories, onUpload }) => {
                     <Menu header = { existingPartTypeButton } >
                         <ListWithSeparator separator = { separator } >
 
-                            {categories.map( category => (
+                            {partTypes.map( partType => (
                                 <ImportButton
                                     className = {cn(
                                         sharedStyles.button,
                                         styles.button
                                     )}
-                                    key = { category.name }
+                                    key = { partType.id }
 
                                     onFileLoaded = {( filename, objectURL ) =>
                                         onUpload(
-                                            category.name,
+                                            partType.id,
                                             filename,
                                             objectURL
                                         )
                                     }
                                     accept = { ACCEPTED_OBJECT_FILE_EXTENSIONS.map( extension => `.${extension}` ).join(',') }
                                 >
-                                    {category.name}
+                                    {partType.name}
                                 </ImportButton>
                             ))}
 

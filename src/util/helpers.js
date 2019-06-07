@@ -1,8 +1,46 @@
-export const getCategories = groups => {
-    return groups.reduce(
+const getCategories = world => {
+    return world.groups.reduce(
         ( categories, group ) => categories.concat( group.categories ),
         []
     )
+}
+
+export const getPartTypes = world => {
+    const categories = getCategories( world )
+
+    const partTypesById = categories.reduce( ( byId, partType ) => ({
+        ...byId,
+        [partType.id]: partType
+    }), {} )
+
+    const allPartTypeIds = categories.map( partType => partType.id )
+
+    return {
+        byId: partTypesById,
+        allIds: allPartTypeIds
+    }
+}
+
+export const getObjects = objects => {
+    const { byPartTypeId, allPartTypeIds } = objects
+
+    const byId = {}
+    const allIds = []
+
+    for ( const partTypeId of allPartTypeIds ) { // or Object.keys(byPartTypeId)
+        for ( const object of byPartTypeId[ partTypeId ] ) {
+            allIds.push( object.id )
+            byId[ object.id ] = {
+                ...object,
+                partTypeId
+            }
+        }
+    }
+
+    return {
+        byId,
+        allIds
+    }
 }
 
 /**
