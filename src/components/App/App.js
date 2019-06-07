@@ -30,22 +30,19 @@ class App extends Component {
         const partTypes = getPartTypes( props.worldData )
         const objects = getObjects( props.objects )
 
-        const selectedPartTypeId = partTypes.allIds[ 0 ]
-
         this.state = {
             partTypes,
+            objects,
 
-            selectedPartTypeId,
+            selectedPartTypeId: partTypes.allIds[ 0 ] || null,
             /**
              * Mapping from part type to threejs object
              */
             loadedObjects: {},
 
-            objects,
-
             uploadedObjectData: null,
             
-            editMode: false,
+            // editMode: false,
 
             isLoading: false,
         }
