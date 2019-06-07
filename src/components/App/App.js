@@ -91,14 +91,20 @@ class App extends Component {
     }
 
     get3dObject = ( key ) => {
+        if ( !this.sceneManager ) return null
+        
         return this.sceneManager.getObject( key )
     }
 
     getParent3dObject = ( key ) => {
+        if ( !this.sceneManager ) return null
+        
         return this.sceneManager.getParentObject( key )
     }
 
     get3dObjectByAttachPoint = ( attachPointName ) => {
+        if ( !this.sceneManager ) return null
+        
         return this.sceneManager.getObjectByAttachPoint( attachPointName )
     }
 
@@ -268,11 +274,6 @@ class App extends Component {
 
         }
 
-        const defaultRotation = this.sceneManager.computeGlobalRotation(
-            this.getSelectedPartType(),
-            this.props.poseData
-        )
-
         this.setState({
             uploadedObjectData: {
                 partType,
@@ -280,7 +281,6 @@ class App extends Component {
                 filename,
                 extension,
                 objectURL,
-                defaultRotation
             }
         })
     }
