@@ -3,8 +3,7 @@ import {
     MeshStandardMaterial, Mesh, Group, Raycaster, Vector3
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
-import { sphereFactory } from '../../../../util/three-helpers'
-import { createLights } from '../../../../util/three-helpers';
+import { sphereFactory, moveCameraToFitObject, createLights } from '../../../../util/three-helpers'
 
 const objectContainer = new Group
 
@@ -50,13 +49,7 @@ export default {
         return canvas
     },
 
-    addObject( geometry, options ) {
-        const {
-            position: { x: posX, y: posY, z: posZ },
-            rotation: { x: rotX, y: rotY, z: rotZ },
-            scale
-        } = options
-
+    init( geometry, position ) {
         mesh = new Mesh(
             geometry,
             new MeshStandardMaterial({
@@ -66,15 +59,31 @@ export default {
             })
         )
 
-        mesh.position.set( posX, posY, posZ )
-        objectContainer.rotation.set( rotX, rotY, rotZ )
-        objectContainer.scale.setScalar( scale )
-
         objectContainer.add( mesh )
+
+        orbitControls.reset()
+        moveCameraToFitObject( camera, orbitControls, geometry.boundingBox )
+
+        const size = geometry.boundingBox.getSize( new Vector3 )
+
+        const maxDimension = Math.max( size.x, size.y )
+
+        sphere.scale.setScalar( maxDimension )
+        sphere.position.set(
+            -position.x,
+            -position.y,
+            -position.z
+        )
+
+        // reset renderer size
+        const { width, height } = canvas.getBoundingClientRect()
+
+        renderer.setSize( width, height, false )
+        renderer.setPixelRatio( width / height )
     },
 
     clearObjects() {
-        objectContainer.remove( ...objectContainer.children )
+        objectContainer.remove( mesh )
         mesh = null
     },
 
@@ -93,13 +102,6 @@ export default {
 
     setSpherePosition({ x, y, z }) {
         sphere.position.set( x, y, z )
-    },
-
-    resetRendererSize() {
-        const { width, height } = canvas.getBoundingClientRect()
-
-        renderer.setSize( width, height, false )
-        renderer.setPixelRatio( width / height )
     },
 
     rayCast( mouseCoords ) {
@@ -121,9 +123,5 @@ export default {
         }
 
         return null
-    },
-
-    getPositionRelativeToObject({ x, y, z }) {
-        return mesh.worldToLocal( new Vector3( x, y, z ) )
     },
 }
