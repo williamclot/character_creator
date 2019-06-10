@@ -296,7 +296,16 @@ class UploadWizard extends Component {
     }
 
     handleGlobalPositioningConfirm = () => {
-        const { attachPointsToPlace } = this.state
+        const { getGlobalPosition } = this.props
+        const { attachPointsToPlace, partType } = this.state
+
+        const position = getGlobalPosition( partType.id )
+
+        this.setPosition({
+            x: -position.x,
+            y: -position.y,
+            z: -position.z,
+        })
         
         const attachPointsLeftToPlace = ( attachPointsToPlace && attachPointsToPlace.length !== 0 )
 

@@ -1,10 +1,41 @@
 import {
+    Object3D,
     Geometry, SphereGeometry, CylinderBufferGeometry,
     LineBasicMaterial, MeshStandardMaterial,
     Mesh, Line,
     Vector3,
     PointLight,
 } from 'three'
+
+
+
+/**
+ * @template T
+ * @callback Predicate
+ * @param { T } value
+ * @returns { boolean }
+ */
+
+/**
+ * 
+ * @param { Object3D } object3D 
+ * @param { Predicate<Object3D> } predicate 
+ */
+export const object3dFind = ( object3D, predicate ) => {
+    if ( predicate( object3D ) ) {
+        return object3D
+    }
+
+    for ( const child of object3D.children ) {
+        /** @type { Object3D } */
+        const foundChild = object3dFind( child, predicate )
+        if ( foundChild ) {
+            return foundChild
+        }
+    }
+
+    return null
+}
 
 export const sphereFactory = {
     buildSphere( withArrow = false ) {
@@ -61,3 +92,36 @@ export const createLights = ( lightPositions = defaultLightPositions ) => {
     })
 }
 
+/**
+ * Copied and adjusted from https://github.com/mrdoob/three.js/pull/14526#issuecomment-497254491
+ * @param {*} camera 
+ * @param {*} controls 
+ * @param {*} size 
+ * @param {*} fitOffset 
+ */
+export const moveCameraToFitObject = ( camera, controls, boundingBox, fitOffset = 1.2 ) => {
+    const size = boundingBox.getSize( new Vector3 )
+    const center = boundingBox.getCenter( new Vector3 )
+
+    const maxSize = Math.max( size.x, size.y )
+
+    const fitHeightDistance = maxSize / ( 2 * Math.atan( Math.PI * camera.fov / 360 ) )
+    const fitWidthDistance = fitHeightDistance / camera.aspect
+    
+    const distance = fitOffset * Math.max( fitHeightDistance, fitWidthDistance )
+    
+    const direction = controls.target.clone()
+        .sub( camera.position )
+        .normalize()
+        .multiplyScalar( distance )
+
+    controls.target.copy( center )
+    
+    camera.near = distance / 100
+    camera.far = distance * 100
+    camera.updateProjectionMatrix()
+
+    camera.position.copy( controls.target ).sub(direction)
+    
+    controls.update()
+}

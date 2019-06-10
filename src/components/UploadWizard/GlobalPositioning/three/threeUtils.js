@@ -1,11 +1,10 @@
 import {
-    WebGLRenderer, Scene, PerspectiveCamera, Group,
-    Color, Mesh, MeshStandardMaterial, Vector3
+    WebGLRenderer, Scene, PerspectiveCamera,
+    Color, Mesh, MeshStandardMaterial, Box3
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
-// import { sphereFactory } from '../../../../util/three-helpers'
 
-import { createLights } from '../../../../util/three-helpers';
+import { createLights, moveCameraToFitObject } from '../../../../util/three-helpers';
 
 
 const scene = new Scene
@@ -29,15 +28,6 @@ camera.add( ...createLights() )
 
 scene.add( camera )
 
-
-const objectContainer = new Group
-
-scene.add( objectContainer )
-
-// const sphere = sphereFactory.buildSphere()
-
-// scene.add( sphere )
-
 const renderScene = () => {
     renderer.render( scene, camera )
 }
@@ -53,8 +43,7 @@ let parentMesh = null
 export default {
     renderScene,
 
-    addObject( geometry ) {
-
+    init( geometry, parentGeometry ) {
         mesh = new Mesh(
             geometry,
             new MeshStandardMaterial({
@@ -64,32 +53,41 @@ export default {
             })
         )
 
-        objectContainer.add( mesh )
-    },
+        scene.add( mesh )
 
-    addParent( currentParentMesh ) {
+        const boundingBox = new Box3().copy( geometry.boundingBox )
 
-        const parentGlobalPosition = currentParentMesh.getWorldPosition( new Vector3 )
+        if ( parentGeometry ) {
+            if ( !parentGeometry.boundingBox ) {
+                parentGeometry.computeBoundingBox()
+            }
 
-        parentMesh = currentParentMesh.clone()
+            boundingBox.union( parentGeometry.boundingBox )
 
-        parentMesh.traverse( object => {
-            if ( object.isMesh ) {
-                object.material = new MeshStandardMaterial({
+            parentMesh = new Mesh(
+                parentGeometry,
+                new MeshStandardMaterial({
                     color: 0xffffff,
                     opacity: .8,
-                    transparent: true,
+                    transparent: true
                 })
-            }
-        })
+            )
 
-        parentMesh.position.copy( parentGlobalPosition )
+            scene.add( parentMesh )
+        }
 
-        scene.add( parentMesh )
+        orbitControls.reset()
+        moveCameraToFitObject( camera, orbitControls, boundingBox )
+
+        // reset renderer size
+        const { width, height } = canvas.getBoundingClientRect()
+
+        renderer.setSize( width, height, false )
+        renderer.setPixelRatio( width / height )
     },
 
     clearObjects() {
-        objectContainer.remove( ...objectContainer.children )
+        scene.remove( mesh )
         mesh = null
 
         if ( parentMesh ) {
@@ -100,12 +98,5 @@ export default {
 
     getCanvas() {
         return canvas
-    },
-
-    resetRendererSize() {
-        const { width, height } = canvas.getBoundingClientRect()
-
-        renderer.setSize( width, height, false )
-        renderer.setPixelRatio( width / height )
     },
 }
