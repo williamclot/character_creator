@@ -96,7 +96,7 @@ class SceneManager {
 
         if ( !parent ) return null
 
-        return this.loadedObjectsMap.get( parent.name ) || null
+        return this.loadedObjectsMap.get( parent.id ) || null
     }
 
     placeStand( newStand, options = {} ) {
