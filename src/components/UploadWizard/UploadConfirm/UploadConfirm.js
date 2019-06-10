@@ -29,18 +29,9 @@ class UploadConfirm extends Component {
     componentDidMount() {
         const {
             uploadedObjectGeometry,
-            position,
-            rotation,
-            scale
         } = this.props
 
-        threeUtils.resetRendererSize()
-
-        threeUtils.addObject( uploadedObjectGeometry, {
-            position,
-            rotation,
-            scale
-        })
+        threeUtils.init( uploadedObjectGeometry )
 
         threeUtils.renderScene()
     }
