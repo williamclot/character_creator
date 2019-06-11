@@ -1,12 +1,10 @@
 import {
     Scene, PerspectiveCamera, WebGLRenderer, Color,
-    MeshStandardMaterial, Mesh, Raycaster, Group
+    MeshStandardMaterial, Mesh, Raycaster, Group, Box3
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
 
-import { sphereFactory } from '../../../../util/three-helpers'
-
-import { createLights } from '../../../../util/three-helpers';
+import { sphereFactory, createLights, moveCameraToFitObject } from '../../../../util/three-helpers'
 
 const objectContainer = new Group
 
@@ -53,11 +51,12 @@ export default {
         return canvas
     },
 
-    addObject( geometry, options ) {
+    init( geometry, options ) {
         const {
             position: { x: posX, y: posY, z: posZ },
             rotation: { x: rotX, y: rotY, z: rotZ },
-            scale
+            scale,
+            attachPointPosition,
         } = options
 
         mesh = new Mesh(
@@ -74,10 +73,33 @@ export default {
         objectContainer.scale.setScalar( scale )
 
         objectContainer.add( mesh )
+
+
+        sphere.position.set(
+            attachPointPosition.x,
+            attachPointPosition.y,
+            attachPointPosition.z,
+        )
+
+        const boundingBox = new Box3().setFromObject( objectContainer )
+
+        const size = boundingBox.getSize()
+        const maxDimension = Math.max( size.x, size.y )
+
+        sphere.scale.setScalar( maxDimension )
+
+        orbitControls.reset()
+        moveCameraToFitObject( camera, orbitControls, boundingBox )
+
+        // reset renderer size
+        const { width, height } = canvas.getBoundingClientRect()
+
+        renderer.setSize( width, height, false )
+        renderer.setPixelRatio( width / height )
     },
 
     clearObjects() {
-        objectContainer.remove( ...objectContainer.children )
+        objectContainer.remove( mesh )
         mesh = null
     },
 
@@ -96,13 +118,6 @@ export default {
 
     setSpherePosition({ x, y, z }) {
         sphere.position.set( x, y, z )
-    },
-
-    resetRendererSize() {
-        const { width, height } = canvas.getBoundingClientRect()
-
-        renderer.setSize( width, height, false )
-        renderer.setPixelRatio( width / height )
     },
 
     rayCast( mouseCoords ) {
