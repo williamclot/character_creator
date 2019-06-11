@@ -377,11 +377,12 @@ class App extends Component {
     }
 
     handleWizardCompleted = async (partType, { name, objectURL, imageSrc, geometry, metadata }) => {
+        this.showLoader()
+
         const object = getObjectFromGeometry( geometry, metadata )
 
         const partTypeId = partType.id
         
-        this.setSelected3dObject( partTypeId, object )
         this.setState({
             uploadedObjectData: null,
         })
@@ -403,12 +404,14 @@ class App extends Component {
                 id,
             }
     
-            this.addObject( objectToAdd )
+            this.setSelected3dObject( partTypeId, object )
             this.setSelectedObjectId( partTypeId, id )
+            this.addObject( objectToAdd )
         } catch {
             console.error(`Failed to upload object '${name}'`)
         }
 
+        this.hideLoader()
     }
 
     render() {
