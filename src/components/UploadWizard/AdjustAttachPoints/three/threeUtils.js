@@ -1,25 +1,27 @@
 import {
     Scene, PerspectiveCamera, WebGLRenderer, Color,
-    MeshStandardMaterial, Mesh, Group, EventDispatcher
+    MeshStandardMaterial, Mesh, Group, EventDispatcher,
+    Box3, Vector3,
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
 
 import TransformControls from '../../../../util/transform-controls'
-import { sphereFactory } from '../../../../util/three-helpers'
-
-import { createLights } from '../../../../util/three-helpers';
+import { sphereFactory, moveCameraToFitObject, createLights } from '../../../../util/three-helpers'
 
 const objectContainer = new Group
+const attachPointContainer = new Group
 
 let mesh = null
-let childMesh = null
+let _childMesh = null
 
 const sphere = sphereFactory.buildSphere()
 sphere.material.color.set( 0xffff00 ) // yellow
 
+attachPointContainer.add( sphere )
+
 const scene = new Scene
 scene.background = new Color( 0xeeeeee )
-scene.add( objectContainer, sphere )
+scene.add( objectContainer, attachPointContainer )
 
 const camera = new PerspectiveCamera(
     75,
@@ -52,7 +54,7 @@ const transformControls = new TransformControls( camera, canvas )
 
 const transformsEventDispatcher = new EventDispatcher()
 
-transformControls.attach( sphere )
+transformControls.attach( attachPointContainer )
 transformControls.setMode( 'translate' )
 
 
@@ -88,11 +90,12 @@ export default {
         return canvas
     },
 
-    addObject( geometry, options ) {
+    init( geometry, options, childMesh ) {
         const {
             position: { x: posX, y: posY, z: posZ },
             rotation: { x: rotX, y: rotY, z: rotZ },
-            scale
+            scale,
+            attachPointPosition,
         } = options
 
         mesh = new Mesh(
@@ -107,38 +110,61 @@ export default {
         objectContainer.scale.setScalar( scale )
 
         objectContainer.add( mesh )
-    },
 
-    addChildObject( currentChildMesh, position ) {
+        attachPointContainer.position.set(
+            attachPointPosition.x,
+            attachPointPosition.y,
+            attachPointPosition.z,
+        )
 
-        childMesh = currentChildMesh.clone()
+        const boundingBox = new Box3().setFromObject( objectContainer )
 
-        childMesh.traverse( object => {
-            if ( object.isMesh ) {
-                object.material = new MeshStandardMaterial({
-                    color: 0xffffff,
-                    opacity: .8,
-                    transparent: true,
-                })
-            }
-        })
+        if ( childMesh ) {
+            boundingBox.expandByObject( childMesh )
 
-        sphere.position.set( position.x, position.y, position.z )
-        sphere.add( childMesh )
+            _childMesh = childMesh.clone()
+    
+            _childMesh.traverse( object => {
+                if ( object.isMesh ) {
+                    object.material = new MeshStandardMaterial({
+                        color: 0xffffff,
+                        opacity: .8,
+                        transparent: true,
+                    })
+                }
+            })
+    
+
+            attachPointContainer.add( _childMesh )
+        }
+
+
+        const size = boundingBox.getSize( new Vector3 )
+        const maxDimension = Math.max( size.x, size.y )
+
+        sphere.scale.setScalar( maxDimension )
+
+        orbitControls.reset()
+        moveCameraToFitObject( camera, orbitControls, boundingBox )
+
+        // reset renderer size
+        const { width, height } = canvas.getBoundingClientRect()
+
+        renderer.setSize( width, height, false )
+        renderer.setPixelRatio( width / height )
     },
 
     clearObjects() {
-        objectContainer.remove( ...objectContainer.children )
+        objectContainer.remove( mesh )
         mesh = null
 
-        if ( childMesh ) {
-            sphere.remove( childMesh )
-            childMesh = null
+        if ( _childMesh ) {
+            attachPointContainer.remove( _childMesh )
+            _childMesh = null
         }
     },
 
     setPosition({ x, y, z }) {
-        // TODO - mesh variable
         mesh.position.set( x, y, z )
     },
 
@@ -151,14 +177,7 @@ export default {
     },
 
     setSpherePosition({ x, y, z }) {
-        sphere.position.set( x, y, z )
-    },
-
-    resetRendererSize() {
-        const { width, height } = canvas.getBoundingClientRect()
-
-        renderer.setSize( width, height, false )
-        renderer.setPixelRatio( width / height )
+        attachPointContainer.position.set( x, y, z )
     },
 
     addEventListener( type, listener ) {
