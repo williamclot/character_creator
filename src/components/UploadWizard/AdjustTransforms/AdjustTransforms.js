@@ -46,36 +46,26 @@ export default class AdjustTransforms extends Component {
             position,
             rotation,
             scale,
+            parentAttachPointPosition,
         } = this.props
 
-        threeUtils.resetRendererSize()
-
-        threeUtils.addObject( uploadedObjectGeometry, {
+        const options = {
             position,
             rotation,
-            scale
-        })
+            scale,
+            parentAttachPointPosition,
+        }
+
+        /**
+         * Assumption: actual mesh is the first child; the other children
+         * are the attachpoints which are not needed in this view
+         */
+        const parentMesh = currentObjectParent && currentObjectParent.children[0]
+
+        threeUtils.init( uploadedObjectGeometry, options, parentMesh )
 
 
         const hasParent = Boolean( currentCategory.parent && currentObjectParent )
-
-        if ( hasParent ) {
-            /**
-             * TODO: get directly from sceneManager
-             * 
-             * Assumption: first child is the group containing the mesh,
-             * other children are bones and need to be filtered out
-             */
-            const parentMesh = currentObjectParent.children[0]
-
-
-            const attachPoint = currentCategory.parent.attachPoint
-            const attachPoints = currentObjectParent.userData.metadata.attachPoints // TODO get from props
-
-            const { x, y, z } = attachPoints[ attachPoint ]
-
-            threeUtils.addParent( parentMesh, { x, y, z } )
-        }
 
         threeUtils.setControlsEnabled( hasParent )
 

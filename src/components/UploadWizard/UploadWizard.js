@@ -44,6 +44,12 @@ class UploadWizard extends Component {
             },
             scale: 1,
 
+            parentAttachPointPosition: {
+                x: 0,
+                y: 0,
+                z: 0
+            },
+
             // handled by PlaceAttachpoint
             attachPointsToPlace: [],
             attachPointsPositions: {} 
@@ -56,6 +62,7 @@ class UploadWizard extends Component {
             getObject,
             getParentObject,
             getObjectByAttachPoint,
+            getParentAttachPointPosition,
             onWizardCanceled,
             showLoader,
             hideLoader,
@@ -101,6 +108,7 @@ class UploadWizard extends Component {
                 currentObjectChildren[ attachPoint ] = getObjectByAttachPoint( attachPoint )
             }
             
+            const parentAttachPointPosition = getParentAttachPointPosition( partType )
 
             this.setState({
                 partType,
@@ -110,6 +118,7 @@ class UploadWizard extends Component {
                 position: computedPosition,
                 attachPointsToPlace: attachPoints,
                 attachPointsPositions: initialAttachPointPositions,
+                parentAttachPointPosition,
                 currentObject,
                 currentObjectParent,
                 currentObjectChildren
@@ -343,6 +352,7 @@ class UploadWizard extends Component {
             partType,
             name, uploadedObjectGeometry,
             currentObject, currentObjectParent, currentObjectChildren,
+            parentAttachPointPosition,
             position, rotation, scale,
             attachPointsPositions, attachPointsToPlace
         } = this.state
@@ -408,6 +418,7 @@ class UploadWizard extends Component {
                     position = { position }
                     rotation = { rotation }
                     scale = { scale }
+                    parentAttachPointPosition = { parentAttachPointPosition }
                     onPositionChange = { this.setPosition }
                     onRotationChange = { this.setRotation }
                     onScaleChange = { this.setScale }

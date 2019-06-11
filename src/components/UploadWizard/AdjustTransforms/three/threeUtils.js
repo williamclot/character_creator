@@ -1,12 +1,11 @@
 import {
     WebGLRenderer, Scene, PerspectiveCamera, EventDispatcher, Group,
-    Color, Mesh, MeshStandardMaterial
+    Color, Mesh, MeshStandardMaterial, Box3, Vector3
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
 import TransformControls from '../../../../util/transform-controls'
-import { sphereFactory } from '../../../../util/three-helpers'
-
-import { createLights } from '../../../../util/three-helpers';
+import { sphereFactory, createLights, moveCameraToFitObject } from '../../../../util/three-helpers'
+import { POSITION_0_0_0 } from '../../../../constants'
 
 
 const scene = new Scene
@@ -49,7 +48,7 @@ orbitControls.enableKeys = false
 
 
 let mesh = null
-let parentMesh = null
+let _parentMesh = null
 
 const transformControls = new TransformControls( camera, canvas )
 
@@ -91,11 +90,12 @@ scene.add( transformControls )
 export default {
     renderScene,
 
-    addObject( geometry, options ) {
+    init( geometry, options, parentMesh ) {
         const {
             position: { x: posX, y: posY, z: posZ },
             rotation: { x: rotX, y: rotY, z: rotZ },
-            scale
+            scale,
+            parentAttachPointPosition = POSITION_0_0_0,
         } = options
 
         mesh = new Mesh(
@@ -107,38 +107,62 @@ export default {
             })
         )
 
+        objectContainer.add( mesh )
+
         mesh.position.set( posX, posY, posZ )
         objectContainer.rotation.set( rotX, rotY, rotZ )
         objectContainer.scale.setScalar( scale )
 
+        objectContainer.position.set(
+            parentAttachPointPosition.x,
+            parentAttachPointPosition.y,
+            parentAttachPointPosition.z,
+        )
+
+        const boundingBox = new Box3().setFromObject( objectContainer )
+
+        if ( parentMesh ) {
+            boundingBox.expandByObject( parentMesh )
+
+            _parentMesh = parentMesh.clone()
+            _parentMesh.traverse( object => {
+                if ( object.isMesh ) {
+                    object.material = new MeshStandardMaterial({
+                        color: 0xffffff,
+                        opacity: .8,
+                        transparent: true,
+                    })
+                }
+            })
+
+            scene.add( _parentMesh )
+        }
+
+
+        sphere.position.set(
+            parentAttachPointPosition.x,
+            parentAttachPointPosition.y,
+            parentAttachPointPosition.z,
+        )
+
+        const size = boundingBox.getSize( new Vector3 )
+        const maxDimension = Math.max( size.x, size.y )
+
+        sphere.scale.setScalar( maxDimension )
+
         transformControls.attach( objectContainer )
         transformControls.setMode( 'rotate' )
 
-        objectContainer.add( mesh )
-    },
+        
+        orbitControls.reset()
+        moveCameraToFitObject( camera, orbitControls, boundingBox )
 
-    addParent( currentParentMesh, position ) {
 
-        parentMesh = currentParentMesh.clone()
+        // reset renderer size
+        const { width, height } = canvas.getBoundingClientRect()
 
-        parentMesh.traverse( object => {
-            if ( object.isMesh ) {
-                object.material = new MeshStandardMaterial({
-                    color: 0xffffff,
-                    opacity: .8,
-                    transparent: true,
-                })
-            }
-        })
-
-        // needs to be negated
-        parentMesh.position.set(
-            -position.x,
-            -position.y,
-            -position.z
-        )
-
-        scene.add( parentMesh )
+        renderer.setSize( width, height, false )
+        renderer.setPixelRatio( width / height )
     },
 
     setControlsEnabled( enabled ) {
@@ -147,17 +171,16 @@ export default {
     },
 
     setPosition({ x, y, z }) {
-        // TODO - mesh variable
         mesh.position.set( x, y, z )
     },
 
     clearObjects() {
-        objectContainer.remove( ...objectContainer.children )
+        objectContainer.remove( mesh )
         mesh = null
 
-        if ( parentMesh ) {
-            scene.remove( parentMesh )
-            parentMesh = null
+        if ( _parentMesh ) {
+            scene.remove( _parentMesh )
+            _parentMesh = null
         }
     },
 
@@ -170,7 +193,6 @@ export default {
     },
 
     setGizmoModeTranslate() {
-        // TODO - mesh variable
         transformControls.attach( mesh )
         transformControls.setMode( 'translate' )
     },
@@ -195,12 +217,5 @@ export default {
 
     getCanvas() {
         return canvas
-    },
-
-    resetRendererSize() {
-        const { width, height } = canvas.getBoundingClientRect()
-
-        renderer.setSize( width, height, false )
-        renderer.setPixelRatio( width / height )
     },
 }
