@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Vector3 } from 'three';
 
 import UploadConfirm from './UploadConfirm'
 import GlobalPositioning from './GlobalPositioning'
@@ -43,6 +44,12 @@ class UploadWizard extends Component {
             },
             scale: 1,
 
+            parentAttachPointPosition: {
+                x: 0,
+                y: 0,
+                z: 0
+            },
+
             // handled by PlaceAttachpoint
             attachPointsToPlace: [],
             attachPointsPositions: {} 
@@ -55,6 +62,7 @@ class UploadWizard extends Component {
             getObject,
             getParentObject,
             getObjectByAttachPoint,
+            getParentAttachPointPosition,
             onWizardCanceled,
             showLoader,
             hideLoader,
@@ -75,17 +83,13 @@ class UploadWizard extends Component {
                 geometry.computeBoundingBox()
             }
 
-            const { min, max } = geometry.boundingBox
-
-            const computedScale = 1 / ( max.y - min.y )
+            const center = geometry.boundingBox.getCenter( new Vector3 )
 
             const computedPosition = {
-                x: - ( max.x + min.x ) / 2,
-                y: - ( max.y + min.y ) / 2,
-                z: - ( max.z + min.z ) / 2,
+                x: - center.x,
+                y: - center.y,
+                z: - center.z,
             }
-
-            const computedRotation = { x: 0, y: 0, z: 0 } // cannot make assumptions for rotation
 
             const attachPoints = partType.attachPoints
             const initialAttachPointPositions = {}
@@ -104,6 +108,7 @@ class UploadWizard extends Component {
                 currentObjectChildren[ attachPoint ] = getObjectByAttachPoint( attachPoint )
             }
             
+            const parentAttachPointPosition = getParentAttachPointPosition( partType )
 
             this.setState({
                 partType,
@@ -111,10 +116,9 @@ class UploadWizard extends Component {
                 objectURL,
                 uploadedObjectGeometry: geometry,
                 position: computedPosition,
-                rotation: computedRotation,
-                scale: computedScale,
                 attachPointsToPlace: attachPoints,
                 attachPointsPositions: initialAttachPointPositions,
+                parentAttachPointPosition,
                 currentObject,
                 currentObjectParent,
                 currentObjectChildren
@@ -301,7 +305,16 @@ class UploadWizard extends Component {
     }
 
     handleGlobalPositioningConfirm = () => {
-        const { attachPointsToPlace } = this.state
+        const { getGlobalPosition } = this.props
+        const { attachPointsToPlace, partType } = this.state
+
+        const position = getGlobalPosition( partType.id )
+
+        this.setPosition({
+            x: -position.x,
+            y: -position.y,
+            z: -position.z,
+        })
         
         const attachPointsLeftToPlace = ( attachPointsToPlace && attachPointsToPlace.length !== 0 )
 
@@ -339,6 +352,7 @@ class UploadWizard extends Component {
             partType,
             name, uploadedObjectGeometry,
             currentObject, currentObjectParent, currentObjectChildren,
+            parentAttachPointPosition,
             position, rotation, scale,
             attachPointsPositions, attachPointsToPlace
         } = this.state
@@ -404,6 +418,7 @@ class UploadWizard extends Component {
                     position = { position }
                     rotation = { rotation }
                     scale = { scale }
+                    parentAttachPointPosition = { parentAttachPointPosition }
                     onPositionChange = { this.setPosition }
                     onRotationChange = { this.setRotation }
                     onScaleChange = { this.setScale }

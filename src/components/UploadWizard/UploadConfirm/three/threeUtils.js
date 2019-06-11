@@ -6,6 +6,7 @@ import canvas from './canvas'
 import scene from './scene'
 import camera from './camera'
 
+import { moveCameraToFitObject } from '../../../../util/three-helpers';
 
 const objectContainer = new Group
 
@@ -27,13 +28,7 @@ const threeUtils = {
         return canvas
     },
 
-    addObject( geometry, options ) {
-        const {
-            position: { x: posX, y: posY, z: posZ },
-            rotation: { x: rotX, y: rotY, z: rotZ },
-            scale
-        } = options
-
+    init( geometry ) {
         const mesh = new Mesh(
             geometry,
             new MeshStandardMaterial({
@@ -41,28 +36,21 @@ const threeUtils = {
             })
         )
 
-        mesh.position.set( posX, posY, posZ )
-        objectContainer.rotation.set( rotX, rotY, rotZ )
-        objectContainer.scale.setScalar( scale )
-
         objectContainer.add( mesh )
-    },
 
-    clearObjects() {
-        objectContainer.remove( ...objectContainer.children )
-    },
+        orbitControls.reset()
+        moveCameraToFitObject( camera, orbitControls, geometry.boundingBox )
 
-    resetRendererSize() {
+        // reset renderer size
         const { width, height } = canvas.getBoundingClientRect()
 
         renderer.setSize( width, height, false )
         renderer.setPixelRatio( width / height )
     },
 
-    setSize({ width, height }) {
-        renderer.setSize( width, height )
-        renderer.setPixelRatio( width / height )
-    }
+    clearObjects() {
+        objectContainer.remove( ...objectContainer.children )
+    },
 }
 
 const orbitControls = new OrbitControls( camera, canvas )

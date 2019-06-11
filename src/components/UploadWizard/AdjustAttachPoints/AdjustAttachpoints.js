@@ -33,34 +33,24 @@ export default class AdjustAttachpoints extends Component {
         } = this.props
         const { posX, posY, posZ } = this.state
 
-        threeUtils.resetRendererSize()
-
-        threeUtils.addObject( uploadedObjectGeometry, {
+        const options = {
             position,
             rotation,
-            scale
-        })
-
-        const childPosition = {
-            x: posX,
-            y: posY,
-            z: posZ,
+            scale,
+            attachPointPosition: {
+                x: posX,
+                y: posY,
+                z: posZ,
+            }
         }
 
-        threeUtils.setSpherePosition( childPosition )
-        
-        const hasChild = Boolean( currentObjectChild )
+        /**
+         * Assumption: actual mesh is the first child; the other children
+         * are the attachpoints which are not needed in this view
+         */
+        const childMesh = currentObjectChild && currentObjectChild.children[0]
 
-        if ( hasChild ) {
-            /**
-             * TODO: get directly from sceneManager
-             * 
-             * Assumption: first child is the group containing the mesh,
-             * other children are bones and need to be filtered out
-             */
-            const childMesh = currentObjectChild.children[0]
-            threeUtils.addChildObject( childMesh, childPosition )
-        }
+        threeUtils.init( uploadedObjectGeometry, options, childMesh )
 
         threeUtils.renderScene()
 

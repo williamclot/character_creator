@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import cn from 'classnames'
-import { Vector3 } from 'three'
 
 import CanvasContainer from '../../CanvasContainer'
 
@@ -8,50 +7,19 @@ import threeUtils from './three'
 
 import styles from './index.module.css'
 import commonStyles from '../index.module.css'
+import { object3dFind } from '../../../util/three-helpers';
 
 export default class GlobalPositioning extends Component {
-    constructor( props ) {
-        super( props )
-
-        this.state = {
-            currentObjectGlobalPosition: null,
-        }
-    }
-
     componentDidMount() {
         const {
             currentObjectParent,
-            currentObject,
             uploadedObjectGeometry,
         } = this.props
 
-        if ( currentObject ) {
-            const globalPosition = currentObject.getWorldPosition( new Vector3 )
-            
-            this.setState({
-                currentObjectGlobalPosition: globalPosition
-            })
-        }
+        const parentObject = currentObjectParent && object3dFind( currentObjectParent, object => object.isMesh )
+        const parentGeometry = parentObject && parentObject.geometry
 
-
-        threeUtils.resetRendererSize()
-
-        threeUtils.addObject( uploadedObjectGeometry )
-
-
-        const hasParent = Boolean( currentObjectParent )
-
-        if ( hasParent ) {
-            /**
-             * TODO: get directly from sceneManager
-             * 
-             * Assumption: first child is the group containing the mesh,
-             * other children are bones and need to be filtered out
-             */
-            const parentMesh = currentObjectParent.children[0]
-
-            threeUtils.addParent( parentMesh )
-        }
+        threeUtils.init( uploadedObjectGeometry, parentGeometry )
 
         threeUtils.renderScene()
     }
@@ -61,39 +29,7 @@ export default class GlobalPositioning extends Component {
     }
 
     handleConfirm = () => {
-        const {
-            onPositionChange,
-            onRotationChange,
-            onScaleChange,
-            nextStep, onConfirm,
-        } = this.props
-        const { currentObjectGlobalPosition } = this.state
-
-        if ( currentObjectGlobalPosition ) {
-            const { x, y, z } = currentObjectGlobalPosition
-            
-            // to get the position of the child relative to the parent,
-            // we need to subtract the position of the parent from the child;
-            // since the position of the child is { 0, 0, 0 } (we placed it there),
-            // then the final computed position will be the parent position, but negated
-            onPositionChange({
-                x: -x,
-                y: -y,
-                z: -z,
-            })
-            
-            // also reset rotation and scale to initial values
-            onRotationChange({
-                x: 0,
-                y: 0,
-                z: 0,
-            })
-            onScaleChange( 1 )
-
-            onConfirm()
-        } else {
-            nextStep()
-        }
+        this.props.onConfirm()
     }
 
     handleReject = () => {

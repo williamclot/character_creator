@@ -25,19 +25,9 @@ export default class PlaceAttachpoint extends Component {
         const {
             uploadedObjectGeometry,
             position,
-            rotation,
-            scale
         } = this.props
 
-        threeUtils.resetRendererSize()
-
-        threeUtils.addObject( uploadedObjectGeometry, {
-            position,
-            rotation,
-            scale,
-        })
-
-        threeUtils.setSpherePosition({ x: 0, y: 0, z: 0 })
+        threeUtils.init( uploadedObjectGeometry, position )
 
         threeUtils.renderScene()
     }
@@ -65,20 +55,18 @@ export default class PlaceAttachpoint extends Component {
 
             if ( intersection ) {
                 
-                threeUtils.setSpherePosition( intersection )
-
-                const localPosition = threeUtils.getPositionRelativeToObject( intersection )
-                
                 // invert to get position of pivot point
                 const computedPosition = {
-                    x: -localPosition.x,
-                    y: -localPosition.y,
-                    z: -localPosition.z,
+                    x: -intersection.x,
+                    y: -intersection.y,
+                    z: -intersection.z,
                 }
 
                 this.setState({
                     position: computedPosition
                 })
+
+                threeUtils.setSpherePosition( intersection )
 
                 threeUtils.renderScene()
             }

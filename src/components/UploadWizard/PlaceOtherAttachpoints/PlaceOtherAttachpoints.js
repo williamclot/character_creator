@@ -32,15 +32,16 @@ export default class PlaceOtherAttachpoints extends Component {
             scale,
         } = this.props
 
-        threeUtils.resetRendererSize()
+        const attachPointPosition = this.state.position
 
-        threeUtils.addObject( uploadedObjectGeometry, {
+        const options = {
             position,
             rotation,
             scale,
-        })
+            attachPointPosition
+        }
 
-        threeUtils.setSpherePosition( this.state.position )
+        threeUtils.init( uploadedObjectGeometry, options )
 
         threeUtils.renderScene()
     }

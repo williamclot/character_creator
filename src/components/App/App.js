@@ -17,7 +17,7 @@ import {
 } from '../../util/helpers'
 import MmfApi from '../../util/api';
 
-import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants'
+import { ACCEPTED_OBJECT_FILE_EXTENSIONS, POSITION_0_0_0 } from '../../constants'
 
 import './App.css'
 
@@ -113,6 +113,14 @@ class App extends Component {
 
     /* ------------------------------------------------------------------------- */
 
+    getObject( objectId ) {
+        return this.state.objects.byId[ objectId ]
+    }
+
+    getPartType( partTypeId ) {
+        return this.state.partTypes.byId[ partTypeId ]
+    }
+
     getPartTypesArray() {
         const { partTypes } = this.state
 
@@ -123,6 +131,110 @@ class App extends Component {
         const { partTypes, selectedPartTypeId } = this.state
 
         return partTypes.byId[ selectedPartTypeId ]
+    }
+
+    getSelectedObjectId( partTypeId ) {
+        return this.state.selectedParts[ partTypeId ]
+    }
+
+    getSelectedObject( partTypeId ) {
+        const objectId = this.getSelectedObjectId( partTypeId )
+
+        return this.getObject( objectId )
+    }
+
+    getObjectsByPartTypeId( partTypeId ) {
+        const { byId, allIds } = this.state.objects
+
+        const objects = allIds.map( id => byId[ id ] )
+
+        return objects.filter( object => object.partTypeId === partTypeId )
+    }
+
+    getParentPartType( partTypeId ) {
+        const { partTypes } = this.state
+
+        const { parent } = partTypes.byId[ partTypeId ]
+
+        if ( parent ) {
+            return partTypes.byId[ parent.id ]
+        }
+
+        return null
+    }
+
+    getObjectPartType( objectId ) {
+        const { objects, partTypes } = this.state
+        const partTypeId = objects.byId[ objectId ].partTypeId
+
+        return partTypes.byId[ partTypeId ]
+    }
+
+    getAttachPoints( objectId ) {
+        const object = this.state.objects.byId[ objectId ]
+
+        if ( object.metadata ) {
+            if ( object.metadata.attachPoints ) {
+                return object.metadata.attachPoints
+            }
+        }
+
+        return {}
+    }
+
+    getAttachPointPosition( objectId, attachPointName ) {
+        const attachPoints = this.getAttachPoints( objectId )
+
+        return attachPoints[ attachPointName ] || { x: 0, y: 0, z: 0 }
+    }
+
+    getPositionInsideParent( partType ) {
+        const {
+            id: parentPartTypeId,
+            attachPoint: parentAttachPoint,
+        } = partType.parent
+
+        const parentObjectId = this.getSelectedObjectId( parentPartTypeId )
+
+        return this.getAttachPointPosition( parentObjectId, parentAttachPoint )
+    }
+
+    getPosition( partType ) {
+        const object = this.getSelectedObject( partType.id )
+
+        if ( object.metadata ) {
+            if ( object.metadata.position ) {
+                return object.metadata.position
+            }
+        }
+
+        return POSITION_0_0_0
+    }
+
+    /**
+     * Recursively walks through part types until it reaches the root parent and
+     * adds up all the attachpoint positions from the root to this partType
+     * @param { string|number } partTypeId 
+     */
+    computeGlobalPosition( partTypeId ) {
+        const partType = this.getPartType( partTypeId )
+
+        if ( !partType.parent ) {
+            return POSITION_0_0_0
+        }
+
+        const parentPartType = this.getPartType( partType.parent.id )
+
+        const parentObjectPosition = this.getPosition( parentPartType )
+        const attachPointPosition = this.getPositionInsideParent( partType )
+
+        const result = this.computeGlobalPosition( partType.parent.id ) // recursive step
+
+        return {
+            x: result.x + attachPointPosition.x - parentObjectPosition.x,
+            y: result.y + attachPointPosition.y - parentObjectPosition.y,
+            z: result.z + attachPointPosition.z - parentObjectPosition.z,
+        }
     }
 
     setSelected3dObject( partTypeId, newObject ) {
@@ -178,14 +290,18 @@ class App extends Component {
         }))
     }
 
-    getObjectsByPartTypeId( partTypeId ) {
-        const { byId, allIds } = this.state.objects
+    /* bound methods below */
 
-        const objects = allIds.map( id => byId[ id ] )
-
-        return objects.filter( object => object.partTypeId === partTypeId )
+    getGlobalPosition = partTypeId => {
+        return this.computeGlobalPosition( partTypeId )
     }
 
+    getParentAttachPointPosition = partType => {
+        if ( !partType.parent ) {
+            return { x: 0, y: 0, z: 0 }
+        }
+        return this.getPositionInsideParent( partType )
+    }
 
     showLoader = () => {
         this.setState({
@@ -268,11 +384,12 @@ class App extends Component {
     }
 
     handleWizardCompleted = async (partType, { name, objectURL, imageSrc, geometry, metadata }) => {
+        this.showLoader()
+
         const object = getObjectFromGeometry( geometry, metadata )
 
         const partTypeId = partType.id
         
-        this.setSelected3dObject( partTypeId, object )
         this.setState({
             uploadedObjectData: null,
         })
@@ -294,12 +411,14 @@ class App extends Component {
                 id,
             }
     
-            this.addObject( objectToAdd )
+            this.setSelected3dObject( partTypeId, object )
             this.setSelectedObjectId( partTypeId, id )
+            this.addObject( objectToAdd )
         } catch {
             console.error(`Failed to upload object '${name}'`)
         }
 
+        this.hideLoader()
     }
 
     render() {
@@ -369,6 +488,8 @@ class App extends Component {
                     getObject = { this.get3dObject }
                     getParentObject = { this.getParent3dObject }
                     getObjectByAttachPoint = { this.get3dObjectByAttachPoint }
+                    getGlobalPosition = { this.getGlobalPosition }
+                    getParentAttachPointPosition = { this.getParentAttachPointPosition }
 
                     data = { uploadedObjectData }
                     
