@@ -11,13 +11,17 @@ import ButtonsContainer from '../ButtonsContainer';
 
 import SceneManager from '../ThreeContainer/sceneManager'
 
+import {
+    ACCEPTED_OBJECT_FILE_EXTENSIONS,
+    POSITION_0_0_0,
+    OBJECT_STATUS
+} from '../../constants'
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
     getPartTypes, getObjects, getNameAndExtension, objectMap,
 } from '../../util/helpers'
 import MmfApi from '../../util/api';
 
-import { ACCEPTED_OBJECT_FILE_EXTENSIONS, POSITION_0_0_0 } from '../../constants'
 
 import './App.css'
 
@@ -267,6 +271,29 @@ class App extends Component {
         }))
     }
 
+
+    setObjectStatus( objectId, statusCode ) {
+        const statusReducer = ( objects, objectId, status ) => {
+            const { byId, allIds } = objects
+            const modifiedObject = {
+                ...byId[ objectId ],
+                status
+            }
+
+            return {
+                byId: {
+                    ...byId,
+                    [ objectId ]: modifiedObject
+                },
+                allIds
+            }
+        }
+
+        this.setState( state => ({
+            objects: statusReducer( state.objects, objectId, statusCode )
+        }))
+    }
+
     addObject( objectToAdd ) {
         const addReducer = ( objects, objectToAdd ) => {
             return {
@@ -286,6 +313,7 @@ class App extends Component {
         }))
     }
 
+    /*
     removeObject( objectToDeleteId ) {
         const removeReducer = ( objects, idToRemove ) => {
             const { [idToRemove]: removedItem, ...remainingItems } = objects.byId
@@ -301,6 +329,7 @@ class App extends Component {
             objects: removeReducer( state.objects, objectToDeleteId )
         }))
     }
+    /*
 
     /* bound methods below */
 
@@ -356,12 +385,17 @@ class App extends Component {
     handleDeleteObject = async ( objectId ) => {
         const { csrfToken } = this.props
 
+        const oldStatus = this.getObject( objectId ).status
+
+        this.setObjectStatus( objectId, OBJECT_STATUS.LOADING )
+
         try {
             
             await this.api.deleteObject( objectId, csrfToken )
-            this.removeObject( objectId )
+            this.setObjectStatus( objectId, OBJECT_STATUS.DELETED )
             
         } catch {
+            this.setObjectStatus( objectId, oldStatus )
             console.error(`Failed to delete object with id ${objectId}`)
         }
     }
@@ -397,14 +431,14 @@ class App extends Component {
 
     handleWizardCompleted = async (partType, { name, objectURL, imageSrc, geometry, metadata }) => {
         this.showLoader()
-
-        const object = getObjectFromGeometry( geometry, metadata )
-
-        const partTypeId = partType.id
         
         this.setState({
             uploadedObjectData: null,
         })
+
+        const partTypeId = partType.id
+        
+        const object = getObjectFromGeometry( geometry, metadata )
                 
         const objectData = {
             name,
@@ -421,6 +455,7 @@ class App extends Component {
             const objectToAdd = {
                 ...objectData,
                 id,
+                status: OBJECT_STATUS.IN_SYNC
             }
     
             this.setSelected3dObject( partTypeId, object )

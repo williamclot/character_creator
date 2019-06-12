@@ -1,3 +1,5 @@
+import { OBJECT_STATUS } from '../constants';
+
 const getCategories = world => {
     return world.groups.reduce(
         ( categories, group ) => categories.concat( group.categories ),
@@ -32,7 +34,8 @@ export const getObjects = objects => {
             allIds.push( object.id )
             byId[ object.id ] = {
                 ...object,
-                partTypeId
+                partTypeId,
+                status: OBJECT_STATUS.IN_SYNC,
             }
         }
     }
