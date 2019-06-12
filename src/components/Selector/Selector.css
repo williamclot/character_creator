@@ -57,6 +57,10 @@
     /* margin-left:5px;
     margin-right:5px; */
 }
+.selector .selector-item.deleted {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
 
 .selector .selector-item:hover {
     background-color: #121c1f59;
@@ -86,6 +90,9 @@
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     font-size: 10px;
+}
+.selector .selector-item.deleted .item-name {
+    background-color: #ff0000;
 }
 
 .selector .selector-item .selector-item-menu {

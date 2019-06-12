@@ -8,3 +8,9 @@ export const POSITION_0_0_0 = {
     y: 0,
     z: 0
 }
+
+export const OBJECT_STATUS = {
+    IN_SYNC       : 'IN_SYNC',
+    LOADING       : 'LOADING',
+    DELETED       : 'DELETED',
+}

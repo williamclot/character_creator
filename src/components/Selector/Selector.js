@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import cn from 'classnames'
 
 import ContextMenu from './ContextMenu'
 import ImportButton from '../ImportButton'
 
-import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants'
+import { ACCEPTED_OBJECT_FILE_EXTENSIONS, OBJECT_STATUS } from '../../constants'
 
 import './Selector.css'
 
@@ -71,11 +72,25 @@ class Selector extends Component {
                 </div>
             )
 
+            const isDeleted = object.status === OBJECT_STATUS.DELETED
+
+            const clickHandler = () => {
+                if ( isDeleted ) return
+
+                this.handleClick( object )
+            }
+
+            const className = cn(
+                "selector-item",
+                isDeleted && 'deleted'
+            )
+
             return (
                 <ContextMenu
-                    className = "selector-item"
-                    onClick = { () => this.handleClick( object ) }
+                    className = { className }
+                    onClick = { clickHandler }
 
+                    disabled = { isDeleted }
                     menuItems = { menuItems }
                     key = { object.id || object.name }
                 >
