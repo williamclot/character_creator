@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
 import { Group } from 'three'
 
 import ThreeContainer from '../ThreeContainer'
@@ -55,6 +55,8 @@ class App extends Component {
         this.sceneManager = new SceneManager( container, this.getPartTypesArray() )
 
         this.api = new MmfApi( props.env.API_ENDPOINT )
+
+        this.threeContainerRef = createRef()
         
         if ( process.env.NODE_ENV === 'development' ) {
             window.x = this
@@ -76,6 +78,11 @@ class App extends Component {
             this.setState({
                 loadedObjects,
                 selectedParts,
+            }, () => {
+
+                this.sceneManager.rescaleContainerToFitObjects( 4 )
+                this.threeContainerRef.current.renderScene()
+
             })
 
         } catch ( err ) {
@@ -243,7 +250,12 @@ class App extends Component {
                 ...state.loadedObjects,
                 [partTypeId]: newObject
             }
-        }))
+        }), () => {
+
+            this.sceneManager.rescaleContainerToFitObjects( 4 )
+            this.threeContainerRef.current.renderScene()
+
+        })
     }
 
     setSelectedObjectId( partTypeId, objectId ) {
@@ -448,6 +460,7 @@ class App extends Component {
         return <div className = "app">
 
             <ThreeContainer
+                ref = { this.threeContainerRef }
                 sceneManager = { this.sceneManager }
                 loadedObjects = { loadedObjects }
                 poseData = { poseData }

@@ -1,4 +1,4 @@
-import { Matrix4, Vector3, Object3D, Group, Bone, Mesh, Material, Color } from 'three'
+import { Matrix4, Vector3, Object3D, Group, Bone, Mesh, Material, Color, Box3 } from 'three'
 import topologicalSort from 'toposort'
 import findMinGeometry from '../util/findMinGeometry'
 
@@ -79,6 +79,15 @@ class SceneManager {
      */
     setContainer( container ) {
         this.container = container
+    }
+
+    rescaleContainerToFitObjects( fitOffset = 2 ) {
+        const boundingBox = new Box3().setFromObject( this.container )
+
+        const size = boundingBox.getSize( new Vector3 )
+        const maxDimension = Math.max( size.x, size.y, size.z )
+
+        this.container.scale.divideScalar( maxDimension / fitOffset )
     }
 
     getObject( key ) {
