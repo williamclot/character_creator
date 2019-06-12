@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import cn from 'classnames'
 
 import ContextMenu from './ContextMenu'
 import ImportButton from '../ImportButton'
 
-import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants'
+import { ACCEPTED_OBJECT_FILE_EXTENSIONS, OBJECT_STATUS } from '../../constants'
 
 import './Selector.css'
 
@@ -18,14 +19,14 @@ class Selector extends Component {
             data
         } = this.props
 
-        onObjectSelected( data.currentCategory, object )
+        onObjectSelected( data.currentPartType.id, object )
     }
 
     handleUpload = ( fileName, objectURL ) => {
         const { data, onUpload } = this.props
 
         if ( typeof onUpload === 'function' ) {
-            onUpload( data.currentCategory, fileName, objectURL )
+            onUpload( data.currentPartType.id, fileName, objectURL )
         }
     }
 
@@ -59,7 +60,7 @@ class Selector extends Component {
             )
         }
 
-        const { objects, currentCategory } = data
+        const { objects, currentPartType } = data
 
         const elementDiv = objects.map( ( object, index, objectsArray ) => {
             const menuItems = (
@@ -71,11 +72,25 @@ class Selector extends Component {
                 </div>
             )
 
+            const isDeleted = object.status === OBJECT_STATUS.DELETED
+
+            const clickHandler = () => {
+                if ( isDeleted ) return
+
+                this.handleClick( object )
+            }
+
+            const className = cn(
+                "selector-item",
+                isDeleted && 'deleted'
+            )
+
             return (
                 <ContextMenu
-                    className = "selector-item"
-                    onClick = { () => this.handleClick( object ) }
+                    className = { className }
+                    onClick = { clickHandler }
 
+                    disabled = { isDeleted }
                     menuItems = { menuItems }
                     key = { object.id || object.name }
                 >
@@ -103,7 +118,7 @@ class Selector extends Component {
                 onFileLoaded = { this.handleUpload }
                 accept = { ACCEPTED_OBJECT_FILE_EXTENSIONS.map( extension => `.${extension}` ).join(',') }
             >
-                Add new { currentCategory }
+                Add new { currentPartType.name }
             </ImportButton>
         </>
     }

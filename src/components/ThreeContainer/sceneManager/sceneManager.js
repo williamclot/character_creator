@@ -1,4 +1,4 @@
-import { Matrix4, Vector3, Object3D, Group, Bone, Mesh, Material, Color } from 'three'
+import { Matrix4, Vector3, Object3D, Group, Bone, Mesh, Material, Color, Box3 } from 'three'
 import topologicalSort from 'toposort'
 import findMinGeometry from '../util/findMinGeometry'
 
@@ -30,7 +30,7 @@ class SceneManager {
 
         const categoriesWithParent = categories.filter( cat => cat.parent )
         const edges = categoriesWithParent.map(
-            ({ name, parent }) => [ parent.name, name ]
+            ({ id, parent }) => [ parent.id, id ]
         )
 
         /**
@@ -51,7 +51,7 @@ class SceneManager {
          * @type { Map<string, Category> }
          */
         this.categoriesMap = categories.reduce(
-            ( categoriesMap, category ) => categoriesMap.set( category.name, category ),
+            ( categoriesMap, category ) => categoriesMap.set( category.id, category ),
             new Map
         )
 
@@ -81,6 +81,15 @@ class SceneManager {
         this.container = container
     }
 
+    rescaleContainerToFitObjects( fitOffset = 2 ) {
+        const boundingBox = new Box3().setFromObject( this.container )
+
+        const size = boundingBox.getSize( new Vector3 )
+        const maxDimension = Math.max( size.x, size.y, size.z )
+
+        this.container.scale.divideScalar( maxDimension / fitOffset )
+    }
+
     getObject( key ) {
         return this.loadedObjectsMap.get( key )
     }
@@ -96,7 +105,7 @@ class SceneManager {
 
         if ( !parent ) return null
 
-        return this.loadedObjectsMap.get( parent.name ) || null
+        return this.loadedObjectsMap.get( parent.id ) || null
     }
 
     placeStand( newStand, options = {} ) {

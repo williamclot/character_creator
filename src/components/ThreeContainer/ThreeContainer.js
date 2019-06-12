@@ -1,21 +1,13 @@
 import React, { PureComponent } from 'react'
 
-import * as THREE from 'three'
-
-
 import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './util/init';
 
 import './ThreeContainer.css'
-import Loader from './Loader';
-import SceneManager from './sceneManager';
 
 class ThreeContainer extends PureComponent {
     constructor( props ) {
         super( props )
 
-        this.state = {
-            loading: false
-        }
     }
 
     componentDidMount() {
@@ -82,22 +74,14 @@ class ThreeContainer extends PureComponent {
     renderScene = () => this.renderer.render( this.scene, this.camera )
 
     render() {
-        const { loading: isLoading } = this.state
-
-        const className = [
-            'canvas-container',
-            ... isLoading ? ['loading'] : []
-        ].join(' ')
-
         return (
             <div
-                className = { className }
+                className = "canvas-container"
                 ref = { el => this.canvasContainer = el }
             >
                 <canvas
                     ref = { el => this.canvas = el }
                 />
-                <Loader loading = { isLoading } />
             </div>
         );
     }

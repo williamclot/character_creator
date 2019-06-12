@@ -16,9 +16,6 @@
   "dependencies": {
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
-    "react-redux": "^6.0.0",
-    "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0",
     "three": "^0.102.0",
     "three-gltf-loader": "^1.100.0",
     "three-orbitcontrols": "^2.99.1",

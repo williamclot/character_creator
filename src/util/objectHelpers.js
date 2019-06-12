@@ -3,7 +3,7 @@ import {
     Mesh, MeshStandardMaterial
 } from 'three'
 
-import { gltfLoader, stlLoader } from './loaders'
+import { stlLoader } from './loaders'
 
 
 /**
@@ -44,6 +44,7 @@ export const get3DObject = async ( objectData, poseData ) => {
             return getObjectFromGeometry( geometry, metadata, poseData )
         }
 
+        /*
         case 'gltf': 
         case 'glb': {
             const resource = await gltfLoader.load( objectData.download_url )
@@ -65,6 +66,7 @@ export const get3DObject = async ( objectData, poseData ) => {
 
             return root
         }
+        */
 
         default: {
             throw new Error( `Extension '${objectData.extension}' not recognized.` )

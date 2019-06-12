@@ -1,28 +1,27 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { Component, createRef } from 'react'
 import { Group } from 'three'
-import axios from 'axios'
 
 import ThreeContainer from '../ThreeContainer'
 import UploadWizard from '../UploadWizard'
 import Header from '../Header';
 import Selector from '../Selector';
-// import { CategoriesView, GroupsView } from '../Categories'
 import PartTypesView from '../PartTypes'
 import LoadingIndicator from '../LoadingIndicator';
 import ButtonsContainer from '../ButtonsContainer';
 
-import { showLoader, hideLoader } from '../../actions/loader'
-
 import SceneManager from '../ThreeContainer/sceneManager'
 
+import {
+    ACCEPTED_OBJECT_FILE_EXTENSIONS,
+    POSITION_0_0_0,
+    OBJECT_STATUS
+} from '../../constants'
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
-    getCategories, getNameAndExtension, objectMap,
-    Dict,
+    getPartTypes, getObjects, getNameAndExtension, objectMap,
 } from '../../util/helpers'
+import MmfApi from '../../util/api';
 
-import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants'
 
 import './App.css'
 
@@ -32,25 +31,36 @@ class App extends Component {
     constructor( props ) {
         super( props )
 
+        const partTypes = getPartTypes( props.worldData )
+        const objects = getObjects( props.objects )
+
         this.state = {
+            partTypes,
+            objects,
+
+            selectedPartTypeId: partTypes.allIds[ 0 ] || null,
             /**
              * Mapping from part type to threejs object
-             * @type { Dict<Object3D> }
              */
             loadedObjects: {},
 
-            objectsByCategory: props.objects.byCategory,
+            /** Mapping from partType id to selected object id */
+            selectedParts: {},
 
-            showUploadWizard: false,
             uploadedObjectData: null,
             
-            editMode: false
+            // editMode: false,
+
+            isLoading: false,
         }
         
         const container = new Group
-        const categories = getCategories( props.worldData.groups )
 
-        this.sceneManager = new SceneManager( container, categories )
+        this.sceneManager = new SceneManager( container, this.getPartTypesArray() )
+
+        this.api = new MmfApi( props.env.API_ENDPOINT )
+
+        this.threeContainerRef = createRef()
         
         if ( process.env.NODE_ENV === 'development' ) {
             window.x = this
@@ -58,144 +68,32 @@ class App extends Component {
     }
 
     async componentDidMount() {
-        this.props.showLoader()
+        this.showLoader()
 
         try {
-            const oneOfEach = objectMap(
-                this.props.objects.byCategory,
-                objectList => objectList[ 0 ]
-            )
+            const oneOfEach = this.state.partTypes.allIds.reduce( (byPartTypeId, partTypeId) => ({
+                ...byPartTypeId,
+                [partTypeId]: this.getObjectsByPartTypeId( partTypeId )[0]
+            }), {} )
 
             const loadedObjects = await fetchObjects( oneOfEach )
+            const selectedParts = objectMap( oneOfEach, object => object.id )
 
             this.setState({
-                loadedObjects
+                loadedObjects,
+                selectedParts,
+            }, () => {
+
+                this.sceneManager.rescaleContainerToFitObjects( 4 )
+                this.threeContainerRef.current.renderScene()
+
             })
 
         } catch ( err ) {
             console.error( err )
         }
         
-        this.props.hideLoader()
-    }
-
-    handleDeleteObject = async ( objectId ) => {
-        const { env, csrfToken } = this.props
-        const currentCategory = this.getSelectedCategory().name
-
-        try {
-            const res = await axios.delete(
-                `${env.API_ENDPOINT}/objects/${objectId}`,
-                {
-                    params: {
-                        _csrf_token: csrfToken
-                    }
-                }
-            )
-
-            if ( res.status !== 204 ) {
-                throw new Error('Delete Failed')
-            }
-    
-            this.setState(state => ({
-                objectsByCategory: {
-                    ...state.objectsByCategory,
-                    [currentCategory]: state.objectsByCategory[currentCategory].filter( object => object.id !== objectId )
-                }
-            }))
-            
-        } catch {
-            console.error(`Failed to delete object with id ${objectId}`)
-        }
-    }
-
-    async postObject( partTypeId, object ) {
-        const { API_ENDPOINT } = this.props.env
-
-        const getBlob = url => axios.get(
-            url,
-            {
-                responseType: 'blob'
-            }
-        )
-        
-        const [{ data: fileBlob }, { data: imageBlob }] = await Promise.all([
-            getBlob( object.download_url ),
-            getBlob( object.img )
-        ])
-
-        console.log('---------')
-        console.log(fileBlob, imageBlob)
-
-        const data = {
-            "name": object.name,
-            // "description": "string",
-            "visibility": 0,
-            // "how_to": "string",
-            // "dimensions": "string",
-            // "time_to_do_from": 0,
-            // "time_to_do_to": 0,
-            // "support_free": true,
-            // "filament_quantity": "string",
-            // "client_url": "string",
-            // "tags": "customizer",
-            "brand": null,
-            "licenses": [],
-            
-            "files": [
-              {
-                "filename": `${object.name}.${object.extension}`,
-                "size": fileBlob.size
-              }
-            ],
-            "images": [
-              {
-                "filename": `${object.name}.jpg`,
-                "size": imageBlob.size
-              }
-            ],
-
-            "customizer_part_type_id": partTypeId,
-            "customizer_metadata": object.metadata
-        }
-
-        const res = await axios.post(
-            `${API_ENDPOINT}/object`,
-            data
-        )
-
-        console.log(res.status)
-
-        if ( res.status !== 200 )
-            throw new Error('Not OK')
-
-        const { files, images, id } = res.data
-
-        const file = files[ 0 ]
-        const image = images[ 0 ]
-
-        const [fileRes, imgRes] = await Promise.all([
-            axios.post(
-                `${API_ENDPOINT}/file`,
-                fileBlob,
-                {
-                    params: {
-                        upload_id: file.upload_id
-                    }
-                }
-            ),
-            axios.post(
-                `${API_ENDPOINT}/image`,
-                imageBlob,
-                {
-                    params: {
-                        upload_id: image.upload_id
-                    }
-                }
-            )
-        ])
-
-        return id
+        this.hideLoader()
     }
 
     componentDidUpdate( prevProps ) {
@@ -206,148 +104,398 @@ class App extends Component {
         }
     }
 
-    onObjectSelected = async ( category, objectData ) => {
-        this.props.showLoader()
-
-        try {
-
-            const newObject = await get3DObject( objectData )
-            this.setSelectedObject( category, newObject )
-
-        } catch ( err ) {
-            console.error(
-                `Something went wrong while loading object of type ${category}:\n`
-                + err
-            )
-        }
-
-        this.props.hideLoader()
+    get3dObject = ( key ) => {
+        if ( !this.sceneManager ) return null
+        
+        return this.sceneManager.getObject( key )
     }
 
-    setSelectedObject = ( category, newObject ) => {
+    getParent3dObject = ( key ) => {
+        if ( !this.sceneManager ) return null
+        
+        return this.sceneManager.getParentObject( key )
+    }
+
+    get3dObjectByAttachPoint = ( attachPointName ) => {
+        if ( !this.sceneManager ) return null
+        
+        return this.sceneManager.getObjectByAttachPoint( attachPointName )
+    }
+
+    /* ------------------------------------------------------------------------- */
+
+    getObject( objectId ) {
+        return this.state.objects.byId[ objectId ]
+    }
+
+    getPartType( partTypeId ) {
+        return this.state.partTypes.byId[ partTypeId ]
+    }
+
+    getPartTypesArray() {
+        const { partTypes } = this.state
+
+        return partTypes.allIds.map( id => partTypes.byId[ id ] )
+    }
+
+    getSelectedPartType() {
+        const { partTypes, selectedPartTypeId } = this.state
+
+        return partTypes.byId[ selectedPartTypeId ]
+    }
+
+    getSelectedObjectId( partTypeId ) {
+        return this.state.selectedParts[ partTypeId ]
+    }
+
+    getSelectedObject( partTypeId ) {
+        const objectId = this.getSelectedObjectId( partTypeId )
+
+        return this.getObject( objectId )
+    }
+
+    getObjectsByPartTypeId( partTypeId ) {
+        const { byId, allIds } = this.state.objects
+
+        const objects = allIds.map( id => byId[ id ] )
+
+        return objects.filter( object => object.partTypeId === partTypeId )
+    }
+
+    getParentPartType( partTypeId ) {
+        const { partTypes } = this.state
+
+        const { parent } = partTypes.byId[ partTypeId ]
+
+        if ( parent ) {
+            return partTypes.byId[ parent.id ]
+        }
+
+        return null
+    }
+
+    getObjectPartType( objectId ) {
+        const { objects, partTypes } = this.state
+        const partTypeId = objects.byId[ objectId ].partTypeId
+
+        return partTypes.byId[ partTypeId ]
+    }
+
+    getAttachPoints( objectId ) {
+        const object = this.state.objects.byId[ objectId ]
+
+        if ( object.metadata ) {
+            if ( object.metadata.attachPoints ) {
+                return object.metadata.attachPoints
+            }
+        }
+
+        return {}
+    }
+
+    getAttachPointPosition( objectId, attachPointName ) {
+        const attachPoints = this.getAttachPoints( objectId )
+
+        return attachPoints[ attachPointName ] || { x: 0, y: 0, z: 0 }
+    }
+
+    getPositionInsideParent( partType ) {
+        const {
+            id: parentPartTypeId,
+            attachPoint: parentAttachPoint,
+        } = partType.parent
+
+        const parentObjectId = this.getSelectedObjectId( parentPartTypeId )
+
+        return this.getAttachPointPosition( parentObjectId, parentAttachPoint )
+    }
+
+    getPosition( partType ) {
+        const object = this.getSelectedObject( partType.id )
+
+        if ( object.metadata ) {
+            if ( object.metadata.position ) {
+                return object.metadata.position
+            }
+        }
+
+        return POSITION_0_0_0
+    }
+
+    /**
+     * Recursively walks through part types until it reaches the root parent and
+     * adds up all the attachpoint positions from the root to this partType
+     * @param { string|number } partTypeId 
+     */
+    computeGlobalPosition( partTypeId ) {
+        const partType = this.getPartType( partTypeId )
+
+        if ( !partType.parent ) {
+            return POSITION_0_0_0
+        }
+
+        const parentPartType = this.getPartType( partType.parent.id )
+
+        const parentObjectPosition = this.getPosition( parentPartType )
+        const attachPointPosition = this.getPositionInsideParent( partType )
+
+        const result = this.computeGlobalPosition( partType.parent.id ) // recursive step
+
+        return {
+            x: result.x + attachPointPosition.x - parentObjectPosition.x,
+            y: result.y + attachPointPosition.y - parentObjectPosition.y,
+            z: result.z + attachPointPosition.z - parentObjectPosition.z,
+        }
+    }
+
+    setSelected3dObject( partTypeId, newObject ) {
         this.setState( state => ({
             loadedObjects: {
                 ...state.loadedObjects,
-                [category]: newObject
+                [partTypeId]: newObject
+            }
+        }), () => {
+
+            this.sceneManager.rescaleContainerToFitObjects( 4 )
+            this.threeContainerRef.current.renderScene()
+
+        })
+    }
+
+    setSelectedObjectId( partTypeId, objectId ) {
+        this.setState( state => ({
+            selectedParts: {
+                ...state.selectedParts,
+                [partTypeId]: objectId
             }
         }))
     }
 
-    onUpload = ( categoryName, filename, objectURL ) => {
-        const partType = this.sceneManager.categoriesMap.get( categoryName )
+
+    setObjectStatus( objectId, statusCode ) {
+        const statusReducer = ( objects, objectId, status ) => {
+            const { byId, allIds } = objects
+            const modifiedObject = {
+                ...byId[ objectId ],
+                status
+            }
+
+            return {
+                byId: {
+                    ...byId,
+                    [ objectId ]: modifiedObject
+                },
+                allIds
+            }
+        }
+
+        this.setState( state => ({
+            objects: statusReducer( state.objects, objectId, statusCode )
+        }))
+    }
+
+    addObject( objectToAdd ) {
+        const addReducer = ( objects, objectToAdd ) => {
+            return {
+                byId: {
+                    ...objects.byId,
+                    [ objectToAdd.id ]: objectToAdd
+                },
+                allIds: [
+                    ...objects.allIds,
+                    objectToAdd.id
+                ]
+            }
+        }
+
+        this.setState( state => ({
+            objects: addReducer( state.objects, objectToAdd )
+        }))
+    }
+
+    /*
+    removeObject( objectToDeleteId ) {
+        const removeReducer = ( objects, idToRemove ) => {
+            const { [idToRemove]: removedItem, ...remainingItems } = objects.byId
+            const remainingIds = objects.allIds.filter( objectId => objectId !== idToRemove )
+
+            return {
+                byId: remainingItems,
+                allIds: remainingIds
+            }
+        }
+
+        this.setState( state => ({
+            objects: removeReducer( state.objects, objectToDeleteId )
+        }))
+    }
+    /*
+
+    /* bound methods below */
+
+    getGlobalPosition = partTypeId => {
+        return this.computeGlobalPosition( partTypeId )
+    }
+
+    getParentAttachPointPosition = partType => {
+        if ( !partType.parent ) {
+            return { x: 0, y: 0, z: 0 }
+        }
+        return this.getPositionInsideParent( partType )
+    }
+
+    showLoader = () => {
+        this.setState({
+            isLoading: true
+        })
+    }
+
+    hideLoader = () => {
+        this.setState({
+            isLoading: false
+        })
+    }
+
+    handlePartTypeSelected = id => {
+        this.setState({
+            selectedPartTypeId: id
+        })
+    }
+
+    handleObjectSelected = async ( partTypeId, objectData ) => {
+        this.showLoader()
+
+        try {
+
+            const newObject = await get3DObject( objectData )
+            this.setSelected3dObject( partTypeId, newObject )
+            this.setSelectedObjectId( partTypeId, objectData.id )
+
+        } catch ( err ) {
+            const partType = this.state.partTypes.byId[ partTypeId ]
+            console.error(
+                `Something went wrong while loading object of type ${partType.name}:\n`
+                + err
+            )
+        }
+
+        this.hideLoader()
+    }
+
+    handleDeleteObject = async ( objectId ) => {
+        const { csrfToken } = this.props
+
+        const oldStatus = this.getObject( objectId ).status
+
+        this.setObjectStatus( objectId, OBJECT_STATUS.LOADING )
+
+        try {
+            
+            await this.api.deleteObject( objectId, csrfToken )
+            this.setObjectStatus( objectId, OBJECT_STATUS.DELETED )
+            
+        } catch {
+            this.setObjectStatus( objectId, oldStatus )
+            console.error(`Failed to delete object with id ${objectId}`)
+        }
+    }
+
+    handleUpload = ( partTypeId, filename, objectURL ) => {
+        const partType = this.state.partTypes.byId[ partTypeId ]
 
         const { name, extension } = getNameAndExtension( filename )
 
-        console.log(name, extension)
-
         if ( !ACCEPTED_OBJECT_FILE_EXTENSIONS.includes( extension ) ) {
 
-            console.log( new Error(
-                `Unrecognized extension '${extension}'`
-            ))
+            console.error( `Unrecognized extension '${extension}'` )
             return
 
         }
 
-        const defaultRotation = this.sceneManager.computeGlobalRotation(
-            this.getSelectedCategory(),
-            this.props.poseData
-        )
-
         this.setState({
-            showUploadWizard: true,
             uploadedObjectData: {
                 partType,
                 name,
                 filename,
                 extension,
                 objectURL,
-                defaultRotation
             }
         })
     }
 
-    onWizardCanceled = () => {
-        console.log('wizard canceled')
-
+    handleWizardCanceled = () => {
         this.setState({
-            showUploadWizard: false,
             uploadedObjectData: null
         })
     }
 
-    onWizardCompleted = async (partType, { name, objectURL, imgDataURL, geometry, metadata }) => {
-        console.log('wizard completed')
-        console.log(name)
-        console.log(metadata)
-
-        const category = partType.name
-        const object = getObjectFromGeometry( geometry, metadata )
+    handleWizardCompleted = async (partType, { name, objectURL, imageSrc, geometry, metadata }) => {
+        this.showLoader()
         
-        this.setSelectedObject( category, object )
         this.setState({
-            showUploadWizard: false,
             uploadedObjectData: null,
         })
+
+        const partTypeId = partType.id
+        
+        const object = getObjectFromGeometry( geometry, metadata )
                 
         const objectData = {
             name,
             download_url: objectURL,
-            img: imgDataURL,
+            img: imageSrc,
             extension: 'stl',
-            metadata
+            metadata,
+            partTypeId,
         }
 
-        const id = await this.postObject( partType.id, objectData )
-        
-        this.setState( state => ({
-            objectsByCategory: {
-                ...state.objectsByCategory,
-                [category]: [
-                    ...state.objectsByCategory[category],
-                    {
-                        id,
-                        ...objectData
-                    }
-                ]
+        try {
+            const id = await this.api.postObject( objectData )
+    
+            const objectToAdd = {
+                ...objectData,
+                id,
+                status: OBJECT_STATUS.IN_SYNC
             }
-        }))
-    }
+    
+            this.setSelected3dObject( partTypeId, object )
+            this.setSelectedObjectId( partTypeId, id )
+            this.addObject( objectToAdd )
+        } catch {
+            console.error(`Failed to upload object '${name}'`)
+        }
 
-    getSelectedGroup = () => this.props.worldData.groups[ this.props.selectedGroupIndex ]
-    getSelectedCategory = () => {
-        const selectedGroup = this.getSelectedGroup()
-        return selectedGroup && selectedGroup.categories[ this.props.selectedCategoryIndex ]
+        this.hideLoader()
     }
-
 
     render() {
         const {
-            worldData: { name, groups },
-            
+            worldData: { name },
             poseData,
-
-            isLoading
         } = this.props
         const {
+            isLoading,
+            selectedPartTypeId,
             loadedObjects,
-            objectsByCategory,
-            showUploadWizard, uploadedObjectData
+            uploadedObjectData,
         } = this.state
 
-        const selectedGroup = this.getSelectedGroup()
-        const selectedCategory = this.getSelectedCategory()
+        const showUploadWizard = Boolean( uploadedObjectData )
 
-        const selectorData = ( selectedCategory ?
+        const partTypes = this.getPartTypesArray()
+        const selectedPartType = this.getSelectedPartType()
+
+        const selectorData = ( selectedPartType ?
             {
-                objects:  objectsByCategory[ selectedCategory.name ],
-                currentCategory: selectedCategory.name
+                objects:  this.getObjectsByPartTypeId(selectedPartType.id),
+                currentPartType: selectedPartType
             } : null
         )
 
         return <div className = "app">
 
             <ThreeContainer
+                ref = { this.threeContainerRef }
                 sceneManager = { this.sceneManager }
                 loadedObjects = { loadedObjects }
                 poseData = { poseData }
@@ -358,16 +506,20 @@ class App extends Component {
             <div className = "editor-panel-container">
                 <div className = "editor-panel">
                     <div className = "groups-container">
-                        <PartTypesView groups = { groups } />
+                        <PartTypesView
+                            partTypes = { partTypes }
+                            selectedPartTypeId = { selectedPartTypeId }
+                            onPartTypeSelected = { this.handlePartTypeSelected }
+                        />
                     </div>
                     
                     <div className = "selector-container">
                         <Selector
                             data = { selectorData }
-                            onObjectSelected = { this.onObjectSelected }
+                            onObjectSelected = { this.handleObjectSelected }
                             onDelete = { this.handleDeleteObject }
 
-                            onUpload = { this.onUpload }
+                            onUpload = { this.handleUpload }
                         />
                     </div>
                 </div>
@@ -375,20 +527,26 @@ class App extends Component {
             </div>
 
             <ButtonsContainer
-                categories = { getCategories(groups) }
-                onUpload = { this.onUpload }
+                partTypes = { partTypes }
+                onUpload = { this.handleUpload }
             />
 
-            <UploadWizard
-                visible = { showUploadWizard }
+            {showUploadWizard && (
+                <UploadWizard
+                    getObject = { this.get3dObject }
+                    getParentObject = { this.getParent3dObject }
+                    getObjectByAttachPoint = { this.get3dObjectByAttachPoint }
+                    getGlobalPosition = { this.getGlobalPosition }
+                    getParentAttachPointPosition = { this.getParentAttachPointPosition }
 
-                sceneManager = { this.sceneManager }
-                
-                data = { uploadedObjectData }
-                
-                onWizardCanceled = { this.onWizardCanceled }
-                onWizardCompleted = { this.onWizardCompleted }
-            />
+                    data = { uploadedObjectData }
+                    
+                    showLoader = { this.showLoader }
+                    hideLoader = { this.hideLoader }
+                    onWizardCanceled = { this.handleWizardCanceled }
+                    onWizardCompleted = { this.handleWizardCompleted }
+                />
+            )}
 
             <LoadingIndicator visible = {isLoading} />
         </div>
@@ -396,14 +554,4 @@ class App extends Component {
 
 }
 
-export default connect(
-    state => ({
-        selectedGroupIndex: state.selectedCategoryPath.groupIndex,
-        selectedCategoryIndex: state.selectedCategoryPath.categoryIndex,
-        isLoading: state.isLoading
-    }),
-    ({
-        showLoader,
-        hideLoader
-    })
-)( App )
+export default App

@@ -30,6 +30,7 @@
                     "label": "Head",
                     "attachPoints": [],
                     "parent": {
+                        "id": 95,
                         "name": "Torso",
                         "attachPoint": "Torso_Neck"
                     }
@@ -47,6 +48,7 @@
                         "ArmL_Hand_L"
                     ],
                     "parent": {
+                        "id": 95,
                         "name": "Torso",
                         "attachPoint": "Torso_UpperArm_L"
                     }
@@ -59,6 +61,7 @@
                         "ArmR_Hand_R"
                     ],
                     "parent": {
+                        "id": 95,
                         "name": "Torso",
                         "attachPoint": "Torso_UpperArm_R"
                     }
@@ -74,6 +77,7 @@
                     "label": "Left Hand",
                     "attachPoints": [],
                     "parent": {
+                        "id": 97,
                         "name": "ArmL",
                         "attachPoint": "ArmL_Hand_L"
                     }
@@ -84,6 +88,7 @@
                     "label": "Right Hand",
                     "attachPoints": [],
                     "parent": {
+                        "id": 98,
                         "name": "ArmR",
                         "attachPoint": "ArmR_Hand_R"
                     }
@@ -101,6 +106,7 @@
                         "LegL_Foot_L"
                     ],
                     "parent": {
+                        "id": 95,
                         "name": "Torso",
                         "attachPoint": "Torso_UpperLeg_L"
                     }
@@ -113,6 +119,7 @@
                         "LegR_Foot_R"
                     ],
                     "parent": {
+                        "id": 95,
                         "name": "Torso",
                         "attachPoint": "Torso_UpperLeg_R"
                     }
@@ -128,6 +135,7 @@
                     "label": "Left Foot",
                     "attachPoints": [],
                     "parent": {
+                        "id": 101,
                         "name": "LegL",
                         "attachPoint": "LegL_Foot_L"
                     }
@@ -138,6 +146,7 @@
                     "label": "Right Foot",
                     "attachPoints": [],
                     "parent": {
+                        "id": 102,
                         "name": "LegR",
                         "attachPoint": "LegR_Foot_R"
                     }
