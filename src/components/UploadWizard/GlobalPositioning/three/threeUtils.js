@@ -22,7 +22,7 @@ const camera = new PerspectiveCamera(
     0.001,
     1000
 )
-camera.position.set( 0, .5, 1 )
+camera.position.set( 0, .5, -1 )
 camera.lookAt( 0, 3, 0 )
 camera.add( ...createLights() )
 
