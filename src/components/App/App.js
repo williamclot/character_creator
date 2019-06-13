@@ -213,6 +213,12 @@ class App extends Component {
     getPosition( partType ) {
         const object = this.getSelectedObject( partType.id )
 
+        if ( !object ) {
+            // should never happen!
+            console.warn( `Object doesn't exist. This shouldn't normally happen` )
+            return POSITION_0_0_0
+        }
+
         if ( object.metadata ) {
             if ( object.metadata.position ) {
                 return object.metadata.position
@@ -231,20 +237,25 @@ class App extends Component {
         const partType = this.getPartType( partTypeId )
 
         if ( !partType.parent ) {
-            return POSITION_0_0_0
+            const pos = this.getPosition( partType )
+
+            // return negated position to "undo" offset created when origin
+            // point was moved to the center of the mesh
+            return {
+                x: -pos.x,
+                y: -pos.y,
+                z: -pos.z,
+            }
         }
 
-        const parentPartType = this.getPartType( partType.parent.id )
-
-        const parentObjectPosition = this.getPosition( parentPartType )
         const attachPointPosition = this.getPositionInsideParent( partType )
 
         const result = this.computeGlobalPosition( partType.parent.id ) // recursive step
 
         return {
-            x: result.x + attachPointPosition.x - parentObjectPosition.x,
-            y: result.y + attachPointPosition.y - parentObjectPosition.y,
-            z: result.z + attachPointPosition.z - parentObjectPosition.z,
+            x: result.x + attachPointPosition.x,
+            y: result.y + attachPointPosition.y,
+            z: result.z + attachPointPosition.z,
         }
     }
 
