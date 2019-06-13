@@ -220,18 +220,18 @@ class UploadWizard extends Component {
 
         switch(currentWizardStep) {
             case steps.UPLOAD_CONFIRM: {
-                this.goToStep( steps.GLOBAL_POSITIONING )
-                break
-            }
-            case steps.GLOBAL_POSITIONING: {
                 const hasParent = Boolean( partType.parent )
 
                 if ( !hasParent ) {
                     this.goToStep( steps.ADJUST )
                 } else {
-                    this.goToStep( steps.PLACE_ATTACHPOINT )
+                    this.goToStep( steps.GLOBAL_POSITIONING )
                 }
 
+                break
+            }
+            case steps.GLOBAL_POSITIONING: {
+                this.goToStep( steps.PLACE_ATTACHPOINT )
                 break
             }
             case steps.PLACE_ATTACHPOINT: {
@@ -283,10 +283,10 @@ class UploadWizard extends Component {
                 break
             }
             case steps.ADJUST: {
-                const hasParent = Boolean(partType.parent)
+                const hasParent = Boolean( partType.parent )
 
                 if ( !hasParent ) {
-                    this.goToStep( steps.GLOBAL_POSITIONING )
+                    this.goToStep( steps.UPLOAD_CONFIRM )
                 } else {
                     this.goToStep( steps.PLACE_ATTACHPOINT )
                 }
