@@ -60,7 +60,7 @@ transformControls.setMode( 'translate' )
 
 // const onTransformChange = throttle( 250, () => {
 
-//     const { x, y, z } = mesh.position
+//     const { x, y, z } = attachPointContainer.position
 //     transformsEventDispatcher.dispatchEvent({ type: 'translate', position: { x, y, z } })
 // })
 
@@ -71,7 +71,7 @@ const onTransformMouseDown = () => {
 const onTransformMouseUp = () => {
     orbitControls.enabled = true
 
-    const { x, y, z } = mesh.position
+    const { x, y, z } = attachPointContainer.position
     transformsEventDispatcher.dispatchEvent({ type: 'translate', position: { x, y, z } })
 }
 
