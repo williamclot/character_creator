@@ -112,7 +112,7 @@ export default class PlaceOtherAttachpoints extends Component {
                 />
 
                 <div className = { styles.title } >
-                    <h4>Place AttachPoint</h4>
+                    <h2>Place AttachPoint</h2>
                     <p>Click roughly where this part attaches to {currentAttachPoint}</p>
                 </div>
 

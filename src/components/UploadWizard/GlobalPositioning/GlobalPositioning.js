@@ -49,9 +49,9 @@ export default class GlobalPositioning extends Component {
                     domElement = { threeUtils.getCanvas() }
                 />
 
-                <div className = { styles.title }>
-                    Does this look alright to you?
-                </div>
+                <h2 className = { styles.title }>
+                    Is it in the correct place?
+                </h2>
 
                 <div className = { styles.buttonsContainer } >
 
