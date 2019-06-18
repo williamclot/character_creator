@@ -68,6 +68,7 @@ export default class AdjustTransforms extends Component {
         const hasParent = Boolean( currentCategory.parent && currentObjectParent )
 
         threeUtils.setControlsEnabled( hasParent )
+        threeUtils.showGrid( !hasParent )
 
         threeUtils.renderScene()
         
