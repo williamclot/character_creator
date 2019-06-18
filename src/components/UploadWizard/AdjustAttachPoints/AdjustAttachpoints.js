@@ -235,9 +235,9 @@ export default class AdjustAttachpoints extends Component {
                 </div>
 
                 <div className = { styles.title } >
-                    <h4>
+                    <h2>
                         Position and Resize
-                    </h4>
+                    </h2>
                 </div>
 
             </div>

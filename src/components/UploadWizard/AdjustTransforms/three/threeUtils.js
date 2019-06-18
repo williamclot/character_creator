@@ -6,6 +6,7 @@ import OrbitControls from 'three-orbitcontrols'
 import TransformControls from '../../../../util/transform-controls'
 import { sphereFactory, createLights, moveCameraToFitObject } from '../../../../util/three-helpers'
 import { POSITION_0_0_0 } from '../../../../constants'
+import { initGridHelper } from '../../../ThreeContainer/util/init'
 
 
 const scene = new Scene
@@ -37,6 +38,10 @@ scene.add( objectContainer )
 const sphere = sphereFactory.buildSphere()
 
 scene.add( sphere )
+
+const gridHelper = initGridHelper()
+
+scene.add( gridHelper )
 
 const renderScene = () => {
     renderer.render( scene, camera )
@@ -149,6 +154,7 @@ export default {
         const maxDimension = Math.max( size.x, size.y )
 
         sphere.scale.setScalar( maxDimension )
+        gridHelper.scale.setScalar( maxDimension )
 
         transformControls.attach( objectContainer )
         transformControls.setMode( 'rotate' )
@@ -171,6 +177,10 @@ export default {
     setControlsEnabled( enabled ) {
         orbitControls.enableRotate = enabled
         orbitControls.enablePan = enabled
+    },
+
+    showGrid( enabled ) {
+        gridHelper.visible = enabled
     },
 
     setPosition({ x, y, z }) {
