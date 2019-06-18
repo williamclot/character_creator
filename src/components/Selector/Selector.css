@@ -46,6 +46,7 @@
     max-width: 100px; */
     /* display: inline; */
 
+    min-height: 103px;
     height: 100%;
     width: 100%;
     border-radius: 10px;
