@@ -363,6 +363,8 @@ export default class AdjustTransforms extends Component {
             scale,
         } = this.state
 
+        const hasParent = Boolean( currentCategory.parent )
+
         const className = cn(
             commonStyles.wizardStep,
             styles.adjustTransforms
@@ -383,18 +385,22 @@ export default class AdjustTransforms extends Component {
                     <h2>
                         Position and Resize
                     </h2>
-                    <p>
-                        Rotate Part to face the camera.
-                    </p>
+                    {hasParent ? (
+                        <p> Adjust Position, Rotation and Scale for it to be in the right place </p>
+                    ) : (
+                        <p> Rotate Part to face the camera. </p>
+                    )}
                 </div>
 
                 <div className = { styles.shortcutButtons } >
-                    <div
-                        className = {cn( commonStyles.button, styles.button )}
-                        onClick = { this.onModeTranslate }
-                    >
-                        Position
-                    </div>
+                    {hasParent && (
+                        <div
+                            className = {cn( commonStyles.button, styles.button )}
+                            onClick = { this.onModeTranslate }
+                        >
+                            Position
+                        </div>
+                    )}
 
                     <div
                         className = {cn( commonStyles.button, styles.button )}
@@ -424,28 +430,30 @@ export default class AdjustTransforms extends Component {
                 <div className = { styles.sideView } >
 
                     <div className = { styles.inputsContainer } >
-                        <div className = {cn( styles.inputGroup, styles.position )} >
-                            <div className = { styles.label } >
-                                Position
+                        {hasParent && (
+                            <div className = {cn( styles.inputGroup, styles.position )} >
+                                <div className = { styles.label } >
+                                    Position
+                                </div>
+                                <div className = { styles.axes } >
+                                    <NumberInput
+                                        axis = {'X'}
+                                        value = { posX }
+                                        onChange = { this.onPositionXChange }
+                                    />
+                                    <NumberInput
+                                        axis = {'Y'}
+                                        value = { posY }
+                                        onChange = { this.onPositionYChange }
+                                    />
+                                    <NumberInput
+                                        axis = {'Z'}
+                                        value = { posZ }
+                                        onChange = { this.onPositionZChange }
+                                    />
+                                </div>
                             </div>
-                            <div className = { styles.axes } >
-                                <NumberInput
-                                    axis = {'X'}
-                                    value = { posX }
-                                    onChange = { this.onPositionXChange }
-                                />
-                                <NumberInput
-                                    axis = {'Y'}
-                                    value = { posY }
-                                    onChange = { this.onPositionYChange }
-                                />
-                                <NumberInput
-                                    axis = {'Z'}
-                                    value = { posZ }
-                                    onChange = { this.onPositionZChange }
-                                />
-                            </div>
-                        </div>
+                        )}
                         <div className = {cn( styles.inputGroup, styles.rotation )} >
                             <div className = { styles.label } >
                                 Rotation
