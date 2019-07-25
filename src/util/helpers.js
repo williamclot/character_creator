@@ -101,6 +101,33 @@ export const radiansToDegreesFormatter = {
     }
 }
 
+export const objectHasBeenModified = ( objectData ) => {
+    const { metadata } = objectData
+
+    if ( !metadata ) {
+        return false
+    }
+
+    if ( metadata.position ) {
+        if ( metadata.position.x !== 0 || metadata.position.y !== 0 || metadata.position.z !== 0 ) {
+            return true
+        }
+    }
+
+    if ( metadata.rotation ) {
+        if ( metadata.rotation.x !== 0 || metadata.rotation.y !== 0 || metadata.rotation.z !== 0 ) {
+            return true
+        }
+    }
+
+    if( metadata.scale ) {
+        if ( metadata.scale !== 1 ) {
+            return true
+        }
+    }
+
+    return false
+}
 
 /**
  * @template T, S

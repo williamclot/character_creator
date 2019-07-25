@@ -63,6 +63,7 @@ class UploadWizard extends Component {
             getParentObject,
             getObjectByAttachPoint,
             getParentAttachPointPosition,
+            hasParentBeenModified,
             onWizardCanceled,
             showLoader,
             hideLoader,
@@ -225,7 +226,11 @@ class UploadWizard extends Component {
                 if ( !hasParent ) {
                     this.goToStep( steps.ADJUST )
                 } else {
-                    this.goToStep( steps.GLOBAL_POSITIONING )
+                    if ( this.props.hasParentBeenModified( partType ) ) {
+                        this.goToStep( steps.PLACE_ATTACHPOINT )
+                    } else {
+                        this.goToStep( steps.GLOBAL_POSITIONING )
+                    }
                 }
 
                 break
@@ -294,7 +299,11 @@ class UploadWizard extends Component {
                 break
             }
             case steps.PLACE_ATTACHPOINT: {
-                this.goToStep( steps.GLOBAL_POSITIONING )
+                if ( this.props.hasParentBeenModified( partType ) ) {
+                    this.goToStep( steps.UPLOAD_CONFIRM )
+                } else {
+                    this.goToStep( steps.GLOBAL_POSITIONING )
+                }
                 break
             }
             case steps.GLOBAL_POSITIONING: {
