@@ -50,7 +50,7 @@ class Selector extends Component {
     }
 
     render() {
-        const { data } = this.props
+        const { data, isOwner } = this.props
 
         if ( !data ) {
             return (
@@ -111,15 +111,16 @@ class Selector extends Component {
                 { elementDiv }
             </div>
 
-
-            <ImportButton
-                className = "import-button"
-                key = "__add__button__"
-                onFileLoaded = { this.handleUpload }
-                accept = { ACCEPTED_OBJECT_FILE_EXTENSIONS.map( extension => `.${extension}` ).join(',') }
-            >
-                Add new { currentPartType.name }
-            </ImportButton>
+            {isOwner && (
+                <ImportButton
+                    className = "import-button"
+                    key = "__add__button__"
+                    onFileLoaded = { this.handleUpload }
+                    accept = { ACCEPTED_OBJECT_FILE_EXTENSIONS.map( extension => `.${extension}` ).join(',') }
+                >
+                    Add new { currentPartType.name }
+                </ImportButton>
+            )}
         </>
     }
 }

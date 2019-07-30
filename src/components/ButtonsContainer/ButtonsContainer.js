@@ -11,7 +11,7 @@ import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants';
 import sharedStyles from '../../shared-styles/button.module.css'
 import styles from './ButtonsContainer.module.css'
 
-const ButtonsContainer = ({ partTypes, onUpload, onDownload }) => {
+const ButtonsContainer = ({ partTypes, onUpload, onDownload, isOwner }) => {
 
     const addNewPartButton = <ButtonWithArrow> Add new Part </ButtonWithArrow>
     const existingPartTypeButton = <ButtonWithArrow> Existing Part Type </ButtonWithArrow>
@@ -24,42 +24,44 @@ const ButtonsContainer = ({ partTypes, onUpload, onDownload }) => {
                 Download
             </Button>
 
-            <Menu header = { addNewPartButton } >
-                <ListWithSeparator separator = { separator } >
+            {isOwner && (
+                <Menu header = { addNewPartButton } >
+                    <ListWithSeparator separator = { separator } >
 
-                    <Menu header = { existingPartTypeButton } >
-                        <ListWithSeparator separator = { separator } >
+                        <Menu header = { existingPartTypeButton } >
+                            <ListWithSeparator separator = { separator } >
 
-                            {partTypes.map( partType => (
-                                <ImportButton
-                                    className = {cn(
-                                        sharedStyles.button,
-                                        styles.button
-                                    )}
-                                    key = { partType.id }
+                                {partTypes.map( partType => (
+                                    <ImportButton
+                                        className = {cn(
+                                            sharedStyles.button,
+                                            styles.button
+                                        )}
+                                        key = { partType.id }
 
-                                    onFileLoaded = {( filename, objectURL ) =>
-                                        onUpload(
-                                            partType.id,
-                                            filename,
-                                            objectURL
-                                        )
-                                    }
-                                    accept = { ACCEPTED_OBJECT_FILE_EXTENSIONS.map( extension => `.${extension}` ).join(',') }
-                                >
-                                    {partType.name}
-                                </ImportButton>
-                            ))}
+                                        onFileLoaded = {( filename, objectURL ) =>
+                                            onUpload(
+                                                partType.id,
+                                                filename,
+                                                objectURL
+                                            )
+                                        }
+                                        accept = { ACCEPTED_OBJECT_FILE_EXTENSIONS.map( extension => `.${extension}` ).join(',') }
+                                    >
+                                        {partType.name}
+                                    </ImportButton>
+                                ))}
 
-                        </ListWithSeparator>
-                    </Menu>
+                            </ListWithSeparator>
+                        </Menu>
 
-                    <Button className = { styles.disabled }>
-                        New Part Type
-                    </Button>
+                        <Button className = { styles.disabled }>
+                            New Part Type
+                        </Button>
 
-                </ListWithSeparator>
-            </Menu>
+                    </ListWithSeparator>
+                </Menu>
+            )}
 
         </div>
     )

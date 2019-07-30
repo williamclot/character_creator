@@ -508,6 +508,7 @@ class App extends Component {
         const {
             worldData: { name },
             poseData,
+            isOwner,
         } = this.props
         const {
             isLoading,
@@ -554,8 +555,8 @@ class App extends Component {
                             data = { selectorData }
                             onObjectSelected = { this.handleObjectSelected }
                             onDelete = { this.handleDeleteObject }
-
                             onUpload = { this.handleUpload }
+                            isOwner = { isOwner }
                         />
                     </div>
                 </div>
@@ -566,6 +567,7 @@ class App extends Component {
                 partTypes = { partTypes }
                 onUpload = { this.handleUpload }
                 onDownload = { this.handleDownload }
+                isOwner = { isOwner }
             />
 
             {showUploadWizard && (
