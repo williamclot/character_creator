@@ -11,7 +11,7 @@ import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants';
 import sharedStyles from '../../shared-styles/button.module.css'
 import styles from './ButtonsContainer.module.css'
 
-const ButtonsContainer = ({ partTypes, onUpload }) => {
+const ButtonsContainer = ({ partTypes, onUpload, onDownload }) => {
 
     const addNewPartButton = <ButtonWithArrow> Add new Part </ButtonWithArrow>
     const existingPartTypeButton = <ButtonWithArrow> Existing Part Type </ButtonWithArrow>
@@ -19,6 +19,10 @@ const ButtonsContainer = ({ partTypes, onUpload }) => {
 
     return (
         <div className = {styles.container}>
+
+            <Button className = { styles.downloadButton } onClick = { onDownload }>
+                Download
+            </Button>
 
             <Menu header = { addNewPartButton } >
                 <ListWithSeparator separator = { separator } >

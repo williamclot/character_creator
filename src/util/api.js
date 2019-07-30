@@ -104,6 +104,17 @@ class MmfApi {
 
         return id
     }
+
+    async triggerDownload( worldId, objectIds ) {
+        const res = await axios.post(
+            `${this.apiEndpoint}/customizers/${worldId}/download`,
+            {
+                selection: objectIds
+            }
+        )
+
+        return res.data
+    }
 }
 
 export default MmfApi

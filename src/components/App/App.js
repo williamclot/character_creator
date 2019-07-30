@@ -441,6 +441,24 @@ class App extends Component {
         })
     }
 
+    handleDownload = async () => {
+        const { worldData } = this.props
+        const { selectedParts } = this.state
+
+        const objectIds = Object.keys( selectedParts ).map( key => selectedParts[key] )
+
+        const response = await this.api.triggerDownload( worldData.id, objectIds )
+
+        if ( response.status === 1 ) { // ready for download
+            window.open( response.download_link )
+        } else {
+            // TODO add popup component
+
+            const message = `You will receive an email when the mesh has finished processing.`
+            window.alert( message )
+        }
+    }
+
     handleWizardCanceled = () => {
         this.setState({
             uploadedObjectData: null
@@ -547,6 +565,7 @@ class App extends Component {
             <ButtonsContainer
                 partTypes = { partTypes }
                 onUpload = { this.handleUpload }
+                onDownload = { this.handleDownload }
             />
 
             {showUploadWizard && (

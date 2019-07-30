@@ -52,3 +52,7 @@
     width: 100%;
     height: 1px;
 }
+
+.downloadButton {
+    margin: 5px 0;
+}
