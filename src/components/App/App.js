@@ -465,7 +465,7 @@ class App extends Component {
         })
     }
 
-    handleWizardCompleted = async (partType, { name, objectURL, imageSrc, geometry, metadata }) => {
+    handleWizardCompleted = async (partType, { name, extension, objectURL, imageSrc, geometry, metadata }) => {
         this.showLoader()
         
         this.setState({
@@ -478,7 +478,12 @@ class App extends Component {
                 
         const objectData = {
             name,
-            download_url: objectURL,
+            files: {
+                default: {
+                    extension,
+                    url: objectURL,
+                }
+            },
             img: imageSrc,
             extension: 'stl',
             metadata,

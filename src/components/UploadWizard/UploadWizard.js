@@ -22,6 +22,9 @@ class UploadWizard extends Component {
 
             partType: null,
 
+            // file extension
+            extension: null,
+
             // handled by UploadConfirm
             name: '',
             imageSrc: null,
@@ -114,6 +117,7 @@ class UploadWizard extends Component {
             this.setState({
                 partType,
                 name,
+                extension,
                 objectURL,
                 uploadedObjectGeometry: geometry,
                 position: computedPosition,
@@ -144,7 +148,7 @@ class UploadWizard extends Component {
         if ( this.state.currentWizardStep === steps.COMPLETED ) {
             const {
                 partType,
-                name, objectURL, imageSrc,
+                name, extension, objectURL, imageSrc,
                 uploadedObjectGeometry,
                 position, rotation, scale,
                 attachPointsPositions
@@ -159,6 +163,7 @@ class UploadWizard extends Component {
     
             this.props.onWizardCompleted(partType, {
                 name,
+                extension,
                 objectURL,
                 imageSrc,
                 metadata,

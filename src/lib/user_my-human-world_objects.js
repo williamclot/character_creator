@@ -4,7 +4,12 @@ const lib = {
             {
                 "id": 1,
                 "name": "Cylinder",
-                "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
+                "files": {
+                    "default": {
+                        "extension": "stl",
+                        "url": process.env.PUBLIC_URL + "/models/cylinder.stl"
+                    }
+                },
                 "extension": "stl",
                 "metadata": {
                     "scale": 3,
@@ -40,7 +45,12 @@ const lib = {
             {
                 "id": 2,
                 "name": "CUBE TORSO",
-                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
+                "files": {
+                    "default": {
+                        "extension": "stl",
+                        "url": process.env.PUBLIC_URL + "/models/cube.stl"
+                    }
+                },
                 "extension": "stl",
                 "metadata": {
                     "attachPoints": {
@@ -77,7 +87,12 @@ const lib = {
             {
                 "id": 3,
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
+                "files": {
+                    "default": {
+                        "extension": "stl",
+                        "url": process.env.PUBLIC_URL + "/models/cube.stl"
+                    }
+                },
                 "extension": "stl",
                 "metadata": {
                     "scale": .4
@@ -88,7 +103,12 @@ const lib = {
             {
                 "id": 4,
                 "name": "Cylinder",
-                "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
+                "files": {
+                    "default": {
+                        "extension": "stl",
+                        "url": process.env.PUBLIC_URL + "/models/cylinder.stl"
+                    }
+                },
                 "extension": "stl",
                 "metadata": {
                     
@@ -117,7 +137,12 @@ const lib = {
             {
                 "id": 5,
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
+                "files": {
+                    "default": {
+                        "extension": "stl",
+                        "url": process.env.PUBLIC_URL + "/models/cube.stl"
+                    }
+                },
                 "extension": "stl",
                 "metadata": {
                     "attachPoints": {
@@ -134,7 +159,12 @@ const lib = {
             {
                 "id": 6,
                 "name": "Cylinder",
-                "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
+                "files": {
+                    "default": {
+                        "extension": "stl",
+                        "url": process.env.PUBLIC_URL + "/models/cylinder.stl"
+                    }
+                },
                 "extension": "stl",
                 "metadata": {
                     
@@ -163,7 +193,12 @@ const lib = {
             {
                 "id": 7,
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
+                "files": {
+                    "default": {
+                        "extension": "stl",
+                        "url": process.env.PUBLIC_URL + "/models/cube.stl"
+                    }
+                },
                 "extension": "stl",
                 "metadata": {
                     "attachPoints": {
@@ -180,7 +215,12 @@ const lib = {
             {
                 "id": 8,
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
+                "files": {
+                    "default": {
+                        "extension": "stl",
+                        "url": process.env.PUBLIC_URL + "/models/cube.stl"
+                    }
+                },
                 "extension": "stl",
                 "metadata": {
                     "scale": .4
@@ -191,7 +231,12 @@ const lib = {
             {
                 "id": 9,
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
+                "files": {
+                    "default": {
+                        "extension": "stl",
+                        "url": process.env.PUBLIC_URL + "/models/cube.stl"
+                    }
+                },
                 "extension": "stl",
                 "metadata": {
                     "scale": .4
@@ -202,7 +247,12 @@ const lib = {
             {
                 "id": 10,
                 "name": "Cylinder",
-                "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
+                "files": {
+                    "default": {
+                        "extension": "stl",
+                        "url": process.env.PUBLIC_URL + "/models/cylinder.stl"
+                    }
+                },
                 "extension": "stl",
                 "metadata": {
                     "position": {
@@ -228,7 +278,12 @@ const lib = {
             {
                 "id": 11,
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
+                "files": {
+                    "default": {
+                        "extension": "stl",
+                        "url": process.env.PUBLIC_URL + "/models/cube.stl"
+                    }
+                },
                 "extension": "stl",
                 "metadata": {
                     "attachPoints": {
@@ -245,7 +300,12 @@ const lib = {
             {
                 "id": 12,
                 "name": "Cylinder",
-                "download_url": process.env.PUBLIC_URL + "/models/cylinder.stl",
+                "files": {
+                    "default": {
+                        "extension": "stl",
+                        "url": process.env.PUBLIC_URL + "/models/cylinder.stl"
+                    }
+                },
                 "extension": "stl",
                 "metadata": {
                     "position": {
@@ -271,7 +331,12 @@ const lib = {
             {
                 "id": 13,
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
+                "files": {
+                    "default": {
+                        "extension": "stl",
+                        "url": process.env.PUBLIC_URL + "/models/cube.stl"
+                    }
+                },
                 "extension": "stl",
                 "metadata": {
                     "attachPoints": {
@@ -288,7 +353,12 @@ const lib = {
             {
                 "id": 14,
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
+                "files": {
+                    "default": {
+                        "extension": "stl",
+                        "url": process.env.PUBLIC_URL + "/models/cube.stl"
+                    }
+                },
                 "extension": "stl",
                 "metadata": {
                     "scale": .4
@@ -299,7 +369,12 @@ const lib = {
             {
                 "id": 15,
                 "name": "CUBE",
-                "download_url": process.env.PUBLIC_URL + "/models/cube.stl",
+                "files": {
+                    "default": {
+                        "extension": "stl",
+                        "url": process.env.PUBLIC_URL + "/models/cube.stl"
+                    }
+                },
                 "extension": "stl",
                 "metadata": {
                     "scale": .4
