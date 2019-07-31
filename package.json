@@ -16,7 +16,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
-    "three": "^0.102.0",
+    "three": "^0.107.0",
     "three-gltf-loader": "^1.100.0",
     "three-orbitcontrols": "^2.99.1",
     "three-stl-loader": "^1.0.6",
