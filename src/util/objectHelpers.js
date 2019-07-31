@@ -80,6 +80,8 @@ export const get3DObject = async ( objectData, poseData ) => {
 }
 
 export const getObjectFromGeometry = ( geometry, metadata, poseData ) => {
+    geometry.computeVertexNormals()
+
     const material = new MeshStandardMaterial({
         color: 0x808080
     })
