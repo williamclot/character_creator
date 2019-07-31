@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import axios from 'axios'
 
+import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader'
+
 import STLLoaderWrapper from 'three-stl-loader';
 // import GLTFLoader from 'three-gltf-loader';
 const STLLoader = STLLoaderWrapper( THREE );
@@ -9,6 +11,7 @@ const TIMEOUT = 30000
 
 // const _gltfLoader = new GLTFLoader
 const _stlLoader = new STLLoader
+const _plyLoader = new PLYLoader
 
 
 // const promisified_gltfLoader = {
@@ -39,7 +42,23 @@ const promisified_stlLoader = {
     },
 }
 
+const promisified_plyLoader = {
+    async load( url ) {
+        const { data } = await axios.get( url, {
+            timeout: TIMEOUT,
+            responseType: 'arraybuffer'
+        })
+
+        return this.parse( data )
+    },
+    async parse( data ) {
+        return _plyLoader.parse( data )
+        // return _stlLoader.parse( data )
+    },
+}
+
 export {
     // promisified_gltfLoader as gltfLoader,
-    promisified_stlLoader as stlLoader
+    promisified_stlLoader as stlLoader,
+    promisified_plyLoader as plyLoader,
 }
