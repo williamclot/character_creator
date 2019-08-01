@@ -3,7 +3,7 @@ import {
     Mesh, MeshStandardMaterial
 } from 'three'
 
-import { stlLoader } from './loaders'
+import { stlLoader, plyLoader } from './loaders'
 
 
 /**
@@ -35,19 +35,24 @@ export const fetchObjects = async objectsData => {
  * @returns { Promise<Object3D> }
  */
 export const get3DObject = async ( objectData, poseData ) => {
-    switch ( objectData.extension ) {
+    const file = objectData.files.viewer || objectData.files.default
+
+    switch ( file.extension ) {
+
+        case 'ply': {
+            const geometry = await plyLoader.load( file.url )
+            return getObjectFromGeometry( geometry, objectData.metadata, poseData )
+        }
 
         case 'stl': {
-            const { download_url, metadata } = objectData
-
-            const geometry = await stlLoader.load( download_url )
-            return getObjectFromGeometry( geometry, metadata, poseData )
+            const geometry = await stlLoader.load( file.url )
+            return getObjectFromGeometry( geometry, objectData.metadata, poseData )
         }
 
         /*
         case 'gltf': 
         case 'glb': {
-            const resource = await gltfLoader.load( objectData.download_url )
+            const resource = await gltfLoader.load( file.url )
             const root = resource.scene.children[ 0 ]
 
             if ( poseData ) {
@@ -69,12 +74,14 @@ export const get3DObject = async ( objectData, poseData ) => {
         */
 
         default: {
-            throw new Error( `Extension '${objectData.extension}' not recognized.` )
+            throw new Error( `Extension '${file.extension}' not recognized.` )
         }
     }
 }
 
 export const getObjectFromGeometry = ( geometry, metadata, poseData ) => {
+    geometry.computeVertexNormals()
+
     const material = new MeshStandardMaterial({
         color: 0x808080
     })

@@ -25,7 +25,7 @@ const generateApiObject = ( object, fileSize, imageSize ) => {
         
         "files": [
           {
-            "filename": `${object.name}.${object.extension}`,
+            "filename": `${object.name}.${object.files.default.extension}`,
             "size": fileSize
           }
         ],
@@ -64,7 +64,7 @@ class MmfApi {
     async postObject( object ) {
         
         const [{ data: fileBlob }, { data: imageBlob }] = await Promise.all([
-            getBlob( object.download_url ),
+            getBlob( object.files.default.url ),
             getBlob( object.img )
         ])
 
