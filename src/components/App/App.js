@@ -23,7 +23,7 @@ import {
 import MmfApi from '../../util/api';
 
 
-import './App.css'
+import styles from './App.module.scss'
 
 
 class App extends Component {
@@ -533,7 +533,7 @@ class App extends Component {
             } : null
         )
 
-        return <div className = "app">
+        return <div className = {styles.app}>
 
             <ThreeContainer
                 ref = { this.threeContainerRef }
@@ -544,9 +544,9 @@ class App extends Component {
 
             <Header title = { name } />
 
-            <div className = "editor-panel-container">
-                <div className = "editor-panel">
-                    <div className = "groups-container">
+            <div className = {styles.editorPanelContainer}>
+                <div className = {styles.editorPanel}>
+                    <div className = {styles.partTypesContainer}>
                         <PartTypesView
                             partTypes = { partTypes }
                             selectedPartTypeId = { selectedPartTypeId }
@@ -554,7 +554,7 @@ class App extends Component {
                         />
                     </div>
                     
-                    <div className = "selector-container">
+                    <div className = {styles.selectorContainer}>
                         <Selector
                             data = { selectorData }
                             onObjectSelected = { this.handleObjectSelected }
