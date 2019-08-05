@@ -511,9 +511,8 @@ class App extends Component {
 
     render() {
         const {
-            worldData: { name },
+            worldData: { name, isOwner },
             poseData,
-            isOwner,
         } = this.props
         const {
             isLoading,
