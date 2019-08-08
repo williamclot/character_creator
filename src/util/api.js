@@ -115,6 +115,15 @@ class MmfApi {
 
         return res.data
     }
+
+    async patchCustomizer( worldId, fields ) {
+        const res = await axios.patch(
+            `${this.apiEndpoint}/customizers/${worldId}`,
+            fields
+        )
+
+        return res.data
+    }
 }
 
 export default MmfApi

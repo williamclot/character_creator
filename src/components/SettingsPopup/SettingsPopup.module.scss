@@ -1,0 +1,95 @@
+.background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color: #000000, $alpha: .9);
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+    // width: 50%;
+    // height: 80%;
+    padding: 10px;
+    background-color: #707070;
+    border-radius: 20px;
+    color: white;
+
+
+    .title {
+        font-size: 1.6em;
+        font-weight: bold;
+
+        padding: 5px;
+    }
+    
+    .settings {
+        display: grid;
+        grid-template-columns: [start] auto [mid] 1fr [end];
+        grid-gap: 10px;
+        padding: 20px;
+
+        .label {
+            grid-column: start / mid;
+            font-style: italic;
+        
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .input {
+            background-color: #4e4e4e;
+            color: white;
+            grid-column: mid / end;
+            border-radius: 10px;
+            border-width: 0;
+            overflow: hidden;
+        }
+
+        .text {
+            padding: 5px;
+        }
+    }
+
+    .buttons {
+        padding: 5px;
+        align-self: flex-end;
+
+        .button {
+            border-width: 0px;
+            margin: 0 10px;
+        }
+
+        input[type="submit" i]:disabled.button {
+            color: graytext;
+            cursor: unset;
+        }
+    }
+}
+
+.chooseImage {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.imagePreview {
+    width: 230px;
+    height: 230px;
+
+    object-fit: cover;
+}
+
+.description {
+    height: 200px;
+}
+
+.visibility {
+    font-weight: bold;
+}

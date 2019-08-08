@@ -1,6 +1,7 @@
 import React, { Component, createRef } from 'react'
 import { Group } from 'three'
 
+import SettingsPopup from '../SettingsPopup'
 import ThreeContainer from '../ThreeContainer'
 import UploadWizard from '../UploadWizard'
 import Header from '../Header';
@@ -52,6 +53,8 @@ class App extends Component {
             // editMode: false,
 
             isLoading: false,
+
+            showSettings: false,
         }
         
         const container = new Group
@@ -509,13 +512,18 @@ class App extends Component {
         this.hideLoader()
     }
 
+    handleSaveChanges = async fieldsChanged => {
+        const { worldData } = this.props
+        await this.api.patchCustomizer(worldData.id, fieldsChanged)
+    }
+
     render() {
         const {
-            worldData: { name, isOwner },
+            worldData,
             poseData,
         } = this.props
         const {
-            isLoading,
+            isLoading, showSettings,
             selectedPartTypeId,
             loadedObjects,
             uploadedObjectData,
@@ -542,7 +550,7 @@ class App extends Component {
                 poseData = { poseData }
             />
 
-            <Header title = { name } />
+            <Header title = { worldData.name } />
 
             <div className = {styles.editorPanelContainer}>
                 <div className = {styles.editorPanel}>
@@ -560,7 +568,7 @@ class App extends Component {
                             onObjectSelected = { this.handleObjectSelected }
                             onDelete = { this.handleDeleteObject }
                             onUpload = { this.handleUpload }
-                            isOwner = { isOwner }
+                            isOwner = { worldData.isOwner }
                         />
                     </div>
                 </div>
@@ -571,7 +579,7 @@ class App extends Component {
                 partTypes = { partTypes }
                 onUpload = { this.handleUpload }
                 onDownload = { this.handleDownload }
-                isOwner = { isOwner }
+                isOwner = { worldData.isOwner }
             />
 
             {showUploadWizard && (
@@ -589,6 +597,21 @@ class App extends Component {
                     hideLoader = { this.hideLoader }
                     onWizardCanceled = { this.handleWizardCanceled }
                     onWizardCompleted = { this.handleWizardCompleted }
+                />
+            )}
+
+            {showSettings && (
+                <SettingsPopup
+                    className = {styles.settingsPopup}
+                    
+                    name = {worldData.name}
+                    description = {worldData.description}
+                    isPrivate = {worldData.isPrivate}
+                    image = {worldData.image}
+                    // tags = {[]}
+
+                    onSave = {this.handleSaveChanges}
+                    onCancel = {() => this.setState({showSettings: false})}
                 />
             )}
 

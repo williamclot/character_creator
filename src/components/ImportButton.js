@@ -53,4 +53,23 @@ class ImportButton extends Component {
     }
 }
 
+const ImportButtonV2 = props => {
+    const { className, children, ...otherProps } = props
+
+    return <>
+        <label className={className} htmlFor="__file_input__">{children}</label>
+        <input
+            {...otherProps}
+            type="file"
+            id="__file_input__"
+            style = {{
+                opacity: 0,
+                position: "absolute",
+                zIndex: -1,
+            }}
+        />
+    </>
+}
+
 export default ImportButton
+export { ImportButtonV2 }
