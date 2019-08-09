@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import cn from 'classnames'
-import { uniqueId } from '../../util/helpers'
 
 import commonStyles from '../../shared-styles/button.module.css'
 import styles from './SettingsPopup.module.scss'
@@ -18,11 +17,20 @@ class SettingsPopup extends Component {
             name: props.name,
             description: props.description,
             isPrivate: props.isPrivate,
-            image: props.image,
-            // tags: props.tags,
-
-            // isSynced: true,
+            imageUrl: props.imageUrl,
+            imagePath: null,
         }
+    }
+
+    isInSync() {
+        const { state, props } = this
+
+        return (
+            state.name === props.name &&
+            state.description === props.description &&
+            state.imageUrl === props.imageUrl &&
+            state.isPrivate === props.isPrivate
+        )
     }
 
     handleNameChange = e => {
@@ -71,8 +79,11 @@ class SettingsPopup extends Component {
                 throw new Error('Upload Failed')
             }
 
+            const imagePath = `/uploads/customizer-thumbnails/${filename}`
+
             this.setState({
-                image: `${CDN_URL}/uploads/customizer/${filename}`
+                imageUrl: `${CDN_URL}${imagePath}`,
+                imagePath,
             })
 
         } catch (err) {
@@ -90,51 +101,42 @@ class SettingsPopup extends Component {
 
     handleSaveChanges = async e => {
         e.preventDefault()
-        
-        const { props, state } = this
 
+        const { props, state } = this
 
         const fieldsToPatch = {}
 
-        if(props.name !== state.name) {
-            fieldsToPatch.name = state.name
-        }
-
-        if(props.description !== state.description) {
-            fieldsToPatch.description = state.description
-        }
-
-        if(props.image !== state.image) {
-            fieldsToPatch.image = state.image
-        }
-
         if(props.isPrivate !== state.isPrivate) {
             const visibility = state.isPrivate ? 'private' : 'public'
-            if(!window.confirm(`Are you sure you want to make it ${visibility}?`)) {
+            const confirmed = window.confirm(`Are you sure you want to make it ${visibility}?`)
+            if(!confirmed) {
                 this.setState({
                     isPrivate: props.isPrivate
                 })
                 return
             }
 
-            fieldsToPatch.is_private = state.isPrivate
+            fieldsToPatch['is_private'] = state.isPrivate
         }
 
-        try {
-            await this.props.onSave(fieldsToPatch)
-            console.log('changes saved successfully')
-        } catch (err) {
-            console.error(err)
+        if(props.name !== state.name) {
+            fieldsToPatch['name'] = state.name
         }
+
+        if(props.description !== state.description) {
+            fieldsToPatch['description'] = state.description
+        }
+
+        if(props.imageUrl !== state.imageUrl) {
+            fieldsToPatch['image_path'] = state.imagePath
+        }
+
+        this.props.onSave(fieldsToPatch)
     }
 
     render() {
         const { className, onCancel } = this.props
-        const { name, description, image, visibility } = this.state
-
-        const isInSync = Object.keys(this.state).every(key => {
-            return this.state[key] === this.props[key]
-        })
+        const { name, description, imageUrl, isPrivate } = this.state
 
         return (
             <div className = {cn(className, styles.background)}>
@@ -158,7 +160,7 @@ class SettingsPopup extends Component {
                             className={cn(styles.input, styles.text, styles.description)}
                         />
 
-                        <label className={styles.label}>Image</label>
+                        <label className={styles.label}>Thumbnail</label>
                         <ImportButtonV2
                             className={cn(styles.input, styles.chooseImage)}
                             accept=".png, .jpg"
@@ -166,8 +168,8 @@ class SettingsPopup extends Component {
                         >
                             Choose Image
                         </ImportButtonV2>
-                        {image && (
-                            <img className={cn(styles.input, styles.imagePreview)} src={image} />
+                        {imageUrl && (
+                            <img className={cn(styles.input, styles.imagePreview)} src={imageUrl} />
                         )}
                         
 
@@ -175,7 +177,7 @@ class SettingsPopup extends Component {
                         <label htmlFor="label_visibility" className={styles.label}>Visibility</label>
                         <select
                             id="label_visibility"
-                            value={visibility}
+                            value={isPrivate ? VISIBILITY_PRIVATE : VISIBILITY_PUBLIC}
                             onChange={this.handleVisibilityChange}
                             className={cn(styles.input, styles.text, styles.visibility)}
                         >
@@ -186,10 +188,11 @@ class SettingsPopup extends Component {
 
                     <div className={styles.buttons}>
                         <input
-                            disabled = {isInSync}
+                            disabled = {this.isInSync()}
                             className={cn(commonStyles.button, styles.button)}
                             type="submit"
-                            value="Save Changes" />
+                            value="Save Changes"
+                        />
                         <button
                             className={cn(commonStyles.button, styles.button)}
                             onClick={onCancel}

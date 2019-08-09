@@ -36,6 +36,12 @@ class App extends Component {
         const objects = getObjects( props.objects )
 
         this.state = {
+            name: props.worldData['name'] || '',
+            description: props.worldData['description'] || '',
+            isPrivate: props.worldData['is_private'] || true,
+            imageUrl: props.worldData['image_url'] || null,
+            // tags: props.worldData['tags'] || [],
+            
             partTypes,
             objects,
 
@@ -512,9 +518,21 @@ class App extends Component {
         this.hideLoader()
     }
 
-    handleSaveChanges = async fieldsChanged => {
+    handleSaveChanges = async fields => {
         const { worldData } = this.props
-        await this.api.patchCustomizer(worldData.id, fieldsChanged)
+
+        try {
+            const updatedCustomizer = await this.api.patchCustomizer(worldData.id, fields)
+            this.setState({
+                name: updatedCustomizer['name'],
+                description: updatedCustomizer['description'],
+                imagePath: updatedCustomizer['image_path'],
+                isPrivate: updatedCustomizer['is_private'],
+            })
+
+        } catch (err) {
+            console.error(err)
+        }
     }
 
     render() {
@@ -523,6 +541,10 @@ class App extends Component {
             poseData,
         } = this.props
         const {
+            name: customizerName,
+            description,
+            imageUrl,
+            isPrivate,
             isLoading, showSettings,
             selectedPartTypeId,
             loadedObjects,
@@ -550,7 +572,7 @@ class App extends Component {
                 poseData = { poseData }
             />
 
-            <Header title = { worldData.name } />
+            <Header title = { customizerName } />
 
             <div className = {styles.editorPanelContainer}>
                 <div className = {styles.editorPanel}>
@@ -604,11 +626,10 @@ class App extends Component {
                 <SettingsPopup
                     className = {styles.settingsPopup}
                     
-                    name = {worldData.name}
-                    description = {worldData.description}
-                    isPrivate = {worldData.isPrivate}
-                    image = {worldData.image}
-                    // tags = {[]}
+                    name = {customizerName}
+                    description = {description}
+                    isPrivate = {isPrivate}
+                    imageUrl = {imageUrl}
 
                     onSave = {this.handleSaveChanges}
                     onCancel = {() => this.setState({showSettings: false})}
