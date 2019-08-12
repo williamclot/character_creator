@@ -38,7 +38,7 @@ class App extends Component {
         this.state = {
             name: props.worldData['name'] || '',
             description: props.worldData['description'] || '',
-            isPrivate: props.worldData['is_private'] || true,
+            isPrivate: props.worldData['is_private'],
             imageUrl: props.worldData['image_url'] || null,
             // tags: props.worldData['tags'] || [],
             
