@@ -526,7 +526,7 @@ class App extends Component {
             this.setState({
                 name: updatedCustomizer['name'],
                 description: updatedCustomizer['description'],
-                imagePath: updatedCustomizer['image_path'],
+                imageUrl: updatedCustomizer['image_url'],
                 isPrivate: updatedCustomizer['is_private'],
             })
 
