@@ -468,6 +468,12 @@ class App extends Component {
         }
     }
 
+    handleShowSettings = () => {
+        this.setState({
+            showSettings: true
+        })
+    }
+
     handleWizardCanceled = () => {
         this.setState({
             uploadedObjectData: null
@@ -601,6 +607,7 @@ class App extends Component {
                 partTypes = { partTypes }
                 onUpload = { this.handleUpload }
                 onDownload = { this.handleDownload }
+                onShowSettings = { this.handleShowSettings }
                 isOwner = { worldData.isOwner }
             />
 
