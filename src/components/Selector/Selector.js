@@ -90,7 +90,7 @@ class Selector extends Component {
                     className = { className }
                     onClick = { clickHandler }
 
-                    disabled = { isDeleted }
+                    disabled = { !isOwner || isDeleted }
                     menuItems = { menuItems }
                     key = { object.id || object.name }
                 >
