@@ -11,7 +11,7 @@ import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants';
 import sharedStyles from '../../shared-styles/button.module.css'
 import styles from './ButtonsContainer.module.css'
 
-const ButtonsContainer = ({ partTypes, onUpload, onDownload, onShowSettings, isOwner }) => {
+const ButtonsContainer = ({ partTypes, onUpload, onDownload, onShowSettings, edit_mode }) => {
 
     const addNewPartButton = <ButtonWithArrow> Add new Part </ButtonWithArrow>
     const existingPartTypeButton = <ButtonWithArrow> Existing Part Type </ButtonWithArrow>
@@ -63,7 +63,7 @@ const ButtonsContainer = ({ partTypes, onUpload, onDownload, onShowSettings, isO
                 Download
             </Button>
 
-            {isOwner && (
+            {edit_mode && (
                 <>
                     <Button className = { styles.withMargin } onClick = { onShowSettings }>
                         Settings

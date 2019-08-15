@@ -50,7 +50,7 @@ class Selector extends Component {
     }
 
     render() {
-        const { data, isOwner } = this.props
+        const { data, edit_mode } = this.props
 
         if ( !data ) {
             return (
@@ -90,7 +90,7 @@ class Selector extends Component {
                     className = { className }
                     onClick = { clickHandler }
 
-                    disabled = { !isOwner || isDeleted }
+                    disabled = { !edit_mode || isDeleted }
                     menuItems = { menuItems }
                     key = { object.id || object.name }
                 >
@@ -111,7 +111,7 @@ class Selector extends Component {
                 { elementDiv }
             </div>
 
-            {isOwner && (
+            {edit_mode && (
                 <ImportButton
                     className = "import-button"
                     key = "__add__button__"

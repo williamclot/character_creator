@@ -543,7 +543,7 @@ class App extends Component {
 
     render() {
         const {
-            isOwner,
+            edit_mode,
             poseData,
         } = this.props
         const {
@@ -596,7 +596,7 @@ class App extends Component {
                             onObjectSelected = { this.handleObjectSelected }
                             onDelete = { this.handleDeleteObject }
                             onUpload = { this.handleUpload }
-                            isOwner = { isOwner }
+                            edit_mode = { edit_mode }
                         />
                     </div>
                 </div>
@@ -608,7 +608,7 @@ class App extends Component {
                 onUpload = { this.handleUpload }
                 onDownload = { this.handleDownload }
                 onShowSettings = { this.handleShowSettings }
-                isOwner = { isOwner }
+                edit_mode = { edit_mode }
             />
 
             {showUploadWizard && (
