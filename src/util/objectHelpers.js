@@ -35,7 +35,8 @@ export const fetchObjects = async objectsData => {
  * @returns { Promise<Object3D> }
  */
 export const get3DObject = async ( objectData, poseData ) => {
-    const file = objectData.files.viewer || objectData.files.default
+    // const file = objectData.files.viewer || objectData.files.default
+    const file = objectData.files.default
 
     switch ( file.extension ) {
 
