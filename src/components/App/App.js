@@ -19,7 +19,7 @@ import {
 } from '../../constants'
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
-    getPartTypes, getObjects, getNameAndExtension, objectMap, objectHasBeenModified,
+    getPartTypes, getObjects, getNameAndExtension, objectMap,
 } from '../../util/helpers'
 import MmfApi from '../../util/api';
 
@@ -364,13 +364,6 @@ class App extends Component {
         return this.getPositionInsideParent( partType )
     }
 
-    hasParentBeenModified = partType => {
-        const parentObjectId = this.getSelectedObjectId( partType.parent.id )
-        const object = this.getObject( parentObjectId )
-
-        return objectHasBeenModified( object )
-    }
-
     showLoader = () => {
         this.setState({
             isLoading: true
@@ -618,7 +611,6 @@ class App extends Component {
                     getObjectByAttachPoint = { this.get3dObjectByAttachPoint }
                     getGlobalPosition = { this.getGlobalPosition }
                     getParentAttachPointPosition = { this.getParentAttachPointPosition }
-                    hasParentBeenModified = { this.hasParentBeenModified }
 
                     data = { uploadedObjectData }
                     
