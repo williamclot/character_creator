@@ -11,8 +11,8 @@ import styles from './index.module.css'
  */
 const defaultProps = {
     step: 1,
-    min: -100,
-    max:  100,
+    min: -Infinity,
+    max:  Infinity,
     precision: 3,
 
     formatter: {
