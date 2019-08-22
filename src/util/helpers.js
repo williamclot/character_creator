@@ -101,6 +101,11 @@ export const radiansToDegreesFormatter = {
     }
 }
 
+export const jQueryRevealLoginPopup = () => {
+    try {
+        $('#loginscreen').foundation('reveal', 'open');
+    } catch {}
+}
 
 /**
  * @template T, S

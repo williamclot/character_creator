@@ -19,7 +19,7 @@ import {
 } from '../../constants'
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
-    getPartTypes, getObjects, getNameAndExtension, objectMap,
+    getPartTypes, getObjects, getNameAndExtension, objectMap, jQueryRevealLoginPopup,
 } from '../../util/helpers'
 import MmfApi from '../../util/api';
 
@@ -449,15 +449,24 @@ class App extends Component {
 
         const objectIds = Object.keys( selectedParts ).map( key => selectedParts[key] )
 
-        const response = await this.api.triggerDownload( worldData.id, objectIds )
+        try {
+            const response = await this.api.triggerDownload( worldData.id, objectIds )
+    
+            if ( response.status === 1 ) { // ready for download
+                window.open( response.download_link )
+            } else {
+                // TODO add popup component
+    
+                const message = `You will receive an email when the mesh has finished processing.`
+                window.alert( message )
+            }
+            
+        } catch (err) {
+            console.error(err)
 
-        if ( response.status === 1 ) { // ready for download
-            window.open( response.download_link )
-        } else {
-            // TODO add popup component
-
-            const message = `You will receive an email when the mesh has finished processing.`
-            window.alert( message )
+            if(err.response.data.error === "access_denied") {
+                jQueryRevealLoginPopup()
+            }
         }
     }
 
