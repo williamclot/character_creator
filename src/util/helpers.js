@@ -103,6 +103,7 @@ export const radiansToDegreesFormatter = {
 
 export const jQueryRevealLoginPopup = () => {
     try {
+        // eslint-disable-next-line
         $('#loginscreen').foundation('reveal', 'open');
     } catch {}
 }
