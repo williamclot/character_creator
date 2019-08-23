@@ -547,6 +547,7 @@ class App extends Component {
         const {
             edit_mode,
             poseData,
+            worldData,
         } = this.props
         const {
             name: customizerName,
@@ -580,7 +581,11 @@ class App extends Component {
                 poseData = { poseData }
             />
 
-            <Header title = { customizerName } />
+            <Header
+                title = { customizerName }
+                userName = {worldData['user_name']}
+                userUrl = {worldData['user_url']}
+            />
 
             <div className = {styles.editorPanelContainer}>
                 <div className = {styles.editorPanel}>

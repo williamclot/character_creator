@@ -1,15 +1,20 @@
 import React from 'react'
 
-import './Header.css'
 import MMFTitle from './MMFTitle';
+
+import styles from './Header.module.scss'
 
 const Header = props => {
     return (
-        <div className = "header">
-            {/* <MMFTitle /> */}
-            <div className = "title">
+        <div className = {styles.header}>
+            <h1 className = {styles.title}>
                 { props.title }
-            </div>
+            </h1>
+
+            <h2 className={styles.userSection}>
+                <span className={styles.by}>By </span>
+                <a className={styles.username} href={props.userUrl}>{props.userName}</a>
+            </h2>
         </div>
     )
 }

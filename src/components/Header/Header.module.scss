@@ -1,0 +1,30 @@
+.header {
+    position: absolute;
+    padding: 30px;
+
+    .title {
+        font-size: 40px;
+        font-weight: 600;
+        
+        .beta {
+            margin-left: 5px;
+            text-transform: lowercase;
+            font-size: 12px;
+        }
+        
+        .my {
+            color: rgb(49, 184, 161);
+        }
+    }
+    
+    .userSection {
+        .by {
+
+        }
+
+        .username {
+
+        }
+    }
+}
+

@@ -2,6 +2,8 @@
     "id": 37,
     "name": "My Human World",
     "slug": "my-human-world",
+    "user_name": "aditm1996",
+    "user_url": "https://www.google.com",
     "groups": [
         {
             "name": "torso",
