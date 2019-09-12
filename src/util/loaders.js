@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import axios from 'axios'
 
-import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader'
+import PLYLoader from '../vendor/three/loaders/PLYLoader';
 
 import STLLoaderWrapper from 'three-stl-loader';
 // import GLTFLoader from 'three-gltf-loader';
