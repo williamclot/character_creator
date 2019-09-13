@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import App from './components/App';
+import App from './App';
 import * as initialProps from './lib'
 import * as env from './env'
 import * as serviceWorker from './serviceWorker';
