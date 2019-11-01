@@ -1,55 +1,35 @@
+.anti-scrollbar-box{
+    /* height: 772px; */
+    /* height: 100%; */
+    overflow-y: scroll;
+
+}
+
 .selector {
     position: relative;
     
-    /* background-color: rgba(0, 0, 0, 0.4);
-    box-shadow: 0px 0px 20px #000000;
-    
-    border-radius: 20px;
-    padding: 10px; */
-
-    height: 100%;
+    /* height: 100%; */
 
     display: grid;
-    /* grid-row-gap: 10px; */
-    grid-template-columns: 1fr 1fr;
-    grid-auto-columns: 1fr;
-    grid-template-rows: repeat(auto-fill, minmax(103px, 103px));
+    grid-template-columns: 150px 150px;
+    grid-template-rows: repeat(auto-fill, 150px);
     justify-items: center;
-    overflow-y: scroll;
+    overflow-y: visible;
     overflow-x: hidden;
 
-    margin: 5px;
+    margin: 10px 5px 0px 10px;
+    padding-right: 5px;
 
     row-gap: 10px;
     column-gap: 10px;
-
-    /* min-width: 150px;
-    max-width: 300px; */
 }
-
-/* Media queries for the number of columns in the selector */
-/* @media (min-width: 1130px) {
-    .selector {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-@media (min-width: 1700px) {
-    .selector {
-        grid-template-columns: 1fr 1fr 1fr;
-    }
-} */
 
 .selector .selector-item {
-    /* min-height: 100px;
-    max-height: 100px;
-    min-width: 100px;
-    max-width: 100px; */
-    /* display: inline; */
 
-    min-height: 103px;
-    height: 100%;
-    width: 100%;
-    border-radius: 10px;
+    /* min-height: 150px; */
+    height: 150px;
+    width: 150px;
+    border-radius: 5px;
     background-color: #00000059;
     align-items: center;
     cursor: pointer;
@@ -82,15 +62,20 @@
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 15px;
+    height: 30px;
     color: white;
     background-color: rgba(15, 15, 15, 1);
     text-align: center;
     vertical-align: middle;
-    line-height: 15px;
+    line-height: 30px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 0px 5px;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    font-size: 10px;
+    font-size: 14px;
+    font-family: "Lato", "Open Sans", sans-serif;
 }
 .selector .selector-item.deleted .item-name {
     background-color: #ff0000;
@@ -104,7 +89,8 @@
 }
 
 .import-button {
-    background-color: #2b2b2b;
+    background-color: #000000;
+    filter: opacity(.7);
     font-weight: bold;
     text-align: center;
     color: white;
@@ -112,9 +98,12 @@
     margin: 10px;
     padding: 10px;
 
-    border-radius: 10px;
-    box-shadow: 2px 2px 6px black;
+    border-radius: 5px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .2);
     cursor: pointer;
+
+    font-size: 18px;
+    font-family: "Lato", "Open Sans", sans-serif;
 }
 
 .import-button:hover {
@@ -124,15 +113,66 @@
 
 .selector::-webkit-scrollbar-track {
     background: none;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    /* margin-left: 2px; */
+    /* margin-bottom: 10px; */
 }
 .selector::-webkit-scrollbar {
     width: 5px;
+    height: 5px;
     background: none;
 }
 .selector::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-border-radius: 10px;
     background: #2e2e2e;
+}
+
+@media (max-width: 1300px){
+    
+    .selector {
+        grid-template-columns: 100px 100px;
+        grid-template-rows: repeat(auto-fill, 100px);
+    }
+
+    .selector .selector-item {
+        height: 100px;
+        width: 100px;
+    }
+
+    .selector .selector-item .item-name {
+        height: 20px;
+        line-height: 20px;
+        font-size: 12px;
+    }
+
+}
+
+@media (max-width: 950px){
+
+    .selector {
+
+        /* height: 100px; */
+    grid-template-columns: repeat(auto-fill, 100px);
+    grid-template-rows: 100px;
+    grid-auto-flow: column;
+    overflow-y: hidden;
+    overflow-x: scroll;
+
+    margin: 10px 0px 0px 10px;
+    padding-right: 0px;
+    padding-bottom: 5px;
+
+    column-gap: 10px;
+    row-gap: unset;
+
+    }
+
+    .selector .selector-item {
+        /* margin-right: 10px; */
+    }
+
+    .import-button {
+        /* margin-top: 0px; */
+    }
+
 }
