@@ -18,6 +18,7 @@
     transition: background-color .2;
     cursor: pointer;
     filter: opacity(0.7);
+    
 }
 
 .partTypes .item:hover {
@@ -38,9 +39,21 @@
 
 @media (max-width: 950px){
 
+    .partTypes {
+        flex-direction: row;
+        /* overflow-x: scroll; */
+        justify-content: flex-start;
+        width: max-content;
+    }
+
     .partTypes .item {
         margin-bottom: 0px;
         margin-right: 10px;
+        width: max-content;
+    }
+
+    .partTypes .item .name {
+        font-size: 18px;
     }
 
 }

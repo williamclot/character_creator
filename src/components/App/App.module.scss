@@ -64,9 +64,12 @@
             
             .partTypesContainer {
                 margin-bottom: 10px;
-                margin-right: 0px;
-                margin-left: 0px;
+                // margin-right: 0px;
+                // margin-left: 10px;
+                padding: 0px 10px;
                 height: unset;
+                width: 100%;
+                overflow-x: scroll;
             }
     
             .selectorContainer {
