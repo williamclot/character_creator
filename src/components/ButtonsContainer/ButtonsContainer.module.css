@@ -65,6 +65,7 @@
 
 .word{
 
+
 }
 
 .icon{
@@ -77,7 +78,7 @@
         right: 10px;
         /* right: unset;
         left: 10px; */
-        bottom: 240px;
+        bottom: 255px;
     }
 
     .iconMinimisableButton{

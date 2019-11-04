@@ -47,6 +47,22 @@
     }
 }
 
+.partTypesContainer::-webkit-scrollbar-track {
+    background: none;
+    // margin-left: 10px;
+    /* margin-bottom: 10px; */
+}
+.partTypesContainer::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background: none;
+}
+.partTypesContainer::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    background: #2e2e2e;
+}
+
 @media (max-width: 950px){
 
     .editorPanelContainer {
@@ -63,13 +79,13 @@
             align-items: flex-start;
             
             .partTypesContainer {
-                margin-bottom: 10px;
+                margin-bottom: 5px;
                 // margin-right: 0px;
                 // margin-left: 10px;
                 padding: 0px 10px;
                 height: unset;
                 width: 100%;
-                overflow-x: scroll;
+                overflow-x: auto;
             }
     
             .selectorContainer {
