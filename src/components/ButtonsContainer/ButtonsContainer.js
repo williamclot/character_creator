@@ -13,60 +13,64 @@ import styles from './ButtonsContainer.module.css'
 
 const ButtonsContainer = ({ partTypes, onUpload, onDownload, onShowSettings, edit_mode }) => {
 
-    const addNewPartButton = <ButtonWithArrow> Add new Part </ButtonWithArrow>
-    const existingPartTypeButton = <ButtonWithArrow> Existing Part Type </ButtonWithArrow>
-    const separator = <div className = { styles.separator } />
+    const addNewPartButton = (
+        <Button className = {styles.iconMinimisableButton}> 
+            <span className = { styles.word }>Add new Part</span>
+            <span className = { styles.icon }>
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </span>
+        </Button>
+    );
+    const existingPartTypeButton = <Button> Existing Part Type </Button>
 
     const menu = (
         <Menu header = { addNewPartButton } >
-            <ListWithSeparator separator = { separator } >
 
-                <Menu header = { existingPartTypeButton } >
-                    <ListWithSeparator separator = { separator } >
+            <Menu header = { existingPartTypeButton } >
+                {partTypes.map( partType => (
+                    <ImportButton
+                        className = {cn(
+                            sharedStyles.button,
+                            styles.button
+                        )}
+                        key = { partType.id }
 
-                        {partTypes.map( partType => (
-                            <ImportButton
-                                className = {cn(
-                                    sharedStyles.button,
-                                    styles.button
-                                )}
-                                key = { partType.id }
-
-                                onFileLoaded = {( filename, objectURL ) =>
-                                    onUpload(
-                                        partType.id,
-                                        filename,
-                                        objectURL
-                                    )
-                                }
-                                accept = { ACCEPTED_OBJECT_FILE_EXTENSIONS.map( extension => `.${extension}` ).join(',') }
-                            >
-                                {partType.name}
-                            </ImportButton>
-                        ))}
-
-                    </ListWithSeparator>
-                </Menu>
-
-                <Button className = { styles.disabled }>
-                    New Part Type
-                </Button>
-
-            </ListWithSeparator>
+                        onFileLoaded = {( filename, objectURL ) =>
+                            onUpload(
+                                partType.id,
+                                filename,
+                                objectURL
+                            )
+                        }
+                        accept = { ACCEPTED_OBJECT_FILE_EXTENSIONS.map( extension => `.${extension}` ).join(',') }
+                    >
+                        {partType.name}
+                    </ImportButton>
+                ))}
+            </Menu>
+            {/*<Button className = { styles.disabled }>
+                New Part Type
+            </Button> */}
         </Menu>
     )
 
     return (
         <div className = {styles.container}>
 
-            <Button className = { styles.withMargin } onClick = { onDownload }>
-                Download
+            <Button className = {[styles.withMargin, styles.iconMinimisableButton]} onClick = { onDownload }>
+                <span className = { styles.word }>Download</span>
+                <span className = { styles.icon }>
+                    <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                </span>
             </Button>
 
             {edit_mode && (
                 <>
-                    <Button className = { styles.withMargin } onClick = { onShowSettings }>
-                        Settings
+                    <Button className = {[styles.withMargin, styles.iconMinimisableButton]} onClick = { onShowSettings }>
+                        <span className = { styles.word }>Settings</span>
+                        <span className = { styles.icon }>
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                        </span>
                     </Button>
 
                     {menu}

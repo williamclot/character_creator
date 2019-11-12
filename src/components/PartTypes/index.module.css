@@ -10,13 +10,15 @@
 .partTypes .item {
     padding: 5px 10px;
     margin-bottom: 10px;
-    margin-top:10px;
-    background-color: rgba(0, 0, 0, 0.8);
+    /* margin-top:10px; */
+    background-color: rgba(0, 0, 0);
     border-radius: 5px;
     border: none;
-    box-shadow: 0px 0px 10px #000000;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .2);
     transition: background-color .2;
     cursor: pointer;
+    filter: opacity(0.7);
+    
 }
 
 .partTypes .item:hover {
@@ -25,11 +27,33 @@
 
 .partTypes .item .name {
     text-align: center;
-    /* line-height: 60px; */
     color: #ffffff;
+    font-size: 23px;
+    font-family: "Lato", "Open Sans", sans-serif;
 }
 
 
 .partTypes .item.selected {
-    background-color: rgba(34, 94, 71, 0.71);
+    background-color: #1DA1F2;
+}
+
+@media (max-width: 950px){
+
+    .partTypes {
+        flex-direction: row;
+        /* overflow-x: scroll; */
+        justify-content: flex-start;
+        width: max-content;
+    }
+
+    .partTypes .item {
+        margin-bottom: 5px;
+        margin-right: 10px;
+        width: max-content;
+    }
+
+    .partTypes .item .name {
+        font-size: 18px;
+    }
+
 }

@@ -1,10 +1,16 @@
 .header {
     position: absolute;
-    padding: 30px;
+    padding: 20px;
+    font-family: "Lato", "Open Sans", sans-serif;
 
     .title {
-        font-size: 40px;
+
+        font-size: 50px;
         font-weight: 600;
+        color: #1DA1F2;
+        margin: 0px;
+        font-family: "Lato", "Open Sans", sans-serif;
+        
         
         .beta {
             margin-left: 5px;
@@ -18,8 +24,10 @@
     }
     
     .userSection {
-        font-size: 1.3125rem;
-
+        // font-size: 1.3125rem;
+        font-size: 18px;
+        margin: 0px;
+        font-family: "Lato", "Open Sans", sans-serif;
         .by {
 
         }

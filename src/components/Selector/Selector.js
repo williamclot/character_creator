@@ -107,9 +107,12 @@ class Selector extends Component {
 
 
         return <>
-            <div className = "selector">
-                { elementDiv }
-            </div>
+            {/* <div className = "anti-scrollbar-box"> */}
+                <div className = "selector">
+                
+                    { elementDiv }
+                </div>
+            {/* </div> */}
 
             {edit_mode && (
                 <ImportButton

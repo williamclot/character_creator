@@ -1,7 +1,7 @@
 .container {
     position: absolute;
-    left: 30px;
-    bottom: 30px;
+    left: 20px;
+    bottom: 20px;
     /* display: flex; */
 }
 
@@ -20,15 +20,21 @@
     left: 100%;
     bottom: 0;
 
-    margin: 0 15px;
+    margin: 0 10px;
 }
+
 .menuBody.visible {
     display: block;
+    display: flex;
+    flex-direction: column;
+}
+
+.menuBody .button{
+    margin-top: 1px;
 }
 
 .button {
-    width: 200px;
-    
+    width: 200px; 
     font-weight: bold;
 }
 .button .triangle {
@@ -55,4 +61,60 @@
 
 .withMargin {
     margin: 5px 0;
+}
+
+.word{
+
+
+}
+
+.icon{
+    display: none;
+}
+
+@media (max-width: 950px){
+    .container {
+        left: unset;
+        right: 10px;
+        /* right: unset;
+        left: 10px; */
+        bottom: 255px;
+    }
+
+    .iconMinimisableButton{
+        width: unset;
+        padding: 10px 15px;
+    }
+
+    .word{
+        display: none;
+    }
+    
+    .icon{
+        display: inline;
+    }
+
+    .menuBody {
+        
+        position: absolute;
+        left: unset;
+        right: 100%;
+        bottom: 0;
+        align-items: end;
+        margin: 0 5px;
+    }
+
+    .button {
+        width: max-content;
+        max-width: 150px;
+        font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 14px;
+    }
+
+    
+
+    
 }

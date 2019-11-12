@@ -7,9 +7,11 @@
 
 .editorPanelContainer {
     /* Used only to center child vertically */
-    right: 50px;
-    width: 350px;
-    height: 100%;
+    right: 20px;
+    top: 20px;
+    bottom: 20px;
+    /* width: 350px; */
+    /* height: 100%; */
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -17,34 +19,80 @@
 
 
     .editorPanel {
-        height: 85%;
+        height: 100%;
         width: 100%;
-    
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: center;   
         
         .partTypesContainer {
             position: relative;
-        
-            margin-right: 20px;
+            // margin-top: 10px;
+            margin-right: 10px;
             height: 100%;
         }
 
         .selectorContainer {
             position: relative;
-        
             display: flex;
             flex-direction: column;
-            
-            background-color: rgba(0, 0, 0, 0.4);
-            box-shadow: 0px 0px 20px #000000;
-            
-            border-radius: 20px;
-            /* padding-bottom: 35px; */
-        
+            background-color: rgba(0, 0, 0, .3);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, .2);
+            border-radius: 10px;
+            // filter:opacity(.7);
             height: 100%;
-            width: 100%;
+            justify-content: space-between;
+            // min-width: 250px; 
         }
     }
+}
+
+.partTypesContainer::-webkit-scrollbar-track {
+    background: none;
+    // margin-left: 10px;
+    /* margin-bottom: 10px; */
+}
+.partTypesContainer::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background: none;
+}
+.partTypesContainer::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    background: #2e2e2e;
+}
+
+@media (max-width: 950px){
+
+    .editorPanelContainer {
+        /* Used only to center child vertically */
+        right: 0px;
+        left: 0px;
+        top: unset;
+        bottom: 0px;
+        height: unset;
+    
+    
+        .editorPanel {
+            flex-direction: column;
+            align-items: flex-start;
+            
+            .partTypesContainer {
+                margin-bottom: 5px;
+                // margin-right: 0px;
+                // margin-left: 10px;
+                padding: 0px 10px;
+                height: unset;
+                width: 100%;
+                overflow-x: auto;
+            }
+    
+            .selectorContainer {
+                height: unset;
+                width: 100%
+            }
+        }
+    }
+
 }
