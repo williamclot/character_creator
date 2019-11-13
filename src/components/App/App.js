@@ -19,7 +19,7 @@ import {
 } from '../../constants'
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
-    getPartTypes, getObjects, getNameAndExtension, objectMap, jQueryRevealLoginPopup,
+    getPartTypes, getObjects, getNameAndExtension, objectMap,
 } from '../../util/helpers'
 import MmfApi from '../../util/api';
 
@@ -465,7 +465,7 @@ class App extends Component {
             console.error(err)
 
             if(err.response.data.error === "access_denied") {
-                jQueryRevealLoginPopup()
+                window.customEventDispatcher.dispatchEvent('SHOW_LOGIN');
             }
         }
     }
