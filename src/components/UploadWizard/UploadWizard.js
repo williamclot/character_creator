@@ -363,6 +363,7 @@ class UploadWizard extends Component {
         } = this.state
 
         const currentAttachPoint = attachPointsToPlace.length !== 0 ? attachPointsToPlace[ 0 ] : null
+        const currentChildPartType = this.props.getChildPartTypeByAttachPoint(currentAttachPoint);
 
         switch ( currentWizardStep ) {
             case steps.UPLOAD_CONFIRM: return (
@@ -443,6 +444,7 @@ class UploadWizard extends Component {
                     scale = { scale }
                     
                     currentAttachPoint = { currentAttachPoint }
+                    currentChildPartType = { currentChildPartType }
                     attachPointsPositions = { attachPointsPositions }
                     onAttachPointPositionChange = { this.setAttachPointPosition }
 

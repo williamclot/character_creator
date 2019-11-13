@@ -91,6 +91,7 @@ export default class PlaceOtherAttachpoints extends Component {
         const {
             currentCategory,
             currentAttachPoint,
+            currentChildPartType,
             nextStep, previousStep
         } = this.props
         
@@ -113,7 +114,7 @@ export default class PlaceOtherAttachpoints extends Component {
 
                 <div className = { styles.title } >
                     <h2>Place AttachPoint</h2>
-                    <p>Click roughly where this part attaches to {currentAttachPoint}</p>
+                    <p>Click roughly where this part attaches to {currentChildPartType ? currentChildPartType.name : ''}</p>
                 </div>
 
                 <div className = { styles.info } >
