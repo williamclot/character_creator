@@ -17,6 +17,7 @@
     flex-direction: column;
     justify-content: center;
 
+    pointer-events: none;
 
     .editorPanel {
         height: 100%;
@@ -43,6 +44,7 @@
             height: 100%;
             justify-content: space-between;
             // min-width: 250px; 
+            pointer-events: initial;
         }
     }
 }
