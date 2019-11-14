@@ -60,7 +60,7 @@ const ButtonsContainer = ({ partTypes, onUpload, onDownload, onShowSettings, edi
 
             <Button
                 title = "Download"
-                className = {[styles.withMargin, styles.iconMinimisableButton]}
+                className = {cn(styles.withMargin, styles.iconMinimisableButton)}
                 onClick = { onDownload }
             >
                 <span className = { styles.word }>Download</span>
@@ -73,7 +73,7 @@ const ButtonsContainer = ({ partTypes, onUpload, onDownload, onShowSettings, edi
                 <>
                     <Button
                         title = "Settings"
-                        className = {[styles.withMargin, styles.iconMinimisableButton]}
+                        className = {cn(styles.withMargin, styles.iconMinimisableButton)}
                         onClick = { onShowSettings }
                     >
                         <span className = { styles.word }>Settings</span>
