@@ -17,7 +17,7 @@ const ButtonsContainer = ({ partTypes, onUpload, onDownload, onShowSettings, edi
         <Button className = {styles.iconMinimisableButton}> 
             <span className = { styles.word }>Add new Part</span>
             <span className = { styles.icon }>
-                <i class="fa fa-plus" aria-hidden="true"></i>
+                <i className="fa fa-plus" aria-hidden="true"></i>
             </span>
         </Button>
     );
@@ -60,7 +60,7 @@ const ButtonsContainer = ({ partTypes, onUpload, onDownload, onShowSettings, edi
             <Button className = {[styles.withMargin, styles.iconMinimisableButton]} onClick = { onDownload }>
                 <span className = { styles.word }>Download</span>
                 <span className = { styles.icon }>
-                    <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                    <i className="fa fa-arrow-down" aria-hidden="true"></i>
                 </span>
             </Button>
 
@@ -69,7 +69,7 @@ const ButtonsContainer = ({ partTypes, onUpload, onDownload, onShowSettings, edi
                     <Button className = {[styles.withMargin, styles.iconMinimisableButton]} onClick = { onShowSettings }>
                         <span className = { styles.word }>Settings</span>
                         <span className = { styles.icon }>
-                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <i className="fa fa-cog" aria-hidden="true"></i>
                         </span>
                     </Button>
 
