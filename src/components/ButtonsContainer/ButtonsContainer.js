@@ -14,14 +14,14 @@ import styles from './ButtonsContainer.module.css'
 const ButtonsContainer = ({ partTypes, onUpload, onDownload, onShowSettings, edit_mode }) => {
 
     const addNewPartButton = (
-        <Button className = {styles.iconMinimisableButton}> 
+        <Button className = {styles.iconMinimisableButton} title="Add new Part"> 
             <span className = { styles.word }>Add new Part</span>
             <span className = { styles.icon }>
                 <i className="fa fa-plus" aria-hidden="true"></i>
             </span>
         </Button>
     );
-    const existingPartTypeButton = <Button> Existing Part Type </Button>
+    const existingPartTypeButton = <Button title="Existing Part Type"> Existing Part Type </Button>
 
     const menu = (
         <Menu header = { addNewPartButton } >
@@ -29,11 +29,12 @@ const ButtonsContainer = ({ partTypes, onUpload, onDownload, onShowSettings, edi
             <Menu header = { existingPartTypeButton } >
                 {partTypes.map( partType => (
                     <ImportButton
+                        key = { partType.id }
                         className = {cn(
                             sharedStyles.button,
                             styles.button
                         )}
-                        key = { partType.id }
+                        title={`Add new ${partType.name}`}
 
                         onFileLoaded = {( filename, objectURL ) =>
                             onUpload(
@@ -57,7 +58,11 @@ const ButtonsContainer = ({ partTypes, onUpload, onDownload, onShowSettings, edi
     return (
         <div className = {styles.container}>
 
-            <Button className = {[styles.withMargin, styles.iconMinimisableButton]} onClick = { onDownload }>
+            <Button
+                title = "Download"
+                className = {[styles.withMargin, styles.iconMinimisableButton]}
+                onClick = { onDownload }
+            >
                 <span className = { styles.word }>Download</span>
                 <span className = { styles.icon }>
                     <i className="fa fa-arrow-down" aria-hidden="true"></i>
@@ -66,7 +71,11 @@ const ButtonsContainer = ({ partTypes, onUpload, onDownload, onShowSettings, edi
 
             {edit_mode && (
                 <>
-                    <Button className = {[styles.withMargin, styles.iconMinimisableButton]} onClick = { onShowSettings }>
+                    <Button
+                        title = "Settings"
+                        className = {[styles.withMargin, styles.iconMinimisableButton]}
+                        onClick = { onShowSettings }
+                    >
                         <span className = { styles.word }>Settings</span>
                         <span className = { styles.icon }>
                             <i className="fa fa-cog" aria-hidden="true"></i>

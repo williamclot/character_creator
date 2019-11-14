@@ -20,7 +20,7 @@ const PartType = props => {
             className = { className }
             onClick = { onClick }
         >
-            <div className = { styles.name } > { partType.name } </div>
+            <div title = {partType.name} className = { styles.name } > { partType.name } </div>
         </div>
     )
 

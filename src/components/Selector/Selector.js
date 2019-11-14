@@ -87,6 +87,7 @@ class Selector extends Component {
 
             return (
                 <ContextMenu
+                    title = {object.name}
                     className = { className }
                     onClick = { clickHandler }
 
