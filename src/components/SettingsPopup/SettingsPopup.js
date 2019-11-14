@@ -160,8 +160,9 @@ class SettingsPopup extends Component {
                             className={cn(styles.input, styles.text, styles.description)}
                         />
 
-                        <label className={styles.label}>Thumbnail</label>
+                        <label htmlFor="label_image" className={styles.label}>Thumbnail</label>
                         <ImportButtonV2
+                            id="label_image"
                             className={cn(styles.input, styles.chooseImage)}
                             accept=".png, .jpg"
                             onChange = {this.handleImageChange}
