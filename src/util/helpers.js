@@ -1,5 +1,10 @@
 import { OBJECT_STATUS } from '../constants';
 
+let _id = 0;
+export const uniqueId = (prefix = '') => {
+    return `${prefix}_${_id++}`
+};
+
 const getCategories = world => {
     return world.groups.reduce(
         ( categories, group ) => categories.concat( group.categories ),

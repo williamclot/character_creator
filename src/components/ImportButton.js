@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { uniqueId } from '../util/helpers';
+
 
 class ImportButton extends Component {
     componentDidMount() {
@@ -54,21 +56,29 @@ class ImportButton extends Component {
 }
 
 const ImportButtonV2 = props => {
-    const { className, children, ...otherProps } = props
+    const [id] = React.useState(uniqueId);
+    const {
+        className, title, children, // label props
+        ...otherProps
+    } = props;
+
+    const idToUse = otherProps.id || id;
 
     return <>
-        <label className={className} htmlFor="__file_input__">{children}</label>
+        <label title={title} className={className} htmlFor={idToUse}>{children}</label>
         <input
             {...otherProps}
+            id={idToUse}
+            
+            // these props should not be overwritten
             type="file"
-            id="__file_input__"
             style = {{
                 opacity: 0,
                 position: "absolute",
                 zIndex: -1,
             }}
         />
-    </>
+    </>;
 }
 
 export default ImportButton
