@@ -67,7 +67,7 @@ class App extends Component {
 
         this.sceneManager = new SceneManager( container, this.getPartTypesArray() )
 
-        this.api = new MmfApi( props.env.API_ENDPOINT )
+        this.api = new MmfApi( props.api )
 
         this.threeContainerRef = createRef()
         
@@ -410,15 +410,13 @@ class App extends Component {
     }
 
     handleDeleteObject = async ( objectId ) => {
-        const { csrfToken } = this.props
-
         const oldStatus = this.getObject( objectId ).status
 
         this.setObjectStatus( objectId, OBJECT_STATUS.LOADING )
 
         try {
             
-            await this.api.deleteObject( objectId, csrfToken )
+            await this.api.deletePart(objectId)
             this.setObjectStatus( objectId, OBJECT_STATUS.DELETED )
             
         } catch {
@@ -451,13 +449,12 @@ class App extends Component {
     }
 
     handleDownload = async () => {
-        const { worldData } = this.props
         const { selectedParts } = this.state
 
         const objectIds = Object.keys( selectedParts ).map( key => selectedParts[key] )
 
         try {
-            const response = await this.api.triggerDownload( worldData.id, objectIds )
+            const response = await this.api.triggerDownload(objectIds);
     
             if ( response.status === 1 ) { // ready for download
                 window.open( response.download_link )
@@ -515,7 +512,7 @@ class App extends Component {
         }
 
         try {
-            const id = await this.api.postObject( objectData )
+            const id = await this.api.postPart(objectData)
     
             const objectToAdd = {
                 ...objectData,
@@ -534,10 +531,8 @@ class App extends Component {
     }
 
     handleSaveChanges = async fields => {
-        const { worldData } = this.props
-
         try {
-            const updatedCustomizer = await this.api.patchCustomizer(worldData.id, fields)
+            const updatedCustomizer = await this.api.patchCustomizer(fields)
             this.setState({
                 name: updatedCustomizer['name'],
                 description: updatedCustomizer['description'],

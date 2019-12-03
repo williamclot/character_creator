@@ -7,122 +7,59 @@ const getBlob = url => {
     )
 }
 
-const generateApiObject = ( object, fileSize, imageSize ) => {
-    return {
-        "name": object.name,
-        // "description": "string",
-        "visibility": 2,
-        // "how_to": "string",
-        // "dimensions": "string",
-        // "time_to_do_from": 0,
-        // "time_to_do_to": 0,
-        // "support_free": true,
-        // "filament_quantity": "string",
-        // "client_url": "string",
-        // "tags": "customizer",
-        "brand": null,
-        "licenses": [],
-        
-        "files": [
-          {
-            "filename": `${object.name}.${object.files.default.extension}`,
-            "size": fileSize
-          }
-        ],
-        "images": [
-          {
-            "filename": `${object.name}.jpg`,
-            "size": imageSize
-          }
-        ],
-
-        "customizer_part_type_id": object.partTypeId,
-        "customizer_metadata": object.metadata
-    }
-}
-
 class MmfApi {
-    constructor( apiEndpoint ) {
-        this.apiEndpoint = apiEndpoint
+    constructor(api) {
+        this.api = api;
     }
 
-    async deleteObject( id, csrfToken ) {
-        const res = await axios.delete(
-            `${this.apiEndpoint}/objects/${id}`,
-            {
-                params: {
-                    _csrf_token: csrfToken
-                }
-            }
-        )
+    async deletePart(id) {
+        const { routes, route_params } = this.api;
+        const url = routes.delete_part.replace(route_params.partId, id);
+        const res = await axios.delete(url);
 
         if ( res.status !== 204 ) {
-            throw new Error('Delete Failed')
+            throw new Error('Delete Failed');
         }
     }
 
-    async postObject( object ) {
+    async postPart(object) {
+        const { routes, route_params } = this.api;
+        const url = routes.post_part.replace(route_params.partTypeId, object.partTypeId);
         
         const [{ data: fileBlob }, { data: imageBlob }] = await Promise.all([
             getBlob( object.files.default.url ),
             getBlob( object.img )
         ])
 
-        const res = await axios.post(
-            `${this.apiEndpoint}/object`,
-            generateApiObject( object, fileBlob.size, imageBlob.size )
-        )
+        const formData = new FormData();
+        formData.append('name', object.name);
+        formData.append('metadata', JSON.stringify(object.metadata));
+        formData.append('3d-file', fileBlob);
+        formData.append('image', imageBlob);
 
-        if ( res.status !== 200 )
-            throw new Error('Not OK')
+        const res = await axios.post(url, formData);
 
-        const { files, images, id } = res.data
+        if (res.status !== 200)
+            throw new Error('Not OK');
 
-        const file = files[ 0 ]
-        const image = images[ 0 ]
-
-        await Promise.all([
-            axios.post(
-                `${this.apiEndpoint}/file`,
-                fileBlob,
-                {
-                    params: {
-                        upload_id: file.upload_id
-                    }
-                }
-            ),
-            axios.post(
-                `${this.apiEndpoint}/image`,
-                imageBlob,
-                {
-                    params: {
-                        upload_id: image.upload_id
-                    }
-                }
-            )
-        ])
-
-        return id
+        return res.data.id;
     }
 
-    async triggerDownload( worldId, objectIds ) {
+    async triggerDownload(objectIds) {
         const res = await axios.post(
-            `${this.apiEndpoint}/customizers/${worldId}/download`,
+            this.api.routes.post_download,
             {
                 selection: objectIds
             }
-        )
+        );
 
-        return res.data
+        return res.data;
     }
 
-    async patchCustomizer( worldId, fields ) {
-        const res = await axios.patch(
-            `${this.apiEndpoint}/customizers/${worldId}`,
-            fields
-        )
+    async patchCustomizer(fields) {
+        const res = await axios.patch(this.api.routes.patch_customizer, fields);
 
-        return res.data
+        return res.data;
     }
 }
 
