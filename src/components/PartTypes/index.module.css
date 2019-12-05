@@ -38,13 +38,29 @@
     background-color: #1DA1F2;
 }
 
+.partTypes::-webkit-scrollbar-track {
+    background: none;
+    /* margin-left: 10px; */
+    /* margin-bottom: 10px; */
+}
+.partTypes::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background: none;
+}
+.partTypes::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    background: #2e2e2e;
+}
+
 @media (max-width: 950px){
 
     .partTypes {
         flex-direction: row;
-        /* overflow-x: scroll; */
+        overflow-x: scroll;
         justify-content: flex-start;
-        width: max-content;
+        width: 100%;
     }
 
     .partTypes .item {
@@ -55,6 +71,7 @@
 
     .partTypes .item .name {
         font-size: 18px;
+        white-space: nowrap;
     }
 
 }
