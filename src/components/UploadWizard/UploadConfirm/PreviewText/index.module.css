@@ -3,6 +3,7 @@
     display: flex;
     justify-content: space-between;
     cursor: pointer;
+    border-radius: 5px;
 }
 
 .description {
@@ -12,7 +13,10 @@
 }
 
 .main {
-    background-color: #0f0f0f;
+    background-color: #000000;
     font-weight: bold;
+    font-size: 1px;
     padding: 5px;
+    border-radius: 0 5px 5px 0;
+    filter: opacity(0.7)
 }

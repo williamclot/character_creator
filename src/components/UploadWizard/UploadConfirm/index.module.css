@@ -1,7 +1,6 @@
 .container {
     display: flex;
-    align-items: center;
-
+    align-items: start;
     border-radius: unset;
 }
 
@@ -14,11 +13,17 @@
 
 .uploadConfirm {
     background-color: #4c4c4c;
-    border-radius: 20px;
-
-    /* width: 420px; */
+    border-radius: 10px;
     color: white;
-    padding: 10px;
+    padding: 20px;
+}
+
+.uploadConfirm h2{
+    color: white;
+    font-family: "Lato", "Open Sans", sans-serif;
+    font-weight: bold;
+    font-size: 23px;
+    margin: 0 0 20px 0;
 }
 
 .uploadConfirm .gridView {
@@ -32,11 +37,14 @@
 }
 
 .label {
-    grid-column: label-col;
+    /* grid-column: label-col; */
     font-style: italic;
 
     font-weight: bold;
     text-align: right;
+    align-self: center;
+
+    font-size: 16px;
 }
 
 .label .questionMark {
@@ -44,11 +52,12 @@
     background-color: white;
     display: inline-block;
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     text-align: center;
     cursor: pointer;
     margin-left: 5px;
+    line-height: 15px;
 }
 
 .label .previewInstructions {
@@ -59,8 +68,6 @@
 
 .view {
     grid-column: view-col;
-    border-radius: 10px;
-    overflow: hidden;
 }
 
 .view.input {
@@ -68,6 +75,9 @@
     border-color: #777777;
     color: white;
     padding: 0px 5px;
+    margin: 0px;
+    border-radius: 5px;
+    font-size: 16px;
 }
 .view.input:focus {
     background-color: grey;
@@ -99,11 +109,15 @@
 .buttonsContainer {
     
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
+    
 }
 
-.buttonsContainer .button {
+.buttonsContainer .button{
+    font-size: 16px;
+    width: 120px;
+}
 
-    width: 50%;
-    margin: 10px;
+.buttonsContainer .button:nth-child(n+1){
+    margin-left: 10px;
 }

@@ -10,13 +10,16 @@
 
     height: 100%;
     width: 100%;
-    opacity: .8;    
+    opacity: .9;    
 }
 
 .wizardContainer {
     height: 100%;
     width: 100%;
     position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .wizardStep {
@@ -31,17 +34,16 @@
 }
 
 .wizardContainer .button {
-    background-color: #2b2b2b;
-    font-size: 20px;
+    background-color: #000000;
+    font-size: 18px;
     font-weight: bold;
     text-align: center;
     color: white;
-    
     padding: 10px;
-    border-radius: 10px;
-
-    box-shadow: 2px 2px 6px black;
+    border-radius: 5px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .2);
     cursor: pointer;
+    filter: opacity(0.7)
 }
 
 .wizardContainer .button:hover {
