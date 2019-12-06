@@ -87,18 +87,19 @@
     position: relative;
     border-radius: 5px;
     overflow: hidden;
+    width: 280px;
+    height: 280px;
 }
 
 .previewContaier .canvas, .img {
-    width: 280px;
-    height: 280px;
+    width: 100%;
+    height: 80%;
+    object-fit: contain;
 }
 
 .previewContaier .canvasContainer {
-    width: 280px;
-    height: 280px;
-    /* Dunno why there is a 1px overhang at the bottom... */
-    border-bottom: 1px solid transparent;
+    width: 100px;
+    height: 80px;
 }
 
 
