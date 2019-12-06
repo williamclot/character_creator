@@ -45,3 +45,19 @@
     margin-bottom: 20px;
 }
 
+@media only screen and (max-height: 805px){
+
+    .tutorial {
+        height: 585px;
+        overflow: scroll;
+    }
+    
+}
+
+@media only screen and (max-height: 650px){
+
+    .tutorial {
+        height: 100%;
+    }
+    
+}

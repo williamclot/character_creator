@@ -1,12 +1,13 @@
 .container {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     border-radius: unset;
 }
 
 .tutorial {
     margin-left: 15px;
 }
+
 .tutorial.hidden {
     display: none;
 }
@@ -133,4 +134,16 @@
 
 .buttonsContainer .button:nth-child(n+2){
     margin-left: 10px;
+}
+
+@media only screen and (max-height: 650px){
+
+    .container {
+        height: 100%;
+    }
+
+    .tutorial {
+        height: 100%;
+    }
+    
 }
