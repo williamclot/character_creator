@@ -1,6 +1,8 @@
 .wrapper {
-    background-color: #767676;
+    background-color: rgba(0,0,0,0.4);
+    /* border-color: #77777700; */
     display: flex;
+    border-radius: 5px;
 }
 
 .filename {
@@ -9,24 +11,22 @@
     font-weight: 500;
 }
 
+.xButton{
+    display: flex;
+    align-items: center
+}
+
 .xButton:before {
-    display: inline-block;
-    background-color: #0f0f0f;
+    background-color: #000;
     content: 'x';
     color: #fff;
-    font-weight: 300;
-    font-family: Arial, sans-serif;
-
-    width: 10px;
-    height: 10px;
-    line-height: 10px;
+    width: 20px;
+    height: 20px;
+    line-height: 17px;
     text-align: center;
     border-radius: 50%;
-    padding: 5px;
-    margin: 5px;
-
     cursor: pointer;
-
-    /* styles below needed because of the clashes with foundation.css */
-    box-sizing: unset;
+    filter: opacity(0.7);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    margin-right: 5px;
 }

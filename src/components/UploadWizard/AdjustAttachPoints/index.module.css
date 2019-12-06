@@ -49,11 +49,16 @@
 }
 
 .adjustTransforms .sideView .buttonsContainer .button {
-    margin: 10px;
+    font-size: 16px;
+    width: 120px;
+}
+
+.adjustTransforms .sideView .buttonsContainer .button:nth-child(n+2) {
+    margin-left:10px;
 }
 
 .adjustTransforms .title {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 20px;
+    left: 20px;
 }

@@ -12,7 +12,7 @@
 }
 
 .uploadConfirm {
-    background-color: #4c4c4c;
+    background-color:rgba(76,76,76,0.7);
     border-radius: 10px;
     color: white;
     padding: 20px;
@@ -71,8 +71,8 @@
 }
 
 .view.input {
-    background-color: #777777;
-    border-color: #777777;
+    background-color: rgba(0,0,0,0.4);
+    border-color: rgba(0,0,0,0);
     color: white;
     padding: 0px 5px;
     margin: 0px;
@@ -84,26 +84,38 @@
 }
 
 .previewContaier {
-    /* width: 350px;
-    height: 350px; */
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
 .previewContaier .canvas, .img {
-    /* width: 250px;
-    height: 200px; */
-
-    width: 350px;
-    height: 350px;
+    width: 280px;
+    height: 280px;
 }
+
+.previewContaier .canvasContainer {
+    width: 280px;
+    height: 280px;
+    /* Dunno why there is a 1px overhang at the bottom... */
+    border-bottom: 1px solid transparent;
+}
+
 
 .previewContaier .canvasTitle {
     background-color: rgba(15, 15, 15, 1);
     text-align: center;
-    line-height: 15px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 80%;
+    font-size: 25px;
+    text-overflow: ellipsis;
     padding: 10px;
-
-    /* dunno why there is a 5px gap before it, so remove it */
-    margin-top: -5px;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
 }
 
 .buttonsContainer {
@@ -118,6 +130,6 @@
     width: 120px;
 }
 
-.buttonsContainer .button:nth-child(n+1){
+.buttonsContainer .button:nth-child(n+2){
     margin-left: 10px;
 }

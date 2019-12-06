@@ -1,5 +1,6 @@
 .wrapper {
-    background-color: #767676;
+    background-color: rgba(0,0,0,0.4);
+    /* border-color: #77777700; */
     display: flex;
     justify-content: space-between;
     cursor: pointer;
@@ -15,7 +16,7 @@
 .main {
     background-color: #000000;
     font-weight: bold;
-    font-size: 1px;
+    font-size: 16px;
     padding: 5px;
     border-radius: 0 5px 5px 0;
     filter: opacity(0.7)
