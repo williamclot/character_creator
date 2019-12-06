@@ -12,8 +12,11 @@
 
 .container .title {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 20px;
+    left: 20px;
+    margin: 0px;
+    font-size: 35px;
+    font-weight: bold;
 }
 
 
@@ -21,14 +24,17 @@
     position: absolute;
     display: flex;
     justify-content: center;
-    right: 2%;
-    bottom: 3%;
+    right: 20px;
+    bottom: 20px;
 }
 
 .container .buttonsContainer .button {
-    margin: 0 10px;
-    padding-left: 20px;
-    padding-right: 20px;
+    font-size: 16px;
+    width: 120px;
+}
+
+.container .buttonsContainer .button:nth-child(n+2) {
+    margin-left: 10px;
 }
 
 .container .buttonsContainer .button.cancellationMark {
