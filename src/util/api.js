@@ -34,8 +34,8 @@ class MmfApi {
         const formData = new FormData();
         formData.append('name', object.name);
         formData.append('metadata', JSON.stringify(object.metadata));
-        formData.append('3d-file', fileBlob);
-        formData.append('image', imageBlob);
+        formData.append('3d-file', new File([fileBlob], object.name));
+        formData.append('image', new File([imageBlob], object.name));
 
         const res = await axios.post(url, formData);
 
@@ -64,3 +64,4 @@ class MmfApi {
 }
 
 export default MmfApi
+
