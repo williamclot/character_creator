@@ -80,10 +80,29 @@ class App extends Component {
         this.showLoader()
 
         try {
-            const oneOfEach = this.state.partTypes.allIds.reduce( (byPartTypeId, partTypeId) => ({
-                ...byPartTypeId,
-                [partTypeId]: this.getObjectsByPartTypeId( partTypeId )[0]
-            }), {} )
+            let oneOfEach = {};
+            
+            // check location hash for initial selected parts
+            const hash = window.location.hash.slice(1);
+            if (hash !== '') {
+                /** @type {number[]} */
+                const selectedIds = JSON.parse(hash);
+
+                for (const partId of selectedIds) {
+                    const part = this.state.objects.byId[partId];
+                    if (part) {
+                        oneOfEach[part.partTypeId] = part;
+                    }
+                }
+            }
+
+            // select first part from each part type that hasn't been filled out from the hash
+            for (const partTypeId of this.state.partTypes.allIds) {
+                if (!oneOfEach[partTypeId]) {
+                    oneOfEach[partTypeId] = this.getObjectsByPartTypeId(partTypeId)[0]; // get first if not found in hash
+                }
+            }
+
 
             const loadedObjects = await fetchObjects( oneOfEach )
             const selectedParts = objectMap( oneOfEach, object => object.id )
