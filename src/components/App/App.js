@@ -37,6 +37,7 @@ class App extends Component {
 
         this.state = {
             name: props.worldData['name'] || '',
+            price: props.worldData['price'] || '',
             description: props.worldData['description'] || '',
             isPrivate: props.worldData['is_private'],
             imageUrl: props.worldData['image_url'] || null,
@@ -554,6 +555,7 @@ class App extends Component {
             const updatedCustomizer = await this.api.patchCustomizer(fields)
             this.setState({
                 name: updatedCustomizer['name'],
+                price: updatedCustomizer['price'],
                 description: updatedCustomizer['description'],
                 imageUrl: updatedCustomizer['image_url'],
                 isPrivate: updatedCustomizer['is_private'],
@@ -572,6 +574,7 @@ class App extends Component {
         } = this.props
         const {
             name: customizerName,
+            price,
             description,
             imageUrl,
             isPrivate,
@@ -662,6 +665,7 @@ class App extends Component {
                     className = {styles.settingsPopup}
                     
                     name = {customizerName}
+                    price = {price}
                     description = {description}
                     isPrivate = {isPrivate}
                     imageUrl = {imageUrl}

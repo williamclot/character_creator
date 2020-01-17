@@ -15,6 +15,7 @@ class SettingsPopup extends Component {
 
         this.state = {
             name: props.name,
+            price: props.price,
             description: props.description,
             isPrivate: props.isPrivate,
             imageUrl: props.imageUrl,
@@ -27,6 +28,7 @@ class SettingsPopup extends Component {
 
         return (
             state.name === props.name &&
+            state.price === props.price &&
             state.description === props.description &&
             state.imageUrl === props.imageUrl &&
             state.isPrivate === props.isPrivate
@@ -36,6 +38,12 @@ class SettingsPopup extends Component {
     handleNameChange = e => {
         this.setState({
             name: e.target.value
+        })
+    }
+
+    handlePriceChange = e => {
+        this.setState({
+            price: Number(e.target.value)
         })
     }
 
@@ -123,6 +131,10 @@ class SettingsPopup extends Component {
             fieldsToPatch['name'] = state.name
         }
 
+        if(props.price !== state.price) {
+            fieldsToPatch['price'] = state.price
+        }
+
         if(props.description !== state.description) {
             fieldsToPatch['description'] = state.description
         }
@@ -136,7 +148,7 @@ class SettingsPopup extends Component {
 
     render() {
         const { className, onCancel } = this.props
-        const { name, description, imageUrl, isPrivate } = this.state
+        const { name, price, description, imageUrl, isPrivate } = this.state
 
         return (
             <div className = {cn(className, styles.background)}>
@@ -150,6 +162,15 @@ class SettingsPopup extends Component {
                             value={name}
                             onChange={this.handleNameChange}
                             className={cn(styles.input, styles.text)}
+                        />
+
+                        <label htmlFor="label_price" className={styles.label}>Price</label>
+                        <input
+                            id="label_price"
+                            type="number"
+                            value={price}
+                            onChange={this.handlePriceChange}
+                            className={cn(styles.input, styles.text, styles.price)}
                         />
 
                         <label htmlFor="label_desc" className={styles.label}>Description</label>
