@@ -474,10 +474,11 @@ class App extends Component {
         const objectIds = Object.keys( selectedParts ).map( key => selectedParts[key] )
 
         try {
-            const response = await this.api.triggerDownload(objectIds);
-    
-            if ( response.status === 1 ) { // ready for download
-                window.open( response.download_link )
+            const customizedMeshData = await this.api.generateCustomizedMesh(objectIds);
+
+            if ( customizedMeshData.status === 1 ) { // ready for download
+                const fullCustomizedMeshData = await this.api.getCustomizedMesh(customizedMeshData.id)
+                window.open( fullCustomizedMeshData.file_url )
             } else {
                 // TODO add popup component
     

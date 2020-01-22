@@ -45,13 +45,21 @@ class MmfApi {
         return res.data.id;
     }
 
-    async triggerDownload(objectIds) {
+    async generateCustomizedMesh(objectIds) {
         const res = await axios.post(
-            this.api.routes.post_download,
+            this.api.routes.post_generate_mesh,
             {
                 selection: objectIds
             }
         );
+
+        return res.data;
+    }
+
+    async getCustomizedMesh(customizedMeshId) {
+        const { routes, route_params } = this.api;
+        const url = routes.get_download.replace(route_params.customizedMeshId, customizedMeshId);
+        const res = await axios.get(url);
 
         return res.data;
     }
