@@ -133,6 +133,22 @@ class App extends Component {
         }
     }
 
+    userOwnsCurrentSelection() {
+        let selectedPartsMap = {};
+        for(const customizedMesh of this.props.customizedMeshes) {
+            const selectedPartIds = customizedMesh.selectedPartIds.sort((p1, p2) => p2 - p1);
+            const hash = selectedPartIds.join(':');
+            selectedPartsMap[hash] = true;
+        }
+
+        return Boolean(selectedPartsMap[this.getSelectedObjectIds().join(':')]);
+    }
+
+    getSelectedObjectIds() {
+        const { selectedParts } = this.state;
+        return Object.keys(selectedParts).map(key => selectedParts[key]).sort((p1, p2) => p2 - p1);
+    }
+
     get3dObject = ( key ) => {
         if ( !this.sceneManager ) return null
         
@@ -471,20 +487,29 @@ class App extends Component {
     handleDownload = async () => {
         const { selectedParts } = this.state
 
-        const objectIds = Object.keys( selectedParts ).map( key => selectedParts[key] )
+        const objectIds = this.getSelectedObjectIds();
 
         try {
             const customizedMeshData = await this.api.generateCustomizedMesh(objectIds);
 
-            if ( customizedMeshData.status === 1 ) { // ready for download
-                const fullCustomizedMeshData = await this.api.getCustomizedMesh(customizedMeshData.id)
-                window.open( fullCustomizedMeshData.file_url )
+            const userHasToBuy = this.props.worldData.price > 0 && !this.userOwnsCurrentSelection();
+
+            if(!userHasToBuy) {
+                if ( customizedMeshData.status === 1 ) { // ready for download
+                    const fullCustomizedMeshData = await this.api.getCustomizedMesh(customizedMeshData.id)
+                    window.open( fullCustomizedMeshData.file_url )
+                } else {
+                    // TODO add popup component
+        
+                    const message = `You will receive an email when the mesh has finished processing.`
+                    window.alert( message )
+                }
             } else {
-                // TODO add popup component
-    
-                const message = `You will receive an email when the mesh has finished processing.`
-                window.alert( message )
+                await this.api.addToCart(customizedMeshData.id);
+                alert('added to cart');
             }
+
+
             
         } catch (err) {
             console.error(err)
@@ -597,6 +622,8 @@ class App extends Component {
             } : null
         )
 
+        const shouldShowAddToCart = worldData.price > 0 && !this.userOwnsCurrentSelection();
+
         return <div className = {styles.app}>
 
             <ThreeContainer
@@ -639,6 +666,7 @@ class App extends Component {
                 partTypes = { partTypes }
                 onUpload = { this.handleUpload }
                 onDownload = { this.handleDownload }
+                shouldShowAddToCart = {shouldShowAddToCart}
                 onShowSettings = { this.handleShowSettings }
                 edit_mode = { edit_mode }
             />
