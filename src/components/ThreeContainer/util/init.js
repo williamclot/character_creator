@@ -83,21 +83,6 @@ export function initLights() {
     return [hemi, light, backlight];
 }
 
-export function initFloor() {
-    //Create a plane that receives shadows (but does not cast them)
-    const planeGeometry = new THREE.PlaneBufferGeometry(10, 10);
-    const planeMaterial = new THREE.ShadowMaterial();
-    planeMaterial.opacity = 0.2;
-
-    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane.name = "plane";
-    plane.rotation.x = -Math.PI / 2;
-    plane.position.y = 0;
-    plane.receiveShadow = true;
-    
-    return plane;
-}
-
 export function initGridHelper() {
 
     const size = 50;

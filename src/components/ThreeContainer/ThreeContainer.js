@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 
-import { initCamera, initRenderer, initControls, initLights, initFloor, initGridHelper, initScene } from './util/init';
+import { initCamera, initRenderer, initControls, initLights, initGridHelper, initScene } from './util/init';
 
 import './ThreeContainer.css'
 
@@ -22,7 +22,6 @@ class ThreeContainer extends PureComponent {
         this.scene = initScene();
             
         const lights = initLights();
-        const floor = initFloor();
         const gridHelper = initGridHelper();
         
 
@@ -32,7 +31,7 @@ class ThreeContainer extends PureComponent {
         this.orbitControls.addEventListener( 'change', this.renderScene )
         
         
-        this.scene.add( floor, gridHelper, ...lights);
+        this.scene.add(gridHelper, ...lights);
         
         const objectsContainer = this.props.sceneManager.getContainer()
         this.scene.add( objectsContainer )
