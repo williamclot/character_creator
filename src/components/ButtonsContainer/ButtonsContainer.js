@@ -11,7 +11,7 @@ import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants';
 import sharedStyles from '../../shared-styles/button.module.css'
 import styles from './ButtonsContainer.module.css'
 
-const ButtonsContainer = ({ partTypes, onUpload, onDownload, onShowSettings, edit_mode }) => {
+const ButtonsContainer = ({ partTypes, onUpload, onDownload, shouldShowAddToCart, onShowSettings, edit_mode }) => {
 
     const addNewPartButton = (
         <Button className = {styles.iconMinimisableButton} title="Add new Part"> 
@@ -55,15 +55,17 @@ const ButtonsContainer = ({ partTypes, onUpload, onDownload, onShowSettings, edi
         </Menu>
     )
 
+    const downloadButtonText = shouldShowAddToCart ? 'Add To Cart' : 'Download';
+
     return (
         <div className = {styles.container}>
 
             <Button
-                title = "Download"
+                title = {downloadButtonText}
                 className = {cn(styles.withMargin, styles.iconMinimisableButton)}
                 onClick = { onDownload }
             >
-                <span className = { styles.word }>Download</span>
+                <span className = { styles.word }>{downloadButtonText}</span>
                 <span className = { styles.icon }>
                     <i className="fa fa-arrow-down" aria-hidden="true"></i>
                 </span>
