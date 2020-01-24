@@ -69,13 +69,6 @@ class MmfApi {
 
         return res.data;
     }
-
-    async addToCart(customizedMeshId) {
-        await axios.post(this.api.routes.addToCart, {
-            itemType: 'customized-mesh',
-            itemId: customizedMeshId
-        })
-    }
 }
 
 export default MmfApi
