@@ -1,6 +1,6 @@
 {
   "name": "mmf-customizer",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "private": true,
   "main": "dist/index.js",
   "module": "dist/index.js",
