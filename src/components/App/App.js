@@ -65,6 +65,11 @@ class App extends Component {
         
         const container = new Group
 
+        const initialRotation = props.worldData['container_rotation'];
+        if(initialRotation) {
+            container.rotation.set(initialRotation.x, initialRotation.y, initialRotation.z);
+        };
+        
         this.sceneManager = new SceneManager( container, this.getPartTypesArray() )
 
         this.api = new MmfApi( props.api )
