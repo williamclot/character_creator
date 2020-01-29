@@ -97,7 +97,7 @@ class Selector extends Component {
                 >
                     <div
                         className = "img"
-                        style = {{ backgroundImage: `url(${object.img})` }}
+                        style = {{ backgroundImage: `url('${object.img})'` }}
                     />
                     <div className = "unselectable item-name">
                         { object.name }
