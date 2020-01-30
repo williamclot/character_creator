@@ -706,6 +706,8 @@ class App extends Component {
 
                     onSave = {this.handleSaveChanges}
                     onCancel = {() => this.setState({showSettings: false})}
+
+                    customizer_pay_per_download_enabled = {this.props.customizer_pay_per_download_enabled}
                 />
             )}
 

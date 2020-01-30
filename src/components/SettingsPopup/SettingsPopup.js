@@ -164,14 +164,18 @@ class SettingsPopup extends Component {
                             className={cn(styles.input, styles.text)}
                         />
 
-                        <label htmlFor="label_price" className={styles.label}>Price</label>
-                        <input
-                            id="label_price"
-                            type="number"
-                            value={price}
-                            onChange={this.handlePriceChange}
-                            className={cn(styles.input, styles.text, styles.price)}
-                        />
+                        {this.props.customizer_pay_per_download_enabled && (
+                            <>
+                                <label htmlFor="label_price" className={styles.label}>Price</label>
+                                <input
+                                    id="label_price"
+                                    type="number"
+                                    value={price}
+                                    onChange={this.handlePriceChange}
+                                    className={cn(styles.input, styles.text, styles.price)}
+                                />
+                            </>
+                        )}
 
                         <label htmlFor="label_desc" className={styles.label}>Description</label>
                         <textarea
