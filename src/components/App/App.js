@@ -511,7 +511,7 @@ class App extends Component {
                 }
             } else {
                 await this.api.addToCart(customizedMeshData.id);
-                alert('added to cart');
+                window.customEventDispatcher.dispatchEvent('ITEM_ADDED_TO_BASKET');
             }
 
 
