@@ -37,6 +37,7 @@ class App extends Component {
 
         this.state = {
             name: props.worldData['name'] || '',
+            price: props.worldData['price'] || '',
             description: props.worldData['description'] || '',
             isPrivate: props.worldData['is_private'],
             imageUrl: props.worldData['image_url'] || null,
@@ -55,6 +56,9 @@ class App extends Component {
             selectedParts: {},
 
             uploadedObjectData: null,
+
+            customizedMeshes: props.customizedMeshes,
+            customizedMeshesInCart: props.customizedMeshesInCart,
             
             // editMode: false,
 
@@ -135,6 +139,58 @@ class App extends Component {
             // const categories = getCategories( this.props.worldData.groups )
             // this.sceneManager.reset( this.props.categories )
         }
+    }
+
+    hashSelectedPartIds(selectedPartIds) {
+        return selectedPartIds
+            .sort((p1, p2) => p2 - p1) // sort because different order should produce the same hash
+            .join(':');
+    }
+
+    userOwnsCurrentSelection() {
+        let selectedPartsMap = {};
+        for(const customizedMeshId of this.props.customizedMeshesOwnedByUser) {
+            const customizedMesh = this.state.customizedMeshes[customizedMeshId];
+            const ownedMeshHash = this.hashSelectedPartIds(customizedMesh.selectedPartIds);
+            selectedPartsMap[ownedMeshHash] = true;
+        }
+
+        const selectedObjectsHash = this.hashSelectedPartIds(this.getSelectedObjectIds());
+        return Boolean(selectedPartsMap[selectedObjectsHash]);
+    }
+
+    isSelectionInCart() {
+        let selectedPartsMap = {};
+        for(const customizedMeshId of this.state.customizedMeshesInCart) {
+            const customizedMesh = this.state.customizedMeshes[customizedMeshId];
+            const meshInCartHash = this.hashSelectedPartIds(customizedMesh.selectedPartIds);
+            selectedPartsMap[meshInCartHash] = true;
+        }
+
+        const selectedObjectsHash = this.hashSelectedPartIds(this.getSelectedObjectIds());
+        return Boolean(selectedPartsMap[selectedObjectsHash]);
+    }
+
+    userMustPurchaseSelection() {
+        if (!this.props.customizer_pay_per_download_enabled) {
+            return false;
+        }
+
+        if(this.props.edit_mode) {
+            // edit mode means user can edit, which means he is either the owner or the admin
+            return false;
+        }
+
+        if(this.props.worldData.price > 0) {
+            return !this.userOwnsCurrentSelection()
+        }
+
+        return false;
+    }
+
+    getSelectedObjectIds() {
+        const { selectedParts } = this.state;
+        return Object.keys(selectedParts).map(key => selectedParts[key]);
     }
 
     get3dObject = ( key ) => {
@@ -472,23 +528,45 @@ class App extends Component {
         })
     }
 
-    handleDownload = async () => {
-        const { selectedParts } = this.state
+    showCart() {
+        window.alert('item added to cart')
+        // window.customEventDispatcher.dispatchEvent('ITEM_ADDED_TO_BASKET');
+    }
 
-        const objectIds = Object.keys( selectedParts ).map( key => selectedParts[key] )
+    handleDownload = async () => {
+        if(this.isSelectionInCart()) {
+            this.showCart();
+            return;
+        }
+
+        const objectIds = this.getSelectedObjectIds();
 
         try {
             const customizedMeshData = await this.api.generateCustomizedMesh(objectIds);
 
-            if ( customizedMeshData.status === 1 ) { // ready for download
-                const fullCustomizedMeshData = await this.api.getCustomizedMesh(customizedMeshData.id)
-                window.open( fullCustomizedMeshData.file_url )
+            if(!this.userMustPurchaseSelection()) {
+                if ( customizedMeshData.status === 1 ) { // ready for download
+                    const fullCustomizedMeshData = await this.api.getCustomizedMesh(customizedMeshData.id)
+                    window.open( fullCustomizedMeshData.file_url )
+                } else {
+                    // TODO add popup component
+        
+                    const message = `You will receive an email when the mesh has finished processing.`
+                    window.alert( message )
+                }
             } else {
-                // TODO add popup component
-    
-                const message = `You will receive an email when the mesh has finished processing.`
-                window.alert( message )
+                await this.api.addToCart(customizedMeshData.id);
+                this.setState(state => ({
+                    customizedMeshesInCart: state.customizedMeshesInCart.concat(customizedMeshData.id),
+                    customizedMeshes: {
+                        ...state.customizedMeshes,
+                        [customizedMeshData.id]: customizedMeshData
+                    }
+                }));
+                this.showCart();
             }
+
+
             
         } catch (err) {
             console.error(err)
@@ -560,6 +638,7 @@ class App extends Component {
             const updatedCustomizer = await this.api.patchCustomizer(fields)
             this.setState({
                 name: updatedCustomizer['name'],
+                price: updatedCustomizer['price'],
                 description: updatedCustomizer['description'],
                 imageUrl: updatedCustomizer['image_url'],
                 isPrivate: updatedCustomizer['is_private'],
@@ -578,6 +657,7 @@ class App extends Component {
         } = this.props
         const {
             name: customizerName,
+            price,
             description,
             imageUrl,
             isPrivate,
@@ -598,6 +678,22 @@ class App extends Component {
                 currentPartType: selectedPartType
             } : null
         )
+
+        const userMustBuySelection = this.userMustPurchaseSelection();
+        const isSelectionInCart = this.isSelectionInCart();
+
+        let downloadButtonMessage;
+        if (userMustBuySelection) {
+            if(isSelectionInCart) {
+                downloadButtonMessage = 'Item already in cart';
+            } else {
+                downloadButtonMessage = `Add To Cart ($${price})`;
+            }
+        } else {
+            downloadButtonMessage = `Download`;
+        }
+
+
 
         return <div className = {styles.app}>
 
@@ -641,6 +737,7 @@ class App extends Component {
                 partTypes = { partTypes }
                 onUpload = { this.handleUpload }
                 onDownload = { this.handleDownload }
+                downloadButtonMessage = {downloadButtonMessage}
                 onShowSettings = { this.handleShowSettings }
                 edit_mode = { edit_mode }
             />
@@ -668,12 +765,15 @@ class App extends Component {
                     className = {styles.settingsPopup}
                     
                     name = {customizerName}
+                    price = {price}
                     description = {description}
                     isPrivate = {isPrivate}
                     imageUrl = {imageUrl}
 
                     onSave = {this.handleSaveChanges}
                     onCancel = {() => this.setState({showSettings: false})}
+
+                    customizer_pay_per_download_enabled = {this.props.customizer_pay_per_download_enabled}
                 />
             )}
 
