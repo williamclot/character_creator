@@ -56,6 +56,9 @@ class App extends Component {
             selectedParts: {},
 
             uploadedObjectData: null,
+
+            customizedMeshes: props.customizedMeshes,
+            customizedMeshesInCart: props.customizedMeshesInCart,
             
             // editMode: false,
 
@@ -138,20 +141,56 @@ class App extends Component {
         }
     }
 
+    hashSelectedPartIds(selectedPartIds) {
+        return selectedPartIds
+            .sort((p1, p2) => p2 - p1) // sort because different order should produce the same hash
+            .join(':');
+    }
+
     userOwnsCurrentSelection() {
         let selectedPartsMap = {};
-        for(const customizedMesh of this.props.customizedMeshes) {
-            const selectedPartIds = customizedMesh.selectedPartIds.sort((p1, p2) => p2 - p1);
-            const hash = selectedPartIds.join(':');
-            selectedPartsMap[hash] = true;
+        for(const customizedMeshId of this.props.customizedMeshesOwnedByUser) {
+            const customizedMesh = this.state.customizedMeshes[customizedMeshId];
+            const ownedMeshHash = this.hashSelectedPartIds(customizedMesh.selectedPartIds);
+            selectedPartsMap[ownedMeshHash] = true;
         }
 
-        return Boolean(selectedPartsMap[this.getSelectedObjectIds().join(':')]);
+        const selectedObjectsHash = this.hashSelectedPartIds(this.getSelectedObjectIds());
+        return Boolean(selectedPartsMap[selectedObjectsHash]);
+    }
+
+    isSelectionInCart() {
+        let selectedPartsMap = {};
+        for(const customizedMeshId of this.state.customizedMeshesInCart) {
+            const customizedMesh = this.state.customizedMeshes[customizedMeshId];
+            const meshInCartHash = this.hashSelectedPartIds(customizedMesh.selectedPartIds);
+            selectedPartsMap[meshInCartHash] = true;
+        }
+
+        const selectedObjectsHash = this.hashSelectedPartIds(this.getSelectedObjectIds());
+        return Boolean(selectedPartsMap[selectedObjectsHash]);
+    }
+
+    userMustPurchaseSelection() {
+        if (!this.props.customizer_pay_per_download_enabled) {
+            return false;
+        }
+
+        if(this.props.edit_mode) {
+            // edit mode means user can edit, which means he is either the owner or the admin
+            return false;
+        }
+
+        if(this.props.worldData.price > 0) {
+            return !this.userOwnsCurrentSelection()
+        }
+
+        return false;
     }
 
     getSelectedObjectIds() {
         const { selectedParts } = this.state;
-        return Object.keys(selectedParts).map(key => selectedParts[key]).sort((p1, p2) => p2 - p1);
+        return Object.keys(selectedParts).map(key => selectedParts[key]);
     }
 
     get3dObject = ( key ) => {
@@ -489,17 +528,23 @@ class App extends Component {
         })
     }
 
+    showCart() {
+        window.alert('item added to cart')
+        // window.customEventDispatcher.dispatchEvent('ITEM_ADDED_TO_BASKET');
+    }
+
     handleDownload = async () => {
-        const { selectedParts } = this.state
+        if(this.isSelectionInCart()) {
+            this.showCart();
+            return;
+        }
 
         const objectIds = this.getSelectedObjectIds();
 
         try {
             const customizedMeshData = await this.api.generateCustomizedMesh(objectIds);
 
-            const userHasToBuy = this.props.worldData.price > 0 && !this.userOwnsCurrentSelection();
-
-            if(!userHasToBuy) {
+            if(!this.userMustPurchaseSelection()) {
                 if ( customizedMeshData.status === 1 ) { // ready for download
                     const fullCustomizedMeshData = await this.api.getCustomizedMesh(customizedMeshData.id)
                     window.open( fullCustomizedMeshData.file_url )
@@ -511,7 +556,14 @@ class App extends Component {
                 }
             } else {
                 await this.api.addToCart(customizedMeshData.id);
-                window.customEventDispatcher.dispatchEvent('ITEM_ADDED_TO_BASKET');
+                this.setState(state => ({
+                    customizedMeshesInCart: state.customizedMeshesInCart.concat(customizedMeshData.id),
+                    customizedMeshes: {
+                        ...state.customizedMeshes,
+                        [customizedMeshData.id]: customizedMeshData
+                    }
+                }));
+                this.showCart();
             }
 
 
@@ -627,7 +679,21 @@ class App extends Component {
             } : null
         )
 
-        const shouldShowAddToCart = worldData.price > 0 && !this.userOwnsCurrentSelection();
+        const userMustBuySelection = this.userMustPurchaseSelection();
+        const isSelectionInCart = this.isSelectionInCart();
+
+        let downloadButtonMessage;
+        if (userMustBuySelection) {
+            if(isSelectionInCart) {
+                downloadButtonMessage = 'Item already in cart';
+            } else {
+                downloadButtonMessage = `Add To Cart ($${price})`;
+            }
+        } else {
+            downloadButtonMessage = `Download`;
+        }
+
+
 
         return <div className = {styles.app}>
 
@@ -671,7 +737,7 @@ class App extends Component {
                 partTypes = { partTypes }
                 onUpload = { this.handleUpload }
                 onDownload = { this.handleDownload }
-                shouldShowAddToCart = {shouldShowAddToCart}
+                downloadButtonMessage = {downloadButtonMessage}
                 onShowSettings = { this.handleShowSettings }
                 edit_mode = { edit_mode }
             />
