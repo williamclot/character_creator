@@ -1,6 +1,6 @@
 {
   "name": "mmf-customizer",
-  "version": "0.10.3-store-integration.0",
+  "version": "0.10.3",
   "private": true,
   "main": "dist/index.js",
   "module": "dist/index.js",
