@@ -10,7 +10,8 @@ import PartTypesView from '../PartTypes'
 import LoadingIndicator from '../LoadingIndicator';
 import ButtonsContainer from '../ButtonsContainer';
 
-import SceneManager from '../ThreeContainer/sceneManager'
+// import SceneManager from '../ThreeContainer/sceneManager'
+import mainSceneManager from '../../scenes/mainSceneManager';
 
 import {
     ACCEPTED_OBJECT_FILE_EXTENSIONS,
@@ -31,6 +32,8 @@ class App extends Component {
 
     constructor( props ) {
         super( props )
+
+        this.canvasContainerRef = createRef();
 
         const partTypes = getPartTypes( props.worldData )
         const objects = getObjects( props.objects )
@@ -73,8 +76,10 @@ class App extends Component {
         if(initialRotation) {
             container.rotation.set(initialRotation.x, initialRotation.y, initialRotation.z);
         };
+
+        mainSceneManager.init(this.getPartTypesArray())
         
-        this.sceneManager = new SceneManager( container, this.getPartTypesArray() )
+        // this.sceneManager = new SceneManager( container, this.getPartTypesArray() )
 
         this.api = new MmfApi( props.api )
 
@@ -86,6 +91,8 @@ class App extends Component {
     }
 
     async componentDidMount() {
+        this.canvasContainerRef.current.appendChild(mainSceneManager.getCanvas());
+
         this.showLoader()
 
         try {
@@ -116,13 +123,21 @@ class App extends Component {
             const loadedObjects = await fetchObjects( oneOfEach )
             const selectedParts = objectMap( oneOfEach, object => object.id )
 
+            
+            {
+                mainSceneManager.addAll(loadedObjects);
+                mainSceneManager.rescaleContainerToFitObjects();
+                mainSceneManager.renderScene();
+            }
+
+
             this.setState({
-                loadedObjects,
+                // loadedObjects,
                 selectedParts,
             }, () => {
 
-                this.sceneManager.rescaleContainerToFitObjects( 4 )
-                this.threeContainerRef.current.renderScene()
+                // this.sceneManager.rescaleContainerToFitObjects( 4 )
+                // this.threeContainerRef.current.renderScene()
 
             })
 
@@ -349,17 +364,22 @@ class App extends Component {
     }
 
     setSelected3dObject( partTypeId, newObject ) {
-        this.setState( state => ({
-            loadedObjects: {
-                ...state.loadedObjects,
-                [partTypeId]: newObject
-            }
-        }), () => {
+        mainSceneManager.add(partTypeId, newObject);
+        mainSceneManager.rescaleContainerToFitObjects( 4 )
+        mainSceneManager.renderScene()
 
-            this.sceneManager.rescaleContainerToFitObjects( 4 )
-            this.threeContainerRef.current.renderScene()
 
-        })
+        // this.setState( state => ({
+        //     loadedObjects: {
+        //         ...state.loadedObjects,
+        //         [partTypeId]: newObject
+        //     }
+        // }), () => {
+
+        //     this.sceneManager.rescaleContainerToFitObjects( 4 )
+        //     this.threeContainerRef.current.renderScene()
+
+        // })
     }
 
     setSelectedObjectId( partTypeId, objectId ) {
@@ -693,12 +713,8 @@ class App extends Component {
 
         return <div className = {styles.app}>
 
-            <ThreeContainer
-                ref = { this.threeContainerRef }
-                sceneManager = { this.sceneManager }
-                loadedObjects = { loadedObjects }
-                poseData = { poseData }
-            />
+            <div className={styles.canvasContainer} ref={this.canvasContainerRef}>
+            </div>
 
             <Header
                 title = { customizerName }
