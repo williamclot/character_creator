@@ -528,14 +528,9 @@ class App extends Component {
         })
     }
 
-    showCart() {
-        window.alert('item added to cart')
-        // window.customEventDispatcher.dispatchEvent('ITEM_ADDED_TO_BASKET');
-    }
-
     handleDownload = async () => {
         if(this.isSelectionInCart()) {
-            this.showCart();
+            window.alert('item added to cart')
             return;
         }
 
@@ -555,7 +550,7 @@ class App extends Component {
                     window.alert( message )
                 }
             } else {
-                await this.api.addToCart(customizedMeshData.id);
+                const data = await this.api.addToCart(customizedMeshData.id);
                 this.setState(state => ({
                     customizedMeshesInCart: state.customizedMeshesInCart.concat(customizedMeshData.id),
                     customizedMeshes: {
@@ -563,7 +558,8 @@ class App extends Component {
                         [customizedMeshData.id]: customizedMeshData
                     }
                 }));
-                this.showCart();
+                window.customEventDispatcher.dispatchEvent('REFRESH_CART_AMOUNT');
+                window.customEventDispatcher.dispatchEvent('ITEM_ADDED_TO_CART', data);
             }
 
 

@@ -71,10 +71,14 @@ class MmfApi {
     }
 
     async addToCart(customizedMeshId) {
-        await axios.post(this.api.routes.addToCart, {
-            itemType: 'customized-mesh',
-            itemId: customizedMeshId
-        })
+        const { routes, route_params } = this.api;
+        const url = routes.addToCart
+            .replace(route_params.itemType, 'customized-mesh')
+            .replace(route_params.itemId, customizedMeshId);
+
+        const { data } = await axios.post(url);
+
+        return data;
     }
 }
 
