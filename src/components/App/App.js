@@ -93,6 +93,7 @@ class App extends Component {
     async componentDidMount() {
         this.canvasContainerRef.current.appendChild(mainSceneManager.getCanvas());
 
+        mainSceneManager.renderScene();
         this.showLoader()
 
         try {
