@@ -1,24 +1,30 @@
 .container {
     display: flex;
-    align-items: center;
-
+    align-items: flex-start;
     border-radius: unset;
 }
 
 .tutorial {
     margin-left: 15px;
 }
+
 .tutorial.hidden {
     display: none;
 }
 
 .uploadConfirm {
-    background-color: #4c4c4c;
-    border-radius: 20px;
-
-    /* width: 420px; */
+    background-color:rgba(76,76,76,0.7);
+    border-radius: 10px;
     color: white;
-    padding: 10px;
+    padding: 20px;
+}
+
+.uploadConfirm h2{
+    color: white;
+    font-family: "Lato", "Open Sans", sans-serif;
+    font-weight: bold;
+    font-size: 23px;
+    margin: 0 0 20px 0;
 }
 
 .uploadConfirm .gridView {
@@ -32,11 +38,14 @@
 }
 
 .label {
-    grid-column: label-col;
+    /* grid-column: label-col; */
     font-style: italic;
 
     font-weight: bold;
     text-align: right;
+    align-self: center;
+
+    font-size: 16px;
 }
 
 .label .questionMark {
@@ -44,11 +53,12 @@
     background-color: white;
     display: inline-block;
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     text-align: center;
     cursor: pointer;
     margin-left: 5px;
+    line-height: 15px;
 }
 
 .label .previewInstructions {
@@ -59,51 +69,81 @@
 
 .view {
     grid-column: view-col;
-    border-radius: 10px;
-    overflow: hidden;
 }
 
 .view.input {
-    background-color: #777777;
-    border-color: #777777;
+    background-color: rgba(0,0,0,0.4);
+    border-color: rgba(0,0,0,0);
     color: white;
     padding: 0px 5px;
+    margin: 0px;
+    border-radius: 5px;
+    font-size: 16px;
 }
 .view.input:focus {
     background-color: grey;
 }
 
 .previewContaier {
-    /* width: 350px;
-    height: 350px; */
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+    width: 280px;
+    height: 280px;
 }
 
 .previewContaier .canvas, .img {
-    /* width: 250px;
-    height: 200px; */
-
-    width: 350px;
-    height: 350px;
+    width: 100%;
+    height: 80%;
+    object-fit: contain;
 }
+
+.previewContaier .canvasContainer {
+    width: 100px;
+    height: 80px;
+}
+
 
 .previewContaier .canvasTitle {
     background-color: rgba(15, 15, 15, 1);
     text-align: center;
-    line-height: 15px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 80%;
+    font-size: 25px;
+    text-overflow: ellipsis;
     padding: 10px;
-
-    /* dunno why there is a 5px gap before it, so remove it */
-    margin-top: -5px;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
 }
 
 .buttonsContainer {
     
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
+    
 }
 
-.buttonsContainer .button {
+.buttonsContainer .button{
+    font-size: 16px;
+    width: 120px;
+}
 
-    width: 50%;
-    margin: 10px;
+.buttonsContainer .button:nth-child(n+2){
+    margin-left: 10px;
+}
+
+@media only screen and (max-height: 650px){
+
+    .container {
+        height: 100%;
+    }
+
+    .tutorial {
+        height: 100%;
+    }
+    
 }

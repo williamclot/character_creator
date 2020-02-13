@@ -19,7 +19,6 @@
     right: 0;
     top: 0;
     height: 100%;
-    width: 25%;
 }
 
 .adjustTransforms .sideView .inputsContainer {
@@ -29,17 +28,20 @@
     width: 100%;
     display: flex;
     flex-flow: column;
+    padding: 20px;
 }
 
 .adjustTransforms .sideView .inputsContainer .inputGroup {
-
-    margin: 10px;
+    margin-bottom: 20px;
 }
 
 .adjustTransforms .sideView .inputsContainer .inputGroup .axes {
-    
     display: flex;
     justify-content: space-between;
+}
+
+.adjustTransforms .sideView .inputsContainer .inputGroup .axes .container:nth-child(n+2) {
+    margin-left: 10px;
 }
 
 .adjustTransforms .sideView .buttonsContainer {
@@ -47,45 +49,59 @@
     position: absolute;
     bottom: 0;
     display: flex;
-    justify-content: space-between;
-    width: 100%;
+    justify-content: flex-end;
+    left: 0;
+    right: 20px;
+    bottom: 20px;
 }
 
 .adjustTransforms .sideView .buttonsContainer .button {
-    
-    margin: 10px;
+    /* margin: 10px; */
+    font-size: 16px;
+    width: 120px;
+}
+
+.adjustTransforms .sideView .buttonsContainer .button:nth-child(n+2){
+    margin-left: 10px;
 }
 
 .adjustTransforms .title {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 20px;
+    left: 20px;
+}
+
+.adjustTransforms .title h2{
+    font-size: 35px;
+    font-weight: bold;
+    margin: 0px;
 }
 
 .adjustTransforms .shortcutButtons {
     position: absolute;
-    bottom: 10px;
-    left: 10px;
+    bottom: 20px;
+    left: 20px;
 }
 
 .adjustTransforms .shortcutButtons .button {
-    height: 25px;
     width: 150px;
     padding: 5px;
-    margin: 5px;
+    margin: 5px 0px;
 }
 .adjustTransforms .shortcutButtons .scaleButton {
-    /* width | style | color */
-    border: thick solid #2b2b2b;
     border-radius: 10px;
-
     font-weight: bold;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .adjustTransforms .shortcutButtons .inlineButton {
-    display: inline-block;
-    height: 25px;
-    width: 25px;
-    padding: 5px;
-    margin: 5px;}
+    display: block;
+    /* height: 25px; */
+    /* width: 25px; */
+    /* padding: 5px; */
+    margin: 5px;
+    line-height: 10px;
+}

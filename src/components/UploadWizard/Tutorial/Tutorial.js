@@ -25,14 +25,13 @@ const Tutorial = props => (
                     which join together to form a 3D print.
                 </p>
 
-                <p> Example: </p>
                 <img
                     className = { styles.img }
                     src = { partTypesImg }
                 />
 
                 <p>
-                    There are the part types of an action figure.
+                    These are the part types of an action figure.
                 </p>
 
             </div>
@@ -49,7 +48,6 @@ const Tutorial = props => (
                     interchanged to make a 3D print customizable.
                 </p>
 
-                <p> Example: </p>
                 <img
                     className = { styles.img }
                     src = { partsImg }

@@ -4,6 +4,10 @@
     line-height: 30px;
 }
 
+.container:nth-child(n+2){
+    margin-left: 10px;
+}
+
 .container .axis {
     background-color: #1f1818;
     color: white;

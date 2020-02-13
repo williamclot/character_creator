@@ -49,9 +49,8 @@
 }
 
 .selector .selector-item .img {
-    padding: 2px;
     width: 100%;
-    height: 100%;
+    height: 80%;
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
@@ -158,7 +157,7 @@
     overflow-y: hidden;
     overflow-x: scroll;
 
-    margin: 10px 0px 0px 10px;
+    margin: 10px 10px 0px 10px;
     padding-right: 0px;
     padding-bottom: 5px;
 
