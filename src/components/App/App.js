@@ -209,21 +209,15 @@ class App extends Component {
     }
 
     get3dObject = ( key ) => {
-        if ( !this.sceneManager ) return null
-        
-        return this.sceneManager.getObject( key )
+        return mainSceneManager.getObject( key )
     }
 
     getParent3dObject = ( key ) => {
-        if ( !this.sceneManager ) return null
-        
-        return this.sceneManager.getParentObject( key )
+        return mainSceneManager.getParentObject( key )
     }
 
     get3dObjectByAttachPoint = ( attachPointName ) => {
-        if ( !this.sceneManager ) return null
-        
-        return this.sceneManager.getObjectByAttachPoint( attachPointName )
+        return mainSceneManager.getObjectByAttachPoint( attachPointName )
     }
 
     /* ------------------------------------------------------------------------- */

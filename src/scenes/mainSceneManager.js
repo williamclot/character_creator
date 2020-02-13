@@ -330,5 +330,17 @@ export default {
     rescaleContainerToFitObjects(fitOffset) {
         sceneManager.rescaleContainerToFitObjects(fitOffset);
     },
+
+    getObject( key ) {
+        return sceneManager.getObject(key);
+    },
+
+    getObjectByAttachPoint( attachPointName ) {
+        return sceneManager.getObjectByAttachPoint(attachPointName);
+    },
+    
+    getParentObject( key ) {
+        return sceneManager.getParentObject(key);
+    },
 }
 
