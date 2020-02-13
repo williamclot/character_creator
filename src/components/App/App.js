@@ -2,7 +2,6 @@ import React, { Component, createRef } from 'react'
 import { Group } from 'three'
 
 import SettingsPopup from '../SettingsPopup'
-import ThreeContainer from '../ThreeContainer'
 import UploadWizard from '../UploadWizard'
 import Header from '../Header';
 import Selector from '../Selector';
@@ -10,7 +9,6 @@ import PartTypesView from '../PartTypes'
 import LoadingIndicator from '../LoadingIndicator';
 import ButtonsContainer from '../ButtonsContainer';
 
-// import SceneManager from '../ThreeContainer/sceneManager'
 import mainSceneManager from '../../scenes/mainSceneManager';
 
 import {
@@ -79,12 +77,9 @@ class App extends Component {
 
         mainSceneManager.init(this.getPartTypesArray())
         
-        // this.sceneManager = new SceneManager( container, this.getPartTypesArray() )
 
         this.api = new MmfApi( props.api )
 
-        this.threeContainerRef = createRef()
-        
         if ( process.env.NODE_ENV === 'development' ) {
             window.x = this
         }
@@ -133,13 +128,7 @@ class App extends Component {
 
 
             this.setState({
-                // loadedObjects,
                 selectedParts,
-            }, () => {
-
-                // this.sceneManager.rescaleContainerToFitObjects( 4 )
-                // this.threeContainerRef.current.renderScene()
-
             })
 
         } catch ( err ) {
@@ -153,7 +142,6 @@ class App extends Component {
         if ( prevProps.worldData !== this.props.worldData ) {
             // // need to reset sceneManager
             // const categories = getCategories( this.props.worldData.groups )
-            // this.sceneManager.reset( this.props.categories )
         }
     }
 
@@ -362,19 +350,6 @@ class App extends Component {
         mainSceneManager.add(partTypeId, newObject);
         mainSceneManager.rescaleContainerToFitObjects( 4 )
         mainSceneManager.renderScene()
-
-
-        // this.setState( state => ({
-        //     loadedObjects: {
-        //         ...state.loadedObjects,
-        //         [partTypeId]: newObject
-        //     }
-        // }), () => {
-
-        //     this.sceneManager.rescaleContainerToFitObjects( 4 )
-        //     this.threeContainerRef.current.renderScene()
-
-        // })
     }
 
     setSelectedObjectId( partTypeId, objectId ) {
