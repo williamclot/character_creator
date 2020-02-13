@@ -47,10 +47,6 @@ class App extends Component {
             objects,
 
             selectedPartTypeId: partTypes.allIds[ 0 ] || null,
-            /**
-             * Mapping from part type to threejs object
-             */
-            loadedObjects: {},
 
             /** Mapping from partType id to selected object id */
             selectedParts: {},
@@ -114,12 +110,12 @@ class App extends Component {
             }
 
 
-            const loadedObjects = await fetchObjects( oneOfEach )
+            const objectsToLoad = await fetchObjects( oneOfEach )
             const selectedParts = objectMap( oneOfEach, object => object.id )
 
             
             {
-                mainSceneManager.addAll(loadedObjects);
+                mainSceneManager.addAll(objectsToLoad);
                 mainSceneManager.rescaleContainerToFitObjects();
                 mainSceneManager.renderScene();
             }
@@ -635,7 +631,6 @@ class App extends Component {
             isPrivate,
             isLoading, showSettings,
             selectedPartTypeId,
-            loadedObjects,
             uploadedObjectData,
         } = this.state
 
