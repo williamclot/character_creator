@@ -1,5 +1,4 @@
 import React, { Component, createRef } from 'react'
-import { Group } from 'three'
 
 import SettingsPopup from '../SettingsPopup'
 import UploadWizard from '../UploadWizard'
@@ -68,14 +67,13 @@ class App extends Component {
             showSettings: false,
         }
         
-        const container = new Group
+        mainSceneManager.init(this.getPartTypesArray());
 
         const initialRotation = props.worldData['container_rotation'];
         if(initialRotation) {
-            container.rotation.set(initialRotation.x, initialRotation.y, initialRotation.z);
+            mainSceneManager.setContainerRotation(initialRotation);
         };
 
-        mainSceneManager.init(this.getPartTypesArray())
         
 
         this.api = new MmfApi( props.api )

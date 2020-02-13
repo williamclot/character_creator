@@ -271,6 +271,9 @@ const sceneManager = {
     },
 }
 
+const setContainerRotation = rotation => {
+    container.rotation.set(rotation.x, rotation.y, rotation.z);
+}
 
 
 /**
@@ -341,6 +344,10 @@ export default {
     
     getParentObject( key ) {
         return sceneManager.getParentObject(key);
+    },
+
+    setContainerRotation(rotation) {
+        setContainerRotation(rotation);
     },
 }
 
