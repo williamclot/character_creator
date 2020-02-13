@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react'
+import React, { Component, createRef, useState, useEffect, useMemo, useRef } from 'react'
 
 import SettingsPopup from '../SettingsPopup'
 import UploadWizard from '../UploadWizard'
@@ -23,6 +23,130 @@ import MmfApi from '../../util/api';
 
 
 import styles from './App.module.scss'
+
+/**
+ * @param {*} apiRoutes 
+ * @returns {MmfApi | null}
+ */
+const useMmfApi = apiRoutes => {
+    const apiRef = useRef(null);
+    useEffect(() => {
+        apiRef.current = new MmfApi(apiRoutes);
+    }, [apiRoutes]);
+
+    return apiRef.current;
+}
+
+const hashSelectedPartIds = (selectedPartIds) => {
+    return selectedPartIds
+        .sort((p1, p2) => p2 - p1) // sort because different order should produce the same hash
+        .join(':');
+}
+
+const App2 = props => {
+    const [name, setName]               = useState(props.worldData['name'] || '');
+    const [price, setPrice]             = useState(props.worldData['price'] || '');
+    const [description, setDescription] = useState(props.worldData['description'] || '');
+    const [isPrivate, setIsPrivate]     = useState(props.worldData['is_private']);
+    const [imageUrl, setImageUrl]       = useState(props.worldData['image_url'] || null);
+    
+    const partTypes = useMemo(() => getPartTypes(props.worldData), [props.worldData]);
+    const partTypesArray = partTypes.allIds.map(id => partTypes.byId[id]);
+
+    const [objects, setObjects] = useState(() => getObjects(props.objects));
+
+    const getObjectsByPartTypeId = (partTypeId) => {
+        const { byId, allIds } = objects
+        return allIds.map(id => byId[id]).filter(object => object.partTypeId === partTypeId);
+    }
+
+    const [selectedPartTypeId, setSelectedPartTypeId] = useState(partTypes.allIds[ 0 ] || null);
+    const [selectedParts, setSelectedParts] = useState({});
+    const [uploadedObjectData, setUploadedObjectData] = useState(null);
+
+    const [customizedMeshes, setCustomizedMeshes] = useState(props.customizedMeshes);
+    const [customizedMeshesInCart, setCustomizedMeshesInCart] = useState(props.customizedMeshesInCart);
+
+    const [isloading, setIsLoading] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
+
+    const canvasContainerRef = useRef();
+
+    const api = useMmfApi(props.api);
+
+    useEffect(() => {
+        const canvas = mainSceneManager.getCanvas();
+        canvasContainerRef.current.appendChild(canvas);
+        return () => canvasContainerRef.current.removeChild(canvas);
+    }, []);
+
+    useEffect(() => {
+        mainSceneManager.init(partTypesArray);
+    }, [partTypesArray]);
+
+    useEffect(() => {
+        const initialRotation = props.worldData['container_rotation'];
+        if(initialRotation) {
+            mainSceneManager.setContainerRotation(initialRotation);
+        };
+    }, [props.worldData['container_rotation']]);
+
+    useEffect(() => {
+        mainSceneManager.renderScene();
+    }, []);
+
+    useEffect(() => void (async () => {
+        setIsLoading(true);
+    
+        try {
+            let oneOfEach = {};
+            
+            // check location hash for initial selected parts
+            const hash = window.location.hash.slice(1);
+            if (hash !== '') {
+                /** @type {number[]} */
+                const selectedIds = JSON.parse(hash);
+    
+                for (const partId of selectedIds) {
+                    const part = objects.byId[partId];
+                    if (part) {
+                        oneOfEach[part.partTypeId] = part;
+                    }
+                }
+            }
+    
+            // select first part from each part type that hasn't been filled out from the hash
+            for (const partTypeId of partTypes.allIds) {
+                if (!oneOfEach[partTypeId]) {
+                    oneOfEach[partTypeId] = getObjectsByPartTypeId(partTypeId)[0]; // get first if not found in hash
+                }
+            }
+    
+    
+            const objectsToLoad = await fetchObjects( oneOfEach )
+            const selectedParts = objectMap( oneOfEach, object => object.id )
+    
+            
+            {
+                mainSceneManager.addAll(objectsToLoad);
+                mainSceneManager.rescaleContainerToFitObjects();
+                mainSceneManager.renderScene();
+            }
+    
+    
+            setSelectedParts(selectedParts);
+    
+        } catch ( err ) {
+            console.error( err )
+        }
+        
+        setIsLoading(false);
+    })());
+
+    useEffect(() => {
+        
+    }, []);
+}
 
 
 class App extends Component {
