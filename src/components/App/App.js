@@ -197,18 +197,6 @@ class App extends Component {
         return Object.keys(selectedParts).map(key => selectedParts[key]);
     }
 
-    get3dObject = ( key ) => {
-        return mainSceneManager.getObject( key )
-    }
-
-    getParent3dObject = ( key ) => {
-        return mainSceneManager.getParentObject( key )
-    }
-
-    get3dObjectByAttachPoint = ( attachPointName ) => {
-        return mainSceneManager.getObjectByAttachPoint( attachPointName )
-    }
-
     /* ------------------------------------------------------------------------- */
 
     getObject( objectId ) {
@@ -726,9 +714,6 @@ class App extends Component {
 
             {showUploadWizard && (
                 <UploadWizard
-                    getObject = { this.get3dObject }
-                    getParentObject = { this.getParent3dObject }
-                    getObjectByAttachPoint = { this.get3dObjectByAttachPoint }
                     getGlobalPosition = { this.getGlobalPosition }
                     getParentAttachPointPosition = { this.getParentAttachPointPosition }
                     getChildPartTypeByAttachPoint = {this.getChildPartTypeByAttachPoint}

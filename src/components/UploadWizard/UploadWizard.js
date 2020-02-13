@@ -11,6 +11,8 @@ import AdjustAttachpoints from './AdjustAttachPoints';
 import { steps } from './wizardSteps'
 import { stlLoader } from '../../util/loaders'
 
+import mainSceneManager from '../../scenes/mainSceneManager';
+
 import styles from './index.module.css'
 
 class UploadWizard extends Component {
@@ -62,9 +64,6 @@ class UploadWizard extends Component {
     async componentDidMount() {
         const {
             data,
-            getObject,
-            getParentObject,
-            getObjectByAttachPoint,
             getParentAttachPointPosition,
             onWizardCanceled,
             showLoader,
@@ -104,11 +103,12 @@ class UploadWizard extends Component {
                 }
             }
             
-            const currentObject = getObject( partType.id )
-            const currentObjectParent = getParentObject( partType.id )
+            
+            const currentObject = mainSceneManager.getObject( partType.id )
+            const currentObjectParent = mainSceneManager.getParentObject( partType.id )
             const currentObjectChildren = {}
             for ( let attachPoint of attachPoints ) {
-                currentObjectChildren[ attachPoint ] = getObjectByAttachPoint( attachPoint )
+                currentObjectChildren[ attachPoint ] = mainSceneManager.getObjectByAttachPoint( attachPoint )
             }
             
             const parentAttachPointPosition = getParentAttachPointPosition( partType )
