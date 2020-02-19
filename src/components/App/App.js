@@ -1,4 +1,4 @@
-import React, { Component, createRef, useState, useEffect, useMemo, useRef, useReducer } from 'react'
+import React, { Component, createRef, useState, useEffect, useMemo, useRef } from 'react'
 
 import SettingsPopup from '../SettingsPopup'
 import UploadWizard from '../UploadWizard'
@@ -17,9 +17,10 @@ import {
 } from '../../constants'
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
-    getPartTypes, getObjects, getNameAndExtension, objectMap,
+    getPartTypes, getNameAndExtension, objectMap,
 } from '../../util/helpers'
 import useMmfApi from '../../hooks/useMmfApi';
+import useCustomizerParts from '../../hooks/useCustomizerParts'
 
 
 import styles from './App.module.scss'
@@ -30,69 +31,6 @@ const hashSelectedPartIds = (selectedPartIds) => {
         .join(':');
 }
 
-const actionsTypes = {
-    ADD: 'ADD',
-    SET_STATUS: 'SET_STATUS',
-}
-
-const _objectsReducer = (objects, action) => {
-    switch(action.type) {
-        case actionsTypes.ADD: {
-            return {
-                byId: {
-                    ...objects.byId,
-                    [ action.objectToAdd.id ]: action.objectToAdd
-                },
-                allIds: [
-                    ...objects.allIds,
-                    action.objectToAdd.id
-                ]
-            }
-        }
-
-        case actionsTypes.SET_STATUS: {
-            const { byId, allIds } = objects;
-            const modifiedObject = {
-                ...byId[action.objectId],
-                status: action.status
-            };
-        
-            return {
-                byId: {
-                    ...byId,
-                    [action.objectId]: modifiedObject
-                },
-                allIds
-            };
-        }
-
-        default: {
-            throw new Error('invalid action');
-        }
-    }
-}
-
-
-const useCustomizerParts = (initialObjectsFromProps) => {
-    const [parts, dispatch] = useReducer(_objectsReducer, initialObjectsFromProps, getObjects);
-    
-    const setObjectStatus = (objectId, statusCode) => {
-        dispatch({
-            type: actionsTypes.SET_STATUS,
-            objectId,
-            status: statusCode
-        });
-    };
-    
-    const addObject = objectToAdd => {
-        dispatch({
-            type: actionsTypes.ADD,
-            objectToAdd
-        })
-    }
-
-    return [parts, { setObjectStatus, addObject }];
-};
 
 const App = props => {
     const [customizerName, setName]     = useState(props.worldData['name'] || '');

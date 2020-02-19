@@ -1,5 +1,3 @@
-import { OBJECT_STATUS } from '../constants';
-
 let _id = 0;
 export const uniqueId = (prefix = '') => {
     return `${prefix}_${_id++}`
@@ -28,28 +26,6 @@ export const getPartTypes = world => {
     }
 }
 
-export const getObjects = objects => {
-    const { byPartTypeId, allPartTypeIds } = objects
-
-    const byId = {}
-    const allIds = []
-
-    for ( const partTypeId of allPartTypeIds ) { // or Object.keys(byPartTypeId)
-        for ( const object of byPartTypeId[ partTypeId ] ) {
-            allIds.push( object.id )
-            byId[ object.id ] = {
-                ...object,
-                partTypeId,
-                status: OBJECT_STATUS.IN_SYNC,
-            }
-        }
-    }
-
-    return {
-        byId,
-        allIds
-    }
-}
 
 /**
  * Calls a defined callback function on each property of an object,
