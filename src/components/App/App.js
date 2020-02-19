@@ -84,7 +84,7 @@ const App2 = props => {
 
     useEffect(() => {
         mainSceneManager.init(partTypesArray);
-    }, [partTypesArray]);
+    }, []);
 
     useEffect(() => {
         const initialRotation = props.worldData['container_rotation'];
