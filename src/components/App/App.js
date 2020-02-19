@@ -1,4 +1,4 @@
-import React, { Component, createRef, useState, useEffect, useMemo, useRef } from 'react'
+import React, { Component, createRef, useState, useEffect, useMemo, useRef, useReducer } from 'react'
 
 import SettingsPopup from '../SettingsPopup'
 import UploadWizard from '../UploadWizard'
@@ -30,6 +30,70 @@ const hashSelectedPartIds = (selectedPartIds) => {
         .join(':');
 }
 
+const actionsTypes = {
+    ADD: 'ADD',
+    SET_STATUS: 'SET_STATUS',
+}
+
+const _objectsReducer = (objects, action) => {
+    switch(action.type) {
+        case actionsTypes.ADD: {
+            return {
+                byId: {
+                    ...objects.byId,
+                    [ action.objectToAdd.id ]: action.objectToAdd
+                },
+                allIds: [
+                    ...objects.allIds,
+                    action.objectToAdd.id
+                ]
+            }
+        }
+
+        case actionsTypes.SET_STATUS: {
+            const { byId, allIds } = objects;
+            const modifiedObject = {
+                ...byId[action.objectId],
+                status: action.status
+            };
+        
+            return {
+                byId: {
+                    ...byId,
+                    [action.objectId]: modifiedObject
+                },
+                allIds
+            };
+        }
+
+        default: {
+            throw new Error('invalid action');
+        }
+    }
+}
+
+
+const useCustomizerParts = (initialObjectsFromProps) => {
+    const [parts, dispatch] = useReducer(_objectsReducer, initialObjectsFromProps, getObjects);
+    
+    const setObjectStatus = (objectId, statusCode) => {
+        dispatch({
+            type: actionsTypes.SET_STATUS,
+            objectId,
+            status: statusCode
+        });
+    };
+    
+    const addObject = objectToAdd => {
+        dispatch({
+            type: actionsTypes.ADD,
+            objectToAdd
+        })
+    }
+
+    return [parts, { setObjectStatus, addObject }];
+};
+
 const App = props => {
     const [customizerName, setName]     = useState(props.worldData['name'] || '');
     const [price, setPrice]             = useState(props.worldData['price'] || '');
@@ -40,7 +104,7 @@ const App = props => {
     const partTypes = useMemo(() => getPartTypes(props.worldData), [props.worldData]);
     const partTypesArray = partTypes.allIds.map(id => partTypes.byId[id]);
 
-    const [objects, setObjects] = useState(() => getObjects(props.objects));
+    const [objects, { setObjectStatus, addObject }] = useCustomizerParts(props.objects);
 
     const [selectedPartTypeId, setSelectedPartTypeId] = useState(partTypes.allIds[ 0 ] || null);
     const [selectedParts, setSelectedParts] = useState({});
@@ -368,43 +432,6 @@ const App = props => {
 
         setIsLoading(false);
     };
-
-    const setObjectStatus = (objectId, statusCode) => {
-        const statusReducer = (objects, objectId, status) => {
-            const { byId, allIds } = objects;
-            const modifiedObject = {
-                ...byId[objectId],
-                status
-            };
-
-            return {
-                byId: {
-                    ...byId,
-                    [objectId]: modifiedObject
-                },
-                allIds
-            };
-        };
-
-        setObjects(currentObjects => statusReducer(currentObjects, objectId, statusCode));
-    };
-
-    const addObject = objectToAdd => {
-        const addReducer = ( objects, objectToAdd ) => {
-            return {
-                byId: {
-                    ...objects.byId,
-                    [ objectToAdd.id ]: objectToAdd
-                },
-                allIds: [
-                    ...objects.allIds,
-                    objectToAdd.id
-                ]
-            }
-        }
-
-        setObjects(currentObjects => addReducer(currentObjects, objectToAdd));
-    }
 
     const handleDeleteObject = async (objectId) => {
         
