@@ -19,23 +19,10 @@ import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/obj
 import {
     getPartTypes, getObjects, getNameAndExtension, objectMap,
 } from '../../util/helpers'
-import MmfApi from '../../util/api';
+import useMmfApi from '../../hooks/useMmfApi';
 
 
 import styles from './App.module.scss'
-
-/**
- * @param {*} apiRoutes 
- * @returns {MmfApi | null}
- */
-const useMmfApi = apiRoutes => {
-    const apiRef = useRef(null);
-    useEffect(() => {
-        apiRef.current = new MmfApi(apiRoutes);
-    }, [apiRoutes]);
-
-    return apiRef.current;
-}
 
 const hashSelectedPartIds = (selectedPartIds) => {
     return selectedPartIds
