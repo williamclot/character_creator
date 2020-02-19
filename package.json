@@ -17,6 +17,7 @@
     "prepare": "rollup -c"
   },
   "dependencies": {
+    "@types/react": "^16.9.20",
     "axios": "^0.18.1",
     "classnames": "^2.2.6",
     "node-sass": "^4.13.1",
