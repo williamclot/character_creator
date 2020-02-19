@@ -55,11 +55,6 @@ const App2 = props => {
 
     const [objects, setObjects] = useState(() => getObjects(props.objects));
 
-    const getObjectsByPartTypeId = (partTypeId) => {
-        const { byId, allIds } = objects
-        return allIds.map(id => byId[id]).filter(object => object.partTypeId === partTypeId);
-    }
-
     const [selectedPartTypeId, setSelectedPartTypeId] = useState(partTypes.allIds[ 0 ] || null);
     const [selectedParts, setSelectedParts] = useState({});
     const selectedPartsIds = Object.keys(selectedParts).map(key => selectedParts[key]);
@@ -209,6 +204,139 @@ const App2 = props => {
     }
     const userMustBuySelection = mustUserBuySelection();
 
+    function getObject( objectId ) {
+        return objects.byId[ objectId ]
+    }
+
+    function getPartType( partTypeId ) {
+        return partTypes.byId[ partTypeId ]
+    }
+
+    function getSelectedObjectId( partTypeId ) {
+        return selectedParts[ partTypeId ]
+    }
+
+    function getSelectedObject( partTypeId ) {
+        const objectId = getSelectedObjectId( partTypeId )
+
+        return getObject( objectId )
+    }
+
+    function getObjectsByPartTypeId( partTypeId ) {
+        const { byId, allIds } = objects
+        return allIds.map(id => byId[id]).filter(object => object.partTypeId === partTypeId);
+    }
+
+    /*
+    function getParentPartType( partTypeId ) {
+        const { parent } = partTypes.byId[ partTypeId ]
+
+        if ( parent ) {
+            return partTypes.byId[ parent.id ]
+        }
+
+        return null
+    }
+    */
+
+    /*
+    function getObjectPartType( objectId ) {
+        const partTypeId = objects.byId[ objectId ].partTypeId
+
+        return partTypes.byId[ partTypeId ]
+    }
+    */
+
+    function getAttachPoints( objectId ) {
+        const object = objects.byId[ objectId ]
+
+        if ( object.metadata ) {
+            if ( object.metadata.attachPoints ) {
+                return object.metadata.attachPoints
+            }
+        }
+
+        return {}
+    }
+
+    function getAttachPointPosition( objectId, attachPointName ) {
+        const attachPoints = getAttachPoints( objectId )
+
+        return attachPoints[attachPointName] || POSITION_0_0_0;
+    }
+
+    function getPositionInsideParent( partType ) {
+        const {
+            id: parentPartTypeId,
+            attachPoint: parentAttachPoint,
+        } = partType.parent
+
+        const parentObjectId = getSelectedObjectId( parentPartTypeId )
+
+        return getAttachPointPosition( parentObjectId, parentAttachPoint )
+    }
+
+    function getPosition( partType ) {
+        const object = getSelectedObject( partType.id )
+
+        if ( !object ) {
+            // should never happen!
+            console.warn( `Object doesn't exist. This shouldn't normally happen` )
+            return POSITION_0_0_0
+        }
+
+        if ( object.metadata ) {
+            if ( object.metadata.position ) {
+                return object.metadata.position
+            }
+        }
+
+        return POSITION_0_0_0
+    }
+
+    /**
+     * Recursively walks through part types until it reaches the root parent and
+     * adds up all the attachpoint positions from the root to this partType
+     * @param { string|number } partTypeId 
+     */
+    function computeGlobalPosition( partTypeId ) {
+        const partType = getPartType( partTypeId )
+
+        if ( !partType.parent ) {
+            const pos = getPosition( partType )
+
+            // return negated position to "undo" offset created when origin
+            // point was moved to the center of the mesh
+            return {
+                x: -pos.x,
+                y: -pos.y,
+                z: -pos.z,
+            }
+        }
+
+        const attachPointPosition = getPositionInsideParent( partType )
+
+        const result = computeGlobalPosition( partType.parent.id ) // recursive step
+
+        return {
+            x: result.x + attachPointPosition.x,
+            y: result.y + attachPointPosition.y,
+            z: result.z + attachPointPosition.z,
+        }
+    }
+
+    const getParentAttachPointPosition = partType => {
+        if ( !partType.parent ) {
+            return POSITION_0_0_0;
+        }
+        return getPositionInsideParent( partType )
+    }
+
+    const getChildPartTypeByAttachPoint = attachPoint => {
+        return partTypesArray.find(partType => {
+            return partType.parent && partType.parent.attachPoint === attachPoint;
+        });
+    }
 
     let downloadButtonMessage;
     if (userMustBuySelection) {
@@ -273,6 +401,23 @@ const App2 = props => {
 
         setObjects(currentObjects => statusReducer(currentObjects, objectId, statusCode));
     };
+
+    const addObject = objectToAdd => {
+        const addReducer = ( objects, objectToAdd ) => {
+            return {
+                byId: {
+                    ...objects.byId,
+                    [ objectToAdd.id ]: objectToAdd
+                },
+                allIds: [
+                    ...objects.allIds,
+                    objectToAdd.id
+                ]
+            }
+        }
+
+        setObjects(currentObjects => addReducer(currentObjects, objectToAdd));
+    }
 
     const handleDeleteObject = async (objectId) => {
         
@@ -364,6 +509,47 @@ const App2 = props => {
         }
     };
 
+    const handleWizardCompleted = async (partType, { name, extension, objectURL, imageSrc, geometry, metadata }) => {
+        setIsLoading(true);
+        setUploadedObjectData(null);
+        
+        const partTypeId = partType.id
+        
+        const object = getObjectFromGeometry( geometry, metadata )
+                
+        const objectData = {
+            name,
+            files: {
+                default: {
+                    extension,
+                    url: objectURL,
+                }
+            },
+            img: imageSrc,
+            extension: 'stl',
+            metadata,
+            partTypeId,
+        }
+
+        try {
+            const id = await api.postPart(objectData)
+    
+            const objectToAdd = {
+                ...objectData,
+                id,
+                status: OBJECT_STATUS.IN_SYNC
+            }
+    
+            setSelected3dObject( partTypeId, object )
+            setSelectedObjectId( partTypeId, id )
+            addObject( objectToAdd )
+        } catch {
+            console.error(`Failed to upload object '${name}'`)
+        }
+
+        setIsLoading(false);
+    }
+
     return (
         <div className = {styles.app}>
 
@@ -408,20 +594,20 @@ const App2 = props => {
                 edit_mode = { props.edit_mode }
             />
 
-            {/* {showUploadWizard && (
+            {showUploadWizard && (
                 <UploadWizard
-                    getGlobalPosition = { this.getGlobalPosition }
-                    getParentAttachPointPosition = { this.getParentAttachPointPosition }
-                    getChildPartTypeByAttachPoint = {this.getChildPartTypeByAttachPoint}
+                    getGlobalPosition = { computeGlobalPosition }
+                    getParentAttachPointPosition = {getParentAttachPointPosition}
+                    getChildPartTypeByAttachPoint = {getChildPartTypeByAttachPoint}
 
                     data = { uploadedObjectData }
                     
-                    showLoader = { this.showLoader }
-                    hideLoader = { this.hideLoader }
-                    onWizardCanceled = { this.handleWizardCanceled }
-                    onWizardCompleted = { this.handleWizardCompleted }
+                    showLoader = {() => setIsLoading(true)}
+                    hideLoader = {() => setIsLoading(false)}
+                    onWizardCanceled = {() => setUploadedObjectData(null)}
+                    onWizardCompleted = {handleWizardCompleted}
                 />
-            )} */}
+            )}
 
             {showSettings && (
                 <SettingsPopup
