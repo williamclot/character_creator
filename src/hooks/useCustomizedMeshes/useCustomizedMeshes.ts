@@ -1,5 +1,5 @@
-import { CustomizedMeshesMap } from '../../types';
-import { useMemo } from 'react';
+import { CustomizedMeshesMap, CustomizedMesh } from '../../types';
+import { useState, useMemo, useCallback } from 'react';
 
 const hashSelectedPartIds = (selectedPartIds: number[]) => {
     return selectedPartIds
@@ -8,20 +8,23 @@ const hashSelectedPartIds = (selectedPartIds: number[]) => {
 }
 
 const useCustomizedMeshes = (
-    customizedMeshes: CustomizedMeshesMap,
-    customizedMeshesInCart: number[],
-    customizedMeshesOwnedByUser: number[],
+    initialCustomizedMeshes: CustomizedMeshesMap,
+    initialCustomizedMeshesInCart: number[],
+    initialCustomizedMeshesOwnedByUser: number[],
     selectedPartsIds: number[],
 ) => {
+    const [customizedMeshes, setCustomizedMeshes] = useState(initialCustomizedMeshes);
+    const [customizedMeshesInCart, setCustomizedMeshesInCart] = useState(initialCustomizedMeshesInCart);
+
     const meshesOwnedByUserMap = useMemo(() => {
         let selectedPartsMap: {[hash: string]: boolean} = {};
-        for(const customizedMeshId of customizedMeshesOwnedByUser) {
+        for(const customizedMeshId of initialCustomizedMeshesOwnedByUser) {
             const customizedMesh = customizedMeshes[customizedMeshId];
             const ownedMeshHash = hashSelectedPartIds(customizedMesh.selectedPartIds);
             selectedPartsMap[ownedMeshHash] = true;
         }
         return selectedPartsMap;
-    }, [customizedMeshesOwnedByUser, customizedMeshes]);
+    }, [initialCustomizedMeshesOwnedByUser, customizedMeshes]);
 
     const userOwnsCurrentSelection = useMemo(() => {
         const selectedObjectsHash = hashSelectedPartIds(selectedPartsIds);
@@ -44,7 +47,18 @@ const useCustomizedMeshes = (
         return selectedObjectsHash in meshesInCartMap;
     }, [selectedPartsIds, meshesInCartMap]);
 
-    return { userOwnsCurrentSelection, isSelectionInCart };
+    const addCustomizedMeshToCart = useCallback((customizedMesh: CustomizedMesh) => {
+        setCustomizedMeshesInCart(currenctCustomizedMeshesInCart => currenctCustomizedMeshesInCart.concat(customizedMesh.id));
+        setCustomizedMeshes(currentCustomizedMeshes => ({
+            ...currentCustomizedMeshes,
+            [customizedMesh.id]: customizedMesh
+        }));
+    }, []);
+
+    return {
+        userOwnsCurrentSelection, isSelectionInCart,
+        addCustomizedMeshToCart,
+    };
 };
 
 export default useCustomizedMeshes;

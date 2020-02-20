@@ -44,8 +44,7 @@ const App = props => {
         selectedParts, setSelectedParts,
         selectedPartsIds,
 
-        customizedMeshes, setCustomizedMeshes,
-        customizedMeshesInCart, setCustomizedMeshesInCart,
+        addCustomizedMeshToCart,
         isSelectionInCart, userOwnsCurrentSelection,
 
         getObjectsByPartTypeId,
@@ -263,11 +262,7 @@ const App = props => {
                 }
             } else {
                 const data = await api.addToCart(customizedMeshData.id);
-                setCustomizedMeshesInCart(currenctCustomizedMeshesInCart => currenctCustomizedMeshesInCart.concat(customizedMeshData.id));
-                setCustomizedMeshes(currentCustomizedMeshes => ({
-                    ...currentCustomizedMeshes,
-                    [customizedMeshData.id]: customizedMeshData
-                }));
+                addCustomizedMeshToCart(customizedMeshData);
 
                 window.customEventDispatcher.dispatchEvent('REFRESH_CART_AMOUNT');
                 window.customEventDispatcher.dispatchEvent('ITEM_ADDED_TO_CART', data);

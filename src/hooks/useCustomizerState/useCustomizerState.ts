@@ -15,13 +15,12 @@ const useCustomizerState = (props: AppProps) => {
     const [selectedParts, setSelectedParts] = useState<{[partTypeId: number]: number}>({});
     const selectedPartsIds = Object.keys(selectedParts).map(key => selectedParts[Number(key)]);
 
-
-    const [customizedMeshes, setCustomizedMeshes] = useState(props.customizedMeshes);
-    const [customizedMeshesInCart, setCustomizedMeshesInCart] = useState(props.customizedMeshesInCart);
-
-    const { isSelectionInCart, userOwnsCurrentSelection } = useCustomizedMeshes(
-        customizedMeshes,
-        customizedMeshesInCart,
+    const {
+        addCustomizedMeshToCart,
+        isSelectionInCart, userOwnsCurrentSelection
+    } = useCustomizedMeshes(
+        props.customizedMeshes,
+        props.customizedMeshesInCart,
         props.customizedMeshesOwnedByUser,
         selectedPartsIds
     );
@@ -148,8 +147,7 @@ const useCustomizerState = (props: AppProps) => {
         selectedParts, setSelectedParts,
         selectedPartsIds,
 
-        customizedMeshes, setCustomizedMeshes,
-        customizedMeshesInCart, setCustomizedMeshesInCart,
+        addCustomizedMeshToCart,
         isSelectionInCart, userOwnsCurrentSelection,
 
         getObjectsByPartTypeId,
