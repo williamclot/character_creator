@@ -12,7 +12,6 @@ import mainSceneManager from '../../scenes/mainSceneManager';
 
 import {
     ACCEPTED_OBJECT_FILE_EXTENSIONS,
-    POSITION_0_0_0,
     OBJECT_STATUS
 } from '../../constants'
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
@@ -21,8 +20,7 @@ import {
 } from '../../util/helpers'
 
 import useMmfApi from '../../hooks/useMmfApi';
-import useCustomizerParts from '../../hooks/useCustomizerParts'
-import usePartTypes from '../../hooks/usePartTypes';
+import useCustomizerState from '../../hooks/useCustomizerState';
 
 
 import styles from './App.module.scss'
@@ -37,19 +35,21 @@ const App = props => {
     const [description, setDescription] = useState(props.worldData['description'] || '');
     const [isPrivate, setIsPrivate]     = useState(props.worldData['is_private']);
     const [imageUrl, setImageUrl]       = useState(props.worldData['image_url'] || null);
-    
-    const { partTypes, partTypesArray } = usePartTypes(props.worldData);
 
     const {
-        parts: objects,
+        partTypes, partTypesArray,
+        objects, addObject, setObjectStatus,
 
-        addPart: addObject,
-        setPartStatus: setObjectStatus, 
-    } = useCustomizerParts(props.objects);
+        selectedPartTypeId, setSelectedPartTypeId,
+        selectedParts, setSelectedParts,
+        selectedPartsIds,
 
-    const [selectedPartTypeId, setSelectedPartTypeId] = useState(partTypes.allIds[ 0 ] || null);
-    const [selectedParts, setSelectedParts] = useState({});
-    const selectedPartsIds = Object.keys(selectedParts).map(key => selectedParts[key]);
+        getObjectsByPartTypeId,
+
+        computeGlobalPosition,
+        getParentAttachPointPosition,
+        getChildPartTypeByAttachPoint,
+    } = useCustomizerState(props.worldData, props.objects);
 
     const [uploadedObjectData, setUploadedObjectData] = useState(null);
 
@@ -195,140 +195,6 @@ const App = props => {
         return false;
     }
     const userMustBuySelection = mustUserBuySelection();
-
-    function getObject( objectId ) {
-        return objects.byId[ objectId ]
-    }
-
-    function getPartType( partTypeId ) {
-        return partTypes.byId[ partTypeId ]
-    }
-
-    function getSelectedObjectId( partTypeId ) {
-        return selectedParts[ partTypeId ]
-    }
-
-    function getSelectedObject( partTypeId ) {
-        const objectId = getSelectedObjectId( partTypeId )
-
-        return getObject( objectId )
-    }
-
-    function getObjectsByPartTypeId( partTypeId ) {
-        const { byId, allIds } = objects
-        return allIds.map(id => byId[id]).filter(object => object.partTypeId === partTypeId);
-    }
-
-    /*
-    function getParentPartType( partTypeId ) {
-        const { parent } = partTypes.byId[ partTypeId ]
-
-        if ( parent ) {
-            return partTypes.byId[ parent.id ]
-        }
-
-        return null
-    }
-    */
-
-    /*
-    function getObjectPartType( objectId ) {
-        const partTypeId = objects.byId[ objectId ].partTypeId
-
-        return partTypes.byId[ partTypeId ]
-    }
-    */
-
-    function getAttachPoints( objectId ) {
-        const object = objects.byId[ objectId ]
-
-        if ( object.metadata ) {
-            if ( object.metadata.attachPoints ) {
-                return object.metadata.attachPoints
-            }
-        }
-
-        return {}
-    }
-
-    function getAttachPointPosition( objectId, attachPointName ) {
-        const attachPoints = getAttachPoints( objectId )
-
-        return attachPoints[attachPointName] || POSITION_0_0_0;
-    }
-
-    function getPositionInsideParent( partType ) {
-        const {
-            id: parentPartTypeId,
-            attachPoint: parentAttachPoint,
-        } = partType.parent
-
-        const parentObjectId = getSelectedObjectId( parentPartTypeId )
-
-        return getAttachPointPosition( parentObjectId, parentAttachPoint )
-    }
-
-    function getPosition( partType ) {
-        const object = getSelectedObject( partType.id )
-
-        if ( !object ) {
-            // should never happen!
-            console.warn( `Object doesn't exist. This shouldn't normally happen` )
-            return POSITION_0_0_0
-        }
-
-        if ( object.metadata ) {
-            if ( object.metadata.position ) {
-                return object.metadata.position
-            }
-        }
-
-        return POSITION_0_0_0
-    }
-
-    /**
-     * Recursively walks through part types until it reaches the root parent and
-     * adds up all the attachpoint positions from the root to this partType
-     * @param { string|number } partTypeId 
-     */
-    function computeGlobalPosition( partTypeId ) {
-        const partType = getPartType( partTypeId )
-
-        if ( !partType.parent ) {
-            const pos = getPosition( partType )
-
-            // return negated position to "undo" offset created when origin
-            // point was moved to the center of the mesh
-            return {
-                x: -pos.x,
-                y: -pos.y,
-                z: -pos.z,
-            }
-        }
-
-        const attachPointPosition = getPositionInsideParent( partType )
-
-        const result = computeGlobalPosition( partType.parent.id ) // recursive step
-
-        return {
-            x: result.x + attachPointPosition.x,
-            y: result.y + attachPointPosition.y,
-            z: result.z + attachPointPosition.z,
-        }
-    }
-
-    const getParentAttachPointPosition = partType => {
-        if ( !partType.parent ) {
-            return POSITION_0_0_0;
-        }
-        return getPositionInsideParent( partType )
-    }
-
-    const getChildPartTypeByAttachPoint = attachPoint => {
-        return partTypesArray.find(partType => {
-            return partType.parent && partType.parent.attachPoint === attachPoint;
-        });
-    }
 
     let downloadButtonMessage;
     if (userMustBuySelection) {
