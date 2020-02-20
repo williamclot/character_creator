@@ -17,7 +17,7 @@ import {
 } from '../../constants'
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
-    getPartTypes, getNameAndExtension, objectMap,
+    getPartTypes, getNameAndExtension, objectMap, hashSelectedPartIds
 } from '../../util/helpers'
 import useMmfApi from '../../hooks/useMmfApi';
 import useCustomizerParts from '../../hooks/useCustomizerParts'
@@ -25,11 +25,6 @@ import useCustomizerParts from '../../hooks/useCustomizerParts'
 
 import styles from './App.module.scss'
 
-const hashSelectedPartIds = (selectedPartIds) => {
-    return selectedPartIds
-        .sort((p1, p2) => p2 - p1) // sort because different order should produce the same hash
-        .join(':');
-}
 
 
 const App = props => {
