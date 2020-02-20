@@ -1,12 +1,8 @@
-import { Objects_from_props, CustomizerPart } from '../../types';
+import { Objects_from_props, CustomizerPartsState, CustomizerPart_in_state } from '../../types';
 import { OBJECT_STATUS } from '../../constants';
 
-type CustomizerPart_in_state = CustomizerPart & {
-    status: string
-    partTypeId: number
-}
 
-export const getObjects = (objects: Objects_from_props) => {
+export const getObjects = (objects: Objects_from_props): CustomizerPartsState => {
     const { byPartTypeId, allPartTypeIds } = objects;
 
     const byId: {[id: string]: CustomizerPart_in_state} = {};

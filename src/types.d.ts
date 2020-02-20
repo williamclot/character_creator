@@ -68,6 +68,18 @@ export type Objects_from_props = {
     byPartTypeId: {[partTypeId: string]: CustomizerPart[]}
 }
 
+export type CustomizerPart_in_state = CustomizerPart & {
+    status: string
+    partTypeId: number
+}
+
+export type CustomizerPartsState = {
+    byId: {
+        [id: string]: CustomizerPart_in_state;
+    };
+    allIds: number[];
+}
+
 export type AppProps = {
     api: ApiRoutes
     customizedMeshes: CustomizedMesh[]

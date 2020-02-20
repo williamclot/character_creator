@@ -1,37 +1,42 @@
 import { useReducer } from 'react';
 import { getObjects } from './getObjects';
+import { Objects_from_props, CustomizerPartsState, CustomizerPart, CustomizerPart_in_state } from '../../types';
 
 type Action = {
     type: 'ADD' | 'SET_STATUS',
     [param: string]: any,
 }
 
-const _objectsReducer = (objects: any, action: Action) => {
+const _objectsReducer = (objects: CustomizerPartsState, action: Action) => {
     switch(action.type) {
         case 'ADD': {
+            const objectId = action.objectToAdd.id as number;
+
             return {
                 byId: {
                     ...objects.byId,
-                    [ action.objectToAdd.id ]: action.objectToAdd
+                    [objectId.toString()]: action.objectToAdd as CustomizerPart_in_state
                 },
                 allIds: [
                     ...objects.allIds,
-                    action.objectToAdd.id
+                    objectId
                 ]
-            }
+            };
         }
 
         case 'SET_STATUS': {
+            const objectId = action.objectId as number;
+
             const { byId, allIds } = objects;
             const modifiedObject = {
-                ...byId[action.objectId],
-                status: action.status
+                ...byId[objectId.toString()],
+                status: action.status as string
             };
         
             return {
                 byId: {
                     ...byId,
-                    [action.objectId]: modifiedObject
+                    [objectId.toString()]: modifiedObject
                 },
                 allIds
             };
@@ -44,7 +49,7 @@ const _objectsReducer = (objects: any, action: Action) => {
 }
 
 
-const useCustomizerParts = (initialObjectsFromProps: any) => {
+const useCustomizerParts = (initialObjectsFromProps: Objects_from_props) => {
     const [parts, dispatch] = useReducer(_objectsReducer, initialObjectsFromProps, getObjects);
     
     const setObjectStatus = (objectId: number, statusCode: number) => {
