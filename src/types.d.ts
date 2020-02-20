@@ -40,11 +40,6 @@ export type Coord3d = {
     z: number
 }
 
-type CustomizedMesh = {
-    id: number
-    [key: string]: any // TODO
-};
-
 export type CustomizerPart = {
     id: number
     name: string
@@ -80,9 +75,20 @@ export type CustomizerPartsState = {
     allIds: number[];
 }
 
+export type CustomizedMesh = {
+    id: number
+    customizer_url: string
+    file_url: string
+    image_url: string
+    selectedPartIds: number[]
+    status: number
+};
+
+export type CustomizedMeshesMap = {[customizedMeshId: number]: CustomizedMesh}
+
 export type AppProps = {
     api: ApiRoutes
-    customizedMeshes: CustomizedMesh[]
+    customizedMeshes: CustomizedMeshesMap
     customizedMeshesInCart: number[] // ids
     customizedMeshesOwnedByUser: number[] // ids
     customizer_pay_per_download_enabled: boolean
