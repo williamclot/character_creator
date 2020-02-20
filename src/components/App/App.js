@@ -41,6 +41,7 @@ const App = props => {
         objects, addObject, setObjectStatus,
 
         selectedPartTypeId, setSelectedPartTypeId,
+        selectedPartType,
         selectedParts, setSelectedParts,
         selectedPartsIds,
 
@@ -133,8 +134,6 @@ const App = props => {
     })(), []);
 
     const showUploadWizard = Boolean(uploadedObjectData);
-
-    const selectedPartType = partTypes.byId[selectedPartTypeId];
 
     const selectorData = (selectedPartType ?
         {

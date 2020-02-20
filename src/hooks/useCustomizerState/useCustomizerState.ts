@@ -14,6 +14,7 @@ const useCustomizerState = (props: AppProps) => {
     const [selectedPartTypeId, setSelectedPartTypeId] = useState(partTypes.allIds[ 0 ] || null);
     const [selectedParts, setSelectedParts] = useState<{[partTypeId: number]: number}>({});
     const selectedPartsIds = Object.keys(selectedParts).map(key => selectedParts[Number(key)]);
+    const selectedPartType = partTypes.byId[selectedPartTypeId];
 
     const {
         addCustomizedMeshToCart,
@@ -144,6 +145,7 @@ const useCustomizerState = (props: AppProps) => {
         objects: parts, addObject: addPart, setObjectStatus: setPartStatus,
 
         selectedPartTypeId, setSelectedPartTypeId,
+        selectedPartType,
         selectedParts, setSelectedParts,
         selectedPartsIds,
 
