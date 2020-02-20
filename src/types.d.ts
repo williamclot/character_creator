@@ -65,7 +65,7 @@ export type CustomizerPart = {
 
 export type Objects_from_props = {
     allPartTypeIds: number[],
-    byPartTypeId: {[partTypeId: string]: CustomizerPart[]}
+    byPartTypeId: {[partTypeId: number]: CustomizerPart[]}
 }
 
 export type CustomizerPart_in_state = CustomizerPart & {
@@ -75,7 +75,7 @@ export type CustomizerPart_in_state = CustomizerPart & {
 
 export type CustomizerPartsState = {
     byId: {
-        [id: string]: CustomizerPart_in_state;
+        [id: number]: CustomizerPart_in_state;
     };
     allIds: number[];
 }

@@ -15,7 +15,7 @@ const _objectsReducer = (objects: CustomizerPartsState, action: Action) => {
             return {
                 byId: {
                     ...objects.byId,
-                    [objectId.toString()]: action.objectToAdd as CustomizerPart_in_state
+                    [objectId]: action.objectToAdd as CustomizerPart_in_state
                 },
                 allIds: [
                     ...objects.allIds,
@@ -29,14 +29,14 @@ const _objectsReducer = (objects: CustomizerPartsState, action: Action) => {
 
             const { byId, allIds } = objects;
             const modifiedObject = {
-                ...byId[objectId.toString()],
+                ...byId[objectId],
                 status: action.status as string
             };
         
             return {
                 byId: {
                     ...byId,
-                    [objectId.toString()]: modifiedObject
+                    [objectId]: modifiedObject
                 },
                 allIds
             };
