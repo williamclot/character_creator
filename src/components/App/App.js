@@ -38,7 +38,12 @@ const App = props => {
     
     const { partTypes, partTypesArray } = usePartTypes(props.worldData);
 
-    const [objects, { setObjectStatus, addObject }] = useCustomizerParts(props.objects);
+    const {
+        parts: objects,
+
+        addPart: addObject,
+        setPartStatus: setObjectStatus, 
+    } = useCustomizerParts(props.objects);
 
     const [selectedPartTypeId, setSelectedPartTypeId] = useState(partTypes.allIds[ 0 ] || null);
     const [selectedParts, setSelectedParts] = useState({});

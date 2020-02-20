@@ -52,7 +52,7 @@ const _objectsReducer = (objects: CustomizerPartsState, action: Action) => {
 const useCustomizerParts = (initialObjectsFromProps: Objects_from_props) => {
     const [parts, dispatch] = useReducer(_objectsReducer, initialObjectsFromProps, getObjects);
     
-    const setObjectStatus = (objectId: number, statusCode: number) => {
+    const setPartStatus = (objectId: number, statusCode: number) => {
         dispatch({
             type: 'SET_STATUS',
             objectId,
@@ -60,14 +60,17 @@ const useCustomizerParts = (initialObjectsFromProps: Objects_from_props) => {
         });
     };
     
-    const addObject = (objectToAdd: any) => {
+    const addPart = (objectToAdd: CustomizerPart_in_state) => {
         dispatch({
             type: 'ADD',
             objectToAdd
-        })
+        });
     }
 
-    return [parts, { setObjectStatus, addObject }];
+    return {
+        parts,
+        setPartStatus, addPart,
+    };
 };
 
 export default useCustomizerParts;
