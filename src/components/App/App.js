@@ -17,10 +17,12 @@ import {
 } from '../../constants'
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
-    getPartTypes, getNameAndExtension, objectMap, hashSelectedPartIds
+    getNameAndExtension, objectMap, hashSelectedPartIds
 } from '../../util/helpers'
+
 import useMmfApi from '../../hooks/useMmfApi';
 import useCustomizerParts from '../../hooks/useCustomizerParts'
+import usePartTypes from '../../hooks/usePartTypes';
 
 
 import styles from './App.module.scss'
@@ -34,8 +36,7 @@ const App = props => {
     const [isPrivate, setIsPrivate]     = useState(props.worldData['is_private']);
     const [imageUrl, setImageUrl]       = useState(props.worldData['image_url'] || null);
     
-    const partTypes = useMemo(() => getPartTypes(props.worldData), [props.worldData]);
-    const partTypesArray = partTypes.allIds.map(id => partTypes.byId[id]);
+    const { partTypes, partTypesArray } = usePartTypes(props.worldData);
 
     const [objects, { setObjectStatus, addObject }] = useCustomizerParts(props.objects);
 
