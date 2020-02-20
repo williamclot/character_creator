@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ApiRoutes } from './ApiRoutes';
+import { ApiRoutes } from '../../types';
 
 
 const getBlob = (url: string) => {
