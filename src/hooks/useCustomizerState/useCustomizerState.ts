@@ -1,18 +1,30 @@
-import { WorldData, Objects_from_props, PartType, Coord3d } from '../../types';
+import { PartType, Coord3d, AppProps } from '../../types';
 import { POSITION_0_0_0 } from '../../constants';
 
 import { useState } from 'react';
 import useCustomizerParts from '../useCustomizerParts';
 import usePartTypes from '../usePartTypes';
+import useCustomizedMeshes from '../useCustomizedMeshes/useCustomizedMeshes';
 
 
-const useCustomizerState = (worldData: WorldData, objects: Objects_from_props) => {
-    const { partTypes, partTypesArray } = usePartTypes(worldData);
-    const { parts, addPart, setPartStatus } = useCustomizerParts(objects);
+const useCustomizerState = (props: AppProps) => {
+    const { partTypes, partTypesArray } = usePartTypes(props.worldData);
+    const { parts, addPart, setPartStatus } = useCustomizerParts(props.objects);
 
     const [selectedPartTypeId, setSelectedPartTypeId] = useState(partTypes.allIds[ 0 ] || null);
     const [selectedParts, setSelectedParts] = useState<{[partTypeId: number]: number}>({});
-    const selectedPartsIds: number[] = Object.keys(selectedParts).map(key => selectedParts[Number(key)]);
+    const selectedPartsIds = Object.keys(selectedParts).map(key => selectedParts[Number(key)]);
+
+
+    const [customizedMeshes, setCustomizedMeshes] = useState(props.customizedMeshes);
+    const [customizedMeshesInCart, setCustomizedMeshesInCart] = useState(props.customizedMeshesInCart);
+
+    const { isSelectionInCart, userOwnsCurrentSelection } = useCustomizedMeshes(
+        customizedMeshes,
+        customizedMeshesInCart,
+        props.customizedMeshesOwnedByUser,
+        selectedPartsIds
+    );
 
 
     function getObject(partId: number) {
@@ -135,6 +147,10 @@ const useCustomizerState = (worldData: WorldData, objects: Objects_from_props) =
         selectedPartTypeId, setSelectedPartTypeId,
         selectedParts, setSelectedParts,
         selectedPartsIds,
+
+        customizedMeshes, setCustomizedMeshes,
+        customizedMeshesInCart, setCustomizedMeshesInCart,
+        isSelectionInCart, userOwnsCurrentSelection,
 
         getObjectsByPartTypeId,
 

@@ -60,12 +60,6 @@ export const radiansToDegreesFormatter = {
     }
 }
 
-export const hashSelectedPartIds = (selectedPartIds) => {
-    return selectedPartIds
-        .sort((p1, p2) => p2 - p1) // sort because different order should produce the same hash
-        .join(':');
-}
-
 /**
  * @template T, S
  * @callback Mapper

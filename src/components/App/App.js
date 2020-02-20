@@ -16,7 +16,7 @@ import {
 } from '../../constants'
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
-    getNameAndExtension, objectMap, hashSelectedPartIds
+    getNameAndExtension, objectMap
 } from '../../util/helpers'
 
 import useMmfApi from '../../hooks/useMmfApi';
@@ -44,17 +44,18 @@ const App = props => {
         selectedParts, setSelectedParts,
         selectedPartsIds,
 
+        customizedMeshes, setCustomizedMeshes,
+        customizedMeshesInCart, setCustomizedMeshesInCart,
+        isSelectionInCart, userOwnsCurrentSelection,
+
         getObjectsByPartTypeId,
 
         computeGlobalPosition,
         getParentAttachPointPosition,
         getChildPartTypeByAttachPoint,
-    } = useCustomizerState(props.worldData, props.objects);
+    } = useCustomizerState(props);
 
     const [uploadedObjectData, setUploadedObjectData] = useState(null);
-
-    const [customizedMeshes, setCustomizedMeshes] = useState(props.customizedMeshes);
-    const [customizedMeshesInCart, setCustomizedMeshesInCart] = useState(props.customizedMeshesInCart);
 
     const [isLoading, setIsLoading] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
@@ -131,41 +132,6 @@ const App = props => {
         
         setIsLoading(false);
     })(), []);
-
-
-
-    const meshesOwnedByUserMap = useMemo(() => {
-        let selectedPartsMap = {};
-        for(const customizedMeshId of props.customizedMeshesOwnedByUser) {
-            const customizedMesh = customizedMeshes[customizedMeshId];
-            const ownedMeshHash = hashSelectedPartIds(customizedMesh.selectedPartIds);
-            selectedPartsMap[ownedMeshHash] = true;
-        }
-        return selectedPartsMap;
-    }, [props.customizedMeshesOwnedByUser, customizedMeshes]);
-
-    const userOwnsCurrentSelection = useMemo(() => {
-        const selectedObjectsHash = hashSelectedPartIds(selectedPartsIds);
-        return Boolean(meshesOwnedByUserMap[selectedObjectsHash]);
-    }, [selectedPartsIds, meshesOwnedByUserMap]);
-
-    const meshesInCartMap = useMemo(() => {
-        let selectedPartsMap = {};
-        for(const customizedMeshId of customizedMeshesInCart) {
-            const customizedMesh = customizedMeshes[customizedMeshId];
-            const meshInCartHash = hashSelectedPartIds(customizedMesh.selectedPartIds);
-            selectedPartsMap[meshInCartHash] = true;
-        }
-
-        return selectedPartsMap;
-    }, [customizedMeshesInCart, customizedMeshes]);
-
-    const isSelectionInCart = useMemo(() => {
-        const selectedObjectsHash = hashSelectedPartIds(selectedPartsIds);
-        return Boolean(meshesInCartMap[selectedObjectsHash]);
-    }, [selectedPartsIds, meshesInCartMap]);
-
-
 
     const showUploadWizard = Boolean(uploadedObjectData);
 
