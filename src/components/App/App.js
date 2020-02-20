@@ -28,7 +28,9 @@ import usePartTypes from '../../hooks/usePartTypes';
 import styles from './App.module.scss'
 
 
-
+/**
+ * @param {import('../../types').AppProps} props 
+ */
 const App = props => {
     const [customizerName, setName]     = useState(props.worldData['name'] || '');
     const [price, setPrice]             = useState(props.worldData['price'] || '');
