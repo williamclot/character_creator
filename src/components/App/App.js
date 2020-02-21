@@ -30,15 +30,12 @@ import styles from './App.module.scss'
  * @param {import('../../types').AppProps} props 
  */
 const App = props => {
-    const [customizerName, setName]     = useState(props.worldData['name'] || '');
-    const [price, setPrice]             = useState(props.worldData['price'] || '');
-    const [description, setDescription] = useState(props.worldData['description'] || '');
-    const [isPrivate, setIsPrivate]     = useState(props.worldData['is_private']);
-    const [imageUrl, setImageUrl]       = useState(props.worldData['image_url'] || null);
-
     const {
         partTypes, partTypesArray,
         objects, addObject, setObjectStatus,
+
+        customizerName, price, description, isPrivate, imageUrl,
+        updateSettings,
 
         selectedPartTypeId, setSelectedPartTypeId,
         selectedPartType,
@@ -261,11 +258,7 @@ const App = props => {
     const handleSaveChanges = async fields => {
         try {
             const updatedCustomizer = await api.patchCustomizer(fields);
-            setName(updatedCustomizer['name']);
-            setPrice(updatedCustomizer['price']);
-            setDescription(updatedCustomizer['description']);
-            setImageUrl(updatedCustomizer['image_url']);
-            setIsPrivate(updatedCustomizer['is_private']);
+            updateSettings(updatedCustomizer);
 
         } catch (err) {
             console.error(err)

@@ -5,11 +5,17 @@ import { useState, useMemo } from 'react';
 import useCustomizerParts from '../useCustomizerParts';
 import usePartTypes from '../usePartTypes';
 import useCustomizedMeshes from '../useCustomizedMeshes/useCustomizedMeshes';
+import useSettingsState from '../useSettingsState';
 
 
 const useCustomizerState = (props: AppProps) => {
     const { partTypes, partTypesArray } = usePartTypes(props.worldData);
     const { parts, addPart, setPartStatus } = useCustomizerParts(props.objects);
+
+    const {
+        customizerName, price, description, isPrivate, imageUrl,
+        updateSettings,
+    } = useSettingsState(props.worldData);
 
     const [selectedPartTypeId, setSelectedPartTypeId] = useState(partTypes.allIds[ 0 ] || null);
     const [selectedParts, setSelectedParts] = useState<{[partTypeId: number]: number}>({});
@@ -159,6 +165,9 @@ const useCustomizerState = (props: AppProps) => {
     return {
         partTypes, partTypesArray,
         objects: parts, addObject: addPart, setObjectStatus: setPartStatus,
+
+        customizerName, price, description, isPrivate, imageUrl,
+        updateSettings,
 
         selectedPartTypeId, setSelectedPartTypeId,
         selectedPartType,
