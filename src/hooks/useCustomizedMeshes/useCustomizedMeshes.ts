@@ -48,11 +48,11 @@ const useCustomizedMeshes = (
     }, [selectedPartsIds, meshesInCartMap]);
 
     const addCustomizedMeshToCart = useCallback((customizedMesh: CustomizedMesh) => {
-        setCustomizedMeshesInCart(currenctCustomizedMeshesInCart => currenctCustomizedMeshesInCart.concat(customizedMesh.id));
         setCustomizedMeshes(currentCustomizedMeshes => ({
             ...currentCustomizedMeshes,
             [customizedMesh.id]: customizedMesh
         }));
+        setCustomizedMeshesInCart(currenctCustomizedMeshesInCart => currenctCustomizedMeshesInCart.concat(customizedMesh.id));
     }, []);
 
     return {
