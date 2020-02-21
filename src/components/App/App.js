@@ -26,7 +26,7 @@ import styles from './App.module.scss'
 
 
 /**
- * @param {import('../../types').AppProps} props 
+ * @type {import('react').FunctionComponent<import('../../types').AppProps>}
  */
 const App = props => {
     const {
