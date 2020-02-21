@@ -1,7 +1,7 @@
 import { PartType, Coord3d, AppProps } from '../../types';
 import { POSITION_0_0_0 } from '../../constants';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import useCustomizerParts from '../useCustomizerParts';
 import usePartTypes from '../usePartTypes';
 import useCustomizedMeshes from '../useCustomizedMeshes/useCustomizedMeshes';
@@ -26,6 +26,22 @@ const useCustomizerState = (props: AppProps) => {
         selectedPartsIds
     );
 
+    const userMustBuySelection = useMemo(() => {
+        if (!props.customizer_pay_per_download_enabled) {
+            return false;
+        }
+
+        if(props.edit_mode) {
+            // edit mode means user can edit, which means he is either the owner or the admin
+            return false;
+        }
+
+        if(props.worldData.price > 0) {
+            return !userOwnsCurrentSelection;
+        }
+
+        return false;
+    }, [props, userOwnsCurrentSelection]);
 
     function getObject(partId: number) {
         return parts.byId[partId];
@@ -150,7 +166,7 @@ const useCustomizerState = (props: AppProps) => {
         selectedPartsIds,
 
         addCustomizedMeshToCart,
-        isSelectionInCart, userOwnsCurrentSelection,
+        isSelectionInCart, userMustBuySelection,
 
         getObjectsByPartTypeId,
 

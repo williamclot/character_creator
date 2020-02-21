@@ -46,7 +46,7 @@ const App = props => {
         selectedPartsIds,
 
         addCustomizedMeshToCart,
-        isSelectionInCart, userOwnsCurrentSelection,
+        isSelectionInCart, userMustBuySelection,
 
         getObjectsByPartTypeId,
 
@@ -141,24 +141,6 @@ const App = props => {
             currentPartType: selectedPartType
         } : null
     );
-    
-    function mustUserBuySelection() {
-        if (!props.customizer_pay_per_download_enabled) {
-            return false;
-        }
-
-        if(props.edit_mode) {
-            // edit mode means user can edit, which means he is either the owner or the admin
-            return false;
-        }
-
-        if(props.worldData.price > 0) {
-            return !userOwnsCurrentSelection;
-        }
-
-        return false;
-    }
-    const userMustBuySelection = mustUserBuySelection();
 
     let downloadButtonMessage;
     if (userMustBuySelection) {
