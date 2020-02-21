@@ -1,5 +1,5 @@
 {
-  "name": "mmf-customizer",
+  "name": "@myminifactory/mmf-customizer",
   "version": "0.11.1",
   "private": true,
   "main": "dist/index.js",
@@ -53,5 +53,16 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "description": "This project is a React component that is imported into the [MyMiniFactory](https://www.myminifactory.com/) website.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MyMiniFactory/CharacterCreator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MyMiniFactory/CharacterCreator/issues"
+  },
+  "homepage": "https://github.com/MyMiniFactory/CharacterCreator#readme"
 }
