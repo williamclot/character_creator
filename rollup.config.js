@@ -3,16 +3,20 @@ import resolve from '@rollup/plugin-node-resolve';
 import images from 'rollup-plugin-image-files'
 import autoExternal from 'rollup-plugin-auto-external'
 import postcss from 'rollup-plugin-postcss'
-import typescript from '@rollup/plugin-typescript';
 
 
-import pkg from './package.json'
+import pkg from './package.json';
+
+const extensionsToProcess = ['.js', '.ts'];
 
 export default {
 	input: 'src/App.js',
+	
 	plugins: [
 		autoExternal(),
-		resolve(),
+		resolve({
+			extensions: extensionsToProcess
+		}),
 
 		postcss({
 			extract: true,
@@ -21,10 +25,8 @@ export default {
 		}),
 
 		images(),
-		typescript({
-			exclude: 'node_modules/**'
-		}),
 		babel({
+			extensions: extensionsToProcess,
 			exclude: 'node_modules/**'
 		}),
 	],
