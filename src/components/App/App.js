@@ -8,8 +8,6 @@ import PartTypesView from '../PartTypes'
 import LoadingIndicator from '../LoadingIndicator';
 import ButtonsContainer from '../ButtonsContainer';
 
-import mainSceneManager from '../../scenes/mainSceneManager';
-
 import {
     ACCEPTED_OBJECT_FILE_EXTENSIONS,
     OBJECT_STATUS
@@ -21,6 +19,7 @@ import {
 
 import useMmfApi from '../../hooks/useMmfApi';
 import useCustomizerState from '../../hooks/useCustomizerState';
+import useSceneManager from '../../hooks/useSceneManager';
 
 
 import styles from './App.module.scss'
@@ -57,29 +56,12 @@ const App = props => {
     const [isLoading, setIsLoading] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
 
-    const canvasContainerRef = useRef();
-
     const api = useMmfApi(props.api);
 
-    useEffect(() => {
-        const canvas = mainSceneManager.getCanvas();
-        canvasContainerRef.current.appendChild(canvas);
-        return () => canvasContainerRef.current.removeChild(canvas);
-    }, []);
+    const { canvasContainerRef, sceneManager } = useSceneManager(partTypesArray, props.worldData.container_rotation);
 
     useEffect(() => {
-        mainSceneManager.init(partTypesArray);
-    }, []);
-
-    useEffect(() => {
-        const initialRotation = props.worldData['container_rotation'];
-        if(initialRotation) {
-            mainSceneManager.setContainerRotation(initialRotation);
-        };
-    }, [props.worldData['container_rotation']]);
-
-    useEffect(() => {
-        mainSceneManager.renderScene();
+        sceneManager.renderScene();
     }, []);
 
     useEffect(() => void (async () => {
@@ -115,9 +97,9 @@ const App = props => {
     
             
             {
-                mainSceneManager.addAll(objectsToLoad);
-                mainSceneManager.rescaleContainerToFitObjects();
-                mainSceneManager.renderScene();
+                sceneManager.addAll(objectsToLoad);
+                sceneManager.rescaleContainerToFitObjects();
+                sceneManager.renderScene();
             }
     
     
@@ -151,9 +133,9 @@ const App = props => {
     }
 
     const setSelected3dObject = (partTypeId, newObject) => {
-        mainSceneManager.add(partTypeId, newObject);
-        mainSceneManager.rescaleContainerToFitObjects( 4 )
-        mainSceneManager.renderScene()
+        sceneManager.add(partTypeId, newObject);
+        sceneManager.rescaleContainerToFitObjects( 4 )
+        sceneManager.renderScene()
     };
 
     const setSelectedObjectId = (partTypeId, objectId) => {
