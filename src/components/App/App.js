@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react'
+import React, { Component, createRef, useState, useEffect, useMemo, useRef } from 'react'
 
 import SettingsPopup from '../SettingsPopup'
 import UploadWizard from '../UploadWizard'
@@ -24,67 +24,77 @@ import MmfApi from '../../util/api';
 
 import styles from './App.module.scss'
 
+/**
+ * @param {*} apiRoutes 
+ * @returns {MmfApi | null}
+ */
+const useMmfApi = apiRoutes => {
+    const apiRef = useRef(null);
+    useEffect(() => {
+        apiRef.current = new MmfApi(apiRoutes);
+    }, [apiRoutes]);
 
-class App extends Component {
+    return apiRef.current;
+}
 
-    constructor( props ) {
-        super( props )
+const hashSelectedPartIds = (selectedPartIds) => {
+    return selectedPartIds
+        .sort((p1, p2) => p2 - p1) // sort because different order should produce the same hash
+        .join(':');
+}
 
-        this.canvasContainerRef = createRef();
+const App = props => {
+    const [customizerName, setName]     = useState(props.worldData['name'] || '');
+    const [price, setPrice]             = useState(props.worldData['price'] || '');
+    const [description, setDescription] = useState(props.worldData['description'] || '');
+    const [isPrivate, setIsPrivate]     = useState(props.worldData['is_private']);
+    const [imageUrl, setImageUrl]       = useState(props.worldData['image_url'] || null);
+    
+    const partTypes = useMemo(() => getPartTypes(props.worldData), [props.worldData]);
+    const partTypesArray = partTypes.allIds.map(id => partTypes.byId[id]);
 
-        const partTypes = getPartTypes( props.worldData )
-        const objects = getObjects( props.objects )
+    const [objects, setObjects] = useState(() => getObjects(props.objects));
 
-        this.state = {
-            name: props.worldData['name'] || '',
-            price: props.worldData['price'] || '',
-            description: props.worldData['description'] || '',
-            isPrivate: props.worldData['is_private'],
-            imageUrl: props.worldData['image_url'] || null,
-            // tags: props.worldData['tags'] || [],
-            
-            partTypes,
-            objects,
+    const [selectedPartTypeId, setSelectedPartTypeId] = useState(partTypes.allIds[ 0 ] || null);
+    const [selectedParts, setSelectedParts] = useState({});
+    const selectedPartsIds = Object.keys(selectedParts).map(key => selectedParts[key]);
 
-            selectedPartTypeId: partTypes.allIds[ 0 ] || null,
+    const [uploadedObjectData, setUploadedObjectData] = useState(null);
 
-            /** Mapping from partType id to selected object id */
-            selectedParts: {},
+    const [customizedMeshes, setCustomizedMeshes] = useState(props.customizedMeshes);
+    const [customizedMeshesInCart, setCustomizedMeshesInCart] = useState(props.customizedMeshesInCart);
 
-            uploadedObjectData: null,
+    const [isLoading, setIsLoading] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
 
-            customizedMeshes: props.customizedMeshes,
-            customizedMeshesInCart: props.customizedMeshesInCart,
-            
-            // editMode: false,
+    const canvasContainerRef = useRef();
 
-            isLoading: false,
+    const api = useMmfApi(props.api);
 
-            showSettings: false,
-        }
-        
-        mainSceneManager.init(this.getPartTypesArray());
+    useEffect(() => {
+        const canvas = mainSceneManager.getCanvas();
+        canvasContainerRef.current.appendChild(canvas);
+        return () => canvasContainerRef.current.removeChild(canvas);
+    }, []);
 
+    useEffect(() => {
+        mainSceneManager.init(partTypesArray);
+    }, []);
+
+    useEffect(() => {
         const initialRotation = props.worldData['container_rotation'];
         if(initialRotation) {
             mainSceneManager.setContainerRotation(initialRotation);
         };
+    }, [props.worldData['container_rotation']]);
 
-        
-
-        this.api = new MmfApi( props.api )
-
-        if ( process.env.NODE_ENV === 'development' ) {
-            window.x = this
-        }
-    }
-
-    async componentDidMount() {
-        this.canvasContainerRef.current.appendChild(mainSceneManager.getCanvas());
-
+    useEffect(() => {
         mainSceneManager.renderScene();
-        this.showLoader()
+    }, []);
 
+    useEffect(() => void (async () => {
+        setIsLoading(true);
+    
         try {
             let oneOfEach = {};
             
@@ -93,147 +103,132 @@ class App extends Component {
             if (hash !== '') {
                 /** @type {number[]} */
                 const selectedIds = JSON.parse(hash);
-
+    
                 for (const partId of selectedIds) {
-                    const part = this.state.objects.byId[partId];
+                    const part = objects.byId[partId];
                     if (part) {
                         oneOfEach[part.partTypeId] = part;
                     }
                 }
             }
-
+    
             // select first part from each part type that hasn't been filled out from the hash
-            for (const partTypeId of this.state.partTypes.allIds) {
+            for (const partTypeId of partTypes.allIds) {
                 if (!oneOfEach[partTypeId]) {
-                    oneOfEach[partTypeId] = this.getObjectsByPartTypeId(partTypeId)[0]; // get first if not found in hash
+                    oneOfEach[partTypeId] = getObjectsByPartTypeId(partTypeId)[0]; // get first if not found in hash
                 }
             }
-
-
+    
+    
             const objectsToLoad = await fetchObjects( oneOfEach )
-            const selectedParts = objectMap( oneOfEach, object => object.id )
-
+            const newSelectedParts = objectMap( oneOfEach, object => object.id )
+    
             
             {
                 mainSceneManager.addAll(objectsToLoad);
                 mainSceneManager.rescaleContainerToFitObjects();
                 mainSceneManager.renderScene();
             }
-
-
-            this.setState({
-                selectedParts,
-            })
-
+    
+    
+            setSelectedParts(newSelectedParts);
+    
         } catch ( err ) {
             console.error( err )
         }
         
-        this.hideLoader()
-    }
+        setIsLoading(false);
+    })(), []);
 
-    componentDidUpdate( prevProps ) {
-        if ( prevProps.worldData !== this.props.worldData ) {
-            // // need to reset sceneManager
-            // const categories = getCategories( this.props.worldData.groups )
-        }
-    }
 
-    hashSelectedPartIds(selectedPartIds) {
-        return selectedPartIds
-            .sort((p1, p2) => p2 - p1) // sort because different order should produce the same hash
-            .join(':');
-    }
 
-    userOwnsCurrentSelection() {
+    const meshesOwnedByUserMap = useMemo(() => {
         let selectedPartsMap = {};
-        for(const customizedMeshId of this.props.customizedMeshesOwnedByUser) {
-            const customizedMesh = this.state.customizedMeshes[customizedMeshId];
-            const ownedMeshHash = this.hashSelectedPartIds(customizedMesh.selectedPartIds);
+        for(const customizedMeshId of props.customizedMeshesOwnedByUser) {
+            const customizedMesh = customizedMeshes[customizedMeshId];
+            const ownedMeshHash = hashSelectedPartIds(customizedMesh.selectedPartIds);
             selectedPartsMap[ownedMeshHash] = true;
         }
+        return selectedPartsMap;
+    }, [props.customizedMeshesOwnedByUser, customizedMeshes]);
 
-        const selectedObjectsHash = this.hashSelectedPartIds(this.getSelectedObjectIds());
-        return Boolean(selectedPartsMap[selectedObjectsHash]);
-    }
+    const userOwnsCurrentSelection = useMemo(() => {
+        const selectedObjectsHash = hashSelectedPartIds(selectedPartsIds);
+        return Boolean(meshesOwnedByUserMap[selectedObjectsHash]);
+    }, [selectedPartsIds, meshesOwnedByUserMap]);
 
-    isSelectionInCart() {
+    const meshesInCartMap = useMemo(() => {
         let selectedPartsMap = {};
-        for(const customizedMeshId of this.state.customizedMeshesInCart) {
-            const customizedMesh = this.state.customizedMeshes[customizedMeshId];
-            const meshInCartHash = this.hashSelectedPartIds(customizedMesh.selectedPartIds);
+        for(const customizedMeshId of customizedMeshesInCart) {
+            const customizedMesh = customizedMeshes[customizedMeshId];
+            const meshInCartHash = hashSelectedPartIds(customizedMesh.selectedPartIds);
             selectedPartsMap[meshInCartHash] = true;
         }
 
-        const selectedObjectsHash = this.hashSelectedPartIds(this.getSelectedObjectIds());
-        return Boolean(selectedPartsMap[selectedObjectsHash]);
-    }
+        return selectedPartsMap;
+    }, [customizedMeshesInCart, customizedMeshes]);
 
-    userMustPurchaseSelection() {
-        if (!this.props.customizer_pay_per_download_enabled) {
+    const isSelectionInCart = useMemo(() => {
+        const selectedObjectsHash = hashSelectedPartIds(selectedPartsIds);
+        return Boolean(meshesInCartMap[selectedObjectsHash]);
+    }, [selectedPartsIds, meshesInCartMap]);
+
+
+
+    const showUploadWizard = Boolean(uploadedObjectData);
+
+    const selectedPartType = partTypes.byId[selectedPartTypeId];
+
+    const selectorData = (selectedPartType ?
+        {
+            objects:  getObjectsByPartTypeId(selectedPartType.id),
+            currentPartType: selectedPartType
+        } : null
+    );
+    
+    function mustUserBuySelection() {
+        if (!props.customizer_pay_per_download_enabled) {
             return false;
         }
 
-        if(this.props.edit_mode) {
+        if(props.edit_mode) {
             // edit mode means user can edit, which means he is either the owner or the admin
             return false;
         }
 
-        if(this.props.worldData.price > 0) {
-            return !this.userOwnsCurrentSelection()
+        if(props.worldData.price > 0) {
+            return !userOwnsCurrentSelection;
         }
 
         return false;
     }
+    const userMustBuySelection = mustUserBuySelection();
 
-    getSelectedObjectIds() {
-        const { selectedParts } = this.state;
-        return Object.keys(selectedParts).map(key => selectedParts[key]);
+    function getObject( objectId ) {
+        return objects.byId[ objectId ]
     }
 
-    /* ------------------------------------------------------------------------- */
-
-    getObject( objectId ) {
-        return this.state.objects.byId[ objectId ]
+    function getPartType( partTypeId ) {
+        return partTypes.byId[ partTypeId ]
     }
 
-    getPartType( partTypeId ) {
-        return this.state.partTypes.byId[ partTypeId ]
+    function getSelectedObjectId( partTypeId ) {
+        return selectedParts[ partTypeId ]
     }
 
-    getPartTypesArray() {
-        const { partTypes } = this.state
+    function getSelectedObject( partTypeId ) {
+        const objectId = getSelectedObjectId( partTypeId )
 
-        return partTypes.allIds.map( id => partTypes.byId[ id ] )
+        return getObject( objectId )
     }
 
-    getSelectedPartType() {
-        const { partTypes, selectedPartTypeId } = this.state
-
-        return partTypes.byId[ selectedPartTypeId ]
+    function getObjectsByPartTypeId( partTypeId ) {
+        const { byId, allIds } = objects
+        return allIds.map(id => byId[id]).filter(object => object.partTypeId === partTypeId);
     }
 
-    getSelectedObjectId( partTypeId ) {
-        return this.state.selectedParts[ partTypeId ]
-    }
-
-    getSelectedObject( partTypeId ) {
-        const objectId = this.getSelectedObjectId( partTypeId )
-
-        return this.getObject( objectId )
-    }
-
-    getObjectsByPartTypeId( partTypeId ) {
-        const { byId, allIds } = this.state.objects
-
-        const objects = allIds.map( id => byId[ id ] )
-
-        return objects.filter( object => object.partTypeId === partTypeId )
-    }
-
-    getParentPartType( partTypeId ) {
-        const { partTypes } = this.state
-
+    /*
+    function getParentPartType( partTypeId ) {
         const { parent } = partTypes.byId[ partTypeId ]
 
         if ( parent ) {
@@ -242,16 +237,18 @@ class App extends Component {
 
         return null
     }
+    */
 
-    getObjectPartType( objectId ) {
-        const { objects, partTypes } = this.state
+    /*
+    function getObjectPartType( objectId ) {
         const partTypeId = objects.byId[ objectId ].partTypeId
 
         return partTypes.byId[ partTypeId ]
     }
+    */
 
-    getAttachPoints( objectId ) {
-        const object = this.state.objects.byId[ objectId ]
+    function getAttachPoints( objectId ) {
+        const object = objects.byId[ objectId ]
 
         if ( object.metadata ) {
             if ( object.metadata.attachPoints ) {
@@ -262,25 +259,25 @@ class App extends Component {
         return {}
     }
 
-    getAttachPointPosition( objectId, attachPointName ) {
-        const attachPoints = this.getAttachPoints( objectId )
+    function getAttachPointPosition( objectId, attachPointName ) {
+        const attachPoints = getAttachPoints( objectId )
 
-        return attachPoints[ attachPointName ] || { x: 0, y: 0, z: 0 }
+        return attachPoints[attachPointName] || POSITION_0_0_0;
     }
 
-    getPositionInsideParent( partType ) {
+    function getPositionInsideParent( partType ) {
         const {
             id: parentPartTypeId,
             attachPoint: parentAttachPoint,
         } = partType.parent
 
-        const parentObjectId = this.getSelectedObjectId( parentPartTypeId )
+        const parentObjectId = getSelectedObjectId( parentPartTypeId )
 
-        return this.getAttachPointPosition( parentObjectId, parentAttachPoint )
+        return getAttachPointPosition( parentObjectId, parentAttachPoint )
     }
 
-    getPosition( partType ) {
-        const object = this.getSelectedObject( partType.id )
+    function getPosition( partType ) {
+        const object = getSelectedObject( partType.id )
 
         if ( !object ) {
             // should never happen!
@@ -302,11 +299,11 @@ class App extends Component {
      * adds up all the attachpoint positions from the root to this partType
      * @param { string|number } partTypeId 
      */
-    computeGlobalPosition( partTypeId ) {
-        const partType = this.getPartType( partTypeId )
+    function computeGlobalPosition( partTypeId ) {
+        const partType = getPartType( partTypeId )
 
         if ( !partType.parent ) {
-            const pos = this.getPosition( partType )
+            const pos = getPosition( partType )
 
             // return negated position to "undo" offset created when origin
             // point was moved to the center of the mesh
@@ -317,9 +314,9 @@ class App extends Component {
             }
         }
 
-        const attachPointPosition = this.getPositionInsideParent( partType )
+        const attachPointPosition = getPositionInsideParent( partType )
 
-        const result = this.computeGlobalPosition( partType.parent.id ) // recursive step
+        const result = computeGlobalPosition( partType.parent.id ) // recursive step
 
         return {
             x: result.x + attachPointPosition.x,
@@ -328,45 +325,84 @@ class App extends Component {
         }
     }
 
-    setSelected3dObject( partTypeId, newObject ) {
+    const getParentAttachPointPosition = partType => {
+        if ( !partType.parent ) {
+            return POSITION_0_0_0;
+        }
+        return getPositionInsideParent( partType )
+    }
+
+    const getChildPartTypeByAttachPoint = attachPoint => {
+        return partTypesArray.find(partType => {
+            return partType.parent && partType.parent.attachPoint === attachPoint;
+        });
+    }
+
+    let downloadButtonMessage;
+    if (userMustBuySelection) {
+        if(isSelectionInCart) {
+            downloadButtonMessage = 'Item already in cart';
+        } else {
+            downloadButtonMessage = `Add To Cart ($${price})`;
+        }
+    } else {
+        downloadButtonMessage = `Download`;
+    }
+
+    const setSelected3dObject = (partTypeId, newObject) => {
         mainSceneManager.add(partTypeId, newObject);
         mainSceneManager.rescaleContainerToFitObjects( 4 )
         mainSceneManager.renderScene()
-    }
+    };
 
-    setSelectedObjectId( partTypeId, objectId ) {
-        this.setState( state => ({
-            selectedParts: {
-                ...state.selectedParts,
-                [partTypeId]: objectId
-            }
-        }))
-    }
+    const setSelectedObjectId = (partTypeId, objectId) => {
+        setSelectedParts(currentSelectedParts => ({
+            ...currentSelectedParts,
+            [partTypeId]: objectId
+        }));
+    };
 
+    const handleObjectSelected = async (partTypeId, objectData) => {
+        setIsLoading(true);
 
-    setObjectStatus( objectId, statusCode ) {
-        const statusReducer = ( objects, objectId, status ) => {
-            const { byId, allIds } = objects
+        try {
+
+            const newObject = await get3DObject(objectData);
+            setSelected3dObject(partTypeId, newObject);
+            setSelectedObjectId(partTypeId, objectData.id);
+
+        } catch ( err ) {
+            const partType = partTypes.byId[partTypeId];
+            console.error(
+                `Something went wrong while loading object of type ${partType.name}:\n`
+                + err
+            );
+        }
+
+        setIsLoading(false);
+    };
+
+    const setObjectStatus = (objectId, statusCode) => {
+        const statusReducer = (objects, objectId, status) => {
+            const { byId, allIds } = objects;
             const modifiedObject = {
-                ...byId[ objectId ],
+                ...byId[objectId],
                 status
-            }
+            };
 
             return {
                 byId: {
                     ...byId,
-                    [ objectId ]: modifiedObject
+                    [objectId]: modifiedObject
                 },
                 allIds
-            }
-        }
+            };
+        };
 
-        this.setState( state => ({
-            objects: statusReducer( state.objects, objectId, statusCode )
-        }))
-    }
+        setObjects(currentObjects => statusReducer(currentObjects, objectId, statusCode));
+    };
 
-    addObject( objectToAdd ) {
+    const addObject = objectToAdd => {
         const addReducer = ( objects, objectToAdd ) => {
             return {
                 byId: {
@@ -380,141 +416,58 @@ class App extends Component {
             }
         }
 
-        this.setState( state => ({
-            objects: addReducer( state.objects, objectToAdd )
-        }))
+        setObjects(currentObjects => addReducer(currentObjects, objectToAdd));
     }
 
-    /*
-    removeObject( objectToDeleteId ) {
-        const removeReducer = ( objects, idToRemove ) => {
-            const { [idToRemove]: removedItem, ...remainingItems } = objects.byId
-            const remainingIds = objects.allIds.filter( objectId => objectId !== idToRemove )
+    const handleDeleteObject = async (objectId) => {
+        
+        const oldStatus = objects.byId[objectId].status;
 
-            return {
-                byId: remainingItems,
-                allIds: remainingIds
-            }
+        setObjectStatus(objectId, OBJECT_STATUS.LOADING);
+
+        try {
+            
+            await api.deletePart(objectId);
+            setObjectStatus(objectId, OBJECT_STATUS.DELETED);
+            
+        } catch {
+            setObjectStatus(objectId, oldStatus);
+            console.error(`Failed to delete object with id ${objectId}`);
+        }
+    }
+
+    const handleUpload = (partTypeId, filename, objectURL) => {
+        const partType = partTypes.byId[partTypeId];
+
+        const { name, extension } = getNameAndExtension(filename);
+
+        if (!ACCEPTED_OBJECT_FILE_EXTENSIONS.includes(extension)) {
+            console.error(`Unrecognized extension '${extension}'`);
+            return;
         }
 
-        this.setState( state => ({
-            objects: removeReducer( state.objects, objectToDeleteId )
-        }))
-    }
-    /*
-
-    /* bound methods below */
-
-    getGlobalPosition = partTypeId => {
-        return this.computeGlobalPosition( partTypeId )
-    }
-
-    getParentAttachPointPosition = partType => {
-        if ( !partType.parent ) {
-            return { x: 0, y: 0, z: 0 }
-        }
-        return this.getPositionInsideParent( partType )
-    }
-
-    getChildPartTypeByAttachPoint = attachPoint => {
-        const partTypesArray = this.getPartTypesArray();
-        return partTypesArray.find(partType => {
-            return partType.parent && partType.parent.attachPoint === attachPoint;
+        setUploadedObjectData({
+            partType,
+            name,
+            filename,
+            extension,
+            objectURL,
         });
     }
 
-    showLoader = () => {
-        this.setState({
-            isLoading: true
-        })
-    }
-
-    hideLoader = () => {
-        this.setState({
-            isLoading: false
-        })
-    }
-
-    handlePartTypeSelected = id => {
-        this.setState({
-            selectedPartTypeId: id
-        })
-    }
-
-    handleObjectSelected = async ( partTypeId, objectData ) => {
-        this.showLoader()
-
-        try {
-
-            const newObject = await get3DObject( objectData )
-            this.setSelected3dObject( partTypeId, newObject )
-            this.setSelectedObjectId( partTypeId, objectData.id )
-
-        } catch ( err ) {
-            const partType = this.state.partTypes.byId[ partTypeId ]
-            console.error(
-                `Something went wrong while loading object of type ${partType.name}:\n`
-                + err
-            )
-        }
-
-        this.hideLoader()
-    }
-
-    handleDeleteObject = async ( objectId ) => {
-        const oldStatus = this.getObject( objectId ).status
-
-        this.setObjectStatus( objectId, OBJECT_STATUS.LOADING )
-
-        try {
-            
-            await this.api.deletePart(objectId)
-            this.setObjectStatus( objectId, OBJECT_STATUS.DELETED )
-            
-        } catch {
-            this.setObjectStatus( objectId, oldStatus )
-            console.error(`Failed to delete object with id ${objectId}`)
-        }
-    }
-
-    handleUpload = ( partTypeId, filename, objectURL ) => {
-        const partType = this.state.partTypes.byId[ partTypeId ]
-
-        const { name, extension } = getNameAndExtension( filename )
-
-        if ( !ACCEPTED_OBJECT_FILE_EXTENSIONS.includes( extension ) ) {
-
-            console.error( `Unrecognized extension '${extension}'` )
-            return
-
-        }
-
-        this.setState({
-            uploadedObjectData: {
-                partType,
-                name,
-                filename,
-                extension,
-                objectURL,
-            }
-        })
-    }
-
-    handleDownload = async () => {
-        if(this.isSelectionInCart()) {
+    const handleDownload = async () => {
+        if(isSelectionInCart) {
             window.alert('item added to cart')
             return;
         }
 
-        const objectIds = this.getSelectedObjectIds();
-
         try {
-            const customizedMeshData = await this.api.generateCustomizedMesh(objectIds);
+            const customizedMeshData = await api.generateCustomizedMesh(selectedPartsIds);
 
-            if(!this.userMustPurchaseSelection()) {
-                if ( customizedMeshData.status === 1 ) { // ready for download
-                    const fullCustomizedMeshData = await this.api.getCustomizedMesh(customizedMeshData.id)
-                    window.open( fullCustomizedMeshData.file_url )
+            if(!userMustBuySelection) {
+                if (customizedMeshData.status === 1) { // ready for download
+                    const fullCustomizedMeshData = await api.getCustomizedMesh(customizedMeshData.id)
+                    window.open(fullCustomizedMeshData.file_url);
                 } else {
                     // TODO add popup component
         
@@ -522,20 +475,17 @@ class App extends Component {
                     window.alert( message )
                 }
             } else {
-                const data = await this.api.addToCart(customizedMeshData.id);
-                this.setState(state => ({
-                    customizedMeshesInCart: state.customizedMeshesInCart.concat(customizedMeshData.id),
-                    customizedMeshes: {
-                        ...state.customizedMeshes,
-                        [customizedMeshData.id]: customizedMeshData
-                    }
+                const data = await api.addToCart(customizedMeshData.id);
+                setCustomizedMeshesInCart(currenctCustomizedMeshesInCart => currenctCustomizedMeshesInCart.concat(customizedMeshData.id));
+                setCustomizedMeshes(currentCustomizedMeshes => ({
+                    ...currentCustomizedMeshes,
+                    [customizedMeshData.id]: customizedMeshData
                 }));
+
                 window.customEventDispatcher.dispatchEvent('REFRESH_CART_AMOUNT');
                 window.customEventDispatcher.dispatchEvent('ITEM_ADDED_TO_CART', data);
             }
 
-
-            
         } catch (err) {
             console.error(err)
 
@@ -543,27 +493,26 @@ class App extends Component {
                 window.customEventDispatcher.dispatchEvent('SHOW_LOGIN');
             }
         }
-    }
+    };
 
-    handleShowSettings = () => {
-        this.setState({
-            showSettings: true
-        })
-    }
+    const handleSaveChanges = async fields => {
+        try {
+            const updatedCustomizer = await api.patchCustomizer(fields);
+            setName(updatedCustomizer['name']);
+            setPrice(updatedCustomizer['price']);
+            setDescription(updatedCustomizer['description']);
+            setImageUrl(updatedCustomizer['image_url']);
+            setIsPrivate(updatedCustomizer['is_private']);
 
-    handleWizardCanceled = () => {
-        this.setState({
-            uploadedObjectData: null
-        })
-    }
+        } catch (err) {
+            console.error(err)
+        }
+    };
 
-    handleWizardCompleted = async (partType, { name, extension, objectURL, imageSrc, geometry, metadata }) => {
-        this.showLoader()
+    const handleWizardCompleted = async (partType, { name, extension, objectURL, imageSrc, geometry, metadata }) => {
+        setIsLoading(true);
+        setUploadedObjectData(null);
         
-        this.setState({
-            uploadedObjectData: null,
-        })
-
         const partTypeId = partType.id
         
         const object = getObjectFromGeometry( geometry, metadata )
@@ -583,7 +532,7 @@ class App extends Component {
         }
 
         try {
-            const id = await this.api.postPart(objectData)
+            const id = await api.postPart(objectData)
     
             const objectToAdd = {
                 ...objectData,
@@ -591,105 +540,45 @@ class App extends Component {
                 status: OBJECT_STATUS.IN_SYNC
             }
     
-            this.setSelected3dObject( partTypeId, object )
-            this.setSelectedObjectId( partTypeId, id )
-            this.addObject( objectToAdd )
+            setSelected3dObject( partTypeId, object )
+            setSelectedObjectId( partTypeId, id )
+            addObject( objectToAdd )
         } catch {
             console.error(`Failed to upload object '${name}'`)
         }
 
-        this.hideLoader()
+        setIsLoading(false);
     }
 
-    handleSaveChanges = async fields => {
-        try {
-            const updatedCustomizer = await this.api.patchCustomizer(fields)
-            this.setState({
-                name: updatedCustomizer['name'],
-                price: updatedCustomizer['price'],
-                description: updatedCustomizer['description'],
-                imageUrl: updatedCustomizer['image_url'],
-                isPrivate: updatedCustomizer['is_private'],
-            })
+    return (
+        <div className = {styles.app}>
 
-        } catch (err) {
-            console.error(err)
-        }
-    }
-
-    render() {
-        const {
-            edit_mode,
-            poseData,
-            worldData,
-        } = this.props
-        const {
-            name: customizerName,
-            price,
-            description,
-            imageUrl,
-            isPrivate,
-            isLoading, showSettings,
-            selectedPartTypeId,
-            uploadedObjectData,
-        } = this.state
-
-        const showUploadWizard = Boolean( uploadedObjectData )
-
-        const partTypes = this.getPartTypesArray()
-        const selectedPartType = this.getSelectedPartType()
-
-        const selectorData = ( selectedPartType ?
-            {
-                objects:  this.getObjectsByPartTypeId(selectedPartType.id),
-                currentPartType: selectedPartType
-            } : null
-        )
-
-        const userMustBuySelection = this.userMustPurchaseSelection();
-        const isSelectionInCart = this.isSelectionInCart();
-
-        let downloadButtonMessage;
-        if (userMustBuySelection) {
-            if(isSelectionInCart) {
-                downloadButtonMessage = 'Item already in cart';
-            } else {
-                downloadButtonMessage = `Add To Cart ($${price})`;
-            }
-        } else {
-            downloadButtonMessage = `Download`;
-        }
-
-
-
-        return <div className = {styles.app}>
-
-            <div className={styles.canvasContainer} ref={this.canvasContainerRef}>
+            <div className={styles.canvasContainer} ref={canvasContainerRef}>
             </div>
 
             <Header
                 title = { customizerName }
-                userName = {worldData['user_name']}
-                userUrl = {worldData['user_url']}
+                userName = {props.worldData['user_name']}
+                userUrl = {props.worldData['user_url']}
             />
 
             <div className = {styles.editorPanelContainer}>
                 <div className = {styles.editorPanel}>
                     <div className = {styles.partTypesContainer}>
                         <PartTypesView
-                            partTypes = { partTypes }
+                            partTypes = { partTypesArray }
                             selectedPartTypeId = { selectedPartTypeId }
-                            onPartTypeSelected = { this.handlePartTypeSelected }
+                            onPartTypeSelected = { id => setSelectedPartTypeId(id) }
                         />
                     </div>
                     
                     <div className = {styles.selectorContainer}>
                         <Selector
                             data = { selectorData }
-                            onObjectSelected = { this.handleObjectSelected }
-                            onDelete = { this.handleDeleteObject }
-                            onUpload = { this.handleUpload }
-                            edit_mode = { edit_mode }
+                            onObjectSelected = { handleObjectSelected }
+                            onDelete = { handleDeleteObject }
+                            onUpload = { handleUpload }
+                            edit_mode = { props.edit_mode }
                         />
                     </div>
                 </div>
@@ -697,26 +586,26 @@ class App extends Component {
             </div>
 
             <ButtonsContainer
-                partTypes = { partTypes }
-                onUpload = { this.handleUpload }
-                onDownload = { this.handleDownload }
+                partTypes = { partTypesArray }
+                onUpload = { handleUpload }
+                onDownload = { handleDownload }
                 downloadButtonMessage = {downloadButtonMessage}
-                onShowSettings = { this.handleShowSettings }
-                edit_mode = { edit_mode }
+                onShowSettings = {() => setShowSettings(true)}
+                edit_mode = { props.edit_mode }
             />
 
             {showUploadWizard && (
                 <UploadWizard
-                    getGlobalPosition = { this.getGlobalPosition }
-                    getParentAttachPointPosition = { this.getParentAttachPointPosition }
-                    getChildPartTypeByAttachPoint = {this.getChildPartTypeByAttachPoint}
+                    getGlobalPosition = { computeGlobalPosition }
+                    getParentAttachPointPosition = {getParentAttachPointPosition}
+                    getChildPartTypeByAttachPoint = {getChildPartTypeByAttachPoint}
 
                     data = { uploadedObjectData }
                     
-                    showLoader = { this.showLoader }
-                    hideLoader = { this.hideLoader }
-                    onWizardCanceled = { this.handleWizardCanceled }
-                    onWizardCompleted = { this.handleWizardCompleted }
+                    showLoader = {() => setIsLoading(true)}
+                    hideLoader = {() => setIsLoading(false)}
+                    onWizardCanceled = {() => setUploadedObjectData(null)}
+                    onWizardCompleted = {handleWizardCompleted}
                 />
             )}
 
@@ -730,17 +619,16 @@ class App extends Component {
                     isPrivate = {isPrivate}
                     imageUrl = {imageUrl}
 
-                    onSave = {this.handleSaveChanges}
-                    onCancel = {() => this.setState({showSettings: false})}
+                    onSave = {handleSaveChanges}
+                    onCancel = {() => setShowSettings(false)}
 
-                    customizer_pay_per_download_enabled = {this.props.customizer_pay_per_download_enabled}
+                    customizer_pay_per_download_enabled = {props.customizer_pay_per_download_enabled}
                 />
             )}
 
             <LoadingIndicator visible = {isLoading} />
         </div>
-    }
-
+    );
 }
 
 export default App
