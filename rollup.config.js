@@ -10,7 +10,7 @@ import pkg from './package.json';
 const extensionsToProcess = ['.js', '.ts'];
 
 export default {
-	input: 'src/App.js',
+	input: 'src/index.js',
 	
 	plugins: [
 		autoExternal(),
