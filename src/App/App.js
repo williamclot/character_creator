@@ -14,7 +14,7 @@ import {
 } from '../constants'
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../util/objectHelpers';
 import {
-    getNameAndExtension, objectMap
+    getNameAndExtension, objectMap, triggerDownloadFromUrl
 } from '../util/helpers'
 
 import useMmfApi from '../hooks/useMmfApi';
@@ -213,7 +213,7 @@ const App = props => {
             if(!userMustBuySelection) {
                 if (customizedMeshData.status === 1) { // ready for download
                     const fullCustomizedMeshData = await api.getCustomizedMesh(customizedMeshData.id)
-                    window.open(fullCustomizedMeshData.file_url);
+                    triggerDownloadFromUrl(fullCustomizedMeshData.file_url);
                 } else {
                     // TODO add popup component
         

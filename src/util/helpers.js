@@ -3,6 +3,16 @@ export const uniqueId = (prefix = '') => {
     return `${prefix}_${_id++}`
 };
 
+export const triggerDownloadFromUrl = (url, filename = 'customized-mesh') => {
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.style.display = 'none';
+    anchor.download = filename;
+
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+}
 
 
 /**
