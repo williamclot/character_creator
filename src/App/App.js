@@ -1,32 +1,32 @@
 import React, { Component, createRef, useState, useEffect, useMemo, useRef } from 'react'
 
-import SettingsPopup from '../SettingsPopup'
-import UploadWizard from '../UploadWizard'
-import Header from '../Header';
-import Selector from '../Selector';
-import PartTypesView from '../PartTypes'
-import LoadingIndicator from '../LoadingIndicator';
-import ButtonsContainer from '../ButtonsContainer';
+import SettingsPopup from '../components/SettingsPopup'
+import UploadWizard from '../components/UploadWizard'
+import Header from '../components/Header';
+import Selector from '../components/Selector';
+import PartTypesView from '../components/PartTypes'
+import LoadingIndicator from '../components/LoadingIndicator';
+import ButtonsContainer from '../components/ButtonsContainer';
 
 import {
     ACCEPTED_OBJECT_FILE_EXTENSIONS,
     OBJECT_STATUS
-} from '../../constants'
-import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
+} from '../constants'
+import { fetchObjects, get3DObject, getObjectFromGeometry } from '../util/objectHelpers';
 import {
     getNameAndExtension, objectMap
-} from '../../util/helpers'
+} from '../util/helpers'
 
-import useMmfApi from '../../hooks/useMmfApi';
-import useCustomizerState from '../../hooks/useCustomizerState';
-import useSceneManager from '../../hooks/useSceneManager';
+import useMmfApi from '../hooks/useMmfApi';
+import useCustomizerState from '../hooks/useCustomizerState';
+import useSceneManager from '../hooks/useSceneManager';
 
 
 import styles from './App.module.scss'
 
 
 /**
- * @type {import('react').FunctionComponent<import('../../types').AppProps>}
+ * @type {import('react').FunctionComponent<import('../types').AppProps>}
  */
 const App = props => {
     const {
