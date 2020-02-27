@@ -1,12 +1,11 @@
 import {
     WebGLRenderer, Scene, PerspectiveCamera, EventDispatcher, Group,
-    Color, Mesh, MeshStandardMaterial, Box3, Vector3
+    Color, Mesh, MeshStandardMaterial, Box3, Vector3, GridHelper,
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
 import TransformControls from '../../../../util/transform-controls'
 import { sphereFactory, createLights, moveCameraToFitObject } from '../../../../util/three-helpers'
 import { POSITION_0_0_0 } from '../../../../constants'
-import { initGridHelper } from '../../../ThreeContainer/util/init'
 
 
 const scene = new Scene
@@ -39,7 +38,7 @@ const sphere = sphereFactory.buildSphere()
 
 scene.add( sphere )
 
-const gridHelper = initGridHelper()
+const gridHelper = new GridHelper(50, 60);
 
 scene.add( gridHelper )
 

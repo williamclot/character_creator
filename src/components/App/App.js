@@ -1,8 +1,6 @@
 import React, { Component, createRef } from 'react'
-import { Group } from 'three'
 
 import SettingsPopup from '../SettingsPopup'
-import ThreeContainer from '../ThreeContainer'
 import UploadWizard from '../UploadWizard'
 import Header from '../Header';
 import Selector from '../Selector';
@@ -10,7 +8,7 @@ import PartTypesView from '../PartTypes'
 import LoadingIndicator from '../LoadingIndicator';
 import ButtonsContainer from '../ButtonsContainer';
 
-import SceneManager from '../ThreeContainer/sceneManager'
+import mainSceneManager from '../../scenes/mainSceneManager';
 
 import {
     ACCEPTED_OBJECT_FILE_EXTENSIONS,
@@ -32,6 +30,8 @@ class App extends Component {
     constructor( props ) {
         super( props )
 
+        this.canvasContainerRef = createRef();
+
         const partTypes = getPartTypes( props.worldData )
         const objects = getObjects( props.objects )
 
@@ -47,10 +47,6 @@ class App extends Component {
             objects,
 
             selectedPartTypeId: partTypes.allIds[ 0 ] || null,
-            /**
-             * Mapping from part type to threejs object
-             */
-            loadedObjects: {},
 
             /** Mapping from partType id to selected object id */
             selectedParts: {},
@@ -67,25 +63,26 @@ class App extends Component {
             showSettings: false,
         }
         
-        const container = new Group
+        mainSceneManager.init(this.getPartTypesArray());
 
         const initialRotation = props.worldData['container_rotation'];
         if(initialRotation) {
-            container.rotation.set(initialRotation.x, initialRotation.y, initialRotation.z);
+            mainSceneManager.setContainerRotation(initialRotation);
         };
+
         
-        this.sceneManager = new SceneManager( container, this.getPartTypesArray() )
 
         this.api = new MmfApi( props.api )
 
-        this.threeContainerRef = createRef()
-        
         if ( process.env.NODE_ENV === 'development' ) {
             window.x = this
         }
     }
 
     async componentDidMount() {
+        this.canvasContainerRef.current.appendChild(mainSceneManager.getCanvas());
+
+        mainSceneManager.renderScene();
         this.showLoader()
 
         try {
@@ -113,17 +110,19 @@ class App extends Component {
             }
 
 
-            const loadedObjects = await fetchObjects( oneOfEach )
+            const objectsToLoad = await fetchObjects( oneOfEach )
             const selectedParts = objectMap( oneOfEach, object => object.id )
 
+            
+            {
+                mainSceneManager.addAll(objectsToLoad);
+                mainSceneManager.rescaleContainerToFitObjects();
+                mainSceneManager.renderScene();
+            }
+
+
             this.setState({
-                loadedObjects,
                 selectedParts,
-            }, () => {
-
-                this.sceneManager.rescaleContainerToFitObjects( 4 )
-                this.threeContainerRef.current.renderScene()
-
             })
 
         } catch ( err ) {
@@ -137,7 +136,6 @@ class App extends Component {
         if ( prevProps.worldData !== this.props.worldData ) {
             // // need to reset sceneManager
             // const categories = getCategories( this.props.worldData.groups )
-            // this.sceneManager.reset( this.props.categories )
         }
     }
 
@@ -191,24 +189,6 @@ class App extends Component {
     getSelectedObjectIds() {
         const { selectedParts } = this.state;
         return Object.keys(selectedParts).map(key => selectedParts[key]);
-    }
-
-    get3dObject = ( key ) => {
-        if ( !this.sceneManager ) return null
-        
-        return this.sceneManager.getObject( key )
-    }
-
-    getParent3dObject = ( key ) => {
-        if ( !this.sceneManager ) return null
-        
-        return this.sceneManager.getParentObject( key )
-    }
-
-    get3dObjectByAttachPoint = ( attachPointName ) => {
-        if ( !this.sceneManager ) return null
-        
-        return this.sceneManager.getObjectByAttachPoint( attachPointName )
     }
 
     /* ------------------------------------------------------------------------- */
@@ -349,17 +329,9 @@ class App extends Component {
     }
 
     setSelected3dObject( partTypeId, newObject ) {
-        this.setState( state => ({
-            loadedObjects: {
-                ...state.loadedObjects,
-                [partTypeId]: newObject
-            }
-        }), () => {
-
-            this.sceneManager.rescaleContainerToFitObjects( 4 )
-            this.threeContainerRef.current.renderScene()
-
-        })
+        mainSceneManager.add(partTypeId, newObject);
+        mainSceneManager.rescaleContainerToFitObjects( 4 )
+        mainSceneManager.renderScene()
     }
 
     setSelectedObjectId( partTypeId, objectId ) {
@@ -659,7 +631,6 @@ class App extends Component {
             isPrivate,
             isLoading, showSettings,
             selectedPartTypeId,
-            loadedObjects,
             uploadedObjectData,
         } = this.state
 
@@ -693,12 +664,8 @@ class App extends Component {
 
         return <div className = {styles.app}>
 
-            <ThreeContainer
-                ref = { this.threeContainerRef }
-                sceneManager = { this.sceneManager }
-                loadedObjects = { loadedObjects }
-                poseData = { poseData }
-            />
+            <div className={styles.canvasContainer} ref={this.canvasContainerRef}>
+            </div>
 
             <Header
                 title = { customizerName }
@@ -740,9 +707,6 @@ class App extends Component {
 
             {showUploadWizard && (
                 <UploadWizard
-                    getObject = { this.get3dObject }
-                    getParentObject = { this.getParent3dObject }
-                    getObjectByAttachPoint = { this.get3dObjectByAttachPoint }
                     getGlobalPosition = { this.getGlobalPosition }
                     getParentAttachPointPosition = { this.getParentAttachPointPosition }
                     getChildPartTypeByAttachPoint = {this.getChildPartTypeByAttachPoint}

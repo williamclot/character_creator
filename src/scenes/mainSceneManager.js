@@ -1,6 +1,74 @@
 import { Matrix4, Vector3, Object3D, Group, Bone, Mesh, Material, Color, Box3 } from 'three'
 import topologicalSort from 'toposort'
-import findMinGeometry from '../util/findMinGeometry'
+
+import * as THREE from 'three';
+import OrbitControls from 'three-orbitcontrols';
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xeeeeee);
+scene.fog = new THREE.Fog(0xeeeeee, 1, 20);
+
+const camera = new THREE.PerspectiveCamera(
+    75,
+    (window.innerWidth / window.innerHeight),
+    0.001,
+    1000
+);
+
+camera.position.set(0, 2, -4);
+
+
+const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    // canvas: canvasElement
+});
+
+renderer.setPixelRatio( window.devicePixelRatio )
+renderer.setSize( window.innerWidth, window.innerHeight ); // Configure renderer size
+
+
+
+const controls = new OrbitControls(camera, renderer.domElement);
+// controls.target.set(-1,0,0);
+// controls.minDistance = 2; //Controling max and min for ease of use
+// controls.maxDistance = 7;
+// controls.minPolarAngle = 0;
+// controls.maxPolarAngle = Math.PI / 2 - 0.1;
+// controls.enablePan = false;
+controls.enableKeys = false
+
+const hemi = new THREE.HemisphereLight(0xffffff, 0xffffff);
+
+//Create a PointLight and turn on shadows for the light
+const light = new THREE.PointLight(0xc1c1c1, 1, 100);
+light.position.set(3, 10, 10);
+light.castShadow = true;
+//Set up shadow properties for the light
+light.shadow.mapSize.width = 2048; // default
+light.shadow.mapSize.height = 2048; // default
+light.decay = 1;
+
+// This light is here to show the details in the back (no shadows)
+const backlight = new THREE.PointLight(0xc4b0ac, 1, 100);
+backlight.position.set(0, 2, -20);
+backlight.penumbra = 2;
+
+scene.add(hemi, light, backlight);
+
+
+const size = 50;
+const divisions = 60;
+
+const gridHelper = new THREE.GridHelper(size, divisions);
+
+scene.add(gridHelper);
+
+
+const container = new Group;
+
+scene.add(container);
+
+
 
 /**
  * An object that holds a reference to a group of 3D objects (_container_).
@@ -17,16 +85,10 @@ import findMinGeometry from '../util/findMinGeometry'
  * When objects from a category are loaded, it is placed as a child of the
  * object from the parent category.
  */
-class SceneManager {
-    /**
-     * @param { Object3D } container
-     * @param { Category[] } categories
-     */
-    constructor( container, categories ) {
-        
-        this.container = container
-        this.stand = null
+const sceneManager = {
+    container,
 
+    initialize(categories) {
 
         const categoriesWithParent = categories.filter( cat => cat.parent )
         const edges = categoriesWithParent.map(
@@ -68,18 +130,19 @@ class SceneManager {
          * Note: assumes bone names are unique
          */
         this.bonesMap = new Map;
-    }
+    },
+
 
     getContainer() {
         return this.container
-    }
+    },
 
     /**
      * @param { Object3D } container
      */
     setContainer( container ) {
         this.container = container
-    }
+    },
 
     rescaleContainerToFitObjects( fitOffset = 2 ) {
         const boundingBox = new Box3().setFromObject( this.container )
@@ -88,17 +151,17 @@ class SceneManager {
         const maxDimension = Math.max( size.x, size.y, size.z )
 
         this.container.scale.divideScalar( maxDimension / fitOffset )
-    }
+    },
 
     getObject( key ) {
         return this.loadedObjectsMap.get( key )
-    }
+    },
 
     getObjectByAttachPoint( attachPointName ) {
         const attachPoint = this.bonesMap.get( attachPointName )
 
         return attachPoint ? attachPoint.children[ 0 ] : null
-    }
+    },
 
     getParentObject( key ) {
         const { parent } = this.categoriesMap.get( key )
@@ -106,35 +169,7 @@ class SceneManager {
         if ( !parent ) return null
 
         return this.loadedObjectsMap.get( parent.id ) || null
-    }
-
-    placeStand( newStand, options = {} ) {
-        
-        const rootCategoryId = this.rootCategory.id        
-        
-        if ( this.stand ) {
-            this.container.remove( this.stand )
-        }
-        
-        this.container.add( newStand )
-        
-        this.stand = newStand
-        
-        const rootObj = this.loadedObjectsMap.get( rootCategoryId )
-        
-        if ( rootObj ) {
-
-            // adding an object will remove it from the previous parent
-            newStand.add( rootObj )
-
-            // TODO only calculate minGeometry after loading all objects (in addAll)
-            
-            const minGeometry = findMinGeometry( rootObj )
-            const currentY = rootObj.position.y
-            rootObj.position.setY( currentY - minGeometry )
-
-        }
-    }
+    },
 
 
     add( categoryKey, objectToAdd, options = {} ) {
@@ -163,7 +198,7 @@ class SceneManager {
         
         this.loadedObjectsMap.set( categoryKey, objectToAdd )
 
-    }
+    },
 
     /**
      * @param { Category } category 
@@ -184,7 +219,7 @@ class SceneManager {
 
         this.getParent( parent ).add( objectToAdd )
 
-    }
+    },
 
     /**
      * @param { Category } category 
@@ -213,7 +248,7 @@ class SceneManager {
         parentObject.remove( currentObject )
         parentObject.add( objectToAdd )
         
-    }
+    },
 
     /**
      * @param { Category } parentCategory 
@@ -230,127 +265,14 @@ class SceneManager {
 
         } else {
 
-            // if ( ! this.stand ) {
-            //     throw new Error( `You first need to place a stand before adding objects` )
-            // }
-
             return this.container
 
         }
-    }
-
-    applyPose( poseData ) {
-        this.container.traverse( bone => {
-            if ( bone.isBone ) {
-                const rotation = poseData[ bone.name ]
-
-                if ( rotation ) {
-                    const { x, y, z } = rotation
-                    bone.rotation.set( x, y, z )
-                }
-            }
-        } )
-    }
-
-    computeGlobalRotation( category, poseData ) {
-        const finalRotation = new Vector3 // default to (0, 0, 0)
-
-        if ( !category || !poseData ) {
-            return finalRotation
-        }
-
-        let cat = this.categoriesMap.get( category.name )
-
-        while( cat && cat.parent ) {
-            const attachPointRotation = poseData[ cat.parent.attachPoint ]
-
-            if ( attachPointRotation ) {
-                const { x, y, z } = attachPointRotation
-                finalRotation.add( new Vector3( x, y, z ))
-            }
-
-            cat = this.categoriesMap.get( cat.parent.name )
-        }
-
-        return finalRotation
-    }
-
-    resetStand() {
-
-        const rootCategoryId = this.rootCategory.id
-
-        const rootObj = this.loadedObjectsMap.get( rootCategoryId )
-        
-        if ( rootObj ) {
-            
-            const minGeometry = findMinGeometry( rootObj )
-            const currentY = rootObj.position.y
-            rootObj.position.setY( currentY - minGeometry )
-
-        }
-
-    }
-
-    /**
-     * @param { Object3D } object3d
-     * @param { Color } newColour
-     */
-    _setColour( object3d, newColour ) {
-
-        object3d.traverse( child  => {
-
-            if ( child instanceof Mesh ) {
-                const { material } = child
-                if (
-                    material instanceof Material &&
-                    material.color instanceof Color
-                ) {
-                    material.color.set( newColour )
-                }
-            }
-
-        } )
-
-    }
-
-    /**
-     * @param { string } categoryId
-     * @param { Color } newColour
-     */
-    changeColour( categoryId, newColour ) {
-        
-        if ( ! this.loadedObjectsMap.has( categoryId ) ) { return }
-
-        const object3d = this.loadedObjectsMap.get( categoryId )
-
-        this._setColour( object3d, newColour )
-
-    }
-
-    changeStandColour( newColour ) {
-
-        if ( ! this.stand ) { return }
-
-        this._setColour( this.stand, newColour )
-
-    }
-
-    changePoseColour( newColour ) {
-
-        this._setColour( this.container, newColour )
-
-    }
+    },
 }
 
-/** 
- * this is not used, but might be needed when adding an object to the scene
- * https://github.com/mrdoob/three.js/blob/master/examples/js/utils/SceneUtils.js#L29
- */
-function getChildWithCorrectMatrixWorld( child, parent ) {
-
-    child.applyMatrix( new Matrix4().getInverse( parent.matrixWorld ) )
-
-    return child
+const setContainerRotation = rotation => {
+    container.rotation.set(rotation.x, rotation.y, rotation.z);
 }
 
 
@@ -375,20 +297,57 @@ function extractKnownBones( object3d, knownBoneNames ) {
     return extractedBones
 }
 
-export default SceneManager
+
+const batchAdd = objectsByCategory => {
+    const keysToSearch = sceneManager.sortedCategoryIds;
+    
+    for (const key of keysToSearch) {
+        if(key in objectsByCategory) {
+            sceneManager.add(key, objectsByCategory[key]);
+        }
+    }
+}
+
+const renderScene = () => {
+    renderer.render(scene, camera);
+};
 
 
-/**
- * JS object representing the parent of a category;
- * needs a category name and an attachpoint name from within that category
- * @typedef { Object } Parent
- * @property { string } name
- * @property { string } attachPoint
-*/
-/**
- * Category object
- * @typedef { Object } Category
- * @property { string } name
- * @property { string[] } attachPoints
- * @property { Parent } [parent]
- */
+controls.addEventListener( 'change', renderScene )
+
+
+export default {
+    init(categories) {
+        sceneManager.initialize(categories);
+    },
+    addAll(objectsByCategory) {
+        batchAdd(objectsByCategory);
+    },
+    add(categoryKey, objectToAdd) {
+        sceneManager.add(categoryKey, objectToAdd);
+    },
+    getCanvas() {
+        return renderer.domElement;
+    },
+    renderScene,
+    rescaleContainerToFitObjects(fitOffset) {
+        sceneManager.rescaleContainerToFitObjects(fitOffset);
+    },
+
+    getObject( key ) {
+        return sceneManager.getObject(key);
+    },
+
+    getObjectByAttachPoint( attachPointName ) {
+        return sceneManager.getObjectByAttachPoint(attachPointName);
+    },
+    
+    getParentObject( key ) {
+        return sceneManager.getParentObject(key);
+    },
+
+    setContainerRotation(rotation) {
+        setContainerRotation(rotation);
+    },
+}
+
