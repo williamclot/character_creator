@@ -8,11 +8,11 @@
     "/dist"
   ],
   "scripts": {
-    "test": "echo \"You don't have any tests yet!\" && exit 1",
+    "test": "npm run check-types && echo \"You don't have any tests yet..........\" && exit 0",
     "check-types": "tsc",
     "lib": "rollup -c",
     "lib:watch": "rollup -cw",
-    "prepare": "rollup -c"
+    "prepare": "npm run test && npm run lib"
   },
   "dependencies": {
     "@types/react": "^16.9.20",
