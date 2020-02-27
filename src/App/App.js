@@ -124,7 +124,7 @@ const App = props => {
     let downloadButtonMessage;
     if (userMustBuySelection) {
         if(isSelectionInCart) {
-            downloadButtonMessage = 'Item already in cart';
+            downloadButtonMessage = 'Added to cart';
         } else {
             downloadButtonMessage = `Add To Cart ($${price})`;
         }
