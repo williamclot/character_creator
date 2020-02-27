@@ -8,88 +8,60 @@ import PartTypesView from '../PartTypes'
 import LoadingIndicator from '../LoadingIndicator';
 import ButtonsContainer from '../ButtonsContainer';
 
-import mainSceneManager from '../../scenes/mainSceneManager';
-
 import {
     ACCEPTED_OBJECT_FILE_EXTENSIONS,
-    POSITION_0_0_0,
     OBJECT_STATUS
 } from '../../constants'
 import { fetchObjects, get3DObject, getObjectFromGeometry } from '../../util/objectHelpers';
 import {
-    getPartTypes, getObjects, getNameAndExtension, objectMap,
+    getNameAndExtension, objectMap
 } from '../../util/helpers'
-import MmfApi from '../../util/api';
+
+import useMmfApi from '../../hooks/useMmfApi';
+import useCustomizerState from '../../hooks/useCustomizerState';
+import useSceneManager from '../../hooks/useSceneManager';
 
 
 import styles from './App.module.scss'
 
+
 /**
- * @param {*} apiRoutes 
- * @returns {MmfApi | null}
+ * @type {import('react').FunctionComponent<import('../../types').AppProps>}
  */
-const useMmfApi = apiRoutes => {
-    const apiRef = useRef(null);
-    useEffect(() => {
-        apiRef.current = new MmfApi(apiRoutes);
-    }, [apiRoutes]);
-
-    return apiRef.current;
-}
-
-const hashSelectedPartIds = (selectedPartIds) => {
-    return selectedPartIds
-        .sort((p1, p2) => p2 - p1) // sort because different order should produce the same hash
-        .join(':');
-}
-
 const App = props => {
-    const [customizerName, setName]     = useState(props.worldData['name'] || '');
-    const [price, setPrice]             = useState(props.worldData['price'] || '');
-    const [description, setDescription] = useState(props.worldData['description'] || '');
-    const [isPrivate, setIsPrivate]     = useState(props.worldData['is_private']);
-    const [imageUrl, setImageUrl]       = useState(props.worldData['image_url'] || null);
-    
-    const partTypes = useMemo(() => getPartTypes(props.worldData), [props.worldData]);
-    const partTypesArray = partTypes.allIds.map(id => partTypes.byId[id]);
+    const {
+        partTypes, partTypesArray,
+        objects, addObject, setObjectStatus,
 
-    const [objects, setObjects] = useState(() => getObjects(props.objects));
+        customizerName, price, description, isPrivate, imageUrl,
+        updateSettings,
 
-    const [selectedPartTypeId, setSelectedPartTypeId] = useState(partTypes.allIds[ 0 ] || null);
-    const [selectedParts, setSelectedParts] = useState({});
-    const selectedPartsIds = Object.keys(selectedParts).map(key => selectedParts[key]);
+        selectedPartTypeId, setSelectedPartTypeId,
+        selectedPartType,
+        selectedParts, setSelectedParts,
+        selectedPartsIds,
+
+        addCustomizedMeshToCart,
+        isSelectionInCart, userMustBuySelection,
+
+        getObjectsByPartTypeId,
+
+        computeGlobalPosition,
+        getParentAttachPointPosition,
+        getChildPartTypeByAttachPoint,
+    } = useCustomizerState(props);
 
     const [uploadedObjectData, setUploadedObjectData] = useState(null);
-
-    const [customizedMeshes, setCustomizedMeshes] = useState(props.customizedMeshes);
-    const [customizedMeshesInCart, setCustomizedMeshesInCart] = useState(props.customizedMeshesInCart);
 
     const [isLoading, setIsLoading] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
 
-    const canvasContainerRef = useRef();
-
     const api = useMmfApi(props.api);
 
-    useEffect(() => {
-        const canvas = mainSceneManager.getCanvas();
-        canvasContainerRef.current.appendChild(canvas);
-        return () => canvasContainerRef.current.removeChild(canvas);
-    }, []);
+    const { canvasContainerRef, sceneManager } = useSceneManager(partTypesArray, props.worldData.container_rotation);
 
     useEffect(() => {
-        mainSceneManager.init(partTypesArray);
-    }, []);
-
-    useEffect(() => {
-        const initialRotation = props.worldData['container_rotation'];
-        if(initialRotation) {
-            mainSceneManager.setContainerRotation(initialRotation);
-        };
-    }, [props.worldData['container_rotation']]);
-
-    useEffect(() => {
-        mainSceneManager.renderScene();
+        sceneManager.renderScene();
     }, []);
 
     useEffect(() => void (async () => {
@@ -125,9 +97,9 @@ const App = props => {
     
             
             {
-                mainSceneManager.addAll(objectsToLoad);
-                mainSceneManager.rescaleContainerToFitObjects();
-                mainSceneManager.renderScene();
+                sceneManager.addAll(objectsToLoad);
+                sceneManager.rescaleContainerToFitObjects(4);
+                sceneManager.renderScene();
             }
     
     
@@ -140,44 +112,7 @@ const App = props => {
         setIsLoading(false);
     })(), []);
 
-
-
-    const meshesOwnedByUserMap = useMemo(() => {
-        let selectedPartsMap = {};
-        for(const customizedMeshId of props.customizedMeshesOwnedByUser) {
-            const customizedMesh = customizedMeshes[customizedMeshId];
-            const ownedMeshHash = hashSelectedPartIds(customizedMesh.selectedPartIds);
-            selectedPartsMap[ownedMeshHash] = true;
-        }
-        return selectedPartsMap;
-    }, [props.customizedMeshesOwnedByUser, customizedMeshes]);
-
-    const userOwnsCurrentSelection = useMemo(() => {
-        const selectedObjectsHash = hashSelectedPartIds(selectedPartsIds);
-        return Boolean(meshesOwnedByUserMap[selectedObjectsHash]);
-    }, [selectedPartsIds, meshesOwnedByUserMap]);
-
-    const meshesInCartMap = useMemo(() => {
-        let selectedPartsMap = {};
-        for(const customizedMeshId of customizedMeshesInCart) {
-            const customizedMesh = customizedMeshes[customizedMeshId];
-            const meshInCartHash = hashSelectedPartIds(customizedMesh.selectedPartIds);
-            selectedPartsMap[meshInCartHash] = true;
-        }
-
-        return selectedPartsMap;
-    }, [customizedMeshesInCart, customizedMeshes]);
-
-    const isSelectionInCart = useMemo(() => {
-        const selectedObjectsHash = hashSelectedPartIds(selectedPartsIds);
-        return Boolean(meshesInCartMap[selectedObjectsHash]);
-    }, [selectedPartsIds, meshesInCartMap]);
-
-
-
     const showUploadWizard = Boolean(uploadedObjectData);
-
-    const selectedPartType = partTypes.byId[selectedPartTypeId];
 
     const selectorData = (selectedPartType ?
         {
@@ -185,158 +120,6 @@ const App = props => {
             currentPartType: selectedPartType
         } : null
     );
-    
-    function mustUserBuySelection() {
-        if (!props.customizer_pay_per_download_enabled) {
-            return false;
-        }
-
-        if(props.edit_mode) {
-            // edit mode means user can edit, which means he is either the owner or the admin
-            return false;
-        }
-
-        if(props.worldData.price > 0) {
-            return !userOwnsCurrentSelection;
-        }
-
-        return false;
-    }
-    const userMustBuySelection = mustUserBuySelection();
-
-    function getObject( objectId ) {
-        return objects.byId[ objectId ]
-    }
-
-    function getPartType( partTypeId ) {
-        return partTypes.byId[ partTypeId ]
-    }
-
-    function getSelectedObjectId( partTypeId ) {
-        return selectedParts[ partTypeId ]
-    }
-
-    function getSelectedObject( partTypeId ) {
-        const objectId = getSelectedObjectId( partTypeId )
-
-        return getObject( objectId )
-    }
-
-    function getObjectsByPartTypeId( partTypeId ) {
-        const { byId, allIds } = objects
-        return allIds.map(id => byId[id]).filter(object => object.partTypeId === partTypeId);
-    }
-
-    /*
-    function getParentPartType( partTypeId ) {
-        const { parent } = partTypes.byId[ partTypeId ]
-
-        if ( parent ) {
-            return partTypes.byId[ parent.id ]
-        }
-
-        return null
-    }
-    */
-
-    /*
-    function getObjectPartType( objectId ) {
-        const partTypeId = objects.byId[ objectId ].partTypeId
-
-        return partTypes.byId[ partTypeId ]
-    }
-    */
-
-    function getAttachPoints( objectId ) {
-        const object = objects.byId[ objectId ]
-
-        if ( object.metadata ) {
-            if ( object.metadata.attachPoints ) {
-                return object.metadata.attachPoints
-            }
-        }
-
-        return {}
-    }
-
-    function getAttachPointPosition( objectId, attachPointName ) {
-        const attachPoints = getAttachPoints( objectId )
-
-        return attachPoints[attachPointName] || POSITION_0_0_0;
-    }
-
-    function getPositionInsideParent( partType ) {
-        const {
-            id: parentPartTypeId,
-            attachPoint: parentAttachPoint,
-        } = partType.parent
-
-        const parentObjectId = getSelectedObjectId( parentPartTypeId )
-
-        return getAttachPointPosition( parentObjectId, parentAttachPoint )
-    }
-
-    function getPosition( partType ) {
-        const object = getSelectedObject( partType.id )
-
-        if ( !object ) {
-            // should never happen!
-            console.warn( `Object doesn't exist. This shouldn't normally happen` )
-            return POSITION_0_0_0
-        }
-
-        if ( object.metadata ) {
-            if ( object.metadata.position ) {
-                return object.metadata.position
-            }
-        }
-
-        return POSITION_0_0_0
-    }
-
-    /**
-     * Recursively walks through part types until it reaches the root parent and
-     * adds up all the attachpoint positions from the root to this partType
-     * @param { string|number } partTypeId 
-     */
-    function computeGlobalPosition( partTypeId ) {
-        const partType = getPartType( partTypeId )
-
-        if ( !partType.parent ) {
-            const pos = getPosition( partType )
-
-            // return negated position to "undo" offset created when origin
-            // point was moved to the center of the mesh
-            return {
-                x: -pos.x,
-                y: -pos.y,
-                z: -pos.z,
-            }
-        }
-
-        const attachPointPosition = getPositionInsideParent( partType )
-
-        const result = computeGlobalPosition( partType.parent.id ) // recursive step
-
-        return {
-            x: result.x + attachPointPosition.x,
-            y: result.y + attachPointPosition.y,
-            z: result.z + attachPointPosition.z,
-        }
-    }
-
-    const getParentAttachPointPosition = partType => {
-        if ( !partType.parent ) {
-            return POSITION_0_0_0;
-        }
-        return getPositionInsideParent( partType )
-    }
-
-    const getChildPartTypeByAttachPoint = attachPoint => {
-        return partTypesArray.find(partType => {
-            return partType.parent && partType.parent.attachPoint === attachPoint;
-        });
-    }
 
     let downloadButtonMessage;
     if (userMustBuySelection) {
@@ -350,9 +133,9 @@ const App = props => {
     }
 
     const setSelected3dObject = (partTypeId, newObject) => {
-        mainSceneManager.add(partTypeId, newObject);
-        mainSceneManager.rescaleContainerToFitObjects( 4 )
-        mainSceneManager.renderScene()
+        sceneManager.add(partTypeId, newObject);
+        sceneManager.rescaleContainerToFitObjects(4);
+        sceneManager.renderScene();
     };
 
     const setSelectedObjectId = (partTypeId, objectId) => {
@@ -381,43 +164,6 @@ const App = props => {
 
         setIsLoading(false);
     };
-
-    const setObjectStatus = (objectId, statusCode) => {
-        const statusReducer = (objects, objectId, status) => {
-            const { byId, allIds } = objects;
-            const modifiedObject = {
-                ...byId[objectId],
-                status
-            };
-
-            return {
-                byId: {
-                    ...byId,
-                    [objectId]: modifiedObject
-                },
-                allIds
-            };
-        };
-
-        setObjects(currentObjects => statusReducer(currentObjects, objectId, statusCode));
-    };
-
-    const addObject = objectToAdd => {
-        const addReducer = ( objects, objectToAdd ) => {
-            return {
-                byId: {
-                    ...objects.byId,
-                    [ objectToAdd.id ]: objectToAdd
-                },
-                allIds: [
-                    ...objects.allIds,
-                    objectToAdd.id
-                ]
-            }
-        }
-
-        setObjects(currentObjects => addReducer(currentObjects, objectToAdd));
-    }
 
     const handleDeleteObject = async (objectId) => {
         
@@ -476,11 +222,7 @@ const App = props => {
                 }
             } else {
                 const data = await api.addToCart(customizedMeshData.id);
-                setCustomizedMeshesInCart(currenctCustomizedMeshesInCart => currenctCustomizedMeshesInCart.concat(customizedMeshData.id));
-                setCustomizedMeshes(currentCustomizedMeshes => ({
-                    ...currentCustomizedMeshes,
-                    [customizedMeshData.id]: customizedMeshData
-                }));
+                addCustomizedMeshToCart(customizedMeshData);
 
                 window.customEventDispatcher.dispatchEvent('REFRESH_CART_AMOUNT');
                 window.customEventDispatcher.dispatchEvent('ITEM_ADDED_TO_CART', data);
@@ -498,11 +240,7 @@ const App = props => {
     const handleSaveChanges = async fields => {
         try {
             const updatedCustomizer = await api.patchCustomizer(fields);
-            setName(updatedCustomizer['name']);
-            setPrice(updatedCustomizer['price']);
-            setDescription(updatedCustomizer['description']);
-            setImageUrl(updatedCustomizer['image_url']);
-            setIsPrivate(updatedCustomizer['is_private']);
+            updateSettings(updatedCustomizer);
 
         } catch (err) {
             console.error(err)

@@ -4,13 +4,19 @@ import images from 'rollup-plugin-image-files'
 import autoExternal from 'rollup-plugin-auto-external'
 import postcss from 'rollup-plugin-postcss'
 
-import pkg from './package.json'
+
+import pkg from './package.json';
+
+const extensionsToProcess = ['.js', '.ts'];
 
 export default {
 	input: 'src/App.js',
+	
 	plugins: [
 		autoExternal(),
-		resolve(),
+		resolve({
+			extensions: extensionsToProcess
+		}),
 
 		postcss({
 			extract: true,
@@ -19,8 +25,8 @@ export default {
 		}),
 
 		images(),
-
 		babel({
+			extensions: extensionsToProcess,
 			exclude: 'node_modules/**'
 		}),
 	],
