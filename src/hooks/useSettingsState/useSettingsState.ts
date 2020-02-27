@@ -11,7 +11,7 @@ type Settings_from_API = {
 
 const useSettingsState = (worldData: WorldData) => {
     const [customizerName, setName]     = useState(worldData['name'] || '');
-    const [price, setPrice]             = useState(worldData['price'] || '');
+    const [price, setPrice]             = useState(worldData['price']);
     const [description, setDescription] = useState(worldData['description'] || '');
     const [isPrivate, setIsPrivate]     = useState(worldData['is_private']);
     const [imageUrl, setImageUrl]       = useState(worldData['image_url'] || null);
