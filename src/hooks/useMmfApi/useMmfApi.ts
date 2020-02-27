@@ -9,7 +9,7 @@ const useMmfApi = (apiRoutes: ApiRoutes) => {
         apiRef.current = new MmfApi(apiRoutes);
     }, [apiRoutes]);
 
-    return apiRef.current;
+    return apiRef.current as MmfApi;
 }
 
 export default useMmfApi;
