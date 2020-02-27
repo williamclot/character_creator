@@ -20,7 +20,7 @@ const useCustomizerState = (props: AppProps) => {
     const [selectedPartTypeId, setSelectedPartTypeId] = useState(partTypes.allIds[ 0 ] || null);
     const [selectedParts, setSelectedParts] = useState<{[partTypeId: number]: number}>({});
     const selectedPartsIds = Object.keys(selectedParts).map(key => selectedParts[Number(key)]);
-    const selectedPartType = partTypes.byId[selectedPartTypeId];
+    const selectedPartType = selectedPartTypeId ? partTypes.byId[selectedPartTypeId] : null;
 
     const {
         addCustomizedMeshToCart,
@@ -91,6 +91,10 @@ const useCustomizerState = (props: AppProps) => {
     }
 
     function getPositionInsideParent(partType: PartType) {
+        if(!partType.parent) {
+            return POSITION_0_0_0;
+        }
+
         const {
             id: parentPartTypeId,
             attachPoint: parentAttachPoint,

@@ -4,7 +4,7 @@ import MmfApi from './api';
 
 
 const useMmfApi = (apiRoutes: ApiRoutes) => {
-    const apiRef = useRef<MmfApi>(null);
+    const apiRef = useRef<MmfApi | null>(null);
     useEffect(() => {
         apiRef.current = new MmfApi(apiRoutes);
     }, [apiRoutes]);
