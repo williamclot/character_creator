@@ -1,15 +1,10 @@
-import { useRef, useEffect } from 'react';
+import { useMemo } from 'react';
 import { ApiRoutes } from '../../types';
 import MmfApi from './api';
 
 
 const useMmfApi = (apiRoutes: ApiRoutes) => {
-    const apiRef = useRef<MmfApi | null>(null);
-    useEffect(() => {
-        apiRef.current = new MmfApi(apiRoutes);
-    }, [apiRoutes]);
-
-    return apiRef.current as MmfApi;
+    return useMemo(() => new MmfApi(apiRoutes), [apiRoutes]);
 }
 
 export default useMmfApi;
