@@ -121,17 +121,6 @@ const App = props => {
         } : null
     );
 
-    let downloadButtonMessage;
-    if (userMustBuySelection) {
-        if(isSelectionInCart) {
-            downloadButtonMessage = 'Added to cart';
-        } else {
-            downloadButtonMessage = `Add To Cart ($${price})`;
-        }
-    } else {
-        downloadButtonMessage = `Download`;
-    }
-
     const setSelected3dObject = (partTypeId, newObject) => {
         sceneManager.add(partTypeId, newObject);
         sceneManager.rescaleContainerToFitObjects(4);
@@ -201,6 +190,18 @@ const App = props => {
         });
     }
 
+    const addToCartButtonMessage = isSelectionInCart ? 'Added to cart' : `Add To Cart ($${price})`;
+    const downloadButtonMessage = 'Download';
+
+    const handleAddToCart = async() => {
+        const customizedMeshData = await api.generateCustomizedMesh(selectedPartsIds);
+        const data = await api.addToCart(customizedMeshData.id);
+        addCustomizedMeshToCart(customizedMeshData);
+
+        window.customEventDispatcher.dispatchEvent('REFRESH_CART_AMOUNT');
+        window.customEventDispatcher.dispatchEvent('ITEM_ADDED_TO_CART', data);
+    };
+
     const handleDownload = async () => {
         if(isSelectionInCart) {
             window.alert('item added to cart')
@@ -210,22 +211,14 @@ const App = props => {
         try {
             const customizedMeshData = await api.generateCustomizedMesh(selectedPartsIds);
 
-            if(!userMustBuySelection) {
-                if (customizedMeshData.status === 1) { // ready for download
-                    const fullCustomizedMeshData = await api.getCustomizedMesh(customizedMeshData.id)
-                    triggerDownloadFromUrl(fullCustomizedMeshData.file_url);
-                } else {
-                    // TODO add popup component
-        
-                    const message = `You will receive an email when the mesh has finished processing.`
-                    window.alert( message )
-                }
+            if (customizedMeshData.status === 1) { // ready for download
+                const fullCustomizedMeshData = await api.getCustomizedMesh(customizedMeshData.id)
+                triggerDownloadFromUrl(fullCustomizedMeshData.file_url);
             } else {
-                const data = await api.addToCart(customizedMeshData.id);
-                addCustomizedMeshToCart(customizedMeshData);
-
-                window.customEventDispatcher.dispatchEvent('REFRESH_CART_AMOUNT');
-                window.customEventDispatcher.dispatchEvent('ITEM_ADDED_TO_CART', data);
+                // TODO add popup component
+    
+                const message = `You will receive an email when the mesh has finished processing.`
+                window.alert( message )
             }
 
         } catch (err) {
@@ -324,10 +317,16 @@ const App = props => {
             </div>
 
             <ButtonsContainer
+                addToCartButtonMessage = { addToCartButtonMessage }
+                downloadButtonMessage = { downloadButtonMessage }
+                userMustBuySelection = { userMustBuySelection }
+                isSelectionInCart = { isSelectionInCart }
+                onDownload = { handleDownload }
+                onAddToCart = { handleAddToCart }
+
                 partTypes = { partTypesArray }
                 onUpload = { handleUpload }
-                onDownload = { handleDownload }
-                downloadButtonMessage = {downloadButtonMessage}
+                
                 onShowSettings = {() => setShowSettings(true)}
                 edit_mode = { props.edit_mode }
             />
