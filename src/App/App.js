@@ -210,9 +210,9 @@ const App = props => {
 
         try {
             const customizedMeshData = await api.generateCustomizedMesh(selectedPartsIds);
+            const fullCustomizedMeshData = await api.getCustomizedMesh(customizedMeshData.id);
 
-            if (customizedMeshData.status === 1) { // ready for download
-                const fullCustomizedMeshData = await api.getCustomizedMesh(customizedMeshData.id)
+            if (fullCustomizedMeshData.status === 1) { // ready for download
                 triggerDownloadFromUrl(fullCustomizedMeshData.file_url);
             } else {
                 // TODO add popup component
