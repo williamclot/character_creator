@@ -72,22 +72,22 @@ const ButtonsContainer = ({
 
             {userMustBuySelection ? (
                 <Button
-                    title = {downloadButtonMessage}
+                    title = {addToCartButtonMessage}
                     className = {cn(styles.withMargin, styles.iconMinimisableButton)}
-                    onClick = { onDownload }
+                    onClick = { !isSelectionInCart ? onAddToCart : null }
                 >
-                    <span className = { styles.word }>{downloadButtonMessage}</span>
+                    <span className = { styles.word }>{addToCartButtonMessage}</span>
                     <span className = { styles.icon }>
                         <i className="fa fa-arrow-down" aria-hidden="true"></i>
                     </span>
                 </Button>
             ) : (
                 <Button
-                    title = {addToCartButtonMessage}
+                    title = {downloadButtonMessage}
                     className = {cn(styles.withMargin, styles.iconMinimisableButton)}
-                    onClick = { !isSelectionInCart ? onAddToCart : null }
+                    onClick = { onDownload }
                 >
-                    <span className = { styles.word }>{addToCartButtonMessage}</span>
+                    <span className = { styles.word }>{downloadButtonMessage}</span>
                     <span className = { styles.icon }>
                         <i className="fa fa-arrow-down" aria-hidden="true"></i>
                     </span>
