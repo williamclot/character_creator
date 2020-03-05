@@ -60,7 +60,7 @@ class Selector extends Component {
             )
         }
 
-        const { objects, currentPartType } = data
+        const { objects, currentPartType, selectedParts } = data
 
         const elementDiv = objects.map( ( object, index, objectsArray ) => {
             const menuItems = (
@@ -73,6 +73,7 @@ class Selector extends Component {
             )
 
             const isDeleted = object.status === OBJECT_STATUS.DELETED
+            const isSelected = selectedParts[currentPartType.id] === object.id;
 
             const clickHandler = () => {
                 if ( isDeleted ) return
@@ -82,6 +83,7 @@ class Selector extends Component {
 
             const className = cn(
                 "selector-item",
+                isSelected && "selected",
                 isDeleted && 'deleted'
             )
 

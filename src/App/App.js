@@ -116,7 +116,8 @@ const App = props => {
 
     const selectorData = (selectedPartType ?
         {
-            objects:  getObjectsByPartTypeId(selectedPartType.id),
+            selectedParts,
+            objects: getObjectsByPartTypeId(selectedPartType.id),
             currentPartType: selectedPartType
         } : null
     );
