@@ -1,4 +1,4 @@
-import OrbitControls from 'three-orbitcontrols'
+import OrbitControls from '../../../../vendor/three/controls/orbit-controls'
 import { Group, MeshStandardMaterial, Mesh } from 'three'
 
 import renderer from './renderer'

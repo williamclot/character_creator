@@ -2,7 +2,7 @@ import {
     WebGLRenderer, Scene, PerspectiveCamera, EventDispatcher, Group,
     Color, Mesh, MeshStandardMaterial, Box3, Vector3, GridHelper,
 } from 'three'
-import OrbitControls from 'three-orbitcontrols'
+import OrbitControls from '../../../../vendor/three/controls/orbit-controls'
 import TransformControls from '../../../../vendor/three/controls/transform-controls'
 import { sphereFactory, createLights, moveCameraToFitObject } from '../../../../util/three-helpers'
 import { POSITION_0_0_0 } from '../../../../constants'

@@ -2,7 +2,7 @@ import {
     Scene, PerspectiveCamera, WebGLRenderer, Color,
     MeshStandardMaterial, Mesh, Group, Raycaster, Vector3
 } from 'three'
-import OrbitControls from 'three-orbitcontrols'
+import OrbitControls from '../../../../vendor/three/controls/orbit-controls'
 import { sphereFactory, moveCameraToFitObject, createLights } from '../../../../util/three-helpers'
 
 const objectContainer = new Group

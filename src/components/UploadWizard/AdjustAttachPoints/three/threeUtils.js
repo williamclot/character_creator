@@ -3,7 +3,7 @@ import {
     MeshStandardMaterial, Mesh, Group, EventDispatcher,
     Box3, Vector3,
 } from 'three'
-import OrbitControls from 'three-orbitcontrols'
+import OrbitControls from '../../../../vendor/three/controls/orbit-controls'
 
 import TransformControls from '../../../../vendor/three/controls/transform-controls'
 import { sphereFactory, moveCameraToFitObject, createLights } from '../../../../util/three-helpers'

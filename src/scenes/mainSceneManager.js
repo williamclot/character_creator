@@ -2,7 +2,7 @@ import { Matrix4, Vector3, Object3D, Group, Bone, Mesh, Material, Color, Box3 } 
 import topologicalSort from 'toposort'
 
 import * as THREE from 'three';
-import OrbitControls from 'three-orbitcontrols';
+import OrbitControls from '../vendor/three/controls/orbit-controls';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xeeeeee);
