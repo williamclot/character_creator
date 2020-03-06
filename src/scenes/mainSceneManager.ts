@@ -1,14 +1,31 @@
-import { Matrix4, Vector3, Object3D, Group, Bone, Mesh, Material, Color, Box3 } from 'three'
+import { PartType, PartTypeParent, Coord3d, CustomizerPart } from '../types';
+import {
+    Object3D,
+    Vector3,
+    Group,
+    Color,
+    Box3,
+    Scene,
+    Fog,
+    PerspectiveCamera,
+    WebGLRenderer,
+    HemisphereLight,
+    PointLight,
+    GridHelper,
+    Bone,
+} from 'three'
+
 import topologicalSort from 'toposort'
 
-import * as THREE from 'three';
 import OrbitControls from '../vendor/three/controls/orbit-controls';
 
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xeeeeee);
-scene.fog = new THREE.Fog(0xeeeeee, 1, 20);
 
-const camera = new THREE.PerspectiveCamera(
+
+const scene = new Scene();
+scene.background = new Color(0xeeeeee);
+scene.fog = new Fog(0xeeeeee, 1, 20);
+
+const camera = new PerspectiveCamera(
     75,
     (window.innerWidth / window.innerHeight),
     0.001,
@@ -18,7 +35,7 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.set(0, 2, -4);
 
 
-const renderer = new THREE.WebGLRenderer({
+const renderer = new WebGLRenderer({
     antialias: true,
     // canvas: canvasElement
 });
@@ -37,10 +54,10 @@ const controls = new OrbitControls(camera, renderer.domElement);
 // controls.enablePan = false;
 controls.enableKeys = false
 
-const hemi = new THREE.HemisphereLight(0xffffff, 0xffffff);
+const hemi = new HemisphereLight(0xffffff, 0xffffff);
 
 //Create a PointLight and turn on shadows for the light
-const light = new THREE.PointLight(0xc1c1c1, 1, 100);
+const light = new PointLight(0xc1c1c1, 1, 100);
 light.position.set(3, 10, 10);
 light.castShadow = true;
 //Set up shadow properties for the light
@@ -49,9 +66,8 @@ light.shadow.mapSize.height = 2048; // default
 light.decay = 1;
 
 // This light is here to show the details in the back (no shadows)
-const backlight = new THREE.PointLight(0xc4b0ac, 1, 100);
+const backlight = new PointLight(0xc4b0ac, 1, 100);
 backlight.position.set(0, 2, -20);
-backlight.penumbra = 2;
 
 scene.add(hemi, light, backlight);
 
@@ -59,7 +75,7 @@ scene.add(hemi, light, backlight);
 const size = 50;
 const divisions = 60;
 
-const gridHelper = new THREE.GridHelper(size, divisions);
+const gridHelper = new GridHelper(size, divisions);
 
 scene.add(gridHelper);
 
@@ -88,19 +104,27 @@ scene.add(container);
 const sceneManager = {
     container,
 
-    initialize(categories) {
+    sortedCategoryIds: [] as number[],
+
+    initialize(categories: PartType[]) {
+
+        for (const cat of categories) {
+
+        }
 
         const categoriesWithParent = categories.filter( cat => cat.parent )
-        const edges = categoriesWithParent.map(
-            ({ id, parent }) => [ parent.id, id ]
-        )
+        const edges = categoriesWithParent.map(({ id, parent }) => {
+            const parentId = (parent as PartTypeParent).id
+
+            return [parentId, id];
+        }) as ReadonlyArray<[number, number]>;
 
         /**
          * this will sort the categories in the correct order they have to be added;
          * since the categories are defined by the designer, they will be loaded via an api call
          * and thus could be sorted when uploading them instead of sorting them here
          */
-        this.sortedCategoryIds = topologicalSort( edges )
+        this.sortedCategoryIds = topologicalSort<number>(edges)
 
 
         /**
@@ -140,7 +164,7 @@ const sceneManager = {
     /**
      * @param { Object3D } container
      */
-    setContainer( container ) {
+    setContainer( container: Object3D ) {
         this.container = container
     },
 
@@ -153,17 +177,17 @@ const sceneManager = {
         this.container.scale.divideScalar( maxDimension / fitOffset )
     },
 
-    getObject( key ) {
+    getObject( key: string ) {
         return this.loadedObjectsMap.get( key )
     },
 
-    getObjectByAttachPoint( attachPointName ) {
+    getObjectByAttachPoint( attachPointName: string ) {
         const attachPoint = this.bonesMap.get( attachPointName )
 
         return attachPoint ? attachPoint.children[ 0 ] : null
     },
 
-    getParentObject( key ) {
+    getParentObject( key: string ) {
         const { parent } = this.categoriesMap.get( key )
 
         if ( !parent ) return null
@@ -172,7 +196,7 @@ const sceneManager = {
     },
 
 
-    add( categoryKey, objectToAdd, options = {} ) {
+    add( categoryKey: number, objectToAdd: CustomizerPart, options = {} ) {
 
         if ( ! this.categoriesMap.has( categoryKey ) ) {
 
@@ -200,11 +224,7 @@ const sceneManager = {
 
     },
 
-    /**
-     * @param { Category } category 
-     * @param { Object3D } objectToAdd 
-     */
-    place( category, objectToAdd ) {
+    place( category: PartType, objectToAdd: Object3D ) {
         const { attachPoints, parent } = category
 
         const extractedBones = extractKnownBones( objectToAdd, attachPoints )
@@ -221,11 +241,7 @@ const sceneManager = {
 
     },
 
-    /**
-     * @param { Category } category 
-     * @param { Object3D } objectToAdd 
-     */
-    replace( category, currentObject, objectToAdd ) {
+    replace( category: PartType, currentObject: Object3D, objectToAdd: Object3D ) {
         const { attachPoints, parent } = category
 
         const extractedBones = extractKnownBones( objectToAdd, attachPoints )
@@ -233,7 +249,7 @@ const sceneManager = {
         for ( let boneId of attachPoints ) {
 
             const oldBone = this.bonesMap.get( boneId )
-            const newBone = extractedBones.get( boneId )
+            const newBone = extractedBones.get( boneId ) as Bone
 
             // update bonesMap to reference new bone
             this.bonesMap.set( boneId, newBone )
@@ -251,10 +267,9 @@ const sceneManager = {
     },
 
     /**
-     * @param { Category } parentCategory 
      * @returns - the parent bone of the category or the group if the category is the root
      */
-    getParent( parentCategory ) {
+    getParent( parentCategory: PartTypeParent ) {
         if ( parentCategory ) {
             const parentBone = this.bonesMap.get( parentCategory.attachPoint )
             if ( ! parentBone ) {
@@ -271,34 +286,32 @@ const sceneManager = {
     },
 }
 
-const setContainerRotation = rotation => {
+const setContainerRotation = (rotation: Coord3d) => {
     container.rotation.set(rotation.x, rotation.y, rotation.z);
 }
 
 
 /**
  * returns a map from boneId to Bone containing only the registered bones
- * @param { Object3D } object3d
- * @param { Set< string > } knownBoneNames
  */
-function extractKnownBones( object3d, knownBoneNames ) {
+function extractKnownBones( object3d: Object3D, knownBoneNames: string[] ) {
+    const knownBoneNamesSet = new Set(knownBoneNames);
 
-    const knownBoneNamesSet = knownBoneNames instanceof Set ? knownBoneNames : new Set( knownBoneNames )
-
-    /** @type { Map< string, Bone > } */
-    const extractedBones = new Map
+    const extractedBones = new Map<string, Bone>();
 
     object3d.traverse( element => {
-        if ( element.isBone && knownBoneNamesSet.has( element.name ) ) {
-            extractedBones.set( element.name, element )
+        if(element instanceof Bone) {
+            if(knownBoneNamesSet.has(element.name)) {
+                extractedBones.set( element.name, element )
+            }
         }
-    } )
+    });
 
-    return extractedBones
+    return extractedBones;
 }
 
 
-const batchAdd = objectsByCategory => {
+const batchAdd = (objectsByCategory: {[id: number]: CustomizerPart}) => {
     const keysToSearch = sceneManager.sortedCategoryIds;
     
     for (const key of keysToSearch) {
@@ -317,36 +330,36 @@ controls.addEventListener( 'change', renderScene )
 
 
 export default {
-    init(categories) {
+    init(categories: PartType[]) {
         sceneManager.initialize(categories);
     },
-    addAll(objectsByCategory) {
+    addAll(objectsByCategory: {[id: number]: CustomizerPart}) {
         batchAdd(objectsByCategory);
     },
-    add(categoryKey, objectToAdd) {
+    add(categoryKey: number, objectToAdd: CustomizerPart) {
         sceneManager.add(categoryKey, objectToAdd);
     },
     getCanvas() {
         return renderer.domElement;
     },
     renderScene,
-    rescaleContainerToFitObjects(fitOffset) {
+    rescaleContainerToFitObjects(fitOffset: number) {
         sceneManager.rescaleContainerToFitObjects(fitOffset);
     },
 
-    getObject( key ) {
+    getObject( key: string ) {
         return sceneManager.getObject(key);
     },
 
-    getObjectByAttachPoint( attachPointName ) {
+    getObjectByAttachPoint( attachPointName: string ) {
         return sceneManager.getObjectByAttachPoint(attachPointName);
     },
     
-    getParentObject( key ) {
+    getParentObject( key: string ) {
         return sceneManager.getParentObject(key);
     },
 
-    setContainerRotation(rotation) {
+    setContainerRotation(rotation: Coord3d) {
         setContainerRotation(rotation);
     },
 }

@@ -8,7 +8,8 @@
         "jsx": "react",
         "noEmit": true,
         "strictNullChecks": true,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true
     },
     "exclude": [
         "node_modules"
