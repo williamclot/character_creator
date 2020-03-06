@@ -1,6 +1,6 @@
 import babel from 'rollup-plugin-babel'
 import resolve from '@rollup/plugin-node-resolve';
-import images from 'rollup-plugin-image-files'
+import images from '@rollup/plugin-image';
 import autoExternal from 'rollup-plugin-auto-external'
 import postcss from 'rollup-plugin-postcss'
 
