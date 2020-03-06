@@ -64,7 +64,9 @@ export default {
             new MeshStandardMaterial({
                 color: 0xffffff,
                 opacity: .8,
-                transparent: true
+                transparent: true,
+                metalness: .5,
+                roughness: .5,
             })
         )
 

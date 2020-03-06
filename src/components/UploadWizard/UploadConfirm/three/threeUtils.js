@@ -32,7 +32,9 @@ const threeUtils = {
         const mesh = new Mesh(
             geometry,
             new MeshStandardMaterial({
-                color: 0xffffff
+                color: 0xffffff,
+                metalness: .5,
+                roughness: .5,
             })
         )
 

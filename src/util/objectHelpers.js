@@ -84,7 +84,9 @@ export const getObjectFromGeometry = ( geometry, metadata, poseData ) => {
     geometry.computeVertexNormals()
 
     const material = new MeshStandardMaterial({
-        color: 0x808080
+        color: 0x808080,
+        metalness: .5,
+        roughness: .5,
     })
 
     const mesh = new Mesh( geometry, material )

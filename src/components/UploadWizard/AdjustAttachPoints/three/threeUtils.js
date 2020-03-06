@@ -101,7 +101,9 @@ export default {
         mesh = new Mesh(
             geometry,
             new MeshStandardMaterial({
-                color: 0xffffff
+                color: 0xffffff,
+                roughness: .5,
+                metalness: .5,
             })
         )
 
@@ -130,6 +132,8 @@ export default {
                         color: 0xffffff,
                         opacity: .8,
                         transparent: true,
+                        metalness: .5,
+                        roughness: .5,
                     })
                 }
             })

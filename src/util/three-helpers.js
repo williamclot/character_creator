@@ -40,7 +40,11 @@ export const object3dFind = ( object3D, predicate ) => {
 export const sphereFactory = {
     buildSphere( withArrow = false ) {
         const color = 0xff0000 // red
-        const material = new MeshStandardMaterial({ color })
+        const material = new MeshStandardMaterial({
+            color,
+            metalness: .5,
+            roughness: .5,
+        })
 
         const sphere = new Mesh(
             new SphereGeometry( .05, 32, 32 ),
