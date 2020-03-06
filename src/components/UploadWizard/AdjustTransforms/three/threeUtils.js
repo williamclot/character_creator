@@ -3,7 +3,7 @@ import {
     Color, Mesh, MeshStandardMaterial, Box3, Vector3, GridHelper,
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
-import TransformControls from '../../../../util/transform-controls'
+import TransformControls from '../../../../vendor/three/controls/transform-controls'
 import { sphereFactory, createLights, moveCameraToFitObject } from '../../../../util/three-helpers'
 import { POSITION_0_0_0 } from '../../../../constants'
 

@@ -5,7 +5,7 @@ import {
 } from 'three'
 import OrbitControls from 'three-orbitcontrols'
 
-import TransformControls from '../../../../util/transform-controls'
+import TransformControls from '../../../../vendor/three/controls/transform-controls'
 import { sphereFactory, moveCameraToFitObject, createLights } from '../../../../util/three-helpers'
 
 const objectContainer = new Group
