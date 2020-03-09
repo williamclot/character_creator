@@ -73,9 +73,9 @@ const gridHelper = new GridHelper(size, divisions);
 
 scene.add(gridHelper);
 
-const container = new Group();
+const _container: Object3D = new Group();
 
-scene.add(container);
+scene.add(_container);
 
 /**
  * returns a map from boneId to Bone containing only the registered bones
@@ -112,8 +112,6 @@ function extractKnownBones(object3d: Object3D, knownBoneNames: string[]) {
  * object from the parent category.
  */
 class SceneManager {
-    container: Object3D;
-
     sortedCategoryIds: number[];
     rootCategory: PartType;
     categoriesMap: Map<number, PartType>;
@@ -121,8 +119,6 @@ class SceneManager {
     bonesMap: Map<string, Bone>;
 
     initialize(categories: PartType[]) {
-        this.container = container;
-
         const categoriesWithParent = categories.filter(cat => cat.parent);
         const edges = categoriesWithParent.map(({ id, parent }) => {
             const parentId = (parent as PartTypeParent).id;
@@ -170,20 +166,16 @@ class SceneManager {
     }
 
     getContainer() {
-        return this.container;
-    }
-
-    setContainer(container: Object3D) {
-        this.container = container;
+        _container;
     }
 
     rescaleContainerToFitObjects(fitOffset = 2) {
-        const boundingBox = new Box3().setFromObject(this.container);
+        const boundingBox = new Box3().setFromObject(_container);
 
         const size = boundingBox.getSize(new Vector3());
         const maxDimension = Math.max(size.x, size.y, size.z);
 
-        this.container.scale.divideScalar(maxDimension / fitOffset);
+        _container.scale.divideScalar(maxDimension / fitOffset);
     }
 
     getObject(key: number) {
@@ -279,7 +271,7 @@ class SceneManager {
 
             return parentBone;
         } else {
-            return this.container;
+            return _container;
         }
     }
 }
@@ -287,7 +279,7 @@ class SceneManager {
 const sceneManager = new SceneManager();
 
 const setContainerRotation = (rotation: Coord3d) => {
-    container.rotation.set(rotation.x, rotation.y, rotation.z);
+    _container.rotation.set(rotation.x, rotation.y, rotation.z);
 };
 
 const batchAdd = (objectsByCategory: { [id: number]: Object3D }) => {
