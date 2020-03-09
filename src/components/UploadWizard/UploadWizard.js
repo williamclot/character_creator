@@ -91,7 +91,7 @@ class UploadWizard extends Component {
 
             const attachPoints = partType.attachPoints;
             const initialAttachPointPositions = {};
-            for (let attachPoint of attachPoints) {
+            for (const attachPoint of attachPoints) {
                 initialAttachPointPositions[attachPoint] = {
                     x: 0,
                     y: 0,
@@ -104,7 +104,7 @@ class UploadWizard extends Component {
                 partType.id,
             );
             const currentObjectChildren = {};
-            for (let attachPoint of attachPoints) {
+            for (const attachPoint of attachPoints) {
                 currentObjectChildren[
                     attachPoint
                 ] = mainSceneManager.getObjectByAttachPoint(attachPoint);

@@ -21,7 +21,7 @@ const useCustomizedMeshes = (
     );
 
     const meshesOwnedByUserMap = useMemo(() => {
-        let selectedPartsMap: { [hash: string]: boolean } = {};
+        const selectedPartsMap: { [hash: string]: boolean } = {};
         for (const customizedMeshId of initialCustomizedMeshesOwnedByUser) {
             const customizedMesh = customizedMeshes[customizedMeshId];
             const ownedMeshHash = hashSelectedPartIds(
@@ -38,7 +38,7 @@ const useCustomizedMeshes = (
     }, [selectedPartsIds, meshesOwnedByUserMap]);
 
     const meshesInCartMap = useMemo(() => {
-        let selectedPartsMap: { [hash: string]: boolean } = {};
+        const selectedPartsMap: { [hash: string]: boolean } = {};
         for (const customizedMeshId of customizedMeshesInCart) {
             const customizedMesh = customizedMeshes[customizedMeshId];
             const meshInCartHash = hashSelectedPartIds(

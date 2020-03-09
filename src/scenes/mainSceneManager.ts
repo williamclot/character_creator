@@ -78,6 +78,25 @@ const container = new Group();
 scene.add(container);
 
 /**
+ * returns a map from boneId to Bone containing only the registered bones
+ */
+function extractKnownBones(object3d: Object3D, knownBoneNames: string[]) {
+    const knownBoneNamesSet = new Set(knownBoneNames);
+
+    const extractedBones = new Map<string, Bone>();
+
+    object3d.traverse(element => {
+        if (element instanceof Bone) {
+            if (knownBoneNamesSet.has(element.name)) {
+                extractedBones.set(element.name, element);
+            }
+        }
+    });
+
+    return extractedBones;
+}
+
+/**
  * An object that holds a reference to a group of 3D objects (_container_).
  * It also needs the categories that define the structure of the objects
  * that need to be added.
@@ -98,9 +117,6 @@ const sceneManager = {
     sortedCategoryIds: [] as number[],
 
     initialize(categories: PartType[]) {
-        for (const cat of categories) {
-        }
-
         const categoriesWithParent = categories.filter(cat => cat.parent);
         const edges = categoriesWithParent.map(({ id, parent }) => {
             const parentId = (parent as PartTypeParent).id;
@@ -209,7 +225,7 @@ const sceneManager = {
 
         const extractedBones = extractKnownBones(objectToAdd, attachPoints);
 
-        for (let boneId of attachPoints) {
+        for (const boneId of attachPoints) {
             const newBone = extractedBones.get(boneId);
 
             this.bonesMap.set(boneId, newBone);
@@ -227,7 +243,7 @@ const sceneManager = {
 
         const extractedBones = extractKnownBones(objectToAdd, attachPoints);
 
-        for (let boneId of attachPoints) {
+        for (const boneId of attachPoints) {
             const oldBone = this.bonesMap.get(boneId);
             const newBone = extractedBones.get(boneId) as Bone;
 
@@ -266,25 +282,6 @@ const sceneManager = {
 const setContainerRotation = (rotation: Coord3d) => {
     container.rotation.set(rotation.x, rotation.y, rotation.z);
 };
-
-/**
- * returns a map from boneId to Bone containing only the registered bones
- */
-function extractKnownBones(object3d: Object3D, knownBoneNames: string[]) {
-    const knownBoneNamesSet = new Set(knownBoneNames);
-
-    const extractedBones = new Map<string, Bone>();
-
-    object3d.traverse(element => {
-        if (element instanceof Bone) {
-            if (knownBoneNamesSet.has(element.name)) {
-                extractedBones.set(element.name, element);
-            }
-        }
-    });
-
-    return extractedBones;
-}
 
 const batchAdd = (objectsByCategory: { [id: number]: CustomizerPart }) => {
     const keysToSearch = sceneManager.sortedCategoryIds;

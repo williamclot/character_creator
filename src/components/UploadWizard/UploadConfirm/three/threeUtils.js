@@ -12,6 +12,14 @@ const objectContainer = new Group();
 
 scene.add(objectContainer);
 
+const renderScene = () => {
+    renderer.render(scene, camera);
+};
+
+const orbitControls = new OrbitControls(camera, canvas);
+orbitControls.addEventListener('change', renderScene);
+orbitControls.enableKeys = false;
+
 const threeUtils = {
     saveImage() {
         return new Promise((resolve, reject) => {
@@ -19,9 +27,7 @@ const threeUtils = {
         });
     },
 
-    renderScene() {
-        renderer.render(scene, camera);
-    },
+    renderScene,
 
     getCanvas() {
         return canvas;
@@ -56,9 +62,5 @@ const threeUtils = {
         objectContainer.remove(...objectContainer.children);
     },
 };
-
-const orbitControls = new OrbitControls(camera, canvas);
-orbitControls.addEventListener('change', threeUtils.renderScene);
-orbitControls.enableKeys = false;
 
 export default threeUtils;

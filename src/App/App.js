@@ -91,7 +91,7 @@ const App = props => {
                 setIsLoading(true);
 
                 try {
-                    let oneOfEach = {};
+                    const oneOfEach = {};
 
                     // check location hash for initial selected parts
                     const hash = window.location.hash.slice(1);

@@ -4,7 +4,7 @@ import cn from 'classnames';
 import logo from './logo.jpg';
 import './index.css';
 
-export default ({ visible: isVisible }) => (
+const LoadingIndicator = ({ visible: isVisible }) => (
     <div className={cn('container', isVisible && 'visible')}>
         <div className="logo">
             <div className="circle">
@@ -13,3 +13,5 @@ export default ({ visible: isVisible }) => (
         </div>
     </div>
 );
+
+export default LoadingIndicator;
