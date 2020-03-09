@@ -1,1 +1,1 @@
-export { default } from './PlaceAttachpoint'
+export { default } from './PlaceAttachpoint';

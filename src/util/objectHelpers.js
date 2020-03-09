@@ -1,53 +1,101 @@
-import {
-    Object3D, Bone, Vector3, Group,
-    Mesh, MeshStandardMaterial
-} from 'three'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Object3D, Bone, Group, Mesh, MeshStandardMaterial } from 'three';
 
-import { stlLoader, plyLoader } from './loaders'
+import { stlLoader, plyLoader } from './loaders';
 
+function createBone(name, position, rotation) {
+    const { x, y, z } = position;
 
-/**
- * @param {{ [key: string]: ObjectData }} objectsData - dictionary with values
- * containing the name, download url and extension type of 3d objects
- */
-export const fetchObjects = async objectsData => {
-    /** @type {{ [key: string]: Object3D }} */
-    const objectsToReturn = {}
+    const bone = new Bone();
+    bone.name = name;
+    bone.position.set(x, y, z);
 
-    const keys = Object.keys( objectsData )
+    if (rotation) {
+        const { x, y, z } = rotation;
+        bone.rotation.set(x, y, z);
+    }
 
-    const promises = keys.map( async key => {
-
-        const object = await get3DObject( objectsData[ key ] )
-        
-        objectsToReturn[ key ] = object
-
-    })
-
-    await Promise.all( promises )
-
-    return objectsToReturn
+    return bone;
 }
+
+export const getObjectFromGeometry = (geometry, metadata, poseData) => {
+    geometry.computeVertexNormals();
+
+    const material = new MeshStandardMaterial({
+        color: 0x808080,
+        metalness: 0.5,
+        roughness: 0.5,
+    });
+
+    const mesh = new Mesh(geometry, material);
+
+    const objectContainer = new Group();
+    objectContainer.add(mesh);
+
+    const root = new Group();
+    root.add(objectContainer);
+
+    if (metadata) {
+        const { position, rotation, scale, attachPoints } = metadata;
+
+        if (position) {
+            const { x, y, z } = position;
+            mesh.position.set(x, y, z);
+        }
+
+        // TODO rotation and scale set to parent !!!!
+        if (rotation) {
+            const { x, y, z } = rotation;
+            objectContainer.rotation.set(x, y, z);
+        }
+
+        if (scale) {
+            // scale is number; applies on all axis
+            objectContainer.scale.setScalar(scale);
+        }
+
+        if (attachPoints) {
+            for (const [attachPointName, position] of Object.entries(
+                attachPoints,
+            )) {
+                const rotation = poseData && poseData[attachPointName];
+                root.add(createBone(attachPointName, position, rotation));
+            }
+        }
+
+        root.userData.metadata = metadata;
+        objectContainer.userData.metadata = metadata;
+    }
+
+    return root;
+};
 
 /**
  * @param { ObjectData } objectData
  * @param {{ [key: string]: Rotation }} poseData
  * @returns { Promise<Object3D> }
  */
-export const get3DObject = async ( objectData, poseData ) => {
+export const get3DObject = async (objectData, poseData) => {
     // const file = objectData.files.viewer || objectData.files.default
-    const file = objectData.files.default
+    const file = objectData.files.default;
 
-    switch ( file.extension ) {
-
+    switch (file.extension) {
         case 'ply': {
-            const geometry = await plyLoader.load( file.url )
-            return getObjectFromGeometry( geometry, objectData.metadata, poseData )
+            const geometry = await plyLoader.load(file.url);
+            return getObjectFromGeometry(
+                geometry,
+                objectData.metadata,
+                poseData,
+            );
         }
 
         case 'stl': {
-            const geometry = await stlLoader.load( file.url )
-            return getObjectFromGeometry( geometry, objectData.metadata, poseData )
+            const geometry = await stlLoader.load(file.url);
+            return getObjectFromGeometry(
+                geometry,
+                objectData.metadata,
+                poseData,
+            );
         }
 
         /*
@@ -75,80 +123,35 @@ export const get3DObject = async ( objectData, poseData ) => {
         */
 
         default: {
-            throw new Error( `Extension '${file.extension}' not recognized.` )
+            throw new Error(`Extension '${file.extension}' not recognized.`);
         }
     }
-}
+};
 
-export const getObjectFromGeometry = ( geometry, metadata, poseData ) => {
-    geometry.computeVertexNormals()
+/**
+ * @param {{ [key: string]: ObjectData }} objectsData - dictionary with values
+ * containing the name, download url and extension type of 3d objects
+ */
+export const fetchObjects = async objectsData => {
+    /** @type {{ [key: string]: Object3D }} */
+    const objectsToReturn = {};
 
-    const material = new MeshStandardMaterial({
-        color: 0x808080,
-        metalness: .5,
-        roughness: .5,
-    })
+    const keys = Object.keys(objectsData);
 
-    const mesh = new Mesh( geometry, material )
+    const promises = keys.map(async key => {
+        const object = await get3DObject(objectsData[key]);
 
-    const objectContainer = new Group
-    objectContainer.add( mesh )
-    
-    const root = new Group
-    root.add( objectContainer )
+        objectsToReturn[key] = object;
+    });
 
-    if ( metadata ) {
-        const { position, rotation, scale, attachPoints } = metadata
-    
-        if ( position ) {
-            const { x, y, z } = position
-            mesh.position.set( x, y, z )
-        }
-    
-    
-        // TODO rotation and scale set to parent !!!!
-        if ( rotation ) {
-            const { x, y, z } = rotation
-            objectContainer.rotation.set( x, y, z )
-        }
-    
-        if ( scale ) {
-            // scale is number; applies on all axis
-            objectContainer.scale.setScalar( scale )
-        }
+    await Promise.all(promises);
 
-        if ( attachPoints ) {
-            for ( let [ attachPointName, position ] of Object.entries( attachPoints ) ) {
-                const rotation = poseData && poseData[ attachPointName ]
-                root.add( createBone( attachPointName, position, rotation ) )
-            }
-        }
-
-        root.userData.metadata = metadata
-        objectContainer.userData.metadata = metadata
-    }
-
-    return root
-}
-
-function createBone( name, position, rotation ) {
-    const { x, y, z } = position
-
-    const bone = new Bone
-    bone.name = name
-    bone.position.set( x, y, z )
-
-    if ( rotation ) {
-        const { x, y, z } = rotation
-        bone.rotation.set( x, y, z )
-    }
-    
-    return bone
-}
+    return objectsToReturn;
+};
 
 /**
  * @typedef {{ name: string, download_url: string, extension: string }} ObjectData
  * object with the name, download url and extension type of a 3d object
- * 
+ *
  * @typedef {{ x: number, y: number, z: number }} Rotation
  */

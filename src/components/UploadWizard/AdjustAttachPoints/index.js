@@ -1,1 +1,1 @@
-export { default } from './AdjustAttachpoints'
+export { default } from './AdjustAttachpoints';

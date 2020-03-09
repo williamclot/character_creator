@@ -1,5 +1,5 @@
 .wrapper {
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.4);
     /* border-color: #77777700; */
     display: flex;
     justify-content: space-between;
@@ -19,5 +19,5 @@
     font-size: 16px;
     padding: 5px;
     border-radius: 0 5px 5px 0;
-    filter: opacity(0.7)
+    filter: opacity(0.7);
 }

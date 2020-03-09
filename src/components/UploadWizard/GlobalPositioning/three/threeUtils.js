@@ -1,109 +1,109 @@
 import {
-    WebGLRenderer, Scene, PerspectiveCamera,
-    Color, Mesh, MeshStandardMaterial, Box3
-} from 'three'
-import OrbitControls from '../../../../vendor/three/controls/orbit-controls'
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+    Color,
+    Mesh,
+    MeshStandardMaterial,
+    Box3,
+} from 'three';
+import OrbitControls from '../../../../vendor/three/controls/orbit-controls';
 
-import { createLights, moveCameraToFitObject } from '../../../../util/three-helpers';
+import {
+    createLights,
+    moveCameraToFitObject,
+} from '../../../../util/three-helpers';
 
-
-const scene = new Scene
-scene.background = new Color( 0xeeeeee )
+const scene = new Scene();
+scene.background = new Color(0xeeeeee);
 
 const renderer = new WebGLRenderer({
     antialias: true,
-})
-const canvas = renderer.domElement
+});
+const canvas = renderer.domElement;
 
+const camera = new PerspectiveCamera(75, 1, 0.001, 1000);
+camera.position.set(0, 0.5, -1);
+camera.lookAt(0, 3, 0);
+camera.add(...createLights());
 
-const camera = new PerspectiveCamera(
-    75,
-    1,
-    0.001,
-    1000
-)
-camera.position.set( 0, .5, -1 )
-camera.lookAt( 0, 3, 0 )
-camera.add( ...createLights() )
-
-scene.add( camera )
+scene.add(camera);
 
 const renderScene = () => {
-    renderer.render( scene, camera )
-}
+    renderer.render(scene, camera);
+};
 
-const orbitControls = new OrbitControls( camera, canvas )
-orbitControls.addEventListener( 'change', renderScene )
-orbitControls.enableKeys = false
+const orbitControls = new OrbitControls(camera, canvas);
+orbitControls.addEventListener('change', renderScene);
+orbitControls.enableKeys = false;
 
-
-let mesh = null
-let parentMesh = null
+let mesh = null;
+let parentMesh = null;
 
 export default {
     renderScene,
 
-    init( geometry, parentGeometry ) {
+    init(geometry, parentGeometry) {
         mesh = new Mesh(
             geometry,
             new MeshStandardMaterial({
                 color: 0xffffff,
-                opacity: .8,
+                opacity: 0.8,
                 transparent: true,
-                metalness: .5,
-                roughness: .5,
-            })
-        )
+                metalness: 0.5,
+                roughness: 0.5,
+            }),
+        );
 
-        scene.add( mesh )
+        scene.add(mesh);
 
-        const boundingBox = new Box3().copy( geometry.boundingBox )
+        const boundingBox = new Box3().copy(geometry.boundingBox);
 
-        if ( parentGeometry ) {
-            if ( !parentGeometry.boundingBox ) {
-                parentGeometry.computeBoundingBox()
+        if (parentGeometry) {
+            if (!parentGeometry.boundingBox) {
+                parentGeometry.computeBoundingBox();
             }
 
-            boundingBox.union( parentGeometry.boundingBox )
+            boundingBox.union(parentGeometry.boundingBox);
 
             parentMesh = new Mesh(
                 parentGeometry,
                 new MeshStandardMaterial({
                     color: 0xffffff,
-                    opacity: .8,
+                    opacity: 0.8,
                     transparent: true,
-                    metalness: .5,
-                    roughness: .5,
-                })
-            )
+                    metalness: 0.5,
+                    roughness: 0.5,
+                }),
+            );
 
-            scene.add( parentMesh )
+            scene.add(parentMesh);
         }
 
-        orbitControls.reset()
-        moveCameraToFitObject( camera, orbitControls, boundingBox )
+        orbitControls.reset();
+        moveCameraToFitObject(camera, orbitControls, boundingBox);
 
         // reset renderer size
-        const { width, height } = canvas.getBoundingClientRect()
+        const { width, height } = canvas.getBoundingClientRect();
 
-        camera.aspect = width / height
-        camera.updateProjectionMatrix()
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
 
-        renderer.setSize( width, height, false )
-        renderer.setPixelRatio( width / height )
+        renderer.setSize(width, height, false);
+        renderer.setPixelRatio(width / height);
     },
 
     clearObjects() {
-        scene.remove( mesh )
-        mesh = null
+        scene.remove(mesh);
+        mesh = null;
 
-        if ( parentMesh ) {
-            scene.remove( parentMesh )
-            parentMesh = null
+        if (parentMesh) {
+            scene.remove(parentMesh);
+            parentMesh = null;
         }
     },
 
     getCanvas() {
-        return canvas
+        return canvas;
     },
-}
+};

@@ -1,13 +1,12 @@
-.anti-scrollbar-box{
+.anti-scrollbar-box {
     /* height: 772px; */
     /* height: 100%; */
     overflow-y: scroll;
-
 }
 
 .selector {
     position: relative;
-    
+
     /* height: 100%; */
 
     display: grid;
@@ -25,7 +24,6 @@
 }
 
 .selector .selector-item {
-
     /* min-height: 150px; */
     height: 150px;
     width: 150px;
@@ -77,7 +75,7 @@
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     font-size: 14px;
-    font-family: "Lato", "Open Sans", sans-serif;
+    font-family: 'Lato', 'Open Sans', sans-serif;
 }
 .selector .selector-item.deleted .item-name {
     background-color: #ff0000;
@@ -92,20 +90,20 @@
 
 .import-button {
     background-color: #000000;
-    filter: opacity(.7);
+    filter: opacity(0.7);
     font-weight: bold;
     text-align: center;
     color: white;
-    
+
     margin: 10px;
     padding: 10px;
 
     border-radius: 5px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, .2);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
     cursor: pointer;
 
     font-size: 18px;
-    font-family: "Lato", "Open Sans", sans-serif;
+    font-family: 'Lato', 'Open Sans', sans-serif;
 }
 
 .import-button:hover {
@@ -129,8 +127,7 @@
     background: #2e2e2e;
 }
 
-@media (max-width: 1300px){
-    
+@media (max-width: 1300px) {
     .selector {
         grid-template-columns: 100px 100px;
         grid-template-rows: repeat(auto-fill, 100px);
@@ -146,27 +143,23 @@
         line-height: 20px;
         font-size: 12px;
     }
-
 }
 
-@media (max-width: 950px){
-
+@media (max-width: 950px) {
     .selector {
-
         /* height: 100px; */
-    grid-template-columns: repeat(auto-fill, 100px);
-    grid-template-rows: 100px;
-    grid-auto-flow: column;
-    overflow-y: hidden;
-    overflow-x: scroll;
+        grid-template-columns: repeat(auto-fill, 100px);
+        grid-template-rows: 100px;
+        grid-auto-flow: column;
+        overflow-y: hidden;
+        overflow-x: scroll;
 
-    margin: 10px 10px 0px 10px;
-    padding-right: 0px;
-    padding-bottom: 5px;
+        margin: 10px 10px 0px 10px;
+        padding-right: 0px;
+        padding-bottom: 5px;
 
-    column-gap: 10px;
-    row-gap: unset;
-
+        column-gap: 10px;
+        row-gap: unset;
     }
 
     .selector .selector-item {
@@ -176,5 +169,4 @@
     .import-button {
         font-size: 14px;
     }
-
 }

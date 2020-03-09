@@ -1,3 +1,3 @@
-import renderer from './renderer'
+import renderer from './renderer';
 
-export default renderer.domElement
+export default renderer.domElement;

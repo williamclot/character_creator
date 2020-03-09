@@ -1,1 +1,1 @@
-export { default } from './AdjustTransforms'
+export { default } from './AdjustTransforms';

@@ -21,9 +21,9 @@ const useSceneManager = (partTypesArray, initialRotation) => {
     }, []);
 
     useEffect(() => {
-        if(initialRotation) {
+        if (initialRotation) {
             mainSceneManager.setContainerRotation(initialRotation);
-        };
+        }
     }, [initialRotation]);
 
     return {

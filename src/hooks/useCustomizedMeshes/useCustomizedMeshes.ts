@@ -5,7 +5,7 @@ const hashSelectedPartIds = (selectedPartIds: number[]) => {
     return selectedPartIds
         .sort((p1, p2) => p2 - p1) // sort because different order should produce the same hash
         .join(':');
-}
+};
 
 const useCustomizedMeshes = (
     initialCustomizedMeshes: CustomizedMeshesMap,
@@ -13,14 +13,20 @@ const useCustomizedMeshes = (
     initialCustomizedMeshesOwnedByUser: number[],
     selectedPartsIds: number[],
 ) => {
-    const [customizedMeshes, setCustomizedMeshes] = useState(initialCustomizedMeshes);
-    const [customizedMeshesInCart, setCustomizedMeshesInCart] = useState(initialCustomizedMeshesInCart);
+    const [customizedMeshes, setCustomizedMeshes] = useState(
+        initialCustomizedMeshes,
+    );
+    const [customizedMeshesInCart, setCustomizedMeshesInCart] = useState(
+        initialCustomizedMeshesInCart,
+    );
 
     const meshesOwnedByUserMap = useMemo(() => {
-        let selectedPartsMap: {[hash: string]: boolean} = {};
-        for(const customizedMeshId of initialCustomizedMeshesOwnedByUser) {
+        const selectedPartsMap: { [hash: string]: boolean } = {};
+        for (const customizedMeshId of initialCustomizedMeshesOwnedByUser) {
             const customizedMesh = customizedMeshes[customizedMeshId];
-            const ownedMeshHash = hashSelectedPartIds(customizedMesh.selectedPartIds);
+            const ownedMeshHash = hashSelectedPartIds(
+                customizedMesh.selectedPartIds,
+            );
             selectedPartsMap[ownedMeshHash] = true;
         }
         return selectedPartsMap;
@@ -32,10 +38,12 @@ const useCustomizedMeshes = (
     }, [selectedPartsIds, meshesOwnedByUserMap]);
 
     const meshesInCartMap = useMemo(() => {
-        let selectedPartsMap: {[hash: string]: boolean} = {};
-        for(const customizedMeshId of customizedMeshesInCart) {
+        const selectedPartsMap: { [hash: string]: boolean } = {};
+        for (const customizedMeshId of customizedMeshesInCart) {
             const customizedMesh = customizedMeshes[customizedMeshId];
-            const meshInCartHash = hashSelectedPartIds(customizedMesh.selectedPartIds);
+            const meshInCartHash = hashSelectedPartIds(
+                customizedMesh.selectedPartIds,
+            );
             selectedPartsMap[meshInCartHash] = true;
         }
 
@@ -47,16 +55,22 @@ const useCustomizedMeshes = (
         return selectedObjectsHash in meshesInCartMap;
     }, [selectedPartsIds, meshesInCartMap]);
 
-    const addCustomizedMeshToCart = useCallback((customizedMesh: CustomizedMesh) => {
-        setCustomizedMeshes(currentCustomizedMeshes => ({
-            ...currentCustomizedMeshes,
-            [customizedMesh.id]: customizedMesh
-        }));
-        setCustomizedMeshesInCart(currenctCustomizedMeshesInCart => currenctCustomizedMeshesInCart.concat(customizedMesh.id));
-    }, []);
+    const addCustomizedMeshToCart = useCallback(
+        (customizedMesh: CustomizedMesh) => {
+            setCustomizedMeshes(currentCustomizedMeshes => ({
+                ...currentCustomizedMeshes,
+                [customizedMesh.id]: customizedMesh,
+            }));
+            setCustomizedMeshesInCart(currenctCustomizedMeshesInCart =>
+                currenctCustomizedMeshesInCart.concat(customizedMesh.id),
+            );
+        },
+        [],
+    );
 
     return {
-        userOwnsCurrentSelection, isSelectionInCart,
+        userOwnsCurrentSelection,
+        isSelectionInCart,
         addCustomizedMeshToCart,
     };
 };

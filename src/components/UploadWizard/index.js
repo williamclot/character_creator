@@ -1,1 +1,1 @@
-export { default } from './UploadWizard'
+export { default } from './UploadWizard';

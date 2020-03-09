@@ -1,1 +1,1 @@
-export { default } from './LoadingIndicator'
+export { default } from './LoadingIndicator';

@@ -1,10 +1,8 @@
-
 .placeAttachpoint {
     background-color: aqua;
 
     height: 90%;
     width: 90%;
-
 }
 
 .placeAttachpoint .previewCanvas {
@@ -26,7 +24,7 @@
     width: 120px;
 }
 
-.placeAttachpoint .buttonsContainer .button:nth-child(n+2) {
+.placeAttachpoint .buttonsContainer .button:nth-child(n + 2) {
     margin-left: 10px;
 }
 
@@ -39,7 +37,7 @@
     font-weight: bold;
 }
 
-.placeAttachpoint .title h2{
+.placeAttachpoint .title h2 {
     margin: 0px;
     font-size: 35px;
     font-weight: bold;

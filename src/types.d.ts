@@ -1,97 +1,99 @@
 export type PartTypeParent = {
-    id: number
-    name: string
-    attachPoint: string
+    id: number;
+    name: string;
+    attachPoint: string;
 };
 
 export type PartType = {
-    id: number
-    name: string
-    label: string
-    attachPoints: string[]
-    parent?: PartTypeParent
-}
+    id: number;
+    name: string;
+    label: string;
+    attachPoints: string[];
+    parent?: PartTypeParent;
+};
 
 export type WorldData = {
-    name: string
-    price: number
-    description: string
-    is_private: boolean
-    image_url: string
-    container_rotation?: Coord3d
-    
-    user_name: string
-    user_url: string
+    name: string;
+    price: number;
+    description: string;
+    is_private: boolean;
+    image_url: string;
+    container_rotation?: Coord3d;
+
+    user_name: string;
+    user_url: string;
 
     groups: {
-        categories: PartType[]
-    }[]
-}
+        categories: PartType[];
+    }[];
+};
 
 export type ApiRoutes = {
-    routes: Record<string, string>
-    route_params: Record<string, string>
+    routes: Record<string, string>;
+    route_params: Record<string, string>;
 };
 
 export type Coord3d = {
-    x: number
-    y: number
-    z: number
-}
+    x: number;
+    y: number;
+    z: number;
+};
 
 export type CustomizerPart = {
-    id: number
-    name: string
-    img: string
+    id: number;
+    name: string;
+    img: string;
     files: {
         default: {
-            extension: string
-            url: string
-        }
-    }
+            extension: string;
+            url: string;
+        };
+    };
     metadata?: {
-        position?: Coord3d
-        rotation?: Coord3d
-        scale?: number
-        attachPoints?: {[attachPointName: string]: Coord3d}
-    }
-}
+        position?: Coord3d;
+        rotation?: Coord3d;
+        scale?: number;
+        attachPoints?: { [attachPointName: string]: Coord3d };
+    };
+};
 
 export type Objects_from_props = {
-    allPartTypeIds: number[],
-    byPartTypeId: {[partTypeId: number]: CustomizerPart[]}
-}
+    allPartTypeIds: number[];
+    byPartTypeId: { [partTypeId: number]: CustomizerPart[] };
+};
 
 export type CustomizerPart_in_state = CustomizerPart & {
-    status: string
-    partTypeId: number
-}
+    status: string;
+    partTypeId: number;
+};
 
 export type CustomizerPartsState = {
     byId: {
         [id: number]: CustomizerPart_in_state;
     };
     allIds: number[];
-}
-
-export type CustomizedMesh = {
-    id: number
-    customizer_url: string
-    file_url: string
-    image_url: string
-    selectedPartIds: number[]
-    status: number
 };
 
-export type CustomizedMeshesMap = {[customizedMeshId: number]: CustomizedMesh}
+export type CustomizedMesh = {
+    id: number;
+    customizer_url: string;
+    file_url: string;
+    image_url: string;
+    selectedPartIds: number[];
+    status: number;
+};
+
+export type CustomizedMeshesMap = {
+    [customizedMeshId: number]: CustomizedMesh;
+};
 
 export type AppProps = {
-    api: ApiRoutes
-    customizedMeshes: CustomizedMeshesMap
-    customizedMeshesInCart: number[] // ids
-    customizedMeshesOwnedByUser: number[] // ids
-    customizer_pay_per_download_enabled: boolean
-    edit_mode: boolean
-    objects: Objects_from_props
-    worldData: WorldData
-}
+    api: ApiRoutes;
+    customizedMeshes: CustomizedMeshesMap;
+    customizedMeshesInCart: number[]; // ids
+    customizedMeshesOwnedByUser: number[]; // ids
+    customizer_pay_per_download_enabled: boolean;
+    edit_mode: boolean;
+    objects: Objects_from_props;
+    worldData: WorldData;
+};

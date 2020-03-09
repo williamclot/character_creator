@@ -8,23 +8,23 @@ const getCategories = (world: WorldData) => {
     }
 
     return partTypesArray;
-}
+};
 
 const getPartTypes = (world: WorldData) => {
     const categories = getCategories(world);
 
-    const partTypesById: {[id: string]: PartType} = {};
+    const partTypesById: { [id: string]: PartType } = {};
 
     for (const partType of categories) {
         partTypesById[partType.id] = partType;
     }
 
-    const allPartTypeIds = categories.map( partType => partType.id )
+    const allPartTypeIds = categories.map(partType => partType.id);
 
     return {
         byId: partTypesById,
-        allIds: allPartTypeIds
-    }
-}
+        allIds: allPartTypeIds,
+    };
+};
 
 export default getPartTypes;

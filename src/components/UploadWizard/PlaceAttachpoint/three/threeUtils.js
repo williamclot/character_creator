@@ -1,132 +1,133 @@
 import {
-    Scene, PerspectiveCamera, WebGLRenderer, Color,
-    MeshStandardMaterial, Mesh, Group, Raycaster, Vector3
-} from 'three'
-import OrbitControls from '../../../../vendor/three/controls/orbit-controls'
-import { sphereFactory, moveCameraToFitObject, createLights } from '../../../../util/three-helpers'
+    Scene,
+    PerspectiveCamera,
+    WebGLRenderer,
+    Color,
+    MeshStandardMaterial,
+    Mesh,
+    Group,
+    Raycaster,
+    Vector3,
+} from 'three';
+import OrbitControls from '../../../../vendor/three/controls/orbit-controls';
+import {
+    sphereFactory,
+    moveCameraToFitObject,
+    createLights,
+} from '../../../../util/three-helpers';
 
-const objectContainer = new Group
+const objectContainer = new Group();
 
-let mesh = null
+let mesh = null;
 
-const sphere = sphereFactory.buildSphere()
+const sphere = sphereFactory.buildSphere();
 
-const scene = new Scene
-scene.background = new Color( 0xeeeeee )
-scene.add( objectContainer, sphere )
+const scene = new Scene();
+scene.background = new Color(0xeeeeee);
+scene.add(objectContainer, sphere);
 
-const camera = new PerspectiveCamera(
-    75,
-    1,
-    0.001,
-    1000
-)
-camera.position.set( 0, .5, -1 )
-camera.lookAt( 0, 3, 0 )
-camera.add( ...createLights() )
+const camera = new PerspectiveCamera(75, 1, 0.001, 1000);
+camera.position.set(0, 0.5, -1);
+camera.lookAt(0, 3, 0);
+camera.add(...createLights());
 
-scene.add( camera )
-
+scene.add(camera);
 
 const renderer = new WebGLRenderer({
-    antialias: true
-})
+    antialias: true,
+});
 
-const canvas = renderer.domElement
+const canvas = renderer.domElement;
 
 function renderScene() {
-    renderer.render( scene, camera )
+    renderer.render(scene, camera);
 }
 
-const orbitControls = new OrbitControls( camera, canvas )
-orbitControls.addEventListener( 'change', renderScene )
-orbitControls.enableKeys = false
+const orbitControls = new OrbitControls(camera, canvas);
+orbitControls.addEventListener('change', renderScene);
+orbitControls.enableKeys = false;
 
 export default {
     renderScene,
 
     getCanvas() {
-        return canvas
+        return canvas;
     },
 
-    init( geometry, position ) {
+    init(geometry, position) {
         mesh = new Mesh(
             geometry,
             new MeshStandardMaterial({
                 color: 0xffffff,
-                opacity: .8,
+                opacity: 0.8,
                 transparent: true,
-                metalness: .5,
-                roughness: .5,
-            })
-        )
+                metalness: 0.5,
+                roughness: 0.5,
+            }),
+        );
 
-        objectContainer.add( mesh )
+        objectContainer.add(mesh);
 
-        orbitControls.reset()
-        moveCameraToFitObject( camera, orbitControls, geometry.boundingBox )
+        orbitControls.reset();
+        moveCameraToFitObject(camera, orbitControls, geometry.boundingBox);
 
-        const size = geometry.boundingBox.getSize( new Vector3 )
+        const size = geometry.boundingBox.getSize(new Vector3());
 
-        const maxDimension = Math.max( size.x, size.y )
+        const maxDimension = Math.max(size.x, size.y);
 
-        sphere.scale.setScalar( maxDimension )
-        sphere.position.set(
-            -position.x,
-            -position.y,
-            -position.z
-        )
+        sphere.scale.setScalar(maxDimension);
+        sphere.position.set(-position.x, -position.y, -position.z);
 
         // reset renderer size
-        const { width, height } = canvas.getBoundingClientRect()
+        const { width, height } = canvas.getBoundingClientRect();
 
-        camera.aspect = width / height
-        camera.updateProjectionMatrix()
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
 
-        renderer.setSize( width, height, false )
-        renderer.setPixelRatio( width / height )
+        renderer.setSize(width, height, false);
+        renderer.setPixelRatio(width / height);
     },
 
     clearObjects() {
-        objectContainer.remove( mesh )
-        mesh = null
+        objectContainer.remove(mesh);
+        mesh = null;
     },
 
     setPosition({ x, y, z }) {
         // TODO - mesh variable
-        mesh.position.set( x, y, z )
+        mesh.position.set(x, y, z);
     },
 
     setRotation({ x, y, z }) {
-        objectContainer.rotation.set( x, y, z )
+        objectContainer.rotation.set(x, y, z);
     },
 
-    setScale( scale ) {
-        objectContainer.scale.setScalar( scale )
+    setScale(scale) {
+        objectContainer.scale.setScalar(scale);
     },
 
     setSpherePosition({ x, y, z }) {
-        sphere.position.set( x, y, z )
+        sphere.position.set(x, y, z);
     },
 
-    rayCast( mouseCoords ) {
+    rayCast(mouseCoords) {
+        const raycaster = new Raycaster();
+        raycaster.setFromCamera(mouseCoords, camera);
 
-        const raycaster = new Raycaster
-        raycaster.setFromCamera( mouseCoords, camera )
+        const intersects = raycaster.intersectObject(objectContainer, true);
 
-        const intersects = raycaster.intersectObject( objectContainer, true )
+        const intersection = intersects.find(
+            intersect => intersect.object.isMesh,
+        );
 
-        const intersection = intersects.find( intersect => intersect.object.isMesh )
+        if (intersection) {
+            const { point } = intersection;
 
-        if( intersection ) {
-            const { point, face } = intersection
+            const { x, y, z } = point;
 
-            const { x, y, z } = point
-            
-            return { x, y, z }
-
+            return { x, y, z };
         }
 
-        return null
+        return null;
     },
-}
+};

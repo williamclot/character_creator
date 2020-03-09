@@ -1,1 +1,1 @@
-export { default } from './Tutorial'
+export { default } from './Tutorial';

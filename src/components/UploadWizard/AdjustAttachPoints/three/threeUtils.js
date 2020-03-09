@@ -1,62 +1,66 @@
 import {
-    Scene, PerspectiveCamera, WebGLRenderer, Color,
-    MeshStandardMaterial, Mesh, Group, EventDispatcher,
-    Box3, Vector3,
-} from 'three'
-import OrbitControls from '../../../../vendor/three/controls/orbit-controls'
+    Scene,
+    PerspectiveCamera,
+    WebGLRenderer,
+    Color,
+    MeshStandardMaterial,
+    Mesh,
+    Group,
+    EventDispatcher,
+    Box3,
+    Vector3,
+} from 'three';
+import OrbitControls from '../../../../vendor/three/controls/orbit-controls';
 
-import TransformControls from '../../../../vendor/three/controls/transform-controls'
-import { sphereFactory, moveCameraToFitObject, createLights } from '../../../../util/three-helpers'
+import TransformControls from '../../../../vendor/three/controls/transform-controls';
+import {
+    sphereFactory,
+    moveCameraToFitObject,
+    createLights,
+} from '../../../../util/three-helpers';
 
-const objectContainer = new Group
-const attachPointContainer = new Group
+const objectContainer = new Group();
+const attachPointContainer = new Group();
 
-let mesh = null
-let _childMesh = null
+let mesh = null;
+let _childMesh = null;
 
-const sphere = sphereFactory.buildSphere()
-sphere.material.color.set( 0xffff00 ) // yellow
+const sphere = sphereFactory.buildSphere();
+sphere.material.color.set(0xffff00); // yellow
 
-attachPointContainer.add( sphere )
+attachPointContainer.add(sphere);
 
-const scene = new Scene
-scene.background = new Color( 0xeeeeee )
-scene.add( objectContainer, attachPointContainer )
+const scene = new Scene();
+scene.background = new Color(0xeeeeee);
+scene.add(objectContainer, attachPointContainer);
 
-const camera = new PerspectiveCamera(
-    75,
-    1,
-    0.001,
-    1000
-)
-camera.position.set( 0, .5, -1 )
-camera.lookAt( 0, 3, 0 )
-camera.add( ...createLights() )
+const camera = new PerspectiveCamera(75, 1, 0.001, 1000);
+camera.position.set(0, 0.5, -1);
+camera.lookAt(0, 3, 0);
+camera.add(...createLights());
 
-scene.add( camera )
+scene.add(camera);
 
 const renderer = new WebGLRenderer({
-    antialias: true
-})
+    antialias: true,
+});
 
-const canvas = renderer.domElement
+const canvas = renderer.domElement;
 
 function renderScene() {
-    renderer.render( scene, camera )
+    renderer.render(scene, camera);
 }
 
-const orbitControls = new OrbitControls( camera, canvas )
-orbitControls.addEventListener( 'change', renderScene )
-orbitControls.enableKeys = false
+const orbitControls = new OrbitControls(camera, canvas);
+orbitControls.addEventListener('change', renderScene);
+orbitControls.enableKeys = false;
 
+const transformControls = new TransformControls(camera, canvas);
 
-const transformControls = new TransformControls( camera, canvas )
+const transformsEventDispatcher = new EventDispatcher();
 
-const transformsEventDispatcher = new EventDispatcher()
-
-transformControls.attach( attachPointContainer )
-transformControls.setMode( 'translate' )
-
+transformControls.attach(attachPointContainer);
+transformControls.setMode('translate');
 
 // const onTransformChange = throttle( 250, () => {
 
@@ -65,133 +69,134 @@ transformControls.setMode( 'translate' )
 // })
 
 const onTransformMouseDown = () => {
-    orbitControls.enabled = false
-}
+    orbitControls.enabled = false;
+};
 
 const onTransformMouseUp = () => {
-    orbitControls.enabled = true
+    orbitControls.enabled = true;
 
-    const { x, y, z } = attachPointContainer.position
-    transformsEventDispatcher.dispatchEvent({ type: 'translate', position: { x, y, z } })
-}
+    const { x, y, z } = attachPointContainer.position;
+    transformsEventDispatcher.dispatchEvent({
+        type: 'translate',
+        position: { x, y, z },
+    });
+};
 
-transformControls.addEventListener( 'change', renderScene )
+transformControls.addEventListener('change', renderScene);
 // transformControls.addEventListener( 'objectChange', onTransformChange )
 
-transformControls.addEventListener( 'mouseDown', onTransformMouseDown )
-transformControls.addEventListener( 'mouseUp', onTransformMouseUp )
+transformControls.addEventListener('mouseDown', onTransformMouseDown);
+transformControls.addEventListener('mouseUp', onTransformMouseUp);
 
-scene.add( transformControls )
+scene.add(transformControls);
 
 export default {
     renderScene,
 
     getCanvas() {
-        return canvas
+        return canvas;
     },
 
-    init( geometry, options, childMesh ) {
+    init(geometry, options, childMesh) {
         const {
             position: { x: posX, y: posY, z: posZ },
             rotation: { x: rotX, y: rotY, z: rotZ },
             scale,
             attachPointPosition,
-        } = options
+        } = options;
 
         mesh = new Mesh(
             geometry,
             new MeshStandardMaterial({
                 color: 0xffffff,
-                roughness: .5,
-                metalness: .5,
-            })
-        )
+                roughness: 0.5,
+                metalness: 0.5,
+            }),
+        );
 
-        mesh.position.set( posX, posY, posZ )
-        objectContainer.rotation.set( rotX, rotY, rotZ )
-        objectContainer.scale.setScalar( scale )
+        mesh.position.set(posX, posY, posZ);
+        objectContainer.rotation.set(rotX, rotY, rotZ);
+        objectContainer.scale.setScalar(scale);
 
-        objectContainer.add( mesh )
+        objectContainer.add(mesh);
 
         attachPointContainer.position.set(
             attachPointPosition.x,
             attachPointPosition.y,
             attachPointPosition.z,
-        )
+        );
 
-        const boundingBox = new Box3().setFromObject( objectContainer )
+        const boundingBox = new Box3().setFromObject(objectContainer);
 
-        if ( childMesh ) {
-            boundingBox.expandByObject( childMesh )
+        if (childMesh) {
+            boundingBox.expandByObject(childMesh);
 
-            _childMesh = childMesh.clone()
-    
-            _childMesh.traverse( object => {
-                if ( object.isMesh ) {
+            _childMesh = childMesh.clone();
+
+            _childMesh.traverse(object => {
+                if (object.isMesh) {
                     object.material = new MeshStandardMaterial({
                         color: 0xffffff,
-                        opacity: .8,
+                        opacity: 0.8,
                         transparent: true,
-                        metalness: .5,
-                        roughness: .5,
-                    })
+                        metalness: 0.5,
+                        roughness: 0.5,
+                    });
                 }
-            })
-    
+            });
 
-            attachPointContainer.add( _childMesh )
+            attachPointContainer.add(_childMesh);
         }
 
+        const size = boundingBox.getSize(new Vector3());
+        const maxDimension = Math.max(size.x, size.y);
 
-        const size = boundingBox.getSize( new Vector3 )
-        const maxDimension = Math.max( size.x, size.y )
+        sphere.scale.setScalar(maxDimension);
 
-        sphere.scale.setScalar( maxDimension )
-
-        orbitControls.reset()
-        moveCameraToFitObject( camera, orbitControls, boundingBox )
+        orbitControls.reset();
+        moveCameraToFitObject(camera, orbitControls, boundingBox);
 
         // reset renderer size
-        const { width, height } = canvas.getBoundingClientRect()
+        const { width, height } = canvas.getBoundingClientRect();
 
-        camera.aspect = width / height
-        camera.updateProjectionMatrix()
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
 
-        renderer.setSize( width, height, false )
-        renderer.setPixelRatio( width / height )
+        renderer.setSize(width, height, false);
+        renderer.setPixelRatio(width / height);
     },
 
     clearObjects() {
-        objectContainer.remove( mesh )
-        mesh = null
+        objectContainer.remove(mesh);
+        mesh = null;
 
-        if ( _childMesh ) {
-            attachPointContainer.remove( _childMesh )
-            _childMesh = null
+        if (_childMesh) {
+            attachPointContainer.remove(_childMesh);
+            _childMesh = null;
         }
     },
 
     setPosition({ x, y, z }) {
-        mesh.position.set( x, y, z )
+        mesh.position.set(x, y, z);
     },
 
     setRotation({ x, y, z }) {
-        objectContainer.rotation.set( x, y, z )
+        objectContainer.rotation.set(x, y, z);
     },
 
-    setScale( scale ) {
-        objectContainer.scale.setScalar( scale )
+    setScale(scale) {
+        objectContainer.scale.setScalar(scale);
     },
 
     setSpherePosition({ x, y, z }) {
-        attachPointContainer.position.set( x, y, z )
+        attachPointContainer.position.set(x, y, z);
     },
 
-    addEventListener( type, listener ) {
-        transformsEventDispatcher.addEventListener( type, listener )
+    addEventListener(type, listener) {
+        transformsEventDispatcher.addEventListener(type, listener);
     },
 
-    removeEventListener( type, listener ) {
-        transformsEventDispatcher.removeEventListener( type, listener )
+    removeEventListener(type, listener) {
+        transformsEventDispatcher.removeEventListener(type, listener);
     },
-}
+};

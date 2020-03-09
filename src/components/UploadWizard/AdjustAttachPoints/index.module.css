@@ -1,8 +1,6 @@
-
 .adjustTransforms {
     height: 90%;
     width: 90%;
-
 }
 
 .adjustTransforms .previewCanvas {
@@ -10,7 +8,6 @@
     width: 100%;
     height: 100%;
 }
-
 
 .adjustTransforms .sideView {
     background-color: rgba(60, 60, 60, 0.3);
@@ -21,8 +18,8 @@
 }
 
 .adjustTransforms .sideView .inputsContainer {
-    opacity: .8;
-    
+    opacity: 0.8;
+
     height: 100%;
     width: 100%;
     display: flex;
@@ -39,12 +36,16 @@
     justify-content: space-between;
 }
 
-.adjustTransforms .sideView .inputsContainer .inputGroup .axes .container:nth-child(n+2) {
+.adjustTransforms
+    .sideView
+    .inputsContainer
+    .inputGroup
+    .axes
+    .container:nth-child(n + 2) {
     margin-left: 10px;
 }
 
 .adjustTransforms .sideView .buttonsContainer {
-
     position: absolute;
     bottom: 0;
     display: flex;
@@ -59,8 +60,8 @@
     width: 120px;
 }
 
-.adjustTransforms .sideView .buttonsContainer .button:nth-child(n+2) {
-    margin-left:10px;
+.adjustTransforms .sideView .buttonsContainer .button:nth-child(n + 2) {
+    margin-left: 10px;
 }
 
 .adjustTransforms .title {
@@ -69,7 +70,7 @@
     left: 20px;
 }
 
-.adjustTransforms .title h2{
+.adjustTransforms .title h2 {
     font-size: 35px;
     font-weight: bold;
     margin: 0px;

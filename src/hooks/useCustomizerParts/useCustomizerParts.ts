@@ -1,26 +1,28 @@
 import { useReducer } from 'react';
 import { getObjects } from './getObjects';
-import { Objects_from_props, CustomizerPartsState, CustomizerPart, CustomizerPart_in_state } from '../../types';
+import {
+    Objects_from_props,
+    CustomizerPartsState,
+    CustomizerPart_in_state,
+} from '../../types';
 
 type Action = {
-    type: 'ADD' | 'SET_STATUS',
-    [param: string]: any,
-}
+    type: 'ADD' | 'SET_STATUS';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [param: string]: any;
+};
 
 const _objectsReducer = (objects: CustomizerPartsState, action: Action) => {
-    switch(action.type) {
+    switch (action.type) {
         case 'ADD': {
             const objectId = action.objectToAdd.id as number;
 
             return {
                 byId: {
                     ...objects.byId,
-                    [objectId]: action.objectToAdd as CustomizerPart_in_state
+                    [objectId]: action.objectToAdd as CustomizerPart_in_state,
                 },
-                allIds: [
-                    ...objects.allIds,
-                    objectId
-                ]
+                allIds: [...objects.allIds, objectId],
             };
         }
 
@@ -30,15 +32,15 @@ const _objectsReducer = (objects: CustomizerPartsState, action: Action) => {
             const { byId, allIds } = objects;
             const modifiedObject = {
                 ...byId[objectId],
-                status: action.status as string
+                status: action.status as string,
             };
-        
+
             return {
                 byId: {
                     ...byId,
-                    [objectId]: modifiedObject
+                    [objectId]: modifiedObject,
                 },
-                allIds
+                allIds,
             };
         }
 
@@ -46,30 +48,34 @@ const _objectsReducer = (objects: CustomizerPartsState, action: Action) => {
             throw new Error('invalid action');
         }
     }
-}
-
+};
 
 const useCustomizerParts = (initialObjectsFromProps: Objects_from_props) => {
-    const [parts, dispatch] = useReducer(_objectsReducer, initialObjectsFromProps, getObjects);
-    
+    const [parts, dispatch] = useReducer(
+        _objectsReducer,
+        initialObjectsFromProps,
+        getObjects,
+    );
+
     const setPartStatus = (objectId: number, statusCode: number) => {
         dispatch({
             type: 'SET_STATUS',
             objectId,
-            status: statusCode
+            status: statusCode,
         });
     };
-    
+
     const addPart = (objectToAdd: CustomizerPart_in_state) => {
         dispatch({
             type: 'ADD',
-            objectToAdd
+            objectToAdd,
         });
-    }
+    };
 
     return {
         parts,
-        setPartStatus, addPart,
+        setPartStatus,
+        addPart,
     };
 };
 

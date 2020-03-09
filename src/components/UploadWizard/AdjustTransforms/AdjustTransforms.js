@@ -1,27 +1,23 @@
-import React, { Component, createRef } from 'react'
-import cn from 'classnames'
+import React, { Component, createRef } from 'react';
+import cn from 'classnames';
 
-import { radiansToDegreesFormatter } from '../../../util/helpers'
+import { radiansToDegreesFormatter } from '../../../util/helpers';
 
-import CanvasContainer from '../../CanvasContainer'
+import CanvasContainer from '../../CanvasContainer';
 
-import threeUtils from './three'
+import threeUtils from './three';
 
-import NumberInput from '../../MyInput'
-import commonStyles from '../index.module.css'
-import styles from './index.module.css'
+import NumberInput from '../../MyInput';
+import commonStyles from '../index.module.css';
+import styles from './index.module.css';
 
 export default class AdjustTransforms extends Component {
-    constructor( props ) {
-        super( props )
+    constructor(props) {
+        super(props);
 
-        this.canvasRef = createRef()
+        this.canvasRef = createRef();
 
-        const {
-            position,
-            rotation,
-            scale
-        } = props
+        const { position, rotation, scale } = props;
 
         this.state = {
             isUsingGizmos: false,
@@ -35,9 +31,9 @@ export default class AdjustTransforms extends Component {
             rotZ: rotation.z,
 
             scale,
-        }
+        };
     }
-    
+
     componentDidMount() {
         const {
             currentCategory,
@@ -47,48 +43,57 @@ export default class AdjustTransforms extends Component {
             rotation,
             scale,
             parentAttachPointPosition,
-        } = this.props
+        } = this.props;
 
         const options = {
             position,
             rotation,
             scale,
             parentAttachPointPosition,
-        }
+        };
 
         /**
          * Assumption: actual mesh is the first child; the other children
          * are the attachpoints which are not needed in this view
          */
-        const parentMesh = currentObjectParent && currentObjectParent.children[0]
+        const parentMesh =
+            currentObjectParent && currentObjectParent.children[0];
 
-        threeUtils.init( uploadedObjectGeometry, options, parentMesh )
+        threeUtils.init(uploadedObjectGeometry, options, parentMesh);
 
+        const hasParent = Boolean(
+            currentCategory.parent && currentObjectParent,
+        );
 
-        const hasParent = Boolean( currentCategory.parent && currentObjectParent )
+        threeUtils.setControlsEnabled(hasParent);
+        threeUtils.showGrid(!hasParent);
 
-        threeUtils.setControlsEnabled( hasParent )
-        threeUtils.showGrid( !hasParent )
+        threeUtils.renderScene();
 
-        threeUtils.renderScene()
-        
+        document.addEventListener('keydown', this.onKeyDown);
 
-        document.addEventListener( 'keydown', this.onKeyDown )
-
-        threeUtils.addEventListener( 'translate', this.handleGizmoPositionChange )
-        threeUtils.addEventListener( 'rotate', this.handleGizmoRotationChange )
-        threeUtils.addEventListener( 'scale', this.handleGizmoScaleChange )
-        
+        threeUtils.addEventListener(
+            'translate',
+            this.handleGizmoPositionChange,
+        );
+        threeUtils.addEventListener('rotate', this.handleGizmoRotationChange);
+        threeUtils.addEventListener('scale', this.handleGizmoScaleChange);
     }
 
     componentWillUnmount() {
-        document.removeEventListener( 'keydown', this.onKeyDown )
+        document.removeEventListener('keydown', this.onKeyDown);
 
-        threeUtils.removeEventListener( 'translate', this.handleGizmoPositionChange )
-        threeUtils.removeEventListener( 'rotate', this.handleGizmoRotationChange )
-        threeUtils.removeEventListener( 'scale', this.handleGizmoScaleChange )
+        threeUtils.removeEventListener(
+            'translate',
+            this.handleGizmoPositionChange,
+        );
+        threeUtils.removeEventListener(
+            'rotate',
+            this.handleGizmoRotationChange,
+        );
+        threeUtils.removeEventListener('scale', this.handleGizmoScaleChange);
 
-        threeUtils.clearObjects()
+        threeUtils.clearObjects();
     }
 
     /*
@@ -156,172 +161,176 @@ export default class AdjustTransforms extends Component {
     }
     */
 
-    handleGizmoPositionChange = ({ position: { x: posX, y: posY, z: posZ } }) => {
+    handleGizmoPositionChange = ({
+        position: { x: posX, y: posY, z: posZ },
+    }) => {
         this.setState({
             posX,
             posY,
-            posZ
-        })
-    }
+            posZ,
+        });
+    };
 
-    handleGizmoRotationChange = ({ rotation: { x: rotX, y: rotY, z: rotZ } }) => {
+    handleGizmoRotationChange = ({
+        rotation: { x: rotX, y: rotY, z: rotZ },
+    }) => {
         this.setState({
             rotX,
             rotY,
-            rotZ
-        })
-    }
+            rotZ,
+        });
+    };
 
     handleGizmoScaleChange = ({ scale }) => {
         this.setState({
-            scale
-        })
-    }
+            scale,
+        });
+    };
 
     onPositionXChange = value => {
         this.setState({
-            posX: value
-        })
+            posX: value,
+        });
 
         threeUtils.setPosition({
             x: value,
             y: this.state.posY,
             z: this.state.posZ,
-        })
+        });
 
-        threeUtils.renderScene()
-    }
+        threeUtils.renderScene();
+    };
 
     onPositionYChange = value => {
         this.setState({
-            posY: value
-        })
+            posY: value,
+        });
 
         threeUtils.setPosition({
             x: this.state.posX,
             y: value,
             z: this.state.posZ,
-        })
+        });
 
-        threeUtils.renderScene()
-    }
+        threeUtils.renderScene();
+    };
 
     onPositionZChange = value => {
         this.setState({
-            posZ: value
-        })
+            posZ: value,
+        });
 
         threeUtils.setPosition({
             x: this.state.posX,
             y: this.state.posY,
             z: value,
-        })
+        });
 
-        threeUtils.renderScene()
-    }
+        threeUtils.renderScene();
+    };
 
     onRotationXChange = value => {
         this.setState({
-            rotX: value
-        })
+            rotX: value,
+        });
 
         threeUtils.setRotation({
             x: value,
             y: this.state.rotY,
             z: this.state.rotZ,
-        })
+        });
 
-        threeUtils.renderScene()
-    }
+        threeUtils.renderScene();
+    };
 
     onRotationYChange = value => {
         this.setState({
-            rotY: value
-        })
+            rotY: value,
+        });
 
         threeUtils.setRotation({
             x: this.state.rotX,
             y: value,
             z: this.state.rotZ,
-        })
+        });
 
-        threeUtils.renderScene()
-    }
+        threeUtils.renderScene();
+    };
 
     onRotationZChange = value => {
         this.setState({
-            rotZ: value
-        })
+            rotZ: value,
+        });
 
         threeUtils.setRotation({
             x: this.state.rotX,
             y: this.state.rotY,
             z: value,
-        })
+        });
 
-        threeUtils.renderScene()
-    }
+        threeUtils.renderScene();
+    };
 
     onScaleChange = value => {
         this.setState({
-            scale: value
-        })
+            scale: value,
+        });
 
-        threeUtils.setScale( value )
+        threeUtils.setScale(value);
 
-        threeUtils.renderScene()
-    }
+        threeUtils.renderScene();
+    };
 
     handleIncrementScale = () => {
-        const currentScale = this.state.scale
-        const step = currentScale / 30
-        const scale = currentScale + step
-        
-        this.setState({
-            scale
-        })
+        const currentScale = this.state.scale;
+        const step = currentScale / 30;
+        const scale = currentScale + step;
 
-        threeUtils.setScale( scale )
-        threeUtils.renderScene()
-    }
+        this.setState({
+            scale,
+        });
+
+        threeUtils.setScale(scale);
+        threeUtils.renderScene();
+    };
 
     handleDecrementScale = () => {
-        const currentScale = this.state.scale
-        const step = currentScale / 30
-        const scale = currentScale - step
-        
-        this.setState({
-            scale
-        })
+        const currentScale = this.state.scale;
+        const step = currentScale / 30;
+        const scale = currentScale - step;
 
-        threeUtils.setScale( scale )
-        threeUtils.renderScene()
-    }
+        this.setState({
+            scale,
+        });
+
+        threeUtils.setScale(scale);
+        threeUtils.renderScene();
+    };
 
     onModeTranslate = () => {
-        threeUtils.setGizmoModeTranslate()
-    }
+        threeUtils.setGizmoModeTranslate();
+    };
 
     onModeRotate = () => {
-        threeUtils.setGizmoModeRotate()
-    }
+        threeUtils.setGizmoModeRotate();
+    };
 
     onModeScale = () => {
-        threeUtils.setGizmoModeScale()
-    }
+        threeUtils.setGizmoModeScale();
+    };
 
-    onKeyDown = (e) => {
-        switch( e.key ) {
+    onKeyDown = e => {
+        switch (e.key) {
             case 'p': {
-                this.onModeTranslate()
-                break
+                this.onModeTranslate();
+                break;
             }
             case 'r': {
-                this.onModeRotate()
-                break
+                this.onModeRotate();
+                break;
             }
         }
-    }
+    };
 
     handleNext = () => {
         const {
@@ -329,200 +338,189 @@ export default class AdjustTransforms extends Component {
             onRotationChange,
             onScaleChange,
             nextStep,
-        } = this.props
-        const {
-            posX, posY, posZ,
-            rotX, rotY, rotZ,
-            scale,
-        } = this.state
+        } = this.props;
+        const { posX, posY, posZ, rotX, rotY, rotZ, scale } = this.state;
 
         onPositionChange({
             x: posX,
             y: posY,
             z: posZ,
-        })
+        });
         onRotationChange({
             x: rotX,
             y: rotY,
             z: rotZ,
-        })        
-        onScaleChange( scale )
+        });
+        onScaleChange(scale);
 
-        nextStep()
-    }
+        nextStep();
+    };
 
     render() {
         const {
             currentCategory,
 
-            nextStep, previousStep
-        } = this.props
-        const {
-            posX, posY, posZ,
-            rotX, rotY, rotZ,
-            scale,
-        } = this.state
+            previousStep,
+        } = this.props;
+        const { posX, posY, posZ, rotX, rotY, rotZ, scale } = this.state;
 
-        const hasParent = Boolean( currentCategory.parent )
+        const hasParent = Boolean(currentCategory.parent);
 
-        const className = cn(
-            commonStyles.wizardStep,
-            styles.adjustTransforms
-        )
+        const className = cn(commonStyles.wizardStep, styles.adjustTransforms);
 
         return (
-            <div
-                className = { className }
-            >
-
+            <div className={className}>
                 <CanvasContainer
-                    className = { styles.previewCanvas }
-                    domElement = { threeUtils.getCanvas() }
-                    onKeyDown = { this.onKeyDown }
+                    className={styles.previewCanvas}
+                    domElement={threeUtils.getCanvas()}
+                    onKeyDown={this.onKeyDown}
                 />
 
-                <div className = { styles.title } >
-                    <h2>
-                        Position and Resize
-                    </h2>
+                <div className={styles.title}>
+                    <h2>Position and Resize</h2>
                     {hasParent ? (
-                        <p> Adjust Position, Rotation and Scale for it to be in the right place </p>
+                        <p>
+                            {' '}
+                            Adjust Position, Rotation and Scale for it to be in
+                            the right place{' '}
+                        </p>
                     ) : (
                         <p> Rotate Part to face the camera. </p>
                     )}
                 </div>
 
-                <div className = { styles.shortcutButtons } >
+                <div className={styles.shortcutButtons}>
                     {hasParent && (
                         <div
-                            className = {cn( commonStyles.button, styles.button )}
-                            onClick = { this.onModeTranslate }
+                            className={cn(commonStyles.button, styles.button)}
+                            onClick={this.onModeTranslate}
                         >
                             Position
                         </div>
                     )}
 
                     <div
-                        className = {cn( commonStyles.button, styles.button )}
-                        onClick = { this.onModeRotate }
+                        className={cn(commonStyles.button, styles.button)}
+                        onClick={this.onModeRotate}
                     >
                         Rotation
                     </div>
 
-                    <div className = { styles.scaleButton } >
+                    <div className={styles.scaleButton}>
                         Scale
                         <span
-                            className = {cn( commonStyles.button, styles.inlineButton )}
-                            onClick = { this.handleIncrementScale }
+                            className={cn(
+                                commonStyles.button,
+                                styles.inlineButton,
+                            )}
+                            onClick={this.handleIncrementScale}
                         >
                             +
                         </span>
                         <span
-                            className = {cn( commonStyles.button, styles.inlineButton )}
-                            onClick = { this.handleDecrementScale }
+                            className={cn(
+                                commonStyles.button,
+                                styles.inlineButton,
+                            )}
+                            onClick={this.handleDecrementScale}
                         >
                             -
                         </span>
                     </div>
-
                 </div>
-                
-                <div className = { styles.sideView } >
 
-                    <div className = { styles.inputsContainer } >
+                <div className={styles.sideView}>
+                    <div className={styles.inputsContainer}>
                         {hasParent && (
-                            <div className = {cn( styles.inputGroup, styles.position )} >
-                                <div className = { styles.label } >
-                                    Position
-                                </div>
-                                <div className = { styles.axes } >
+                            <div
+                                className={cn(
+                                    styles.inputGroup,
+                                    styles.position,
+                                )}
+                            >
+                                <div className={styles.label}>Position</div>
+                                <div className={styles.axes}>
                                     <NumberInput
-                                        axis = {'X'}
-                                        value = { posX }
-                                        onChange = { this.onPositionXChange }
+                                        axis={'X'}
+                                        value={posX}
+                                        onChange={this.onPositionXChange}
                                     />
                                     <NumberInput
-                                        axis = {'Y'}
-                                        value = { posY }
-                                        onChange = { this.onPositionYChange }
+                                        axis={'Y'}
+                                        value={posY}
+                                        onChange={this.onPositionYChange}
                                     />
                                     <NumberInput
-                                        axis = {'Z'}
-                                        value = { posZ }
-                                        onChange = { this.onPositionZChange }
+                                        axis={'Z'}
+                                        value={posZ}
+                                        onChange={this.onPositionZChange}
                                     />
                                 </div>
                             </div>
                         )}
-                        <div className = {cn( styles.inputGroup, styles.rotation )} >
-                            <div className = { styles.label } >
-                                Rotation
-                            </div>
-                            <div className = { styles.axes } >
+                        <div className={cn(styles.inputGroup, styles.rotation)}>
+                            <div className={styles.label}>Rotation</div>
+                            <div className={styles.axes}>
                                 <NumberInput
-                                    axis = {'X'}
-                                    value = { rotX }
-                                    onChange = { this.onRotationXChange }
-                                    formatter = { radiansToDegreesFormatter }
-                                    min = { -Infinity }
-                                    max = { Infinity }
-                                    precision = { 0 }
+                                    axis={'X'}
+                                    value={rotX}
+                                    onChange={this.onRotationXChange}
+                                    formatter={radiansToDegreesFormatter}
+                                    min={-Infinity}
+                                    max={Infinity}
+                                    precision={0}
                                 />
                                 <NumberInput
-                                    axis = {'Y'}
-                                    value = { rotY }
-                                    onChange = { this.onRotationYChange }
-                                    formatter = { radiansToDegreesFormatter }
-                                    min = { -Infinity }
-                                    max = { Infinity }
-                                    precision = { 0 }
+                                    axis={'Y'}
+                                    value={rotY}
+                                    onChange={this.onRotationYChange}
+                                    formatter={radiansToDegreesFormatter}
+                                    min={-Infinity}
+                                    max={Infinity}
+                                    precision={0}
                                 />
                                 <NumberInput
-                                    axis = {'Z'}
-                                    value = { rotZ }
-                                    onChange = { this.onRotationZChange }
-                                    formatter = { radiansToDegreesFormatter }
-                                    min = { -Infinity }
-                                    max = { Infinity }
-                                    precision = { 0 }
+                                    axis={'Z'}
+                                    value={rotZ}
+                                    onChange={this.onRotationZChange}
+                                    formatter={radiansToDegreesFormatter}
+                                    min={-Infinity}
+                                    max={Infinity}
+                                    precision={0}
                                 />
                             </div>
                         </div>
-                        <div className = {cn( styles.inputGroup, styles.scale )} >
-                        <div className = { styles.label } >
-                                Scale
-                            </div>
-                            <div className = { styles.axes } >
+                        <div className={cn(styles.inputGroup, styles.scale)}>
+                            <div className={styles.label}>Scale</div>
+                            <div className={styles.axes}>
                                 <NumberInput
-                                    axis = { null }
-                                    value = { scale }
-                                    step = { scale / 30 }
-                                    min = { 0 }
-                                    precision = { 4 }
-                                    onChange = { this.onScaleChange }
+                                    axis={null}
+                                    value={scale}
+                                    step={scale / 30}
+                                    min={0}
+                                    precision={4}
+                                    onChange={this.onScaleChange}
                                 />
                             </div>
                         </div>
                     </div>
-                    
-                    <div className = { styles.buttonsContainer } >
+
+                    <div className={styles.buttonsContainer}>
                         <div
-                            className = {cn( commonStyles.button, styles.button )}
-                            onClick = { previousStep }
+                            className={cn(commonStyles.button, styles.button)}
+                            onClick={previousStep}
                         >
                             Back
                         </div>
                         <div
-                            className = {cn( commonStyles.button, styles.button )}
-                            onClick = { this.handleNext }
+                            className={cn(commonStyles.button, styles.button)}
+                            onClick={this.handleNext}
                         >
                             Next
                         </div>
                     </div>
-
                 </div>
-
             </div>
-        )
+        );
     }
 }

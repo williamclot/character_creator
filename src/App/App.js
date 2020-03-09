@@ -1,48 +1,59 @@
-import React, { Component, createRef, useState, useEffect, useMemo, useRef } from 'react'
+import React, { useState, useEffect } from 'react';
 
-import SettingsPopup from '../components/SettingsPopup'
-import UploadWizard from '../components/UploadWizard'
+import SettingsPopup from '../components/SettingsPopup';
+import UploadWizard from '../components/UploadWizard';
 import Header from '../components/Header';
 import Selector from '../components/Selector';
-import PartTypesView from '../components/PartTypes'
+import PartTypesView from '../components/PartTypes';
 import LoadingIndicator from '../components/LoadingIndicator';
 import ButtonsContainer from '../components/ButtonsContainer';
 
+import { ACCEPTED_OBJECT_FILE_EXTENSIONS, OBJECT_STATUS } from '../constants';
 import {
-    ACCEPTED_OBJECT_FILE_EXTENSIONS,
-    OBJECT_STATUS
-} from '../constants'
-import { fetchObjects, get3DObject, getObjectFromGeometry } from '../util/objectHelpers';
+    fetchObjects,
+    get3DObject,
+    getObjectFromGeometry,
+} from '../util/objectHelpers';
 import {
-    getNameAndExtension, objectMap, triggerDownloadFromUrl
-} from '../util/helpers'
+    getNameAndExtension,
+    objectMap,
+    triggerDownloadFromUrl,
+} from '../util/helpers';
 
 import useMmfApi from '../hooks/useMmfApi';
 import useCustomizerState from '../hooks/useCustomizerState';
 import useSceneManager from '../hooks/useSceneManager';
 
-
-import styles from './App.module.scss'
-
+import styles from './App.module.scss';
 
 /**
  * @type {import('react').FunctionComponent<import('../types').AppProps>}
  */
 const App = props => {
     const {
-        partTypes, partTypesArray,
-        objects, addObject, setObjectStatus,
+        partTypes,
+        partTypesArray,
+        objects,
+        addObject,
+        setObjectStatus,
 
-        customizerName, price, description, isPrivate, imageUrl,
+        customizerName,
+        price,
+        description,
+        isPrivate,
+        imageUrl,
         updateSettings,
 
-        selectedPartTypeId, setSelectedPartTypeId,
+        selectedPartTypeId,
+        setSelectedPartTypeId,
         selectedPartType,
-        selectedParts, setSelectedParts,
+        selectedParts,
+        setSelectedParts,
         selectedPartsIds,
 
         addCustomizedMeshToCart,
-        isSelectionInCart, userMustBuySelection,
+        isSelectionInCart,
+        userMustBuySelection,
 
         getObjectsByPartTypeId,
 
@@ -58,69 +69,77 @@ const App = props => {
 
     const api = useMmfApi(props.api);
 
-    const { canvasContainerRef, sceneManager } = useSceneManager(partTypesArray, props.worldData.container_rotation);
+    const { canvasContainerRef, sceneManager } = useSceneManager(
+        partTypesArray,
+        props.worldData.container_rotation,
+    );
 
     useEffect(() => {
         sceneManager.renderScene();
     }, []);
 
-    useEffect(() => void (async () => {
-        setIsLoading(true);
-    
-        try {
-            let oneOfEach = {};
-            
-            // check location hash for initial selected parts
-            const hash = window.location.hash.slice(1);
-            if (hash !== '') {
-                /** @type {number[]} */
-                const selectedIds = JSON.parse(hash);
-    
-                for (const partId of selectedIds) {
-                    const part = objects.byId[partId];
-                    if (part) {
-                        oneOfEach[part.partTypeId] = part;
+    useEffect(
+        () =>
+            void (async () => {
+                setIsLoading(true);
+
+                try {
+                    const oneOfEach = {};
+
+                    // check location hash for initial selected parts
+                    const hash = window.location.hash.slice(1);
+                    if (hash !== '') {
+                        /** @type {number[]} */
+                        const selectedIds = JSON.parse(hash);
+
+                        for (const partId of selectedIds) {
+                            const part = objects.byId[partId];
+                            if (part) {
+                                oneOfEach[part.partTypeId] = part;
+                            }
+                        }
                     }
+
+                    // select first part from each part type that hasn't been filled out from the hash
+                    for (const partTypeId of partTypes.allIds) {
+                        if (!oneOfEach[partTypeId]) {
+                            oneOfEach[partTypeId] = getObjectsByPartTypeId(
+                                partTypeId,
+                            )[0]; // get first if not found in hash
+                        }
+                    }
+
+                    const objectsToLoad = await fetchObjects(oneOfEach);
+                    const newSelectedParts = objectMap(
+                        oneOfEach,
+                        object => object.id,
+                    );
+
+                    {
+                        sceneManager.addAll(objectsToLoad);
+                        sceneManager.rescaleContainerToFitObjects(4);
+                        sceneManager.renderScene();
+                    }
+
+                    setSelectedParts(newSelectedParts);
+                } catch (err) {
+                    console.error(err);
                 }
-            }
-    
-            // select first part from each part type that hasn't been filled out from the hash
-            for (const partTypeId of partTypes.allIds) {
-                if (!oneOfEach[partTypeId]) {
-                    oneOfEach[partTypeId] = getObjectsByPartTypeId(partTypeId)[0]; // get first if not found in hash
-                }
-            }
-    
-    
-            const objectsToLoad = await fetchObjects( oneOfEach )
-            const newSelectedParts = objectMap( oneOfEach, object => object.id )
-    
-            
-            {
-                sceneManager.addAll(objectsToLoad);
-                sceneManager.rescaleContainerToFitObjects(4);
-                sceneManager.renderScene();
-            }
-    
-    
-            setSelectedParts(newSelectedParts);
-    
-        } catch ( err ) {
-            console.error( err )
-        }
-        
-        setIsLoading(false);
-    })(), []);
+
+                setIsLoading(false);
+            })(),
+        [],
+    );
 
     const showUploadWizard = Boolean(uploadedObjectData);
 
-    const selectorData = (selectedPartType ?
-        {
-            selectedParts,
-            objects: getObjectsByPartTypeId(selectedPartType.id),
-            currentPartType: selectedPartType
-        } : null
-    );
+    const selectorData = (selectedPartType
+        ? {
+              selectedParts,
+              objects: getObjectsByPartTypeId(selectedPartType.id),
+              currentPartType: selectedPartType,
+          }
+        : null);
 
     const setSelected3dObject = (partTypeId, newObject) => {
         sceneManager.add(partTypeId, newObject);
@@ -131,7 +150,7 @@ const App = props => {
     const setSelectedObjectId = (partTypeId, objectId) => {
         setSelectedParts(currentSelectedParts => ({
             ...currentSelectedParts,
-            [partTypeId]: objectId
+            [partTypeId]: objectId,
         }));
     };
 
@@ -139,38 +158,33 @@ const App = props => {
         setIsLoading(true);
 
         try {
-
             const newObject = await get3DObject(objectData);
             setSelected3dObject(partTypeId, newObject);
             setSelectedObjectId(partTypeId, objectData.id);
-
-        } catch ( err ) {
+        } catch (err) {
             const partType = partTypes.byId[partTypeId];
             console.error(
-                `Something went wrong while loading object of type ${partType.name}:\n`
-                + err
+                `Something went wrong while loading object of type ${partType.name}:\n` +
+                    err,
             );
         }
 
         setIsLoading(false);
     };
 
-    const handleDeleteObject = async (objectId) => {
-        
+    const handleDeleteObject = async objectId => {
         const oldStatus = objects.byId[objectId].status;
 
         setObjectStatus(objectId, OBJECT_STATUS.LOADING);
 
         try {
-            
             await api.deletePart(objectId);
             setObjectStatus(objectId, OBJECT_STATUS.DELETED);
-            
         } catch {
             setObjectStatus(objectId, oldStatus);
             console.error(`Failed to delete object with id ${objectId}`);
         }
-    }
+    };
 
     const handleUpload = (partTypeId, filename, objectURL) => {
         const partType = partTypes.byId[partTypeId];
@@ -189,13 +203,17 @@ const App = props => {
             extension,
             objectURL,
         });
-    }
+    };
 
-    const addToCartButtonMessage = isSelectionInCart ? 'Added to cart' : `Add To Cart ($${price})`;
+    const addToCartButtonMessage = isSelectionInCart
+        ? 'Added to cart'
+        : `Add To Cart ($${price})`;
     const downloadButtonMessage = 'Download';
 
-    const handleAddToCart = async() => {
-        const customizedMeshData = await api.generateCustomizedMesh(selectedPartsIds);
+    const handleAddToCart = async () => {
+        const customizedMeshData = await api.generateCustomizedMesh(
+            selectedPartsIds,
+        );
         const data = await api.addToCart(customizedMeshData.id);
         addCustomizedMeshToCart(customizedMeshData);
 
@@ -204,28 +222,32 @@ const App = props => {
     };
 
     const handleDownload = async () => {
-        if(isSelectionInCart) {
-            window.alert('item added to cart')
+        if (isSelectionInCart) {
+            window.alert('item added to cart');
             return;
         }
 
         try {
-            const customizedMeshData = await api.generateCustomizedMesh(selectedPartsIds);
-            const fullCustomizedMeshData = await api.getCustomizedMesh(customizedMeshData.id);
+            const customizedMeshData = await api.generateCustomizedMesh(
+                selectedPartsIds,
+            );
+            const fullCustomizedMeshData = await api.getCustomizedMesh(
+                customizedMeshData.id,
+            );
 
-            if (fullCustomizedMeshData.status === 1) { // ready for download
+            if (fullCustomizedMeshData.status === 1) {
+                // ready for download
                 triggerDownloadFromUrl(fullCustomizedMeshData.file_url);
             } else {
                 // TODO add popup component
-    
-                const message = `You will receive an email when the mesh has finished processing.`
-                window.alert( message )
+
+                const message = `You will receive an email when the mesh has finished processing.`;
+                window.alert(message);
             }
-
         } catch (err) {
-            console.error(err)
+            console.error(err);
 
-            if(err.response.data.error === "access_denied") {
+            if (err.response.data.error === 'access_denied') {
                 window.customEventDispatcher.dispatchEvent('SHOW_LOGIN');
             }
         }
@@ -235,138 +257,137 @@ const App = props => {
         try {
             const updatedCustomizer = await api.patchCustomizer(fields);
             updateSettings(updatedCustomizer);
-
         } catch (err) {
-            console.error(err)
+            console.error(err);
         }
     };
 
-    const handleWizardCompleted = async (partType, { name, extension, objectURL, imageSrc, geometry, metadata }) => {
+    const handleWizardCompleted = async (
+        partType,
+        { name, extension, objectURL, imageSrc, geometry, metadata },
+    ) => {
         setIsLoading(true);
         setUploadedObjectData(null);
-        
-        const partTypeId = partType.id
-        
-        const object = getObjectFromGeometry( geometry, metadata )
-                
+
+        const partTypeId = partType.id;
+
+        const object = getObjectFromGeometry(geometry, metadata);
+
         const objectData = {
             name,
             files: {
                 default: {
                     extension,
                     url: objectURL,
-                }
+                },
             },
             img: imageSrc,
             extension: 'stl',
             metadata,
             partTypeId,
-        }
+        };
 
         try {
-            const id = await api.postPart(objectData)
-    
+            const id = await api.postPart(objectData);
+
             const objectToAdd = {
                 ...objectData,
                 id,
-                status: OBJECT_STATUS.IN_SYNC
-            }
-    
-            setSelected3dObject( partTypeId, object )
-            setSelectedObjectId( partTypeId, id )
-            addObject( objectToAdd )
+                status: OBJECT_STATUS.IN_SYNC,
+            };
+
+            setSelected3dObject(partTypeId, object);
+            setSelectedObjectId(partTypeId, id);
+            addObject(objectToAdd);
         } catch {
-            console.error(`Failed to upload object '${name}'`)
+            console.error(`Failed to upload object '${name}'`);
         }
 
         setIsLoading(false);
-    }
+    };
 
     return (
-        <div className = {styles.app}>
-
-            <div className={styles.canvasContainer} ref={canvasContainerRef}>
-            </div>
+        <div className={styles.app}>
+            <div
+                className={styles.canvasContainer}
+                ref={canvasContainerRef}
+            ></div>
 
             <Header
-                title = { customizerName }
-                userName = {props.worldData['user_name']}
-                userUrl = {props.worldData['user_url']}
+                title={customizerName}
+                userName={props.worldData['user_name']}
+                userUrl={props.worldData['user_url']}
             />
 
-            <div className = {styles.editorPanelContainer}>
-                <div className = {styles.editorPanel}>
-                    <div className = {styles.partTypesContainer}>
+            <div className={styles.editorPanelContainer}>
+                <div className={styles.editorPanel}>
+                    <div className={styles.partTypesContainer}>
                         <PartTypesView
-                            partTypes = { partTypesArray }
-                            selectedPartTypeId = { selectedPartTypeId }
-                            onPartTypeSelected = { id => setSelectedPartTypeId(id) }
+                            partTypes={partTypesArray}
+                            selectedPartTypeId={selectedPartTypeId}
+                            onPartTypeSelected={id => setSelectedPartTypeId(id)}
                         />
                     </div>
-                    
-                    <div className = {styles.selectorContainer}>
+
+                    <div className={styles.selectorContainer}>
                         <Selector
-                            data = { selectorData }
-                            onObjectSelected = { handleObjectSelected }
-                            onDelete = { handleDeleteObject }
-                            onUpload = { handleUpload }
-                            edit_mode = { props.edit_mode }
+                            data={selectorData}
+                            onObjectSelected={handleObjectSelected}
+                            onDelete={handleDeleteObject}
+                            onUpload={handleUpload}
+                            edit_mode={props.edit_mode}
                         />
                     </div>
                 </div>
-
             </div>
 
             <ButtonsContainer
-                addToCartButtonMessage = { addToCartButtonMessage }
-                downloadButtonMessage = { downloadButtonMessage }
-                userMustBuySelection = { userMustBuySelection }
-                isSelectionInCart = { isSelectionInCart }
-                onDownload = { handleDownload }
-                onAddToCart = { handleAddToCart }
-
-                partTypes = { partTypesArray }
-                onUpload = { handleUpload }
-                
-                onShowSettings = {() => setShowSettings(true)}
-                edit_mode = { props.edit_mode }
+                addToCartButtonMessage={addToCartButtonMessage}
+                downloadButtonMessage={downloadButtonMessage}
+                userMustBuySelection={userMustBuySelection}
+                isSelectionInCart={isSelectionInCart}
+                onDownload={handleDownload}
+                onAddToCart={handleAddToCart}
+                partTypes={partTypesArray}
+                onUpload={handleUpload}
+                onShowSettings={() => setShowSettings(true)}
+                edit_mode={props.edit_mode}
             />
 
             {showUploadWizard && (
                 <UploadWizard
-                    getGlobalPosition = { computeGlobalPosition }
-                    getParentAttachPointPosition = {getParentAttachPointPosition}
-                    getChildPartTypeByAttachPoint = {getChildPartTypeByAttachPoint}
-
-                    data = { uploadedObjectData }
-                    
-                    showLoader = {() => setIsLoading(true)}
-                    hideLoader = {() => setIsLoading(false)}
-                    onWizardCanceled = {() => setUploadedObjectData(null)}
-                    onWizardCompleted = {handleWizardCompleted}
+                    getGlobalPosition={computeGlobalPosition}
+                    getParentAttachPointPosition={getParentAttachPointPosition}
+                    getChildPartTypeByAttachPoint={
+                        getChildPartTypeByAttachPoint
+                    }
+                    data={uploadedObjectData}
+                    showLoader={() => setIsLoading(true)}
+                    hideLoader={() => setIsLoading(false)}
+                    onWizardCanceled={() => setUploadedObjectData(null)}
+                    onWizardCompleted={handleWizardCompleted}
                 />
             )}
 
             {showSettings && (
                 <SettingsPopup
-                    className = {styles.settingsPopup}
-                    
-                    name = {customizerName}
-                    price = {price}
-                    description = {description}
-                    isPrivate = {isPrivate}
-                    imageUrl = {imageUrl}
-
-                    onSave = {handleSaveChanges}
-                    onCancel = {() => setShowSettings(false)}
-
-                    customizer_pay_per_download_enabled = {props.customizer_pay_per_download_enabled}
+                    className={styles.settingsPopup}
+                    name={customizerName}
+                    price={price}
+                    description={description}
+                    isPrivate={isPrivate}
+                    imageUrl={imageUrl}
+                    onSave={handleSaveChanges}
+                    onCancel={() => setShowSettings(false)}
+                    customizer_pay_per_download_enabled={
+                        props.customizer_pay_per_download_enabled
+                    }
                 />
             )}
 
-            <LoadingIndicator visible = {isLoading} />
+            <LoadingIndicator visible={isLoading} />
         </div>
     );
-}
+};
 
-export default App
+export default App;

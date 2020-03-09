@@ -1,1 +1,1 @@
-export { default } from './GlobalPositioning'
+export { default } from './GlobalPositioning';

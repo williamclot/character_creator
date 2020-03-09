@@ -1,1 +1,1 @@
-export { default } from './SettingsPopup'
+export { default } from './SettingsPopup';

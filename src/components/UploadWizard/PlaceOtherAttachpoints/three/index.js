@@ -1,1 +1,1 @@
-export { default } from './threeUtils'
+export { default } from './threeUtils';
