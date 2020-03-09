@@ -1,7 +1,5 @@
 import React from 'react';
 
-import MMFTitle from './MMFTitle';
-
 import styles from './Header.module.scss';
 
 const Header = props => {

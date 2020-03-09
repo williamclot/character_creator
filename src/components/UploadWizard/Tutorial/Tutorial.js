@@ -1,12 +1,11 @@
-import React, { Component, createRef } from 'react';
-import cn from 'classnames';
+import React from 'react';
 
 import partsImg from './images/parts.png';
 import partTypesImg from './images/part-types.png';
 
 import styles from './index.module.css';
 
-const Tutorial = props => (
+const Tutorial = () => (
     <div className={styles.tutorial}>
         <div className={styles.title}>Part Types and Parts</div>
 

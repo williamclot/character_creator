@@ -2,8 +2,7 @@ import React from 'react';
 import cn from 'classnames';
 
 import ImportButton from '../ImportButton';
-import Button, { ButtonWithArrow } from './Button';
-import ListWithSeparator from './ListWithSeparator';
+import Button from './Button';
 import Menu from './Menu';
 
 import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants';

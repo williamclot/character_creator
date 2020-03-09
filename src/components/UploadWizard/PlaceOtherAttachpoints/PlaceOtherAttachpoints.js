@@ -97,13 +97,7 @@ export default class PlaceOtherAttachpoints extends Component {
     };
 
     render() {
-        const {
-            currentCategory,
-            currentAttachPoint,
-            currentChildPartType,
-            nextStep,
-            previousStep,
-        } = this.props;
+        const { currentChildPartType, previousStep } = this.props;
 
         const className = cn(commonStyles.wizardStep, styles.placeAttachpoint);
 

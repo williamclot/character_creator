@@ -79,7 +79,7 @@ export default class PlaceAttachpoint extends Component {
     };
 
     render() {
-        const { currentCategory, nextStep, previousStep } = this.props;
+        const { currentCategory, previousStep } = this.props;
 
         const parentName = currentCategory
             ? currentCategory.parent

@@ -360,7 +360,6 @@ export default class AdjustTransforms extends Component {
         const {
             currentCategory,
 
-            nextStep,
             previousStep,
         } = this.props;
         const { posX, posY, posZ, rotX, rotY, rotZ, scale } = this.state;

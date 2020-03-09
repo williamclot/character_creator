@@ -23,7 +23,7 @@ class CanvasContainer extends Component {
     render() {
         const {
             className,
-            domElement, // this is ignored
+            domElement, // eslint-disable-line @typescript-eslint/no-unused-vars
             ...otherProps
         } = this.props;
 

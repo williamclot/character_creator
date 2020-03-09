@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ApiRoutes } from '../../types';
+import { ApiRoutes, CustomizerPart_in_state } from '../../types';
 
 const getBlob = (url: string) => {
     return axios.get(url, { responseType: 'blob' });
@@ -25,11 +25,11 @@ class MmfApi {
         }
     }
 
-    async postPart(object: any) {
+    async postPart(object: CustomizerPart_in_state) {
         const { routes, route_params } = this.api;
         const url = routes.post_part.replace(
             route_params.partTypeId,
-            object.partTypeId,
+            object.partTypeId.toString(),
         );
 
         const [{ data: fileBlob }, { data: imageBlob }] = await Promise.all([
@@ -69,7 +69,13 @@ class MmfApi {
         return res.data;
     }
 
-    async patchCustomizer(fields: any) {
+    async patchCustomizer(fields: {
+        is_private: string;
+        name: string;
+        price: number;
+        description: string;
+        image_path: string;
+    }) {
         const res = await axios.patch(this.api.routes.patch_customizer, fields);
 
         return res.data;

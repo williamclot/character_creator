@@ -2,7 +2,7 @@ import React from 'react';
 
 import styles from './index.module.css';
 
-const PreviewText = props => {
+const PreviewText = () => {
     return (
         <div className={styles.wrapper}>
             <span className={styles.description}>Browse Preview Icon</span>

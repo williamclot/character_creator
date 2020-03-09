@@ -3,12 +3,12 @@ import { getObjects } from './getObjects';
 import {
     Objects_from_props,
     CustomizerPartsState,
-    CustomizerPart,
     CustomizerPart_in_state,
 } from '../../types';
 
 type Action = {
     type: 'ADD' | 'SET_STATUS';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [param: string]: any;
 };
 

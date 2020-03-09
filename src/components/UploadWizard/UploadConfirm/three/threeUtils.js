@@ -22,7 +22,7 @@ orbitControls.enableKeys = false;
 
 const threeUtils = {
     saveImage() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             canvas.toBlob(blob => resolve(blob), 'image/jpeg');
         });
     },

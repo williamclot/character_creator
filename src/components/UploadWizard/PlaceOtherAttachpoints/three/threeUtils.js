@@ -140,7 +140,7 @@ export default {
         );
 
         if (intersection) {
-            const { point, face } = intersection;
+            const { point } = intersection;
 
             const { x, y, z } = point;
 

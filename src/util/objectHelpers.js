@@ -1,11 +1,5 @@
-import {
-    Object3D,
-    Bone,
-    Vector3,
-    Group,
-    Mesh,
-    MeshStandardMaterial,
-} from 'three';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Object3D, Bone, Group, Mesh, MeshStandardMaterial } from 'three';
 
 import { stlLoader, plyLoader } from './loaders';
 

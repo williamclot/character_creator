@@ -201,7 +201,7 @@ const sceneManager = {
         return this.loadedObjectsMap.get(parent.id) || null;
     },
 
-    add(categoryKey: number, objectToAdd: CustomizerPart, options = {}) {
+    add(categoryKey: number, objectToAdd: CustomizerPart) {
         if (!this.categoriesMap.has(categoryKey)) {
             throw new Error(`Category ${categoryKey} is not defined!`);
             // TODO handle this case (or make sure it can't happen)

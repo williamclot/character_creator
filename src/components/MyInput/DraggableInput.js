@@ -74,12 +74,12 @@ export default class DraggableInput extends Component {
     render() {
         const {
             className,
-            axis,
             value,
             precision,
-            min,
-            max,
-            step,
+            // axis,
+            // min,
+            // max,
+            // step,
             formatter,
         } = this.props;
 
