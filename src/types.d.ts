@@ -8,6 +8,7 @@ export type PartType = {
     id: number
     name: string
     label: string
+    attachPoints: string[]
     parent?: PartTypeParent
 }
 
@@ -27,11 +28,9 @@ export type WorldData = {
     }[]
 }
 
-type Dict<T> = {[key: string]: T}
-
 export type ApiRoutes = {
-    routes: Dict<string>
-    route_params: Dict<string>
+    routes: Record<string, string>
+    route_params: Record<string, string>
 };
 
 export type Coord3d = {
