@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
-import cn from 'classnames'
+import React, { Component } from 'react';
+import cn from 'classnames';
 
-import commonStyles from '../../shared-styles/button.module.css'
-import styles from './SettingsPopup.module.scss'
+import commonStyles from '../../shared-styles/button.module.css';
+import styles from './SettingsPopup.module.scss';
 import { ImportButtonV2 } from '../ImportButton';
 import axios from 'axios';
 
-const VISIBILITY_PRIVATE = 'private'
-const VISIBILITY_PUBLIC = 'public'
+const VISIBILITY_PRIVATE = 'private';
+const VISIBILITY_PUBLIC = 'public';
 
 class SettingsPopup extends Component {
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state = {
             name: props.name,
@@ -20,11 +20,11 @@ class SettingsPopup extends Component {
             isPrivate: props.isPrivate,
             imageUrl: props.imageUrl,
             imagePath: null,
-        }
+        };
     }
 
     isInSync() {
-        const { state, props } = this
+        const { state, props } = this;
 
         return (
             state.name === props.name &&
@@ -32,37 +32,40 @@ class SettingsPopup extends Component {
             state.description === props.description &&
             state.imageUrl === props.imageUrl &&
             state.isPrivate === props.isPrivate
-        )
+        );
     }
 
     handleNameChange = e => {
         this.setState({
-            name: e.target.value
-        })
-    }
+            name: e.target.value,
+        });
+    };
 
     handlePriceChange = e => {
         this.setState({
-            price: Number(e.target.value)
-        })
-    }
+            price: Number(e.target.value),
+        });
+    };
 
     handleDescriptionChange = e => {
         this.setState({
-            description: e.target.value
-        })
-    }
+            description: e.target.value,
+        });
+    };
 
-    handleImageChange = async e => {        
-        const file = e.target.files[0]
-        if(!file) {
-            return
+    handleImageChange = async e => {
+        const file = e.target.files[0];
+        if (!file) {
+            return;
         }
 
-        const CDN_URL = process.env.NODE_ENV === 'production' ? 'https://cdn.myminifactory.com' : 'http://cdn.local'
+        const CDN_URL =
+            process.env.NODE_ENV === 'production'
+                ? 'https://cdn.myminifactory.com'
+                : 'http://cdn.local';
 
-        const formData = new FormData
-        formData.set('fileToUpload', file)
+        const formData = new FormData();
+        formData.set('fileToUpload', file);
 
         try {
             const { data } = await axios.post(
@@ -70,93 +73,99 @@ class SettingsPopup extends Component {
                 formData,
                 {
                     params: {
-                        path: 'customizer'
+                        path: 'customizer',
                     },
                     headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                }
-            )
+                        'Content-Type': 'multipart/form-data',
+                    },
+                },
+            );
 
-            const filename = data[0]
+            const filename = data[0];
 
-            if(filename === 'A') {
+            if (filename === 'A') {
                 // if upload fails, cdn responds with string 'Are you sure you should be doing this';
                 // therefore, if first element is 'A' => Error.
                 // if upload succeeds, cdn returns array with filename as first element
-                throw new Error('Upload Failed')
+                throw new Error('Upload Failed');
             }
 
-            const imagePath = `/uploads/customizer-thumbnails/${filename}`
+            const imagePath = `/uploads/customizer-thumbnails/${filename}`;
 
             this.setState({
                 imageUrl: `${CDN_URL}${imagePath}`,
                 imagePath,
-            })
-
+            });
         } catch (err) {
-            console.error(err)
+            console.error(err);
         }
-    }
+    };
 
     handleVisibilityChange = e => {
-        const isPrivate = e.target.value === VISIBILITY_PRIVATE
+        const isPrivate = e.target.value === VISIBILITY_PRIVATE;
 
         this.setState({
-            isPrivate
-        })
-    }
+            isPrivate,
+        });
+    };
 
     handleSaveChanges = async e => {
-        e.preventDefault()
+        e.preventDefault();
 
-        const { props, state } = this
+        const { props, state } = this;
 
-        const fieldsToPatch = {}
+        const fieldsToPatch = {};
 
-        if(props.isPrivate !== state.isPrivate) {
-            const visibility = state.isPrivate ? 'private' : 'public'
-            const confirmed = window.confirm(`Are you sure you want to make it ${visibility}?`)
-            if(!confirmed) {
+        if (props.isPrivate !== state.isPrivate) {
+            const visibility = state.isPrivate ? 'private' : 'public';
+            const confirmed = window.confirm(
+                `Are you sure you want to make it ${visibility}?`,
+            );
+            if (!confirmed) {
                 this.setState({
-                    isPrivate: props.isPrivate
-                })
-                return
+                    isPrivate: props.isPrivate,
+                });
+                return;
             }
 
-            fieldsToPatch['is_private'] = state.isPrivate
+            fieldsToPatch['is_private'] = state.isPrivate;
         }
 
-        if(props.name !== state.name) {
-            fieldsToPatch['name'] = state.name
+        if (props.name !== state.name) {
+            fieldsToPatch['name'] = state.name;
         }
 
-        if(props.price !== state.price) {
-            fieldsToPatch['price'] = state.price
+        if (props.price !== state.price) {
+            fieldsToPatch['price'] = state.price;
         }
 
-        if(props.description !== state.description) {
-            fieldsToPatch['description'] = state.description
+        if (props.description !== state.description) {
+            fieldsToPatch['description'] = state.description;
         }
 
-        if(props.imageUrl !== state.imageUrl) {
-            fieldsToPatch['image_path'] = state.imagePath
+        if (props.imageUrl !== state.imageUrl) {
+            fieldsToPatch['image_path'] = state.imagePath;
         }
 
-        this.props.onSave(fieldsToPatch)
-    }
+        this.props.onSave(fieldsToPatch);
+    };
 
     render() {
-        const { className, onCancel } = this.props
-        const { name, price, description, imageUrl, isPrivate } = this.state
+        const { className, onCancel } = this.props;
+        const { name, price, description, imageUrl, isPrivate } = this.state;
 
         return (
-            <div className = {cn(className, styles.background)}>
-                <form className = {styles.container} onSubmit = {this.handleSaveChanges}>
-                    <div className = {styles.title}>Settings</div>
+            <div className={cn(className, styles.background)}>
+                <form
+                    className={styles.container}
+                    onSubmit={this.handleSaveChanges}
+                >
+                    <div className={styles.title}>Settings</div>
 
                     <div className={styles.settings}>
-                        <label htmlFor="label_name" className={styles.label}>Name</label>
+                        <label htmlFor="label_name" className={styles.label}>
+                            Name
+                        </label>
                         <input
                             id="label_name"
                             value={name}
@@ -166,46 +175,80 @@ class SettingsPopup extends Component {
 
                         {this.props.customizer_pay_per_download_enabled && (
                             <>
-                                <label htmlFor="label_price" className={styles.label}>Price</label>
+                                <label
+                                    htmlFor="label_price"
+                                    className={styles.label}
+                                >
+                                    Price
+                                </label>
                                 <input
                                     id="label_price"
                                     type="number"
                                     value={price}
                                     onChange={this.handlePriceChange}
-                                    className={cn(styles.input, styles.text, styles.price)}
+                                    className={cn(
+                                        styles.input,
+                                        styles.text,
+                                        styles.price,
+                                    )}
                                 />
                             </>
                         )}
 
-                        <label htmlFor="label_desc" className={styles.label}>Description</label>
+                        <label htmlFor="label_desc" className={styles.label}>
+                            Description
+                        </label>
                         <textarea
                             id="label_desc"
                             value={description}
                             onChange={this.handleDescriptionChange}
-                            className={cn(styles.input, styles.text, styles.description)}
+                            className={cn(
+                                styles.input,
+                                styles.text,
+                                styles.description,
+                            )}
                         />
 
-                        <label htmlFor="label_image" className={styles.label}>Thumbnail</label>
+                        <label htmlFor="label_image" className={styles.label}>
+                            Thumbnail
+                        </label>
                         <ImportButtonV2
                             id="label_image"
                             className={cn(styles.input, styles.chooseImage)}
                             accept=".png, .jpg"
-                            onChange = {this.handleImageChange}
+                            onChange={this.handleImageChange}
                         >
                             Choose Image
                         </ImportButtonV2>
                         {imageUrl && (
-                            <img className={cn(styles.input, styles.imagePreview)} src={imageUrl} />
+                            <img
+                                className={cn(
+                                    styles.input,
+                                    styles.imagePreview,
+                                )}
+                                src={imageUrl}
+                            />
                         )}
-                        
 
-                        
-                        <label htmlFor="label_visibility" className={styles.label}>Visibility</label>
+                        <label
+                            htmlFor="label_visibility"
+                            className={styles.label}
+                        >
+                            Visibility
+                        </label>
                         <select
                             id="label_visibility"
-                            value={isPrivate ? VISIBILITY_PRIVATE : VISIBILITY_PUBLIC}
+                            value={
+                                isPrivate
+                                    ? VISIBILITY_PRIVATE
+                                    : VISIBILITY_PUBLIC
+                            }
                             onChange={this.handleVisibilityChange}
-                            className={cn(styles.input, styles.text, styles.visibility)}
+                            className={cn(
+                                styles.input,
+                                styles.text,
+                                styles.visibility,
+                            )}
                         >
                             <option value={VISIBILITY_PRIVATE}>Private</option>
                             <option value={VISIBILITY_PUBLIC}>Public</option>
@@ -214,7 +257,7 @@ class SettingsPopup extends Component {
 
                     <div className={styles.buttons}>
                         <input
-                            disabled = {this.isInSync()}
+                            disabled={this.isInSync()}
                             className={cn(commonStyles.button, styles.button)}
                             type="submit"
                             value="Save Changes"
@@ -223,14 +266,13 @@ class SettingsPopup extends Component {
                             className={cn(commonStyles.button, styles.button)}
                             onClick={onCancel}
                         >
-                                Cancel
+                            Cancel
                         </button>
                     </div>
                 </form>
-
             </div>
-        )
+        );
     }
 }
 
-export default SettingsPopup
+export default SettingsPopup;

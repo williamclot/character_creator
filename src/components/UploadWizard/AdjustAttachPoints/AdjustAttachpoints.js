@@ -1,28 +1,30 @@
-import React, { Component } from 'react'
-import cn from 'classnames'
+import React, { Component } from 'react';
+import cn from 'classnames';
 
-import CanvasContainer from '../../CanvasContainer'
+import CanvasContainer from '../../CanvasContainer';
 
-import threeUtils from './three'
+import threeUtils from './three';
 
-import NumberInput from '../../MyInput'
-import commonStyles from '../index.module.css'
-import styles from './index.module.css'
+import NumberInput from '../../MyInput';
+import commonStyles from '../index.module.css';
+import styles from './index.module.css';
 
 export default class AdjustAttachpoints extends Component {
-    constructor( props ) {
-        super( props )
+    constructor(props) {
+        super(props);
 
-        const { currentAttachPoint, attachPointsPositions } = props
-        const { x: posX, y: posY, z: posZ } = attachPointsPositions[ currentAttachPoint ] || { x: 0, y: 0, z: 0 }
+        const { currentAttachPoint, attachPointsPositions } = props;
+        const { x: posX, y: posY, z: posZ } = attachPointsPositions[
+            currentAttachPoint
+        ] || { x: 0, y: 0, z: 0 };
 
         this.state = {
             posX,
             posY,
             posZ,
-        }
+        };
     }
-    
+
     componentDidMount() {
         const {
             currentObjectChild,
@@ -30,8 +32,8 @@ export default class AdjustAttachpoints extends Component {
             position,
             rotation,
             scale,
-        } = this.props
-        const { posX, posY, posZ } = this.state
+        } = this.props;
+        const { posX, posY, posZ } = this.state;
 
         const options = {
             position,
@@ -41,28 +43,34 @@ export default class AdjustAttachpoints extends Component {
                 x: posX,
                 y: posY,
                 z: posZ,
-            }
-        }
+            },
+        };
 
         /**
          * Assumption: actual mesh is the first child; the other children
          * are the attachpoints which are not needed in this view
          */
-        const childMesh = currentObjectChild && currentObjectChild.children[0]
+        const childMesh = currentObjectChild && currentObjectChild.children[0];
 
-        threeUtils.init( uploadedObjectGeometry, options, childMesh )
+        threeUtils.init(uploadedObjectGeometry, options, childMesh);
 
-        threeUtils.renderScene()
+        threeUtils.renderScene();
 
-        threeUtils.addEventListener( 'translate', this.handleGizmoPositionChange )
+        threeUtils.addEventListener(
+            'translate',
+            this.handleGizmoPositionChange,
+        );
     }
 
     componentWillUnmount() {
-        threeUtils.clearObjects()
+        threeUtils.clearObjects();
 
-        threeUtils.removeEventListener( 'translate', this.handleGizmoPositionChange )
+        threeUtils.removeEventListener(
+            'translate',
+            this.handleGizmoPositionChange,
+        );
     }
-    
+
     /*
     componentDidUpdate( prevProps, prevState ) {
         console.log('updateeeee')
@@ -97,150 +105,136 @@ export default class AdjustAttachpoints extends Component {
     }
     */
 
-    handleGizmoPositionChange = ({ position: { x: posX, y: posY, z: posZ } }) => {
+    handleGizmoPositionChange = ({
+        position: { x: posX, y: posY, z: posZ },
+    }) => {
         this.setState({
             posX,
             posY,
-            posZ
-        })
-    }
+            posZ,
+        });
+    };
 
     onPositionXChange = value => {
         this.setState({
-            posX: value
-        })
+            posX: value,
+        });
 
         threeUtils.setSpherePosition({
             x: value,
             y: this.state.posY,
             z: this.state.posZ,
-        })
+        });
 
-        threeUtils.renderScene()
-    }
+        threeUtils.renderScene();
+    };
 
     onPositionYChange = value => {
         this.setState({
-            posY: value
-        })
+            posY: value,
+        });
 
         threeUtils.setSpherePosition({
             x: this.state.posX,
             y: value,
             z: this.state.posZ,
-        })
+        });
 
-        threeUtils.renderScene()
-    }
+        threeUtils.renderScene();
+    };
 
     onPositionZChange = value => {
         this.setState({
-            posZ: value
-        })
+            posZ: value,
+        });
 
         threeUtils.setSpherePosition({
             x: this.state.posX,
             y: this.state.posY,
             z: value,
-        })
+        });
 
-        threeUtils.renderScene()
-    }
+        threeUtils.renderScene();
+    };
 
     handleNext = () => {
         const {
             currentAttachPoint,
             onAttachPointPositionChange,
             nextStep,
-        } = this.props
-        const {
-            posX, posY, posZ,
-        } = this.state
+        } = this.props;
+        const { posX, posY, posZ } = this.state;
 
-        onAttachPointPositionChange( currentAttachPoint, {
+        onAttachPointPositionChange(currentAttachPoint, {
             x: posX,
             y: posY,
             z: posZ,
-        })
+        });
 
-        nextStep()
-    }
+        nextStep();
+    };
 
     render() {
         const {
             // currentCategory,
 
-            previousStep
-        } = this.props
-        const { posX, posY, posZ } = this.state
+            previousStep,
+        } = this.props;
+        const { posX, posY, posZ } = this.state;
 
-        const className = cn(
-            commonStyles.wizardStep,
-            styles.adjustTransforms
-        )
+        const className = cn(commonStyles.wizardStep, styles.adjustTransforms);
 
         return (
-            <div
-                className = { className }
-            >
-
+            <div className={className}>
                 <CanvasContainer
-                    className = { styles.previewCanvas}
-                    domElement = { threeUtils.getCanvas() }
+                    className={styles.previewCanvas}
+                    domElement={threeUtils.getCanvas()}
                 />
-                
-                <div className = { styles.sideView } >
 
-                    <div className = { styles.inputsContainer } >
-                        <div className = {cn( styles.inputGroup, styles.position )} >
-                            <div className = { styles.label } >
-                                Position
-                            </div>
-                            <div className = { styles.axes } >
+                <div className={styles.sideView}>
+                    <div className={styles.inputsContainer}>
+                        <div className={cn(styles.inputGroup, styles.position)}>
+                            <div className={styles.label}>Position</div>
+                            <div className={styles.axes}>
                                 <NumberInput
-                                    axis = {'X'}
-                                    value = { posX }
-                                    onChange = { this.onPositionXChange }
+                                    axis={'X'}
+                                    value={posX}
+                                    onChange={this.onPositionXChange}
                                 />
                                 <NumberInput
-                                    axis = {'Y'}
-                                    value = { posY }
-                                    onChange = { this.onPositionYChange }
+                                    axis={'Y'}
+                                    value={posY}
+                                    onChange={this.onPositionYChange}
                                 />
                                 <NumberInput
-                                    axis = {'Z'}
-                                    value = { posZ }
-                                    onChange = { this.onPositionZChange }
+                                    axis={'Z'}
+                                    value={posZ}
+                                    onChange={this.onPositionZChange}
                                 />
                             </div>
                         </div>
-                        
                     </div>
-                    
-                    <div className = { styles.buttonsContainer } >
+
+                    <div className={styles.buttonsContainer}>
                         <div
-                            className = {cn( commonStyles.button, styles.button )}
-                            onClick = { previousStep }
+                            className={cn(commonStyles.button, styles.button)}
+                            onClick={previousStep}
                         >
                             Back
                         </div>
                         <div
-                            className = {cn( commonStyles.button, styles.button )}
-                            onClick = { this.handleNext }
+                            className={cn(commonStyles.button, styles.button)}
+                            onClick={this.handleNext}
                         >
                             Next
                         </div>
                     </div>
-
                 </div>
 
-                <div className = { styles.title } >
-                    <h2>
-                        Position and Resize
-                    </h2>
+                <div className={styles.title}>
+                    <h2>Position and Resize</h2>
                 </div>
-
             </div>
-        )
+        );
     }
 }

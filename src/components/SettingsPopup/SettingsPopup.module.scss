@@ -2,8 +2,8 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: rgba($color: #000000, $alpha: .9);
-    
+    background-color: rgba($color: #000000, $alpha: 0.9);
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,7 +14,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    
+
     // width: 50%;
     // height: 80%;
     padding: 10px;
@@ -22,13 +22,12 @@
     border-radius: 20px;
     color: white;
 
-
     .title {
-        font-family: "Lato", "Open Sans", sans-serif;
+        font-family: 'Lato', 'Open Sans', sans-serif;
         font-size: 23px;
         font-weight: bold;
     }
-    
+
     .settings {
         display: grid;
         grid-template-columns: [start] auto [mid] 1fr [end];
@@ -38,7 +37,7 @@
         .label {
             grid-column: start / mid;
             font-style: italic;
-        
+
             font-weight: bold;
             text-align: right;
 
@@ -69,11 +68,10 @@
             margin: 0 10px;
         }
 
-        input[type="submit" i]:disabled.button {
+        input[type='submit' i]:disabled.button {
             color: graytext;
             cursor: unset;
 
-            
             /** styles needed when integrated */
             background-color: #2b2b2b !important;
         }
@@ -96,7 +94,6 @@
 }
 
 .price {
-    
 }
 
 .description {

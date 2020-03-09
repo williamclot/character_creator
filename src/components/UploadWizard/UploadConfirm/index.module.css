@@ -13,15 +13,15 @@
 }
 
 .uploadConfirm {
-    background-color:rgba(76,76,76,0.7);
+    background-color: rgba(76, 76, 76, 0.7);
     border-radius: 10px;
     color: white;
     padding: 20px;
 }
 
-.uploadConfirm h2{
+.uploadConfirm h2 {
     color: white;
-    font-family: "Lato", "Open Sans", sans-serif;
+    font-family: 'Lato', 'Open Sans', sans-serif;
     font-weight: bold;
     font-size: 23px;
     margin: 0 0 20px 0;
@@ -32,7 +32,7 @@
 
     display: grid;
     grid-template-columns: [label-col] auto [view-col] 1fr;
-    
+
     /* justify-items: stretch; */
     grid-gap: 10px;
 }
@@ -72,8 +72,8 @@
 }
 
 .view.input {
-    background-color: rgba(0,0,0,0.4);
-    border-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0.4);
+    border-color: rgba(0, 0, 0, 0);
     color: white;
     padding: 0px 5px;
     margin: 0px;
@@ -92,7 +92,8 @@
     height: 280px;
 }
 
-.previewContaier .canvas, .img {
+.previewContaier .canvas,
+.img {
     width: 100%;
     height: 80%;
     object-fit: contain;
@@ -102,7 +103,6 @@
     width: 100px;
     height: 80px;
 }
-
 
 .previewContaier .canvasTitle {
     background-color: rgba(15, 15, 15, 1);
@@ -121,23 +121,20 @@
 }
 
 .buttonsContainer {
-    
     display: flex;
     justify-content: flex-end;
-    
 }
 
-.buttonsContainer .button{
+.buttonsContainer .button {
     font-size: 16px;
     width: 120px;
 }
 
-.buttonsContainer .button:nth-child(n+2){
+.buttonsContainer .button:nth-child(n + 2) {
     margin-left: 10px;
 }
 
-@media only screen and (max-height: 650px){
-
+@media only screen and (max-height: 650px) {
     .container {
         height: 100%;
     }
@@ -145,5 +142,4 @@
     .tutorial {
         height: 100%;
     }
-    
 }

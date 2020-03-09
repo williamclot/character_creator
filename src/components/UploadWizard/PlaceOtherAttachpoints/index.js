@@ -1,1 +1,1 @@
-export { default } from './PlaceOtherAttachpoints'
+export { default } from './PlaceOtherAttachpoints';

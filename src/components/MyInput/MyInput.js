@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import cn from 'classnames'
+import React, { Component } from 'react';
+import cn from 'classnames';
 
-import NormalInput from './NormalInput'
+import NormalInput from './NormalInput';
 import DraggableInput from './DraggableInput';
 
-import styles from './index.module.css'
+import styles from './index.module.css';
 
 /**
  * @type { Props }
@@ -12,92 +12,85 @@ import styles from './index.module.css'
 const defaultProps = {
     step: 1,
     min: -Infinity,
-    max:  Infinity,
+    max: Infinity,
     precision: 3,
 
     formatter: {
         format: number => number,
-        parse: text => text
-    }
-}
+        parse: text => text,
+    },
+};
 
 export default class NumberInput extends Component {
-    constructor( props ) {
-        super( props )
+    constructor(props) {
+        super(props);
 
         this.state = {
-            isSelected: false
-        }
+            isSelected: false,
+        };
     }
 
     handleClick = () => {
         this.setState({
-            isSelected: true
-        })
-    }
+            isSelected: true,
+        });
+    };
 
     handleBlur = () => {
         this.setState({
-            isSelected: false
-        })
-    }
+            isSelected: false,
+        });
+    };
 
     render() {
         const {
             axis,
-            value, onChange,
-            precision, min, max, step, formatter
-        } = this.props
+            value,
+            onChange,
+            precision,
+            min,
+            max,
+            step,
+            formatter,
+        } = this.props;
 
-
-        const hasAxis = Boolean( axis )
-        const inputClassName = cn(
-            styles.input,
-            !hasAxis && styles.noAxis
-        )
+        const hasAxis = Boolean(axis);
+        const inputClassName = cn(styles.input, !hasAxis && styles.noAxis);
 
         return (
-            <div className = { styles.container } >
+            <div className={styles.container}>
+                {hasAxis && <div className={styles.axis}>{axis}</div>}
 
-                {hasAxis && (
-                    <div className = { styles.axis } >
-                        { axis }
-                    </div>
-                )}
-
-                {this.state.isSelected ?
+                {this.state.isSelected ? (
                     <NormalInput
-                        className = {cn( inputClassName, styles.normalInput )}
-                        onBlur = { this.handleBlur }
-        
-                        value = { value }
-                        onChange = { onChange }
-                        formatter = { formatter }
-                        min = { min }
-                        max = { max }
-                        precision = { precision }
+                        className={cn(inputClassName, styles.normalInput)}
+                        onBlur={this.handleBlur}
+                        value={value}
+                        onChange={onChange}
+                        formatter={formatter}
+                        min={min}
+                        max={max}
+                        precision={precision}
                     />
-                    :
+                ) : (
                     <DraggableInput
-                        className = {cn( inputClassName, styles.draggableInput )}
-                        onClick = { this.handleClick }
-
-                        value = { value }
-                        onChange = { onChange }
-                        formatter = { formatter }
-                        min = { min }
-                        max = { max }
-                        step = { step }
-                        precision = { precision }
+                        className={cn(inputClassName, styles.draggableInput)}
+                        onClick={this.handleClick}
+                        value={value}
+                        onChange={onChange}
+                        formatter={formatter}
+                        min={min}
+                        max={max}
+                        step={step}
+                        precision={precision}
                     />
-                }
-
+                )}
             </div>
-        )
+        );
     }
 }
 
-NumberInput.defaultProps = defaultProps
+NumberInput.defaultProps = defaultProps;
 
 /**
  * @typedef { Object } Props

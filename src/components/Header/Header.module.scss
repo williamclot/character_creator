@@ -1,45 +1,40 @@
 .header {
     position: absolute;
     padding: 20px;
-    font-family: "Lato", "Open Sans", sans-serif;
+    font-family: 'Lato', 'Open Sans', sans-serif;
 
     .title {
-
         font-size: 50px;
         font-weight: 600;
-        color: #1DA1F2;
+        color: #1da1f2;
         margin: 0px;
-        font-family: "Lato", "Open Sans", sans-serif;
-        
-        
+        font-family: 'Lato', 'Open Sans', sans-serif;
+
         .beta {
             margin-left: 5px;
             text-transform: lowercase;
             font-size: 12px;
         }
-        
+
         .my {
             color: rgb(49, 184, 161);
         }
     }
-    
+
     .userSection {
         // font-size: 1.3125rem;
         font-size: 18px;
         margin: 0px;
-        font-family: "Lato", "Open Sans", sans-serif;
+        font-family: 'Lato', 'Open Sans', sans-serif;
         .by {
-
         }
 
         .username {
-
         }
     }
 }
 
-@media (max-width: 950px){
-
+@media (max-width: 950px) {
     .header {
         padding: 10px;
 
@@ -47,5 +42,4 @@
             font-size: 25px;
         }
     }
-
 }

@@ -19,7 +19,6 @@
     font-weight: bold;
 }
 
-
 .container .buttonsContainer {
     position: absolute;
     display: flex;
@@ -33,14 +32,13 @@
     width: 120px;
 }
 
-.container .buttonsContainer .button:nth-child(n+2) {
+.container .buttonsContainer .button:nth-child(n + 2) {
     margin-left: 10px;
 }
 
 .container .buttonsContainer .button.cancellationMark {
     color: red;
 }
-
 
 .container .buttonsContainer .button.confirmationMark {
     color: green;

@@ -1,5 +1,5 @@
 .wrapper {
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.4);
     /* border-color: #77777700; */
     display: flex;
     border-radius: 5px;
@@ -11,9 +11,9 @@
     font-weight: 500;
 }
 
-.xButton{
+.xButton {
     display: flex;
-    align-items: center
+    align-items: center;
 }
 
 .xButton:before {

@@ -20,8 +20,6 @@
     max-height: 100%;
 }
 
-
-
 .editorPanelContainer {
     /* Used only to center child vertically */
     right: 20px;
@@ -41,8 +39,8 @@
         width: 100%;
         display: flex;
         align-items: center;
-        justify-content: center;   
-        
+        justify-content: center;
+
         .partTypesContainer {
             position: relative;
             // margin-top: 10px;
@@ -54,13 +52,13 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            background-color: rgba(0, 0, 0, .3);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, .2);
+            background-color: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             // filter:opacity(.7);
             height: 100%;
             justify-content: space-between;
-            // min-width: 250px; 
+            // min-width: 250px;
             pointer-events: initial;
         }
     }
@@ -82,8 +80,7 @@
     background: #2e2e2e;
 }
 
-@media (max-width: 950px){
-
+@media (max-width: 950px) {
     .editorPanelContainer {
         /* Used only to center child vertically */
         right: 0px;
@@ -91,12 +88,11 @@
         top: unset;
         bottom: 0px;
         height: unset;
-    
-    
+
         .editorPanel {
             flex-direction: column;
             align-items: flex-start;
-            
+
             .partTypesContainer {
                 margin-bottom: 5px;
                 // margin-right: 0px;
@@ -106,12 +102,11 @@
                 width: 100%;
                 // overflow-x: auto;
             }
-    
+
             .selectorContainer {
                 height: unset;
-                width: 100%
+                width: 100%;
             }
         }
     }
-
 }

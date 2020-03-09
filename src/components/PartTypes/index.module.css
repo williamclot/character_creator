@@ -15,11 +15,10 @@
     background-color: rgba(0, 0, 0);
     border-radius: 5px;
     border: none;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, .2);
-    transition: background-color .2;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2;
     cursor: pointer;
     filter: opacity(0.7);
-    
 }
 
 .partTypes .item:hover {
@@ -30,12 +29,11 @@
     text-align: center;
     color: #ffffff;
     font-size: 23px;
-    font-family: "Lato", "Open Sans", sans-serif;
+    font-family: 'Lato', 'Open Sans', sans-serif;
 }
 
-
 .partTypes .item.selected {
-    background-color: #1DA1F2;
+    background-color: #1da1f2;
 }
 
 .partTypes::-webkit-scrollbar-track {
@@ -54,8 +52,7 @@
     background: #2e2e2e;
 }
 
-@media (max-width: 950px){
-
+@media (max-width: 950px) {
     .partTypes {
         flex-direction: row;
         overflow-x: scroll;
@@ -73,5 +70,4 @@
         font-size: 18px;
         white-space: nowrap;
     }
-
 }

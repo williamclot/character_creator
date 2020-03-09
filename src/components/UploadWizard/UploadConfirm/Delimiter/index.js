@@ -1,1 +1,1 @@
-export { default } from './Delimiter'
+export { default } from './Delimiter';

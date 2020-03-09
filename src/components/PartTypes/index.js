@@ -1,1 +1,1 @@
-export { default } from './PartTypes'
+export { default } from './PartTypes';

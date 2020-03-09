@@ -6,11 +6,9 @@
 }
 
 .menu {
-
 }
 
 .menuHeader {
-
 }
 
 .menuBody {
@@ -29,12 +27,12 @@
     flex-direction: column;
 }
 
-.menuBody .button{
+.menuBody .button {
     margin-top: 1px;
 }
 
 .button {
-    width: 200px; 
+    width: 200px;
     font-weight: bold;
 }
 .button .triangle {
@@ -63,16 +61,14 @@
     margin: 5px 0;
 }
 
-.word{
-
-
+.word {
 }
 
-.icon{
+.icon {
     display: none;
 }
 
-@media (max-width: 950px){
+@media (max-width: 950px) {
     .container {
         left: unset;
         right: 10px;
@@ -81,21 +77,20 @@
         bottom: 255px;
     }
 
-    .iconMinimisableButton{
+    .iconMinimisableButton {
         width: unset;
         padding: 10px 15px;
     }
 
-    .word{
+    .word {
         display: none;
     }
-    
-    .icon{
+
+    .icon {
         display: inline;
     }
 
     .menuBody {
-        
         position: absolute;
         left: unset;
         right: 100%;
@@ -113,8 +108,4 @@
         text-overflow: ellipsis;
         font-size: 14px;
     }
-
-    
-
-    
 }

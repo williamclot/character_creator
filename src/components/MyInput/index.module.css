@@ -4,7 +4,7 @@
     line-height: 30px;
 }
 
-.container:nth-child(n+2){
+.container:nth-child(n + 2) {
     margin-left: 10px;
 }
 
@@ -38,7 +38,6 @@
 }
 
 .container .normalInput {
-
 }
 .container .normalInput:focus {
     background-color: grey;

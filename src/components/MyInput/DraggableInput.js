@@ -1,104 +1,96 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
-const LEFT_MOUSE_BUTTON = 0
+const LEFT_MOUSE_BUTTON = 0;
 
 export default class DraggableInput extends Component {
-    constructor( props ) {
-        super( props )
+    constructor(props) {
+        super(props);
 
-        this.prevPointer = null
-        this.distance = null
-        this.startValue = null
-
+        this.prevPointer = null;
+        this.distance = null;
+        this.startValue = null;
     }
 
     componentWillUnmount() {
         // in case component is unmounted during drag
-        document.removeEventListener( 'mouseup', this.onMouseUp )
-        document.removeEventListener( 'mousemove', this.onMouseMove )
+        document.removeEventListener('mouseup', this.onMouseUp);
+        document.removeEventListener('mousemove', this.onMouseMove);
     }
 
     onMouseDown = event => {
-        if ( event.button !== LEFT_MOUSE_BUTTON ) return
+        if (event.button !== LEFT_MOUSE_BUTTON) return;
 
-        event.preventDefault()
+        event.preventDefault();
 
         this.prevPointer = {
             x: event.clientX,
             y: event.clientY,
-        }
-        this.distance = 0
-        this.startValue = this.props.value
+        };
+        this.distance = 0;
+        this.startValue = this.props.value;
 
-        document.addEventListener( 'mouseup', this.onMouseUp )
-        document.addEventListener( 'mousemove', this.onMouseMove )
-    }
+        document.addEventListener('mouseup', this.onMouseUp);
+        document.addEventListener('mousemove', this.onMouseMove);
+    };
 
     onMouseMove = event => {
-        const { step, min, max } = this.props
+        const { step, min, max } = this.props;
 
-        const {
-            clientX, clientY,
-            shiftKey: isShiftPressed
-        } = event
+        const { clientX, clientY, shiftKey: isShiftPressed } = event;
 
-        const {
-            x: prevX,
-            y: prevY
-        } = this.prevPointer
+        const { x: prevX, y: prevY } = this.prevPointer;
 
-        const deltaX = clientX - prevX
-        const deltaY = clientY - prevY
+        const deltaX = clientX - prevX;
+        const deltaY = clientY - prevY;
 
-        this.distance += ( deltaX - deltaY )
+        this.distance += deltaX - deltaY;
 
-        const dividingFactor = isShiftPressed ? 5 : 50
-        const normalizedDistance = ( this.distance / dividingFactor )
+        const dividingFactor = isShiftPressed ? 5 : 50;
+        const normalizedDistance = this.distance / dividingFactor;
 
-        const value = this.startValue + normalizedDistance * step
-        
-        const clampedValue = Math.min( max, Math.max( min, value ) )
+        const value = this.startValue + normalizedDistance * step;
 
-        this.props.onChange( clampedValue )
+        const clampedValue = Math.min(max, Math.max(min, value));
+
+        this.props.onChange(clampedValue);
 
         this.prevPointer = {
             x: clientX,
-            y: clientY
-        }
-    }
+            y: clientY,
+        };
+    };
 
     onMouseUp = () => {
-        const totalDistanceMoved = Math.abs( this.distance )
+        const totalDistanceMoved = Math.abs(this.distance);
 
-        if ( totalDistanceMoved < 2 ) {
-            this.props.onClick()
+        if (totalDistanceMoved < 2) {
+            this.props.onClick();
         }
 
-        document.removeEventListener( 'mouseup', this.onMouseUp )
-        document.removeEventListener( 'mousemove', this.onMouseMove )
-    }
-
+        document.removeEventListener('mouseup', this.onMouseUp);
+        document.removeEventListener('mousemove', this.onMouseMove);
+    };
 
     render() {
         const {
             className,
-            axis, value,
-            precision, min, max, step,
-            formatter
-        } = this.props
+            axis,
+            value,
+            precision,
+            min,
+            max,
+            step,
+            formatter,
+        } = this.props;
 
-        const formattedValue = formatter.format( value )
-        const computedValue = Number(formattedValue).toFixed( precision )
-
+        const formattedValue = formatter.format(value);
+        const computedValue = Number(formattedValue).toFixed(precision);
 
         return (
-            <span
-                className = { className }
-                onMouseDown = { this.onMouseDown }
-            >
+            <span className={className} onMouseDown={this.onMouseDown}>
                 {computedValue}
             </span>
-        )
+        );
     }
 }
 

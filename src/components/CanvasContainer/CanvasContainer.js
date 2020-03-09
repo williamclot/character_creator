@@ -1,19 +1,19 @@
-import React, { Component, createRef } from 'react'
-import cn from 'classnames'
+import React, { Component, createRef } from 'react';
+import cn from 'classnames';
 
-import styles from './index.module.css'
+import styles from './index.module.css';
 
 class CanvasContainer extends Component {
-    constructor( props ) {
-        super( props )
+    constructor(props) {
+        super(props);
 
-        this.canvasContainerRef = createRef()
+        this.canvasContainerRef = createRef();
     }
 
     componentDidMount() {
-        const { domElement } = this.props
+        const { domElement } = this.props;
 
-        this.canvasContainerRef.current.appendChild( domElement )
+        this.canvasContainerRef.current.appendChild(domElement);
     }
 
     componentWillUnmount() {
@@ -25,16 +25,16 @@ class CanvasContainer extends Component {
             className,
             domElement, // this is ignored
             ...otherProps
-        } = this.props
+        } = this.props;
 
         return (
             <div
-                className = {cn( styles.canvasContainer, className )}
-                ref = { this.canvasContainerRef }
-                { ...otherProps }
+                className={cn(styles.canvasContainer, className)}
+                ref={this.canvasContainerRef}
+                {...otherProps}
             />
-        )
+        );
     }
 }
 
-export default CanvasContainer
+export default CanvasContainer;

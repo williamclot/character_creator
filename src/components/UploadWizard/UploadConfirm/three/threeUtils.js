@@ -1,65 +1,64 @@
-import OrbitControls from '../../../../vendor/three/controls/orbit-controls'
-import { Group, MeshStandardMaterial, Mesh } from 'three'
+import OrbitControls from '../../../../vendor/three/controls/orbit-controls';
+import { Group, MeshStandardMaterial, Mesh } from 'three';
 
-import renderer from './renderer'
-import canvas from './canvas'
-import scene from './scene'
-import camera from './camera'
+import renderer from './renderer';
+import canvas from './canvas';
+import scene from './scene';
+import camera from './camera';
 
 import { moveCameraToFitObject } from '../../../../util/three-helpers';
 
-const objectContainer = new Group
+const objectContainer = new Group();
 
-scene.add( objectContainer )
-
+scene.add(objectContainer);
 
 const threeUtils = {
     saveImage() {
-        return new Promise(( resolve, reject ) => {
-            canvas.toBlob( blob => resolve(blob), 'image/jpeg' )
-        })
+        return new Promise((resolve, reject) => {
+            canvas.toBlob(blob => resolve(blob), 'image/jpeg');
+        });
     },
 
     renderScene() {
-        renderer.render( scene, camera )
+        renderer.render(scene, camera);
     },
 
     getCanvas() {
-        return canvas
+        return canvas;
     },
 
-    init( geometry ) {
+    init(geometry) {
         const mesh = new Mesh(
             geometry,
             new MeshStandardMaterial({
                 color: 0xffffff,
-                metalness: .5,
-                roughness: .5,
-            })
-        )
+                metalness: 0.5,
+                roughness: 0.5,
+            }),
+        );
 
-        objectContainer.add( mesh )
+        objectContainer.add(mesh);
 
-        orbitControls.reset()
-        moveCameraToFitObject( camera, orbitControls, geometry.boundingBox )
+        orbitControls.reset();
+        moveCameraToFitObject(camera, orbitControls, geometry.boundingBox);
 
         // reset renderer size
-        const { width, height } = canvas.getBoundingClientRect()
+        const { width, height } = canvas.getBoundingClientRect();
 
-        camera.aspect = width / height
-        camera.updateProjectionMatrix()
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
 
-        renderer.setSize( width, height, false )
-        renderer.setPixelRatio( width / height )
+        renderer.setSize(width, height, false);
+        renderer.setPixelRatio(width / height);
     },
 
     clearObjects() {
-        objectContainer.remove( ...objectContainer.children )
+        objectContainer.remove(...objectContainer.children);
     },
-}
+};
 
-const orbitControls = new OrbitControls( camera, canvas )
-orbitControls.addEventListener( 'change', threeUtils.renderScene )
-orbitControls.enableKeys = false
+const orbitControls = new OrbitControls(camera, canvas);
+orbitControls.addEventListener('change', threeUtils.renderScene);
+orbitControls.enableKeys = false;
 
-export default threeUtils
+export default threeUtils;
