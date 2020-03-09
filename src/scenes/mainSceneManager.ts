@@ -1,4 +1,4 @@
-import { PartType, PartTypeParent, Coord3d, CustomizerPart } from '../types';
+import { PartType, PartTypeParent, Coord3d } from '../types';
 import {
     Object3D,
     Vector3,
@@ -111,12 +111,18 @@ function extractKnownBones(object3d: Object3D, knownBoneNames: string[]) {
  * When objects from a category are loaded, it is placed as a child of the
  * object from the parent category.
  */
-const sceneManager = {
-    container,
+class SceneManager {
+    container: Object3D;
 
-    sortedCategoryIds: [] as number[],
+    sortedCategoryIds: number[];
+    rootCategory: PartType;
+    categoriesMap: Map<number, PartType>;
+    loadedObjectsMap: Map<number, Object3D>;
+    bonesMap: Map<string, Bone>;
 
     initialize(categories: PartType[]) {
+        this.container = container;
+
         const categoriesWithParent = categories.filter(cat => cat.parent);
         const edges = categoriesWithParent.map(({ id, parent }) => {
             const parentId = (parent as PartTypeParent).id;
@@ -129,14 +135,14 @@ const sceneManager = {
          * since the categories are defined by the designer, they will be loaded via an api call
          * and thus could be sorted when uploading them instead of sorting them here
          */
-        this.sortedCategoryIds = topologicalSort<number>(edges);
+        this.sortedCategoryIds = topologicalSort(edges);
 
         /**
          * could also be identified when uploading the categories
          */
         this.rootCategory = categories.find(
             category => category.parent === null,
-        );
+        ) as PartType;
 
         /**
          * A mapping from category ID to category data
@@ -161,18 +167,15 @@ const sceneManager = {
          * Note: assumes bone names are unique
          */
         this.bonesMap = new Map();
-    },
+    }
 
     getContainer() {
         return this.container;
-    },
+    }
 
-    /**
-     * @param { Object3D } container
-     */
     setContainer(container: Object3D) {
         this.container = container;
-    },
+    }
 
     rescaleContainerToFitObjects(fitOffset = 2) {
         const boundingBox = new Box3().setFromObject(this.container);
@@ -181,36 +184,38 @@ const sceneManager = {
         const maxDimension = Math.max(size.x, size.y, size.z);
 
         this.container.scale.divideScalar(maxDimension / fitOffset);
-    },
+    }
 
-    getObject(key: string) {
+    getObject(key: number) {
         return this.loadedObjectsMap.get(key);
-    },
+    }
 
     getObjectByAttachPoint(attachPointName: string) {
         const attachPoint = this.bonesMap.get(attachPointName);
 
         return attachPoint ? attachPoint.children[0] : null;
-    },
+    }
 
-    getParentObject(key: string) {
-        const { parent } = this.categoriesMap.get(key);
+    getParentObject(key: number) {
+        const { parent } = this.categoriesMap.get(key) as PartType;
 
         if (!parent) return null;
 
         return this.loadedObjectsMap.get(parent.id) || null;
-    },
+    }
 
-    add(categoryKey: number, objectToAdd: CustomizerPart) {
+    add(categoryKey: number, objectToAdd: Object3D) {
         if (!this.categoriesMap.has(categoryKey)) {
             throw new Error(`Category ${categoryKey} is not defined!`);
             // TODO handle this case (or make sure it can't happen)
         }
 
-        const category = this.categoriesMap.get(categoryKey);
+        const category = this.categoriesMap.get(categoryKey) as PartType;
 
         if (this.loadedObjectsMap.has(categoryKey)) {
-            const currentObject = this.loadedObjectsMap.get(categoryKey);
+            const currentObject = this.loadedObjectsMap.get(
+                categoryKey,
+            ) as Object3D;
 
             this.replace(category, currentObject, objectToAdd);
         } else {
@@ -218,7 +223,7 @@ const sceneManager = {
         }
 
         this.loadedObjectsMap.set(categoryKey, objectToAdd);
-    },
+    }
 
     place(category: PartType, objectToAdd: Object3D) {
         const { attachPoints, parent } = category;
@@ -226,13 +231,13 @@ const sceneManager = {
         const extractedBones = extractKnownBones(objectToAdd, attachPoints);
 
         for (const boneId of attachPoints) {
-            const newBone = extractedBones.get(boneId);
+            const newBone = extractedBones.get(boneId) as Bone;
 
             this.bonesMap.set(boneId, newBone);
         }
 
         this.getParent(parent).add(objectToAdd);
-    },
+    }
 
     replace(
         category: PartType,
@@ -244,7 +249,7 @@ const sceneManager = {
         const extractedBones = extractKnownBones(objectToAdd, attachPoints);
 
         for (const boneId of attachPoints) {
-            const oldBone = this.bonesMap.get(boneId);
+            const oldBone = this.bonesMap.get(boneId) as Bone;
             const newBone = extractedBones.get(boneId) as Bone;
 
             // update bonesMap to reference new bone
@@ -258,12 +263,12 @@ const sceneManager = {
 
         parentObject.remove(currentObject);
         parentObject.add(objectToAdd);
-    },
+    }
 
     /**
      * @returns - the parent bone of the category or the group if the category is the root
      */
-    getParent(parentCategory: PartTypeParent) {
+    getParent(parentCategory?: PartTypeParent) {
         if (parentCategory) {
             const parentBone = this.bonesMap.get(parentCategory.attachPoint);
             if (!parentBone) {
@@ -276,14 +281,16 @@ const sceneManager = {
         } else {
             return this.container;
         }
-    },
-};
+    }
+}
+
+const sceneManager = new SceneManager();
 
 const setContainerRotation = (rotation: Coord3d) => {
     container.rotation.set(rotation.x, rotation.y, rotation.z);
 };
 
-const batchAdd = (objectsByCategory: { [id: number]: CustomizerPart }) => {
+const batchAdd = (objectsByCategory: { [id: number]: Object3D }) => {
     const keysToSearch = sceneManager.sortedCategoryIds;
 
     for (const key of keysToSearch) {
@@ -303,10 +310,10 @@ export default {
     init(categories: PartType[]) {
         sceneManager.initialize(categories);
     },
-    addAll(objectsByCategory: { [id: number]: CustomizerPart }) {
+    addAll(objectsByCategory: { [id: number]: Object3D }) {
         batchAdd(objectsByCategory);
     },
-    add(categoryKey: number, objectToAdd: CustomizerPart) {
+    add(categoryKey: number, objectToAdd: Object3D) {
         sceneManager.add(categoryKey, objectToAdd);
     },
     getCanvas() {
@@ -317,7 +324,7 @@ export default {
         sceneManager.rescaleContainerToFitObjects(fitOffset);
     },
 
-    getObject(key: string) {
+    getObject(key: number) {
         return sceneManager.getObject(key);
     },
 
@@ -325,7 +332,7 @@ export default {
         return sceneManager.getObjectByAttachPoint(attachPointName);
     },
 
-    getParentObject(key: string) {
+    getParentObject(key: number) {
         return sceneManager.getParentObject(key);
     },
 
