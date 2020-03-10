@@ -338,4 +338,8 @@ export default {
     disablePan() {
         controls.enablePan = false;
     },
+
+    resetCamera() {
+        controls.reset();
+    },
 };
