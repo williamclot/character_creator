@@ -75,9 +75,10 @@ const App = props => {
     );
 
     useEffect(() => {
-        if (!props.edit_mode) {
-            sceneManager.disablePan();
-        }
+        sceneManager.setPanEnabled(props.edit_mode);
+    }, [props.edit_mode]);
+
+    useEffect(() => {
         sceneManager.renderScene();
     }, []);
 

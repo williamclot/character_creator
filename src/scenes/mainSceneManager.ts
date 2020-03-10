@@ -332,11 +332,8 @@ export default {
         setContainerRotation(rotation);
     },
 
-    enablePan() {
-        controls.enablePan = true;
-    },
-    disablePan() {
-        controls.enablePan = false;
+    setPanEnabled(enabled: boolean) {
+        controls.enablePan = enabled;
     },
 
     resetCamera() {
