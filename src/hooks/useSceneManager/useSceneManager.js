@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+import { throttle } from 'throttle-debounce';
 
 import mainSceneManager from '../../scenes/mainSceneManager';
 
@@ -25,6 +26,16 @@ const useSceneManager = (partTypesArray, initialRotation) => {
             mainSceneManager.setContainerRotation(initialRotation);
         }
     }, [initialRotation]);
+
+    useEffect(() => {
+        const listener = throttle(100, () => {
+            mainSceneManager.handleResize();
+            mainSceneManager.renderScene();
+        });
+
+        window.addEventListener('resize', listener);
+        return () => window.removeEventListener('resize', listener);
+    }, []);
 
     return {
         canvasContainerRef,

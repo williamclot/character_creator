@@ -342,4 +342,14 @@ export default {
     resetCamera() {
         controls.reset();
     },
+
+    handleResize() {
+        const { width, height } = renderer.domElement.getBoundingClientRect();
+
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(width, height, false);
+        renderer.setPixelRatio(width / height);
+    },
 };
