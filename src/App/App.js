@@ -75,6 +75,9 @@ const App = props => {
     );
 
     useEffect(() => {
+        if (!props.edit_mode) {
+            sceneManager.disablePan();
+        }
         sceneManager.renderScene();
     }, []);
 

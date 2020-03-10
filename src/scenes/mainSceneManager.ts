@@ -331,4 +331,11 @@ export default {
     setContainerRotation(rotation: Coord3d) {
         setContainerRotation(rotation);
     },
+
+    enablePan() {
+        controls.enablePan = true;
+    },
+    disablePan() {
+        controls.enablePan = false;
+    },
 };
