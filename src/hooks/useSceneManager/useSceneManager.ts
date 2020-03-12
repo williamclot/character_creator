@@ -1,20 +1,27 @@
+import { PartType, Coord3d } from '../../types';
 import { useRef, useEffect } from 'react';
 import { throttle } from 'throttle-debounce';
 
 import mainSceneManager from '../../scenes/mainSceneManager';
 
-/**
- * @param {import('../../types').PartType[]} partTypesArray
- * @param {import('../../types').Coord3d} [initialRotation]
- */
-const useSceneManager = (partTypesArray, initialRotation) => {
-    /** @type {import('react').MutableRefObject<HTMLElement>} */
-    const canvasContainerRef = useRef(null);
+const useSceneManager = (
+    partTypesArray: PartType[],
+    initialRotation: Coord3d,
+) => {
+    const canvasContainerRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
         const canvas = mainSceneManager.getCanvas();
-        canvasContainerRef.current.appendChild(canvas);
-        return () => canvasContainerRef.current.removeChild(canvas);
+
+        if (canvasContainerRef.current) {
+            canvasContainerRef.current.appendChild(canvas);
+        }
+
+        return () => {
+            if (canvasContainerRef.current) {
+                canvasContainerRef.current.removeChild(canvas);
+            }
+        };
     }, []);
 
     useEffect(() => {
