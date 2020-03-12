@@ -40,21 +40,6 @@ const renderer = new WebGLRenderer({
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight); // Configure renderer size
 
-const controls = new OrbitControls(camera, renderer.domElement);
-// controls.target.set(-1,0,0);
-// controls.minDistance = 2; //Controling max and min for ease of use
-// controls.maxDistance = 7;
-// controls.minPolarAngle = 0;
-// controls.maxPolarAngle = Math.PI / 2 - 0.1;
-// controls.enablePan = false;
-controls.enableKeys = false;
-
-const renderScene = () => {
-    renderer.render(scene, camera);
-};
-
-controls.addEventListener('change', renderScene);
-
 const hemi = new HemisphereLight(0xffffff, 0xffffff);
 
 //Create a PointLight and turn on shadows for the light
@@ -78,6 +63,26 @@ const divisions = 60;
 const gridHelper = new GridHelper(size, divisions);
 
 scene.add(gridHelper);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+// controls.target.set(-1,0,0);
+// controls.minDistance = 2; //Controling max and min for ease of use
+// controls.maxDistance = 7;
+// controls.minPolarAngle = 0;
+// controls.maxPolarAngle = Math.PI / 2 - 0.1;
+// controls.enablePan = false;
+controls.enableKeys = false;
+
+const renderScene = () => {
+    renderer.render(scene, camera);
+};
+
+controls.addEventListener('change', () => {
+    const isCameraAboveGround = camera.position.y >= 0;
+    gridHelper.visible = isCameraAboveGround;
+
+    renderScene();
+});
 
 const _container: Object3D = new Group();
 
@@ -181,7 +186,17 @@ class SceneManager {
         const size = boundingBox.getSize(new Vector3());
         const maxDimension = Math.max(size.x, size.y, size.z);
 
+        // rescale to fit into view
         _container.scale.divideScalar(maxDimension / fitOffset);
+
+        const newBoundingBox = new Box3().setFromObject(_container);
+
+        // move container aboce grid
+        _container.position.setY(_container.position.y - newBoundingBox.min.y);
+
+        // look at container
+        controls.target = _container.position;
+        controls.update();
     }
 
     getObject(key: number) {
