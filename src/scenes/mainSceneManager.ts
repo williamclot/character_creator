@@ -193,6 +193,10 @@ class SceneManager {
 
         // move container aboce grid
         _container.position.setY(_container.position.y - newBoundingBox.min.y);
+
+        // look at container
+        controls.target = _container.position;
+        controls.update();
     }
 
     getObject(key: number) {
