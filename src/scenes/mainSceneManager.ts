@@ -181,7 +181,13 @@ class SceneManager {
         const size = boundingBox.getSize(new Vector3());
         const maxDimension = Math.max(size.x, size.y, size.z);
 
+        // rescale to fit into view
         _container.scale.divideScalar(maxDimension / fitOffset);
+
+        const newBoundingBox = new Box3().setFromObject(_container);
+
+        // move container aboce grid
+        _container.position.setY(_container.position.y - newBoundingBox.min.y);
     }
 
     getObject(key: number) {
