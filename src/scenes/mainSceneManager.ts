@@ -49,6 +49,12 @@ const controls = new OrbitControls(camera, renderer.domElement);
 // controls.enablePan = false;
 controls.enableKeys = false;
 
+const renderScene = () => {
+    renderer.render(scene, camera);
+};
+
+controls.addEventListener('change', renderScene);
+
 const hemi = new HemisphereLight(0xffffff, 0xffffff);
 
 //Create a PointLight and turn on shadows for the light
@@ -278,32 +284,18 @@ class SceneManager {
 
 const sceneManager = new SceneManager();
 
-const setContainerRotation = (rotation: Coord3d) => {
-    _container.rotation.set(rotation.x, rotation.y, rotation.z);
-};
-
-const batchAdd = (objectsByCategory: { [id: number]: Object3D }) => {
-    const keysToSearch = sceneManager.sortedCategoryIds;
-
-    for (const key of keysToSearch) {
-        if (key in objectsByCategory) {
-            sceneManager.add(key, objectsByCategory[key]);
-        }
-    }
-};
-
-const renderScene = () => {
-    renderer.render(scene, camera);
-};
-
-controls.addEventListener('change', renderScene);
-
 export default {
     init(categories: PartType[]) {
         sceneManager.initialize(categories);
     },
     addAll(objectsByCategory: { [id: number]: Object3D }) {
-        batchAdd(objectsByCategory);
+        const keysToSearch = sceneManager.sortedCategoryIds;
+
+        for (const key of keysToSearch) {
+            if (key in objectsByCategory) {
+                sceneManager.add(key, objectsByCategory[key]);
+            }
+        }
     },
     add(categoryKey: number, objectToAdd: Object3D) {
         sceneManager.add(categoryKey, objectToAdd);
@@ -329,7 +321,7 @@ export default {
     },
 
     setContainerRotation(rotation: Coord3d) {
-        setContainerRotation(rotation);
+        _container.rotation.set(rotation.x, rotation.y, rotation.z);
     },
 
     setPanEnabled(enabled: boolean) {
