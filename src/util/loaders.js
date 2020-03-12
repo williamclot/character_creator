@@ -7,7 +7,7 @@ import STLLoaderWrapper from 'three-stl-loader';
 // import GLTFLoader from 'three-gltf-loader';
 const STLLoader = STLLoaderWrapper(THREE);
 
-const TIMEOUT = 30000;
+const TIMEOUT = 120000;
 
 // const _gltfLoader = new GLTFLoader
 const _stlLoader = new STLLoader();
