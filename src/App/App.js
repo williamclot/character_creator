@@ -317,11 +317,7 @@ const App = props => {
                 ref={canvasContainerRef}
             ></div>
 
-            <Header
-                title={customizerName}
-                userName={props.worldData['user_name']}
-                userUrl={props.worldData['user_url']}
-            />
+            <Header title={customizerName} user={props.worldData.user} />
 
             <div className={styles.editorPanelContainer}>
                 <div className={styles.editorPanel}>

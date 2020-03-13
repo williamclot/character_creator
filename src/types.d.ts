@@ -12,16 +12,26 @@ export type PartType = {
     parent?: PartTypeParent;
 };
 
+export type User = {
+    username: string;
+    name: string;
+    avatar: string;
+    url: string;
+};
+
 export type WorldData = {
+    id: number;
     name: string;
     price: number;
     description: string;
+    url: string;
+    slug: string;
     is_private: boolean;
     image_url: string;
     container_rotation?: Coord3d;
+    tags: string[];
 
-    user_name: string;
-    user_url: string;
+    user: User;
 
     groups: {
         categories: PartType[];
