@@ -1,7 +1,17 @@
 import React, { Component } from 'react';
 import { uniqueId } from '../util/helpers';
 
-class ImportButton extends Component {
+type ImportButtonPropTypes = {
+    className: string;
+    title: string;
+    id: string;
+    accept: string;
+    onFileLoaded: (filename: string, objectUrl: string) => void;
+};
+
+class ImportButton extends Component<ImportButtonPropTypes> {
+    private _fileInput: HTMLInputElement;
+
     componentDidMount() {
         this._fileInput = document.createElement('input');
         this._fileInput.type = 'file';
@@ -14,20 +24,25 @@ class ImportButton extends Component {
         }
     }
 
-    handleLoad = e => {
+    handleLoad = (e: Event) => {
         const { onFileLoaded } = this.props;
 
-        /** @type {File} */
-        const file = e.target.files[0];
+        if (!e.target) {
+            return;
+        }
+
+        const files = this._fileInput.files;
+
+        if (!files || !files[0]) {
+            return;
+        }
+
+        const file = files[0];
 
         // first reset the value to recognize if same file is uploaded again
         this._fileInput.value = '';
 
         if (!file) {
-            return;
-        }
-
-        if (typeof onFileLoaded !== 'function') {
             return;
         }
 
@@ -51,7 +66,7 @@ class ImportButton extends Component {
     }
 }
 
-const ImportButtonV2 = props => {
+const ImportButtonV2: React.FunctionComponent<ImportButtonPropTypes> = props => {
     const [id] = React.useState(uniqueId);
     const {
         className,
