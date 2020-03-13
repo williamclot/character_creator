@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, ChangeEvent } from 'react';
 import { uniqueId } from '../util/helpers';
 
 type ImportButtonPropTypes = {
@@ -66,7 +66,15 @@ class ImportButton extends Component<ImportButtonPropTypes> {
     }
 }
 
-const ImportButtonV2: React.FunctionComponent<ImportButtonPropTypes> = props => {
+type ImportButtonPropTypesV2PropTypes = {
+    className: string;
+    title: string;
+    id: string;
+    accept: string;
+    onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+};
+
+const ImportButtonV2: React.FunctionComponent<ImportButtonPropTypesV2PropTypes> = props => {
     const [id] = React.useState(uniqueId);
     const {
         className,

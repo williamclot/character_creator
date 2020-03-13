@@ -34,6 +34,7 @@
     "@rollup/plugin-image": "^2.0.4",
     "@rollup/plugin-node-resolve": "^7.1.1",
     "@types/axios": "^0.14.0",
+    "@types/classnames": "^2.2.10",
     "@types/react": "^16.9.23",
     "@types/throttle-debounce": "^2.1.0",
     "@types/toposort": "^2.0.3",
