@@ -3,7 +3,10 @@ export const uniqueId = (prefix = '') => {
     return `${prefix}_${_id++}`;
 };
 
-export const triggerDownloadFromUrl = (url, filename = 'customized-mesh') => {
+export const triggerDownloadFromUrl = (
+    url: string,
+    filename = 'customized-mesh',
+) => {
     const anchor = document.createElement('a');
     anchor.href = url;
     anchor.style.display = 'none';
@@ -14,24 +17,22 @@ export const triggerDownloadFromUrl = (url, filename = 'customized-mesh') => {
     document.body.removeChild(anchor);
 };
 
+type Dict<T> = Record<string, T>;
 /**
  * Calls a defined callback function on each property of an object,
  * and returns a new object that contains the results.
- * @template T, S
- * @param { Dict<T> } object
- * @param { Mapper<T, S> } mapFn
- * @returns { Dict<S> }
  */
-export const objectMap = (object, mapFn) =>
-    Object.keys(object).reduce((result, key) => {
+export const objectMap = <T, S>(
+    object: Dict<T>,
+    mapFn: (value: T, key: string) => S,
+) => {
+    return Object.keys(object).reduce<Dict<S>>((result, key) => {
         result[key] = mapFn(object[key], key);
         return result;
     }, {});
+};
 
-/**
- * @param { string } filename
- */
-export const getNameAndExtension = filename => {
+export const getNameAndExtension = (filename: string) => {
     const dotIndex = filename.lastIndexOf('.');
     const hasDot = dotIndex !== -1;
 
@@ -42,12 +43,15 @@ export const getNameAndExtension = filename => {
 };
 
 /**
- *
  * get normalized mouse coordinates
- * @param { Event } event
  */
-export function fromEvent(event) {
-    const { left, top, width, height } = event.target.getBoundingClientRect();
+export function fromEvent(event: MouseEvent) {
+    const {
+        left,
+        top,
+        width,
+        height,
+    } = (event.target as HTMLElement).getBoundingClientRect();
 
     return {
         x: ((event.clientX - left) / width) * 2 - 1,
@@ -56,27 +60,14 @@ export function fromEvent(event) {
 }
 
 export const radiansToDegreesFormatter = {
-    format: number => {
+    format: (number: number) => {
         // const degreeSign = String.fromCharCode(176)
         // return `${value}${degreeSign}`
 
         return number * (180 / Math.PI);
     },
-    parse: text => {
+    parse: (text: string) => {
         const number = Number.parseFloat(text);
         return number / (180 / Math.PI);
     },
 };
-
-/**
- * @template T, S
- * @callback Mapper
- * @param { T } value
- * @param { string } key
- * @returns { S }
- */
-
-/**
- * @template T
- * @typedef { {[key: string]: T} } Dict
- */
