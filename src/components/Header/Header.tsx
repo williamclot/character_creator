@@ -13,12 +13,16 @@ const Header: React.FunctionComponent<PropTypes> = props => {
         <div className={styles.header}>
             <h1 className={styles.title}>{props.title}</h1>
 
-            <h2 className={styles.userSection}>
-                <span className={styles.by}>By </span>
-                <a className={styles.username} href={props.user.url}>
-                    {props.user.username}
-                </a>
-            </h2>
+            <a className={styles.userSection} href={props.user.url}>
+                <img
+                    className={styles.userPic}
+                    src={props.user.avatar}
+                    alt={props.user.name}
+                />
+                <span className={styles.username}>
+                    {props.user.name}, @{props.user.username}
+                </span>
+            </a>
         </div>
     );
 };
