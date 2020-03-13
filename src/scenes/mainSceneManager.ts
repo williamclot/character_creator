@@ -180,25 +180,6 @@ class SceneManager {
         _container;
     }
 
-    rescaleContainerToFitObjects(fitOffset = 2) {
-        const boundingBox = new Box3().setFromObject(_container);
-
-        const size = boundingBox.getSize(new Vector3());
-        const maxDimension = Math.max(size.x, size.y, size.z);
-
-        // rescale to fit into view
-        _container.scale.divideScalar(maxDimension / fitOffset);
-
-        const newBoundingBox = new Box3().setFromObject(_container);
-
-        // move container above grid
-        _container.position.setY(_container.position.y - newBoundingBox.min.y);
-
-        // look at container
-        controls.target = _container.position.clone();
-        controls.update();
-    }
-
     getObject(key: number) {
         return this.loadedObjectsMap.get(key);
     }
@@ -303,6 +284,7 @@ export default {
     init(categories: PartType[]) {
         sceneManager.initialize(categories);
     },
+
     addAll(objectsByCategory: { [id: number]: Object3D }) {
         const keysToSearch = sceneManager.sortedCategoryIds;
 
@@ -312,15 +294,34 @@ export default {
             }
         }
     },
+
     add(categoryKey: number, objectToAdd: Object3D) {
         sceneManager.add(categoryKey, objectToAdd);
     },
+
     getCanvas() {
         return renderer.domElement;
     },
+
     renderScene,
-    rescaleContainerToFitObjects(fitOffset: number) {
-        sceneManager.rescaleContainerToFitObjects(fitOffset);
+
+    rescaleContainerToFitObjects(fitOffset = 2) {
+        const boundingBox = new Box3().setFromObject(_container);
+
+        const size = boundingBox.getSize(new Vector3());
+        const maxDimension = Math.max(size.x, size.y, size.z);
+
+        // rescale to fit into view
+        _container.scale.divideScalar(maxDimension / fitOffset);
+
+        const newBoundingBox = new Box3().setFromObject(_container);
+
+        // move container above grid
+        _container.position.setY(_container.position.y - newBoundingBox.min.y);
+
+        // look at container
+        controls.target = _container.position.clone();
+        controls.update();
     },
 
     getObject(key: number) {
