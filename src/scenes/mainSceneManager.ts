@@ -191,11 +191,11 @@ class SceneManager {
 
         const newBoundingBox = new Box3().setFromObject(_container);
 
-        // move container aboce grid
+        // move container above grid
         _container.position.setY(_container.position.y - newBoundingBox.min.y);
 
         // look at container
-        controls.target = _container.position;
+        controls.target = _container.position.clone();
         controls.update();
     }
 
