@@ -13,20 +13,22 @@ const useSceneManager = (
     useEffect(() => {
         const canvas = mainSceneManager.getCanvas();
 
-        if (canvasContainerRef.current) {
-            canvasContainerRef.current.appendChild(canvas);
+        const canvasContainerElement = canvasContainerRef.current;
+
+        if (canvasContainerElement) {
+            canvasContainerElement.appendChild(canvas);
         }
 
         return () => {
-            if (canvasContainerRef.current) {
-                canvasContainerRef.current.removeChild(canvas);
+            if (canvasContainerElement) {
+                canvasContainerElement.removeChild(canvas);
             }
         };
     }, []);
 
     useEffect(() => {
         mainSceneManager.init(partTypesArray);
-    }, []);
+    }, [partTypesArray]);
 
     useEffect(() => {
         if (initialRotation) {
