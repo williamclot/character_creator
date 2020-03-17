@@ -14,6 +14,7 @@ const useCustomizerState = (props: AppProps) => {
     const {
         customizerName,
         price,
+        tags,
         description,
         isPrivate,
         imageUrl,
@@ -194,6 +195,7 @@ const useCustomizerState = (props: AppProps) => {
 
         customizerName,
         price,
+        tags,
         description,
         isPrivate,
         imageUrl,

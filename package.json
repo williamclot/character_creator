@@ -16,8 +16,10 @@
     "prepare": "npm run lint && npm run check-types && npm run test && npm run lib"
   },
   "dependencies": {
+    "@material-ui/core": "^4.9.5",
     "axios": "^0.18.1",
     "classnames": "^2.2.6",
+    "material-ui-chip-input": "^1.1.0",
     "three": "^0.114.0",
     "three-gltf-loader": "^1.111.0",
     "three-stl-loader": "^1.0.6",
