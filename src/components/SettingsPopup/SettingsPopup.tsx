@@ -193,7 +193,7 @@ const SettingsPopup: React.FunctionComponent<PropTypes> = props => {
             fieldsToPatch['image_path'] = state.imagePath;
         }
 
-        if(!arraysEqual(props.tags, state.tags)) {
+        if (!arraysEqual(props.tags, state.tags)) {
             fieldsToPatch['tags'] = state.tags;
         }
 
@@ -239,14 +239,16 @@ const SettingsPopup: React.FunctionComponent<PropTypes> = props => {
                     )}
 
                     <label className={styles.label}>Tags</label>
-                    {/* <div className={styles.input}> */}
-                        <ChipInput
-                            className={styles.input}
-                            value={state.tags}
-                            onAdd={handleAddTag}
-                            onDelete={handleRemoveTag}
-                        />
-                    {/* </div> */}
+                    <ChipInput
+                        className={cn(styles.input, styles.tags)}
+                        classes={{
+                            inputRoot: styles.tagInputContainer,
+                            input: styles.tagInput,
+                        }}
+                        value={state.tags}
+                        onAdd={handleAddTag}
+                        onDelete={handleRemoveTag}
+                    />
 
                     <label htmlFor="label_desc" className={styles.label}>
                         Description

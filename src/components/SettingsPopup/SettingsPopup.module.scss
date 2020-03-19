@@ -103,3 +103,18 @@
 .visibility {
     font-weight: bold;
 }
+
+.tags {
+    .tagInputContainer {
+        height: 32px;
+
+        .tagInput {
+            background-color: #e0e0e0;
+            max-width: 70px;
+            margin-bottom: 0;
+            border-radius: 16px;
+            border-width: 0;
+            // overflow: hidden;
+        }
+    }
+}
