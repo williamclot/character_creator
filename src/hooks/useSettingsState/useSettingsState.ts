@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 type Settings_from_API = {
     name: string;
     price: number;
+    tags: string[];
     description: string;
     image_url: string;
     is_private: boolean;
@@ -17,6 +18,7 @@ const useSettingsState = (worldData: WorldData) => {
     );
     const [isPrivate, setIsPrivate] = useState(worldData['is_private']);
     const [imageUrl, setImageUrl] = useState(worldData['image_url'] || null);
+    const [tags, setTags] = useState(worldData['tags']);
 
     const updateSettings = useCallback(
         (updatedCustomizer: Settings_from_API) => {
@@ -25,6 +27,7 @@ const useSettingsState = (worldData: WorldData) => {
             setDescription(updatedCustomizer['description']);
             setImageUrl(updatedCustomizer['image_url']);
             setIsPrivate(updatedCustomizer['is_private']);
+            setTags(updatedCustomizer['tags']);
         },
         [],
     );
@@ -32,6 +35,7 @@ const useSettingsState = (worldData: WorldData) => {
     return {
         customizerName,
         price,
+        tags,
         description,
         isPrivate,
         imageUrl,

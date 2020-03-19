@@ -1,10 +1,12 @@
 import React, { useState, useMemo, ChangeEvent, FormEvent } from 'react';
+import ChipInput from 'material-ui-chip-input';
 import cn from 'classnames';
 
 import commonStyles from '../../shared-styles/button.module.css';
 import styles from './SettingsPopup.module.scss';
 import { ImportButtonV2 } from '../ImportButton';
 import axios from 'axios';
+import { arraysEqual } from '../../util/helpers';
 
 const VISIBILITY_PRIVATE = 'private';
 const VISIBILITY_PUBLIC = 'public';
@@ -13,6 +15,7 @@ type FiledsToPatch = {
     is_private?: boolean;
     name?: string;
     price?: number;
+    tags?: string[];
     description?: string;
     image_path?: string | null;
 };
@@ -21,6 +24,7 @@ type StateTypes = {
     name: string;
     price: number;
     description: string;
+    tags: string[];
     isPrivate: boolean;
     imageUrl: string;
     imagePath: string | null;
@@ -38,6 +42,7 @@ const SettingsPopup: React.FunctionComponent<PropTypes> = props => {
         name: props.name,
         price: props.price,
         description: props.description,
+        tags: props.tags,
         isPrivate: props.isPrivate,
         imageUrl: props.imageUrl,
         imagePath: null,
@@ -49,7 +54,8 @@ const SettingsPopup: React.FunctionComponent<PropTypes> = props => {
             state.price === props.price &&
             state.description === props.description &&
             state.imageUrl === props.imageUrl &&
-            state.isPrivate === props.isPrivate
+            state.isPrivate === props.isPrivate &&
+            arraysEqual(state.tags, props.tags)
         );
     }, [props, state]);
 
@@ -136,6 +142,20 @@ const SettingsPopup: React.FunctionComponent<PropTypes> = props => {
         });
     };
 
+    const handleAddTag = (tag: string) => {
+        setState({
+            ...state,
+            tags: state.tags.concat(tag),
+        });
+    };
+
+    const handleRemoveTag = (_: string, index: number) => {
+        setState({
+            ...state,
+            tags: state.tags.filter((_, i) => i !== index),
+        });
+    };
+
     const handleSaveChanges = async (e: FormEvent) => {
         e.preventDefault();
 
@@ -171,6 +191,10 @@ const SettingsPopup: React.FunctionComponent<PropTypes> = props => {
 
         if (props.imageUrl !== state.imageUrl) {
             fieldsToPatch['image_path'] = state.imagePath;
+        }
+
+        if (!arraysEqual(props.tags, state.tags)) {
+            fieldsToPatch['tags'] = state.tags;
         }
 
         props.onSave(fieldsToPatch);
@@ -213,6 +237,18 @@ const SettingsPopup: React.FunctionComponent<PropTypes> = props => {
                             />
                         </>
                     )}
+
+                    <label className={styles.label}>Tags</label>
+                    <ChipInput
+                        className={cn(styles.input, styles.tags)}
+                        classes={{
+                            inputRoot: styles.tagInputContainer,
+                            input: styles.tagInput,
+                        }}
+                        value={state.tags}
+                        onAdd={handleAddTag}
+                        onDelete={handleRemoveTag}
+                    />
 
                     <label htmlFor="label_desc" className={styles.label}>
                         Description

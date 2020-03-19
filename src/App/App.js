@@ -38,6 +38,7 @@ const App = props => {
         setObjectStatus,
 
         customizerName,
+        tags,
         price,
         description,
         isPrivate,
@@ -374,6 +375,7 @@ const App = props => {
                     className={styles.settingsPopup}
                     name={customizerName}
                     price={price}
+                    tags={tags}
                     description={description}
                     isPrivate={isPrivate}
                     imageUrl={imageUrl}

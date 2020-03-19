@@ -71,3 +71,17 @@ export const radiansToDegreesFormatter = {
         return number / (180 / Math.PI);
     },
 };
+
+export const arraysEqual = <T>(arr1: T[], arr2: T[]) => {
+    if (arr1.length !== arr2.length) return false;
+
+    const s1 = new Set(arr1);
+    const s2 = new Set(arr2);
+    for (const el of s1) {
+        if (!s2.has(el)) {
+            return false;
+        }
+    }
+
+    return true;
+};
