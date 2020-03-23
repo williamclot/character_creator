@@ -340,6 +340,12 @@ const App = props => {
 
             <Header title={customizerName} user={props.worldData.user} />
 
+            {isLoading && (
+                <div className={styles.canvasOverlay}>
+                    <LoadingIndicator />
+                </div>
+            )}
+
             <div className={styles.editorPanelContainer}>
                 <div className={styles.editorPanel}>
                     <div className={styles.partTypesContainer}>
@@ -406,8 +412,6 @@ const App = props => {
                     }
                 />
             )}
-
-            <LoadingIndicator visible={isLoading} />
         </div>
     );
 };
