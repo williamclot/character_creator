@@ -103,6 +103,7 @@ export type AppProps = {
     customizedMeshesInCart: number[]; // ids
     customizedMeshesOwnedByUser: number[]; // ids
     customizer_pay_per_download_enabled: boolean;
+    canPublishToStore: boolean;
     edit_mode: boolean;
     objects: Objects_from_props;
     worldData: WorldData;

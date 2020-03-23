@@ -381,8 +381,8 @@ const App = props => {
                     imageUrl={imageUrl}
                     onSave={handleSaveChanges}
                     onCancel={() => setShowSettings(false)}
-                    customizer_pay_per_download_enabled={
-                        props.customizer_pay_per_download_enabled
+                    userCanSetPrice={
+                        props.canPublishToStore
                     }
                 />
             )}

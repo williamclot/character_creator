@@ -33,7 +33,7 @@ type StateTypes = {
 type PropTypes = {
     className: string;
     onCancel: () => void;
-    customizer_pay_per_download_enabled: boolean;
+    userCanSetPrice: boolean;
     onSave: (filedsToPatch: FiledsToPatch) => void;
 } & StateTypes;
 
@@ -216,7 +216,7 @@ const SettingsPopup: React.FunctionComponent<PropTypes> = props => {
                         className={cn(styles.input, styles.text)}
                     />
 
-                    {props.customizer_pay_per_download_enabled && (
+                    {props.userCanSetPrice && (
                         <>
                             <label
                                 htmlFor="label_price"
