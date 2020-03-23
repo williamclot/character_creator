@@ -1,7 +1,7 @@
 import { PartType, Coord3d, AppProps } from '../../types';
 import { POSITION_0_0_0 } from '../../constants';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import useCustomizerParts from '../useCustomizerParts';
 import usePartTypes from '../usePartTypes';
 import useCustomizedMeshes from '../useCustomizedMeshes/useCustomizedMeshes';
@@ -24,15 +24,21 @@ const useCustomizerState = (props: AppProps) => {
     const [selectedPartTypeId, setSelectedPartTypeId] = useState(
         partTypes.allIds[0] || null,
     );
-    const [selectedParts, setSelectedParts] = useState<{
-        [partTypeId: number]: number;
-    }>({});
+    const [selectedParts, setSelectedParts] = useState<Record<number, number>>({});
     const selectedPartsIds = Object.keys(selectedParts).map(
         key => selectedParts[Number(key)],
     );
     const selectedPartType = selectedPartTypeId
         ? partTypes.byId[selectedPartTypeId]
         : null;
+
+    const savedSelectionRef = useRef<Record<number, number>>(selectedParts);
+    const saveSelection = (selection: Record<number, number>) => {
+        savedSelectionRef.current = { ...selection };
+    };
+    const getSavedSelection = () => {
+        return savedSelectionRef.current;
+    };
 
     const {
         addCustomizedMeshToCart,
@@ -207,6 +213,8 @@ const useCustomizerState = (props: AppProps) => {
         selectedParts,
         setSelectedParts,
         selectedPartsIds,
+        saveSelection,
+        getSavedSelection,
 
         addCustomizedMeshToCart,
         isSelectionInCart,

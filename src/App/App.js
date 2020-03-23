@@ -51,6 +51,8 @@ const App = props => {
         selectedParts,
         setSelectedParts,
         selectedPartsIds,
+        saveSelection,
+        getSavedSelection,
 
         addCustomizedMeshToCart,
         isSelectionInCart,
@@ -124,9 +126,11 @@ const App = props => {
                         sceneManager.addAll(objectsToLoad);
                         sceneManager.rescaleContainerToFitObjects(4);
                         sceneManager.renderScene();
+                        sceneManager.saveCamera();
                     }
 
                     setSelectedParts(newSelectedParts);
+                    saveSelection(newSelectedParts);
                 } catch (err) {
                     console.error(err);
                 }
@@ -175,6 +179,22 @@ const App = props => {
         }
 
         setIsLoading(false);
+    };
+
+    const handleResetSelection = async () => {
+        setIsLoading(true);
+        const newSelectedParts = getSavedSelection();
+        const oneOfEach = objectMap(newSelectedParts, partId => objects.byId[partId]);
+        const newParts = await fetchObjects(oneOfEach);
+        sceneManager.addAll(newParts);
+        sceneManager.rescaleContainerToFitObjects(4);
+        sceneManager.renderScene();
+        setSelectedParts(newSelectedParts);
+        setIsLoading(false);
+    };
+
+    const handleResetCamera = () => {
+        sceneManager.resetCamera();
     };
 
     const handleDeleteObject = async objectId => {

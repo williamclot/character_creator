@@ -344,6 +344,10 @@ export default {
         controls.enablePan = enabled;
     },
 
+    saveCamera() {
+        controls.saveState();
+    },
+
     resetCamera() {
         controls.reset();
     },
