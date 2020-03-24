@@ -336,6 +336,13 @@ const App = props => {
         setIsLoading(false);
     };
 
+    const partTypesToShow = props.edit_mode
+        ? partTypesArray
+        : partTypesArray.filter(pt => {
+              const objectsInThisPartType = getObjectsByPartTypeId(pt.id);
+              return objectsInThisPartType.length > 1;
+          });
+
     return (
         <div className={styles.app}>
             <div
@@ -355,7 +362,7 @@ const App = props => {
                 <div className={styles.editorPanel}>
                     <div className={styles.partTypesContainer}>
                         <PartTypesView
-                            partTypes={partTypesArray}
+                            partTypes={partTypesToShow}
                             selectedPartTypeId={selectedPartTypeId}
                             onPartTypeSelected={id => setSelectedPartTypeId(id)}
                         />
