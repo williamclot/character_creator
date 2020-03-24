@@ -32,7 +32,7 @@ type StateTypes = {
 
 type PropTypes = {
     className: string;
-    onCancel: () => void;
+    onClose: () => void;
     userCanSetPrice: boolean;
     onSave: (filedsToPatch: FiledsToPatch) => void;
 } & StateTypes;
@@ -200,6 +200,19 @@ const SettingsPopup: React.FunctionComponent<PropTypes> = props => {
         props.onSave(fieldsToPatch);
     };
 
+    const handleCancel = () => {
+        setState({
+            name: props.name,
+            price: props.price,
+            description: props.description,
+            tags: props.tags,
+            isPrivate: props.isPrivate,
+            imageUrl: props.imageUrl,
+            imagePath: null,
+        });
+        props.onClose();
+    };
+
     return (
         <form className={styles.container} onSubmit={handleSaveChanges}>
             <div className={styles.title}>Settings</div>
@@ -305,7 +318,7 @@ const SettingsPopup: React.FunctionComponent<PropTypes> = props => {
                 <button
                     type="button"
                     className={cn(commonStyles.button, styles.button)}
-                    onClick={props.onCancel}
+                    onClick={handleCancel}
                 >
                     Cancel
                 </button>

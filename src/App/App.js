@@ -422,7 +422,7 @@ const App = props => {
                     isPrivate={isPrivate}
                     imageUrl={imageUrl}
                     onSave={handleSaveChanges}
-                    onCancel={handleCloseSettings}
+                    onClose={handleCloseSettings}
                     userCanSetPrice={props.canPublishToStore}
                 />
             </MyBackDrop>
