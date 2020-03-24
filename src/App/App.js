@@ -7,6 +7,7 @@ import Selector from '../components/Selector';
 import PartTypesView from '../components/PartTypes';
 import LoadingIndicator from '../components/LoadingIndicator';
 import ButtonsContainer from '../components/ButtonsContainer';
+import MyBackDrop from '../components/MyBackDrop';
 
 import { ACCEPTED_OBJECT_FILE_EXTENSIONS, OBJECT_STATUS } from '../constants';
 import {
@@ -287,6 +288,10 @@ const App = props => {
         }
     };
 
+    const handleCloseSettings = () => {
+        setShowSettings(false);
+    };
+
     const handleWizardCompleted = async (
         partType,
         { name, extension, objectURL, imageSrc, geometry, metadata },
@@ -396,7 +401,7 @@ const App = props => {
                 />
             )}
 
-            {showSettings && (
+            <MyBackDrop open={showSettings}>
                 <SettingsPopup
                     className={styles.settingsPopup}
                     name={customizerName}
@@ -406,12 +411,10 @@ const App = props => {
                     isPrivate={isPrivate}
                     imageUrl={imageUrl}
                     onSave={handleSaveChanges}
-                    onCancel={() => setShowSettings(false)}
-                    userCanSetPrice={
-                        props.canPublishToStore
-                    }
+                    onCancel={handleCloseSettings}
+                    userCanSetPrice={props.canPublishToStore}
                 />
-            )}
+            </MyBackDrop>
         </div>
     );
 };

@@ -201,126 +201,115 @@ const SettingsPopup: React.FunctionComponent<PropTypes> = props => {
     };
 
     return (
-        <div className={cn(props.className, styles.background)}>
-            <form className={styles.container} onSubmit={handleSaveChanges}>
-                <div className={styles.title}>Settings</div>
+        <form className={styles.container} onSubmit={handleSaveChanges}>
+            <div className={styles.title}>Settings</div>
 
-                <div className={styles.settings}>
-                    <label htmlFor="label_name" className={styles.label}>
-                        Name
-                    </label>
-                    <input
-                        id="label_name"
-                        value={state.name}
-                        onChange={handleNameChange}
-                        className={cn(styles.input, styles.text)}
-                    />
+            <div className={styles.settings}>
+                <label htmlFor="label_name" className={styles.label}>
+                    Name
+                </label>
+                <input
+                    id="label_name"
+                    value={state.name}
+                    onChange={handleNameChange}
+                    className={cn(styles.input, styles.text)}
+                />
 
-                    {props.userCanSetPrice && (
-                        <>
-                            <label
-                                htmlFor="label_price"
-                                className={styles.label}
-                            >
-                                Price
-                            </label>
-                            <input
-                                id="label_price"
-                                type="number"
-                                value={state.price}
-                                onChange={handlePriceChange}
-                                className={cn(
-                                    styles.input,
-                                    styles.text,
-                                    styles.price,
-                                )}
-                            />
-                        </>
-                    )}
-
-                    <label className={styles.label}>Tags</label>
-                    <ChipInput
-                        className={cn(styles.input, styles.tags)}
-                        classes={{
-                            inputRoot: styles.tagInputContainer,
-                            input: styles.tagInput,
-                        }}
-                        value={state.tags}
-                        onAdd={handleAddTag}
-                        onDelete={handleRemoveTag}
-                    />
-
-                    <label htmlFor="label_desc" className={styles.label}>
-                        Description
-                    </label>
-                    <textarea
-                        id="label_desc"
-                        value={state.description}
-                        onChange={handleDescriptionChange}
-                        className={cn(
-                            styles.input,
-                            styles.text,
-                            styles.description,
-                        )}
-                    />
-
-                    <label htmlFor="label_image" className={styles.label}>
-                        Thumbnail
-                    </label>
-                    <ImportButtonV2
-                        id="label_image"
-                        className={cn(styles.input, styles.chooseImage)}
-                        title="Change Image"
-                        accept=".png, .jpg"
-                        onChange={handleImageChange}
-                    >
-                        Choose Image
-                    </ImportButtonV2>
-                    {state.imageUrl && (
-                        <img
-                            className={cn(styles.input, styles.imagePreview)}
-                            src={state.imageUrl}
+                {props.userCanSetPrice && (
+                    <>
+                        <label htmlFor="label_price" className={styles.label}>
+                            Price
+                        </label>
+                        <input
+                            id="label_price"
+                            type="number"
+                            value={state.price}
+                            onChange={handlePriceChange}
+                            className={cn(
+                                styles.input,
+                                styles.text,
+                                styles.price,
+                            )}
                         />
+                    </>
+                )}
+
+                <label className={styles.label}>Tags</label>
+                <ChipInput
+                    className={cn(styles.input, styles.tags)}
+                    classes={{
+                        inputRoot: styles.tagInputContainer,
+                        input: styles.tagInput,
+                    }}
+                    value={state.tags}
+                    onAdd={handleAddTag}
+                    onDelete={handleRemoveTag}
+                />
+
+                <label htmlFor="label_desc" className={styles.label}>
+                    Description
+                </label>
+                <textarea
+                    id="label_desc"
+                    value={state.description}
+                    onChange={handleDescriptionChange}
+                    className={cn(
+                        styles.input,
+                        styles.text,
+                        styles.description,
                     )}
+                />
 
-                    <label htmlFor="label_visibility" className={styles.label}>
-                        Visibility
-                    </label>
-                    <select
-                        id="label_visibility"
-                        value={
-                            state.isPrivate
-                                ? VISIBILITY_PRIVATE
-                                : VISIBILITY_PUBLIC
-                        }
-                        onChange={handleVisibilityChange}
-                        className={cn(
-                            styles.input,
-                            styles.text,
-                            styles.visibility,
-                        )}
-                    >
-                        <option value={VISIBILITY_PRIVATE}>Private</option>
-                        <option value={VISIBILITY_PUBLIC}>Public</option>
-                    </select>
-                </div>
-
-                <div className={styles.buttons}>
-                    <input
-                        disabled={isInSync}
-                        className={cn(commonStyles.button, styles.button)}
-                        type="submit"
-                        value="Save Changes"
+                <label htmlFor="label_image" className={styles.label}>
+                    Thumbnail
+                </label>
+                <ImportButtonV2
+                    id="label_image"
+                    className={cn(styles.input, styles.chooseImage)}
+                    title="Change Image"
+                    accept=".png, .jpg"
+                    onChange={handleImageChange}
+                >
+                    Choose Image
+                </ImportButtonV2>
+                {state.imageUrl && (
+                    <img
+                        className={cn(styles.input, styles.imagePreview)}
+                        src={state.imageUrl}
                     />
-                    <button
-                        className={cn(commonStyles.button, styles.button)}
-                        onClick={props.onCancel}
-                    >
-                        Cancel
-                    </button>
-                </div>
-            </form>
-        </div>
+                )}
+
+                <label htmlFor="label_visibility" className={styles.label}>
+                    Visibility
+                </label>
+                <select
+                    id="label_visibility"
+                    value={
+                        state.isPrivate ? VISIBILITY_PRIVATE : VISIBILITY_PUBLIC
+                    }
+                    onChange={handleVisibilityChange}
+                    className={cn(styles.input, styles.text, styles.visibility)}
+                >
+                    <option value={VISIBILITY_PRIVATE}>Private</option>
+                    <option value={VISIBILITY_PUBLIC}>Public</option>
+                </select>
+            </div>
+
+            <div className={styles.buttons}>
+                <input
+                    disabled={isInSync}
+                    className={cn(commonStyles.button, styles.button)}
+                    type="submit"
+                    value="Save Changes"
+                />
+                <button
+                    className={cn(commonStyles.button, styles.button)}
+                    onClick={props.onCancel}
+                >
+                    Cancel
+                </button>
+            </div>
+        </form>
     );
 };
 
