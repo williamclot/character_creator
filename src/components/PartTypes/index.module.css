@@ -36,6 +36,13 @@
     background-color: #1da1f2;
 }
 
+.partTypes .item.disabled {
+    background-color: #1da1f2;
+    opacity: 70%;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 .partTypes::-webkit-scrollbar-track {
     background: none;
     /* margin-left: 10px; */

@@ -362,8 +362,21 @@ const App = props => {
                 <div className={styles.editorPanel}>
                     <div className={styles.partTypesContainer}>
                         <PartTypesView
-                            partTypes={partTypesToShow}
-                            selectedPartTypeId={selectedPartTypeId}
+                            partTypes={partTypesToShow.map((pt, index) => {
+                                const isRootPartType = index === 0;
+                                const objectsInThisPartType = getObjectsByPartTypeId(
+                                    pt.id,
+                                );
+
+                                return {
+                                    id: pt.id,
+                                    name: pt.name,
+                                    selected: pt.id === selectedPartTypeId,
+                                    disabled:
+                                        objectsInThisPartType.length === 0 &&
+                                        !isRootPartType,
+                                };
+                            })}
                             onPartTypeSelected={id => setSelectedPartTypeId(id)}
                         />
                     </div>
