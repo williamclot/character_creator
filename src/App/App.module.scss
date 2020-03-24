@@ -30,6 +30,13 @@
         left: 20px;
         bottom: 20px;
     }
+
+    .createYourOwn {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 }
 
 
@@ -101,6 +108,10 @@
             /* right: unset;
             left: 10px; */
             bottom: 255px;
+        }
+
+        .createYourOwn {
+            bottom: 140px;
         }
     }
 

@@ -388,6 +388,15 @@ const App = props => {
                 />
             </div>
 
+            {!props.edit_mode && (
+                <a
+                    className={styles.createYourOwn}
+                    href={props.api.routes.createCustomizer}
+                >
+                    Create your own Customizer
+                </a>
+            )}
+
             {showUploadWizard && (
                 <UploadWizard
                     getGlobalPosition={computeGlobalPosition}
