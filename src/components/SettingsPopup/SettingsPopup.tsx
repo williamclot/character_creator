@@ -303,6 +303,7 @@ const SettingsPopup: React.FunctionComponent<PropTypes> = props => {
                     value="Save Changes"
                 />
                 <button
+                    type="button"
                     className={cn(commonStyles.button, styles.button)}
                     onClick={props.onCancel}
                 >
