@@ -61,7 +61,7 @@ const ButtonsContainer = ({
     );
 
     return (
-        <div className={styles.container}>
+        <>
             {userMustBuySelection ? (
                 <Button
                     title={addToCartButtonMessage}
@@ -113,7 +113,7 @@ const ButtonsContainer = ({
                     {menu}
                 </>
             )}
-        </div>
+        </>
     );
 };
 

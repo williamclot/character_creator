@@ -24,6 +24,12 @@
         display: flex;
         justify-content: center;
     }
+
+    .buttonsContainer {
+        position: absolute;
+        left: 20px;
+        bottom: 20px;
+    }
 }
 
 
@@ -88,6 +94,16 @@
 }
 
 @media (max-width: 950px) {
+    .app {
+        .buttonsContainer {
+            left: unset;
+            right: 10px;
+            /* right: unset;
+            left: 10px; */
+            bottom: 255px;
+        }
+    }
+
     .editorPanelContainer {
         /* Used only to center child vertically */
         right: 0px;

@@ -373,18 +373,20 @@ const App = props => {
                 </div>
             </div>
 
-            <ButtonsContainer
-                addToCartButtonMessage={addToCartButtonMessage}
-                downloadButtonMessage={downloadButtonMessage}
-                userMustBuySelection={userMustBuySelection}
-                isSelectionInCart={isSelectionInCart}
-                onDownload={handleDownload}
-                onAddToCart={handleAddToCart}
-                partTypes={partTypesArray}
-                onUpload={handleUpload}
-                onShowSettings={() => setShowSettings(true)}
-                edit_mode={props.edit_mode}
-            />
+            <div className={styles.buttonsContainer}>
+                <ButtonsContainer
+                    addToCartButtonMessage={addToCartButtonMessage}
+                    downloadButtonMessage={downloadButtonMessage}
+                    userMustBuySelection={userMustBuySelection}
+                    isSelectionInCart={isSelectionInCart}
+                    onDownload={handleDownload}
+                    onAddToCart={handleAddToCart}
+                    partTypes={partTypesArray}
+                    onUpload={handleUpload}
+                    onShowSettings={() => setShowSettings(true)}
+                    edit_mode={props.edit_mode}
+                />
+            </div>
 
             {showUploadWizard && (
                 <UploadWizard
