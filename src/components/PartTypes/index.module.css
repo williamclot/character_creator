@@ -37,8 +37,7 @@
 }
 
 .partTypes .item.disabled {
-    background-color: #1da1f2;
-    opacity: 70%;
+    opacity: 50%;
     cursor: not-allowed;
     pointer-events: none;
 }
