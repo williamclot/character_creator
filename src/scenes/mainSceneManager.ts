@@ -15,8 +15,6 @@ import {
     Bone,
 } from 'three';
 
-import topologicalSort from 'toposort';
-
 import OrbitControls from '../vendor/three/controls/orbit-controls';
 
 const scene = new Scene();
@@ -130,20 +128,6 @@ class SceneManager {
     bonesMap: Map<string, Bone>;
 
     initialize(categories: PartType[]) {
-        const categoriesWithParent = categories.filter(cat => cat.parent);
-        const edges = categoriesWithParent.map(({ id, parent }) => {
-            const parentId = (parent as PartTypeParent).id;
-
-            return [parentId, id];
-        }) as ReadonlyArray<[number, number]>;
-
-        /**
-         * this will sort the categories in the correct order they have to be added;
-         * since the categories are defined by the designer, they will be loaded via an api call
-         * and thus could be sorted when uploading them instead of sorting them here
-         */
-        this.sortedCategoryIds = topologicalSort(edges);
-
         /**
          * could also be identified when uploading the categories
          */
@@ -283,16 +267,6 @@ const sceneManager = new SceneManager();
 export default {
     init(categories: PartType[]) {
         sceneManager.initialize(categories);
-    },
-
-    addAll(objectsByCategory: { [id: number]: Object3D }) {
-        const keysToSearch = sceneManager.sortedCategoryIds;
-
-        for (const key of keysToSearch) {
-            if (key in objectsByCategory) {
-                sceneManager.add(key, objectsByCategory[key]);
-            }
-        }
     },
 
     add(categoryKey: number, objectToAdd: Object3D) {

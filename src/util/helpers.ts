@@ -72,6 +72,16 @@ export const radiansToDegreesFormatter = {
     },
 };
 
+export const getSelectionFromHash = () => {
+    // check location hash for initial selected parts
+    const hash = window.location.hash.slice(1);
+    if (hash !== '') {
+        return JSON.parse(hash) as number[];
+    }
+
+    return [];
+};
+
 export const arraysEqual = <T>(arr1: T[], arr2: T[]) => {
     if (arr1.length !== arr2.length) return false;
 

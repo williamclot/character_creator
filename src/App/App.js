@@ -10,15 +10,11 @@ import ButtonsContainer from '../components/ButtonsContainer';
 import MyBackDrop from '../components/MyBackDrop';
 
 import { ACCEPTED_OBJECT_FILE_EXTENSIONS, OBJECT_STATUS } from '../constants';
-import {
-    fetchObjects,
-    get3DObject,
-    getObjectFromGeometry,
-} from '../util/objectHelpers';
+import { get3DObject, getObjectFromGeometry } from '../util/objectHelpers';
 import {
     getNameAndExtension,
-    objectMap,
     triggerDownloadFromUrl,
+    getSelectionFromHash,
 } from '../util/helpers';
 
 import useMmfApi from '../hooks/useMmfApi';
@@ -86,60 +82,88 @@ const App = props => {
         sceneManager.renderScene();
     }, []);
 
-    useEffect(
-        () =>
-            void (async () => {
-                setIsLoading(true);
+    useEffect(() => {
+        async function loadParts() {
+            /** @type {Record<number, number>} */
+            const partMap = {};
+            for (const partId of getSelectionFromHash()) {
+                const part = objects.byId[partId];
+                if (part) {
+                    partMap[part.partTypeId] = part.id;
+                }
+            }
 
-                try {
-                    const oneOfEach = {};
-
-                    // check location hash for initial selected parts
-                    const hash = window.location.hash.slice(1);
-                    if (hash !== '') {
-                        /** @type {number[]} */
-                        const selectedIds = JSON.parse(hash);
-
-                        for (const partId of selectedIds) {
-                            const part = objects.byId[partId];
-                            if (part) {
-                                oneOfEach[part.partTypeId] = part;
-                            }
-                        }
-                    }
-
-                    // select first part from each part type that hasn't been filled out from the hash
-                    for (const partTypeId of partTypes.allIds) {
-                        if (!oneOfEach[partTypeId]) {
-                            oneOfEach[partTypeId] = getObjectsByPartTypeId(
-                                partTypeId,
-                            )[0]; // get first if not found in hash
-                        }
-                    }
-
-                    const objectsToLoad = await fetchObjects(oneOfEach);
-                    const newSelectedParts = objectMap(
-                        oneOfEach,
-                        object => object.id,
+            for (const partTypeId of partTypes.allIds) {
+                if (!(partTypeId in partMap)) {
+                    // selection for this part type not found in hash, so use default
+                    const objectsInThisPartType = getObjectsByPartTypeId(
+                        partTypeId,
                     );
+                    if (objectsInThisPartType.length > 0) {
+                        const part = objectsInThisPartType[0];
+                        partMap[part.partTypeId] = part.id;
+                    }
+                }
+            }
 
-                    {
-                        sceneManager.addAll(objectsToLoad);
-                        sceneManager.rescaleContainerToFitObjects(4);
-                        sceneManager.renderScene();
-                        sceneManager.saveCamera();
+            const partTypesThatCanBeLoadedIds = partTypes.sortedIds.filter(
+                partTypeId => {
+                    const hasParts = partTypeId in partMap;
+                    if (!hasParts) {
+                        return false;
                     }
 
-                    setSelectedParts(newSelectedParts);
-                    saveSelection(newSelectedParts);
-                } catch (err) {
-                    console.error(err);
+                    const partType = partTypes.byId[partTypeId];
+                    if (partType.parent) {
+                        const parentHasParts = partType.parent.id in partMap;
+                        if (!parentHasParts) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                },
+            );
+
+            if (partTypesThatCanBeLoadedIds.length === 0) {
+                return;
+            }
+
+            setIsLoading(true);
+
+            /** @type {Record<number, import('three').Object3D} */
+            const objects3DMap = {};
+            const promises = partTypesThatCanBeLoadedIds.map(
+                async partTypeId => {
+                    const partId = partMap[partTypeId];
+                    objects3DMap[partTypeId] = await get3DObject(
+                        objects.byId[partId],
+                    );
+                },
+            );
+
+            try {
+                await Promise.all(promises);
+
+                for (const partTypeId of partTypesThatCanBeLoadedIds) {
+                    sceneManager.add(partTypeId, objects3DMap[partTypeId]);
                 }
 
-                setIsLoading(false);
-            })(),
-        [],
-    );
+                sceneManager.rescaleContainerToFitObjects(4);
+                sceneManager.renderScene();
+                sceneManager.saveCamera();
+
+                setSelectedParts(partMap);
+                saveSelection(partMap);
+            } catch (e) {
+                console.error(e);
+            }
+
+            setIsLoading(false);
+        }
+
+        loadParts();
+    }, []);
 
     const showUploadWizard = Boolean(uploadedObjectData);
 
@@ -183,14 +207,56 @@ const App = props => {
     };
 
     const handleResetSelection = async () => {
+        const partMap = getSavedSelection();
+
+        const partTypesThatCanBeLoadedIds = partTypes.sortedIds.filter(
+            partTypeId => {
+                const hasParts = partTypeId in partMap;
+                if (!hasParts) {
+                    return false;
+                }
+
+                const partType = partTypes.byId[partTypeId];
+                if (partType.parent) {
+                    const parentHasParts = partType.parent.id in partMap;
+                    if (!parentHasParts) {
+                        return false;
+                    }
+                }
+
+                return true;
+            },
+        );
+
+        if (partTypesThatCanBeLoadedIds.length === 0) {
+            return;
+        }
+
         setIsLoading(true);
-        const newSelectedParts = getSavedSelection();
-        const oneOfEach = objectMap(newSelectedParts, partId => objects.byId[partId]);
-        const newParts = await fetchObjects(oneOfEach);
-        sceneManager.addAll(newParts);
-        sceneManager.rescaleContainerToFitObjects(4);
-        sceneManager.renderScene();
-        setSelectedParts(newSelectedParts);
+
+        /** @type {Record<number, import('three').Object3D} */
+        const objects3DMap = {};
+        const promises = partTypesThatCanBeLoadedIds.map(async partTypeId => {
+            const partId = partMap[partTypeId];
+            objects3DMap[partTypeId] = await get3DObject(objects.byId[partId]);
+        });
+
+        try {
+            await Promise.all(promises);
+
+            for (const partTypeId of partTypesThatCanBeLoadedIds) {
+                sceneManager.add(partTypeId, objects3DMap[partTypeId]);
+            }
+
+            sceneManager.rescaleContainerToFitObjects(4);
+            sceneManager.renderScene();
+            sceneManager.saveCamera();
+
+            setSelectedParts(partMap);
+        } catch (e) {
+            console.error(e);
+        }
+
         setIsLoading(false);
     };
 
