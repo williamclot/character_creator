@@ -121,7 +121,6 @@ function extractKnownBones(object3d: Object3D, knownBoneNames: string[]) {
  * object from the parent category.
  */
 class SceneManager {
-    sortedCategoryIds: number[];
     rootCategory: PartType;
     categoriesMap: Map<number, PartType>;
     loadedObjectsMap: Map<number, Object3D>;
