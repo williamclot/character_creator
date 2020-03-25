@@ -28,7 +28,7 @@ const getPartTypes = (world: WorldData) => {
      */
     const sortedPartTypeIds = topologicalSort(edges);
 
-    const partTypesById: { [id: string]: PartType } = {};
+    const partTypesById: Record<number, PartType> = {};
 
     for (const partType of categories) {
         partTypesById[partType.id] = partType;

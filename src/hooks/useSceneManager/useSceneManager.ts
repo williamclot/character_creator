@@ -5,7 +5,7 @@ import { throttle } from 'throttle-debounce';
 import mainSceneManager from '../../scenes/mainSceneManager';
 
 const useSceneManager = (
-    partTypesArray: PartType[],
+    partTypesById: Record<number, PartType>,
     initialRotation: Coord3d,
 ) => {
     const canvasContainerRef = useRef<HTMLElement>(null);
@@ -27,8 +27,8 @@ const useSceneManager = (
     }, []);
 
     useEffect(() => {
-        mainSceneManager.init(partTypesArray);
-    }, [partTypesArray]);
+        mainSceneManager.init(partTypesById);
+    }, [partTypesById]);
 
     useEffect(() => {
         if (initialRotation) {

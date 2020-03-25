@@ -70,7 +70,7 @@ const App = props => {
     const api = useMmfApi(props.api);
 
     const { canvasContainerRef, sceneManager } = useSceneManager(
-        partTypesArray,
+        partTypes.byId,
         props.worldData.container_rotation,
     );
 

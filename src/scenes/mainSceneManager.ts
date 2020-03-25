@@ -121,28 +121,12 @@ function extractKnownBones(object3d: Object3D, knownBoneNames: string[]) {
  * object from the parent category.
  */
 class SceneManager {
-    rootCategory: PartType;
-    categoriesMap: Map<number, PartType>;
+    partTypesById: Record<number, PartType>;
     loadedObjectsMap: Map<number, Object3D>;
     bonesMap: Map<string, Bone>;
 
-    initialize(categories: PartType[]) {
-        /**
-         * could also be identified when uploading the categories
-         */
-        this.rootCategory = categories.find(
-            category => category.parent === null,
-        ) as PartType;
-
-        /**
-         * A mapping from category ID to category data
-         * @type { Map<string, Category> }
-         */
-        this.categoriesMap = categories.reduce(
-            (categoriesMap, category) =>
-                categoriesMap.set(category.id, category),
-            new Map(),
-        );
+    initialize(partTypesById: Record<number, PartType>) {
+        this.partTypesById = partTypesById;
 
         /**
          * @type { Map<string, Object3D> }
@@ -174,7 +158,7 @@ class SceneManager {
     }
 
     getParentObject(key: number) {
-        const { parent } = this.categoriesMap.get(key) as PartType;
+        const { parent } = this.partTypesById[key];
 
         if (!parent) return null;
 
@@ -182,12 +166,12 @@ class SceneManager {
     }
 
     add(categoryKey: number, objectToAdd: Object3D) {
-        if (!this.categoriesMap.has(categoryKey)) {
+        if (!(categoryKey in this.partTypesById)) {
             throw new Error(`Category ${categoryKey} is not defined!`);
             // TODO handle this case (or make sure it can't happen)
         }
 
-        const category = this.categoriesMap.get(categoryKey) as PartType;
+        const category = this.partTypesById[categoryKey];
 
         if (this.loadedObjectsMap.has(categoryKey)) {
             const currentObject = this.loadedObjectsMap.get(
@@ -264,8 +248,8 @@ class SceneManager {
 const sceneManager = new SceneManager();
 
 export default {
-    init(categories: PartType[]) {
-        sceneManager.initialize(categories);
+    init(partTypesById: Record<number, PartType>) {
+        sceneManager.initialize(partTypesById);
     },
 
     add(categoryKey: number, objectToAdd: Object3D) {
