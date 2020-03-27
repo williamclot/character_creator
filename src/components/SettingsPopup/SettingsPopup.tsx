@@ -249,8 +249,11 @@ const SettingsPopup: React.FunctionComponent<PropTypes> = props => {
                     </>
                 )}
 
-                <label className={styles.label}>Tags</label>
+                <label htmlFor="label_tags" className={styles.label}>
+                    Tags
+                </label>
                 <ChipInput
+                    id="label_tags"
                     className={cn(styles.input, styles.tags)}
                     classes={{
                         inputRoot: styles.tagInputContainer,
