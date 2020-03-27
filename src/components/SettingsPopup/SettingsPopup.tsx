@@ -236,6 +236,8 @@ const SettingsPopup: React.FunctionComponent<PropTypes> = props => {
                         <input
                             id="label_price"
                             type="number"
+                            step={0.01}
+                            min={0}
                             value={state.price}
                             onChange={handlePriceChange}
                             className={cn(
