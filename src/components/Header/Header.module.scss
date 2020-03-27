@@ -43,6 +43,26 @@
     }
 }
 
+@media (max-width: 1499px) {
+    .header {
+        
+        .title {
+            font-size: 37px;
+        }
+
+        .userSection {
+            .userPic {
+                width: 37px;
+                height: 37px;
+            }
+    
+            .username {
+                font-size: 23px;
+            }
+        }
+    }
+}
+
 @media (max-width: 950px) {
     .header {
         padding: 10px;
