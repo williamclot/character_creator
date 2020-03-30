@@ -40,7 +40,7 @@
     border: 3px solid black;
 }
 .selector .selector-item.deleted {
-    opacity: 0.4;
+    opacity: 0.2;
     cursor: not-allowed;
 }
 
