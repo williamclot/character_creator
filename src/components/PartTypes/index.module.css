@@ -37,7 +37,7 @@
 }
 
 .partTypes .item.disabled {
-    opacity: .5;
+    opacity: .2;
     cursor: not-allowed;
     pointer-events: none;
 }
