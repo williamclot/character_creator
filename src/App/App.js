@@ -7,7 +7,6 @@ import Selector from '../components/Selector';
 import PartTypesView from '../components/PartTypes';
 import LoadingIndicator from '../components/LoadingIndicator';
 import ButtonsContainer from '../components/ButtonsContainer';
-import MyBackDrop from '../components/MyBackDrop';
 
 import { ACCEPTED_OBJECT_FILE_EXTENSIONS, OBJECT_STATUS } from '../constants';
 import { get3DObject, getObjectFromGeometry } from '../util/objectHelpers';
@@ -497,20 +496,22 @@ const App = props => {
                 />
             )}
 
-            <MyBackDrop open={showSettings}>
-                <SettingsPopup
-                    className={styles.settingsPopup}
-                    name={customizerName}
-                    price={price}
-                    tags={tags}
-                    description={description}
-                    isPrivate={isPrivate}
-                    imageUrl={imageUrl}
-                    onSave={handleSaveChanges}
-                    onClose={handleCloseSettings}
-                    userCanSetPrice={props.canPublishToStore}
-                />
-            </MyBackDrop>
+            {showSettings && (
+                <div className={styles.settingsBackdrop}>
+                    <SettingsPopup
+                        className={styles.settingsPopup}
+                        name={customizerName}
+                        price={price}
+                        tags={tags}
+                        description={description}
+                        isPrivate={isPrivate}
+                        imageUrl={imageUrl}
+                        onSave={handleSaveChanges}
+                        onClose={handleCloseSettings}
+                        userCanSetPrice={props.canPublishToStore}
+                    />
+                </div>
+            )}
         </div>
     );
 };
