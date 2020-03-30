@@ -477,7 +477,10 @@ const App = props => {
                     className={styles.createYourOwn}
                     href={props.api.routes.createCustomizer}
                 >
-                    Create your own Customizer
+                    <span className={styles.emphasised}>
+                        Are you a designer?&nbsp;
+                    </span>
+                    Make your own customizer here!
                 </a>
             )}
 
