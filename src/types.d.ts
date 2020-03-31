@@ -23,6 +23,7 @@ export type WorldData = {
     id: number;
     name: string;
     price: number;
+    currency: string;
     description: string;
     url: string;
     slug: string;

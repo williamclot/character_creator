@@ -34,6 +34,7 @@ type PropTypes = {
     className: string;
     onClose: () => void;
     userCanSetPrice: boolean;
+    currency: string;
     onSave: (filedsToPatch: FiledsToPatch) => void;
 } & StateTypes;
 
@@ -231,7 +232,7 @@ const SettingsPopup: React.FunctionComponent<PropTypes> = props => {
                 {props.userCanSetPrice && (
                     <>
                         <label htmlFor="label_price" className={styles.label}>
-                            Price
+                            Price ({props.currency})
                         </label>
                         <input
                             id="label_price"

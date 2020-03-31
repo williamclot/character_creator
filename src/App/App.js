@@ -296,9 +296,11 @@ const App = props => {
         });
     };
 
+    const currencySymbol =
+        props.worldData.currency === 'USD' ? '$' : props.worldData.currency;
     const addToCartButtonMessage = isSelectionInCart
         ? 'Added to cart'
-        : `Add To Cart ($${price})`;
+        : `Add To Cart (${currencySymbol} ${price})`;
     const downloadButtonMessage = 'Download';
 
     const handleAddToCart = async () => {
@@ -509,6 +511,7 @@ const App = props => {
                         className={styles.settingsPopup}
                         name={customizerName}
                         price={price}
+                        currency={props.worldData.currency}
                         tags={tags}
                         description={description}
                         isPrivate={isPrivate}
