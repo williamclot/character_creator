@@ -310,9 +310,12 @@ const App = props => {
             );
             const data = await api.addToCart(customizedMeshData.id);
             addCustomizedMeshToCart(customizedMeshData);
-    
+
             window.customEventDispatcher.dispatchEvent('REFRESH_CART_AMOUNT');
-            window.customEventDispatcher.dispatchEvent('ITEM_ADDED_TO_CART', data);
+            window.customEventDispatcher.dispatchEvent(
+                'ITEM_ADDED_TO_CART',
+                data,
+            );
         } catch (e) {
             window.customEventDispatcher.dispatchEvent('SHOW_LOGIN');
         }
