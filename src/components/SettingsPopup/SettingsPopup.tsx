@@ -2,7 +2,7 @@ import React, { useState, useMemo, ChangeEvent, FormEvent } from 'react';
 import ChipInput from 'material-ui-chip-input';
 import cn from 'classnames';
 
-import commonStyles from '../../shared-styles/button.module.css';
+import commonStyles from '../../shared-styles/button.module.scss';
 import styles from './SettingsPopup.module.scss';
 import { ImportButtonV2 } from '../ImportButton';
 import axios from 'axios';

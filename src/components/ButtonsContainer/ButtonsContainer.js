@@ -7,7 +7,7 @@ import Menu from './Menu';
 
 import { ACCEPTED_OBJECT_FILE_EXTENSIONS } from '../../constants';
 
-import sharedStyles from '../../shared-styles/button.module.css';
+import sharedStyles from '../../shared-styles/button.module.scss';
 import styles from './ButtonsContainer.module.css';
 
 const ButtonsContainer = ({

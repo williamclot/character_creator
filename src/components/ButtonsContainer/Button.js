@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 
-import sharedStyles from '../../shared-styles/button.module.css';
+import sharedStyles from '../../shared-styles/button.module.scss';
 import styles from './ButtonsContainer.module.css';
 
 const Button = ({ className, children, ...props }) => (
