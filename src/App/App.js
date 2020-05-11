@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import cn from 'classnames';
 
 import SettingsPopup from '../components/SettingsPopup';
 import UploadWizard from '../components/UploadWizard';
@@ -7,6 +8,9 @@ import Selector from '../components/Selector';
 import PartTypesView from '../components/PartTypes';
 import LoadingIndicator from '../components/LoadingIndicator';
 import ButtonsContainer from '../components/ButtonsContainer';
+import Button from '../components/Button';
+import LikeIcon from '../components/LikeIcon/LikeIcon';
+import SocialMediaButtons from '../components/SocialMediaButtons';
 
 import { ACCEPTED_OBJECT_FILE_EXTENSIONS, OBJECT_STATUS } from '../constants';
 import { get3DObject, getObjectFromGeometry } from '../util/objectHelpers';
@@ -19,8 +23,11 @@ import {
 import useMmfApi from '../hooks/useMmfApi';
 import useCustomizerState from '../hooks/useCustomizerState';
 import useSceneManager from '../hooks/useSceneManager';
+import useLikeState from '../hooks/useLikeState';
+import useSelectorState, { Tabs } from '../hooks/useSelectorState';
 
 import styles from './App.module.scss';
+import sharedStyles from '../shared-styles/basic-button.module.scss';
 
 /**
  * @type {import('react').FunctionComponent<import('../types').AppProps>}
@@ -67,6 +74,9 @@ const App = props => {
     const [showSettings, setShowSettings] = useState(false);
 
     const api = useMmfApi(props.api);
+
+    const { currentTab, goToSelector, goToComments } = useSelectorState();
+    const likesState = useLikeState(api);
 
     const { canvasContainerRef, sceneManager } = useSceneManager(
         partTypes.byId,
@@ -417,6 +427,37 @@ const App = props => {
               return objectsInThisPartType.length > 1;
           });
 
+    let selectorContent = null;
+    if (currentTab === Tabs.SELECTOR) {
+        selectorContent = (
+            <Selector
+                data={selectorData}
+                onObjectSelected={handleObjectSelected}
+                onDelete={handleDeleteObject}
+                onUpload={handleUpload}
+                edit_mode={props.edit_mode}
+            />
+        );
+    } else if (currentTab === Tabs.COMMENTS) {
+        selectorContent = (
+            <>
+                <div className={styles.commentsHeader}>
+                    <button
+                        title="Back"
+                        className={styles.commentsCloseButton}
+                        onClick={goToSelector}
+                    >
+                        <i className="fa fa-angle-left" aria-hidden="true"></i>
+                    </button>
+                    <h3 className={styles.commentsTitle}>Comments</h3>
+                </div>
+                <div className={styles.commentsContainer}>
+                    {props.commentsComponent}
+                </div>
+            </>
+        );
+    }
+
     return (
         <div className={styles.app}>
             <div
@@ -435,33 +476,64 @@ const App = props => {
             <div className={styles.editorPanelContainer}>
                 <div className={styles.editorPanel}>
                     <div className={styles.partTypesContainer}>
-                        <PartTypesView
-                            partTypes={partTypesToShow.map(pt => {
-                                const parent = pt.parent;
-                                const isDisabled = !parent
-                                    ? false
-                                    : getObjectsByPartTypeId(parent.id)
-                                          .length === 0;
+                        <div className={styles.partTypes}>
+                            <PartTypesView
+                                partTypes={partTypesToShow.map(pt => {
+                                    const parent = pt.parent;
+                                    const isDisabled = !parent
+                                        ? false
+                                        : getObjectsByPartTypeId(parent.id)
+                                            .length === 0;
 
-                                return {
-                                    id: pt.id,
-                                    name: pt.name,
-                                    selected: pt.id === selectedPartTypeId,
-                                    disabled: isDisabled,
-                                };
-                            })}
-                            onPartTypeSelected={id => setSelectedPartTypeId(id)}
-                        />
+                                    return {
+                                        id: pt.id,
+                                        name: pt.name,
+                                        selected: pt.id === selectedPartTypeId,
+                                        disabled: isDisabled,
+                                    };
+                                })}
+                                onPartTypeSelected={id => setSelectedPartTypeId(id)}
+                            />
+                        </div>
+
+                        {props.comments_enabled && (
+                            <div className={styles.controlButtons}>
+                                <SocialMediaButtons url={props.worldData.url} />
+                                <Button
+                                    title="Like"
+                                    className={styles.controlButton}
+                                    onClick={
+                                        likesState.isLiked
+                                            ? likesState.unlike
+                                            : likesState.like
+                                    }
+                                >
+                                    <LikeIcon liked={likesState.isLiked} />
+                                </Button>
+                                <Button
+                                    title="Comment"
+                                    className={cn(
+                                        styles.controlButton,
+                                        currentTab === Tabs.COMMENTS &&
+                                            sharedStyles.selected,
+                                    )}
+                                    onClick={
+                                        currentTab === Tabs.COMMENTS
+                                            ? goToSelector
+                                            : goToComments
+                                    }
+                                >
+                                    <i
+                                        className="fa fa-comment"
+                                        aria-hidden="true"
+                                    ></i>
+                                </Button>
+                            </div>
+                        )}
                     </div>
 
                     <div className={styles.selectorContainer}>
-                        <Selector
-                            data={selectorData}
-                            onObjectSelected={handleObjectSelected}
-                            onDelete={handleDeleteObject}
-                            onUpload={handleUpload}
-                            edit_mode={props.edit_mode}
-                        />
+                        {selectorContent}
                     </div>
                 </div>
             </div>

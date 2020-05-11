@@ -108,4 +108,6 @@ export type AppProps = {
     edit_mode: boolean;
     objects: Objects_from_props;
     worldData: WorldData;
+    commentsComponent: JSX.Element;
+    comments_enabled: boolean;
 };

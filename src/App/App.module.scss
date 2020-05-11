@@ -79,16 +79,37 @@
 
         .partTypesContainer {
             position: relative;
-            // margin-top: 10px;
-            margin-right: 10px;
             height: 100%;
+
+            .partTypes {
+                position: relative;
+                // margin-top: 10px;
+                margin-right: 10px;
+                height: 100%;
+            }
+            .controlButtons {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                margin-right: 10px;
+                
+                display: flex;
+                pointer-events: initial;
+                justify-content: space-around;
+                width: 260px;
+                .controlButton {
+                    margin: 0;
+                }
+            }
         }
+
 
         .selectorContainer {
             position: relative;
             display: flex;
             flex-direction: column;
-            background-color: rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            background-color: rgba(0, 0, 0, 0.7);
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             // filter:opacity(.7);
@@ -98,6 +119,32 @@
             pointer-events: initial;
         }
     }
+}
+
+.commentsHeader {
+    display: flex;
+    border-bottom: 1px solid #fff;
+
+    .commentsCloseButton {
+        border-right: 1px solid white;
+        background-color: unset;
+        padding: 10px;
+        margin: 0;
+        width: 38px;
+        font-size: 24px;
+        line-height: 24px;
+    }
+
+    .commentsTitle {
+        color: white;
+        font-size: 18px !important;
+        margin: 0px;
+        padding: 10px;
+    }
+}
+.commentsContainer {
+    height: 100%;
+    overflow-y: scroll;
 }
 
 .partTypesContainer::-webkit-scrollbar-track {
