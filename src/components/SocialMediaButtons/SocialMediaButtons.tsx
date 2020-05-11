@@ -8,8 +8,8 @@ interface Props {
 }
 
 const SocialMediaButtons: FC<Props> = props => {
-    const facebookUrl = `https://twitter.com/share?url=${props.url}`;
-    const twitterUrl = `https://facebook.com/share.php?u=${props.url}`;
+    const facebookUrl = `https://facebook.com/share.php?u=${props.url}`;
+    const twitterUrl = `https://twitter.com/share?url=${props.url}`;
     const pinterestUrl = `https://pinterest.com/pin/create/button/?url=${props.url}`;
 
     return (
