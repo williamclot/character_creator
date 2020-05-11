@@ -91,6 +91,24 @@ class MmfApi {
 
         return data;
     }
+
+    async isLiked() {
+        const res = await axios.get<boolean>(this.api.routes.getIsLiked);
+        return res.data;
+    }
+
+    async getLikesCount() {
+        const res = await axios.get<number>(this.api.routes.getLikesCount);
+        return res.data;
+    }
+
+    async likeCustomizer() {
+        await axios.post(this.api.routes.postLike);
+    }
+
+    async unlikeCustomizer() {
+        await axios.delete(this.api.routes.deleteLike);
+    }
 }
 
 export default MmfApi;
