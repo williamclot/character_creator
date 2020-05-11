@@ -93,7 +93,7 @@ class MmfApi {
     }
 
     async isLiked() {
-        const res = await axios.get<boolean>(this.api.routes.getIsLiked);
+        const res = await axios.get<boolean>(this.api.routes.isLiked);
         return res.data;
     }
 
