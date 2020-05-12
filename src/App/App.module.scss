@@ -87,20 +87,6 @@
                 margin-right: 10px;
                 height: 100%;
             }
-            .controlButtons {
-                position: absolute;
-                bottom: 0;
-                right: 0;
-                margin-right: 10px;
-                
-                display: flex;
-                pointer-events: initial;
-                justify-content: space-around;
-                width: 260px;
-                .controlButton {
-                    margin: 0;
-                }
-            }
         }
 
 
@@ -120,6 +106,41 @@
         }
     }
 }
+
+.buttonsContainer2 {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 180px;
+    pointer-events: initial;
+    margin: 0 10px 0 0;
+
+    .downloadButton2 {
+        width: 100%;
+        margin: 0 0 0 0;
+        font-weight: bold;
+    }
+
+    .mediaButtonsContainer {
+        width: 100%;
+        margin: 0 0 10px 0;
+        height: 35px;
+        display: flex;
+        justify-content: space-between;
+    
+        .action {
+            margin: 0 0 0 0;
+            padding: 5px 10px 5px 10px;
+        
+            .count {
+                font-weight: initial;
+                font-size: initial;
+                margin: 0 0 0 10px;
+            }
+        }
+    }
+}
+
 
 .commentsHeader {
     display: flex;

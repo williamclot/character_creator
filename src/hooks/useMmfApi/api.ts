@@ -109,6 +109,19 @@ class MmfApi {
     async unlikeCustomizer() {
         await axios.delete(this.api.routes.deleteLike);
     }
+
+    async getCommentsCount() {
+        type ResData = {
+            number: number;
+        };
+
+        const res = await axios.get<ResData>(this.api.routes.getCommentsCount, {
+            headers: {
+                'X-Requested-with': 'XMLHttpRequest',
+            },
+        });
+        return res.data.number;
+    }
 }
 
 export default MmfApi;

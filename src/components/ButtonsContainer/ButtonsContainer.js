@@ -22,6 +22,7 @@ const ButtonsContainer = ({
     onUpload,
     onShowSettings,
     edit_mode,
+    comments_enabled,
 }) => {
     const addNewPartButton = (
         <Button className={styles.iconMinimisableButton} title="Add new Part">
@@ -60,39 +61,37 @@ const ButtonsContainer = ({
         </Menu>
     );
 
+    let downloadButton = null;
+
+    if (!comments_enabled) {
+        downloadButton = userMustBuySelection ? (
+            <Button
+                title={addToCartButtonMessage}
+                className={cn(styles.withMargin, styles.iconMinimisableButton)}
+                onClick={!isSelectionInCart ? onAddToCart : null}
+            >
+                <span className={styles.word}>{addToCartButtonMessage}</span>
+                <span className={styles.icon}>
+                    <i className="fa fa-arrow-down" aria-hidden="true"></i>
+                </span>
+            </Button>
+        ) : (
+            <Button
+                title={downloadButtonMessage}
+                className={cn(styles.withMargin, styles.iconMinimisableButton)}
+                onClick={onDownload}
+            >
+                <span className={styles.word}>{downloadButtonMessage}</span>
+                <span className={styles.icon}>
+                    <i className="fa fa-arrow-down" aria-hidden="true"></i>
+                </span>
+            </Button>
+        );
+    }
+
     return (
         <>
-            {userMustBuySelection ? (
-                <Button
-                    title={addToCartButtonMessage}
-                    className={cn(
-                        styles.withMargin,
-                        styles.iconMinimisableButton,
-                    )}
-                    onClick={!isSelectionInCart ? onAddToCart : null}
-                >
-                    <span className={styles.word}>
-                        {addToCartButtonMessage}
-                    </span>
-                    <span className={styles.icon}>
-                        <i className="fa fa-arrow-down" aria-hidden="true"></i>
-                    </span>
-                </Button>
-            ) : (
-                <Button
-                    title={downloadButtonMessage}
-                    className={cn(
-                        styles.withMargin,
-                        styles.iconMinimisableButton,
-                    )}
-                    onClick={onDownload}
-                >
-                    <span className={styles.word}>{downloadButtonMessage}</span>
-                    <span className={styles.icon}>
-                        <i className="fa fa-arrow-down" aria-hidden="true"></i>
-                    </span>
-                </Button>
-            )}
+            {downloadButton}
 
             {edit_mode && (
                 <>

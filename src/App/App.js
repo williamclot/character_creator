@@ -8,9 +8,7 @@ import Selector from '../components/Selector';
 import PartTypesView from '../components/PartTypes';
 import LoadingIndicator from '../components/LoadingIndicator';
 import ButtonsContainer from '../components/ButtonsContainer';
-import Button from '../components/Button';
 import LikeIcon from '../components/LikeIcon/LikeIcon';
-import SocialMediaButtons from '../components/SocialMediaButtons';
 
 import { ACCEPTED_OBJECT_FILE_EXTENSIONS, OBJECT_STATUS } from '../constants';
 import { get3DObject, getObjectFromGeometry } from '../util/objectHelpers';
@@ -77,6 +75,10 @@ const App = props => {
 
     const { currentTab, goToSelector, goToComments } = useSelectorState();
     const likesState = useLikeState(api);
+    const [commentsCount, setCommentsCount] = useState(0);
+    useEffect(() => {
+        api.getCommentsCount().then(setCommentsCount);
+    }, []);
 
     const { canvasContainerRef, sceneManager } = useSceneManager(
         partTypes.byId,
@@ -458,6 +460,36 @@ const App = props => {
         );
     }
 
+    let downloadButton;
+    if (userMustBuySelection) {
+        downloadButton = (
+            <button
+                title={addToCartButtonMessage}
+                className={cn(sharedStyles.button, styles.downloadButton2)}
+                onClick={!isSelectionInCart ? handleAddToCart : null}
+            >
+                {isSelectionInCart ? (
+                    'Added to cart'
+                ) : (
+                    <>
+                        Add To Cart
+                        <br />({currencySymbol} {price})
+                    </>
+                )}
+            </button>
+        );
+    } else {
+        downloadButton = (
+            <button
+                title="Download"
+                className={cn(sharedStyles.button, styles.downloadButton2)}
+                onClick={handleDownload}
+            >
+                Download
+            </button>
+        );
+    }
+
     return (
         <div className={styles.app}>
             <div
@@ -483,7 +515,7 @@ const App = props => {
                                     const isDisabled = !parent
                                         ? false
                                         : getObjectsByPartTypeId(parent.id)
-                                            .length === 0;
+                                              .length === 0;
 
                                     return {
                                         id: pt.id,
@@ -492,42 +524,68 @@ const App = props => {
                                         disabled: isDisabled,
                                     };
                                 })}
-                                onPartTypeSelected={id => setSelectedPartTypeId(id)}
+                                onPartTypeSelected={id =>
+                                    setSelectedPartTypeId(id)
+                                }
                             />
                         </div>
 
                         {props.comments_enabled && (
-                            <div className={styles.controlButtons}>
-                                <SocialMediaButtons url={props.worldData.url} />
-                                <Button
-                                    title="Like"
-                                    className={styles.controlButton}
-                                    onClick={
-                                        likesState.isLiked
-                                            ? likesState.unlike
-                                            : likesState.like
-                                    }
-                                >
-                                    <LikeIcon liked={likesState.isLiked} />
-                                </Button>
-                                <Button
-                                    title="Comment"
-                                    className={cn(
-                                        styles.controlButton,
-                                        currentTab === Tabs.COMMENTS &&
-                                            sharedStyles.selected,
-                                    )}
-                                    onClick={
-                                        currentTab === Tabs.COMMENTS
-                                            ? goToSelector
-                                            : goToComments
-                                    }
-                                >
-                                    <i
-                                        className="fa fa-comment"
-                                        aria-hidden="true"
-                                    ></i>
-                                </Button>
+                            <div className={styles.buttonsContainer2}>
+                                <div className={styles.mediaButtonsContainer}>
+                                    <button
+                                        title="Like"
+                                        className={cn(
+                                            sharedStyles.button,
+                                            styles.action,
+                                        )}
+                                        onClick={
+                                            likesState.isLiked
+                                                ? likesState.unlike
+                                                : likesState.like
+                                        }
+                                    >
+                                        <LikeIcon liked={likesState.isLiked} />
+                                        <span className={styles.count}>
+                                            {likesState.likeCount}
+                                        </span>
+                                    </button>
+                                    <button
+                                        title="Comment"
+                                        className={cn(
+                                            sharedStyles.button,
+                                            styles.action,
+                                            currentTab === Tabs.COMMENTS &&
+                                                sharedStyles.selected,
+                                        )}
+                                        onClick={
+                                            currentTab === Tabs.COMMENTS
+                                                ? goToSelector
+                                                : goToComments
+                                        }
+                                    >
+                                        <i
+                                            className="fa fa-comment"
+                                            aria-hidden="true"
+                                        ></i>
+                                        <span className={styles.count}>
+                                            {commentsCount}
+                                        </span>
+                                    </button>
+                                    <button
+                                        title="Share"
+                                        className={cn(
+                                            sharedStyles.button,
+                                            styles.action,
+                                        )}
+                                    >
+                                        <i
+                                            className="fa fa-share-alt"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </button>
+                                </div>
+                                {downloadButton}
                             </div>
                         )}
                     </div>
@@ -550,6 +608,7 @@ const App = props => {
                     onUpload={handleUpload}
                     onShowSettings={() => setShowSettings(true)}
                     edit_mode={props.edit_mode}
+                    comments_enabled={props.comments_enabled}
                 />
             </div>
 
