@@ -22,6 +22,7 @@ import useMmfApi from '../hooks/useMmfApi';
 import useCustomizerState from '../hooks/useCustomizerState';
 import useSceneManager from '../hooks/useSceneManager';
 import useLikeState from '../hooks/useLikeState';
+import useCommentsState from '../hooks/useCommentsState';
 import useSelectorState, { Tabs } from '../hooks/useSelectorState';
 
 import styles from './App.module.scss';
@@ -75,10 +76,7 @@ const App = props => {
 
     const { currentTab, goToSelector, goToComments } = useSelectorState();
     const likesState = useLikeState(api);
-    const [commentsCount, setCommentsCount] = useState(0);
-    useEffect(() => {
-        api.getCommentsCount().then(setCommentsCount);
-    }, []);
+    const commentsState = useCommentsState(api);
 
     const { canvasContainerRef, sceneManager } = useSceneManager(
         partTypes.byId,
@@ -572,7 +570,14 @@ const App = props => {
                                             aria-hidden="true"
                                         ></i>
                                         <span className={styles.count}>
-                                            {commentsCount}
+                                            {commentsState.isLoading ? (
+                                                <i
+                                                    className="fa fa-spinner fa-spin"
+                                                    aria-hidden="true"
+                                                ></i>
+                                            ) : (
+                                                commentsState.commentsCount
+                                            )}
                                         </span>
                                     </button>
                                     <button
