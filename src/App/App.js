@@ -539,15 +539,18 @@ const App = props => {
                                             sharedStyles.button,
                                             styles.action,
                                         )}
-                                        onClick={
-                                            likesState.isLiked
-                                                ? likesState.unlike
-                                                : likesState.like
-                                        }
+                                        onClick={likesState.handleLike}
                                     >
                                         <LikeIcon liked={likesState.isLiked} />
                                         <span className={styles.count}>
-                                            {likesState.likeCount}
+                                            {likesState.isLoading ? (
+                                                <i
+                                                    className="fa fa-spinner fa-spin"
+                                                    aria-hidden="true"
+                                                ></i>
+                                            ) : (
+                                                likesState.likeCount
+                                            )}
                                         </span>
                                     </button>
                                     <button
