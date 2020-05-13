@@ -18,6 +18,7 @@ import {
     getSelectionFromHash,
 } from '../util/helpers';
 
+import useBooleanState from '../hooks/useBooleanState';
 import useMmfApi from '../hooks/useMmfApi';
 import useCustomizerState from '../hooks/useCustomizerState';
 import useSceneManager from '../hooks/useSceneManager';
@@ -28,6 +29,7 @@ import useSelectorState, { Tabs } from '../hooks/useSelectorState';
 import styles from './App.module.scss';
 import sharedStyles from '../shared-styles/basic-button.module.scss';
 
+import SharePopup from '../components/SharePopup';
 /**
  * @type {import('react').FunctionComponent<import('../types').AppProps>}
  */
@@ -71,6 +73,10 @@ const App = props => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+
+    const [isSharePopupOpen, openSharePopup, closeSharePopup] = useBooleanState(
+        false,
+    );
 
     const api = useMmfApi(props.api);
 
@@ -488,6 +494,10 @@ const App = props => {
         );
     }
 
+    const shareUrl = `${props.worldData.url}#${JSON.stringify(
+        selectedPartsIds,
+    )}`;
+
     return (
         <div className={styles.app}>
             <div
@@ -586,6 +596,7 @@ const App = props => {
                                             sharedStyles.button,
                                             styles.action,
                                         )}
+                                        onClick={openSharePopup}
                                     >
                                         <i
                                             className="fa fa-share-alt"
@@ -664,6 +675,14 @@ const App = props => {
                     />
                 </div>
             )}
+
+            <SharePopup
+                url={shareUrl}
+                title={props.worldData.name}
+                description={props.worldData.description}
+                open={isSharePopupOpen}
+                onClose={closeSharePopup}
+            />
         </div>
     );
 };
