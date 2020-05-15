@@ -8,13 +8,12 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 }
 
 .selector {
     position: relative;
-
-    /* height: 100%; */
+    height: 100%;
+    width: 100%;
 
     display: grid;
     grid-template-columns: 150px 150px;
@@ -111,6 +110,24 @@
 
     font-size: 18px;
     font-family: 'Lato', 'Open Sans', sans-serif;
+    
+}
+.import-button .word {
+
+}
+.import-button .icon {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .import-button .word {
+        display: none;
+    }
+    .import-button .icon {
+        display: inline-flex;
+        align-items: center;
+        height: 100%;
+    }
 }
 
 .import-button:hover {
