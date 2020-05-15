@@ -650,6 +650,7 @@ const App = props => {
                         <span className={styles.emphasised}>
                             Are you a designer?&nbsp;
                         </span>
+                        <br />
                         Make your own customizer here!
                     </a>
                 )}

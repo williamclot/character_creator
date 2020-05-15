@@ -198,13 +198,19 @@
     bottom: 40px;
     transform: translateX(-50%);
     color: #796FBC;
+    text-align: center;
 
     .emphasised {
         font-weight: bold;
     }
 
+    @media (max-width: 1100px) {
+        bottom: 80px;
+        left: 0;
+        transform: none;
+    }
     @media (max-width: 950px) {
-        bottom: 150px;
+        bottom: 180px;
     }
 }
 
