@@ -24,7 +24,6 @@ import useCustomizerState from '../hooks/useCustomizerState';
 import useSceneManager from '../hooks/useSceneManager';
 import useLikeState from '../hooks/useLikeState';
 import useCommentsState from '../hooks/useCommentsState';
-import useSelectorState, { Tabs } from '../hooks/useSelectorState';
 
 import styles from './App.module.scss';
 import sharedStyles from '../shared-styles/basic-button.module.scss';
@@ -80,7 +79,6 @@ const App = props => {
 
     const api = useMmfApi(props.api);
 
-    const { currentTab, goToSelector, goToComments } = useSelectorState();
     const likesState = useLikeState(api);
     const commentsState = useCommentsState(api);
 
@@ -179,6 +177,12 @@ const App = props => {
 
         loadParts();
     }, []);
+
+    useEffect(() => {
+        if (props.comments_enabled) {
+            window.customEventDispatcher.dispatchEvent('CUSTOMIZER_LOADED');
+        }
+    }, [props.comments_enabled]);
 
     const showUploadWizard = Boolean(uploadedObjectData);
 
@@ -433,37 +437,6 @@ const App = props => {
               return objectsInThisPartType.length > 1;
           });
 
-    let selectorContent = null;
-    if (currentTab === Tabs.SELECTOR) {
-        selectorContent = (
-            <Selector
-                data={selectorData}
-                onObjectSelected={handleObjectSelected}
-                onDelete={handleDeleteObject}
-                onUpload={handleUpload}
-                edit_mode={props.edit_mode}
-            />
-        );
-    } else if (currentTab === Tabs.COMMENTS) {
-        selectorContent = (
-            <>
-                <div className={styles.commentsHeader}>
-                    <button
-                        title="Back"
-                        className={styles.commentsCloseButton}
-                        onClick={goToSelector}
-                    >
-                        <i className="fa fa-angle-left" aria-hidden="true"></i>
-                    </button>
-                    <h3 className={styles.commentsTitle}>Comments</h3>
-                </div>
-                <div className={styles.commentsContainer}>
-                    {props.commentsComponent}
-                </div>
-            </>
-        );
-    }
-
     let downloadButton;
     if (userMustBuySelection) {
         downloadButton = (
@@ -555,7 +528,13 @@ const App = props => {
                 </div>
 
                 <div className={styles.selectorContainer}>
-                    {selectorContent}
+                    <Selector
+                        data={selectorData}
+                        onObjectSelected={handleObjectSelected}
+                        onDelete={handleDeleteObject}
+                        onUpload={handleUpload}
+                        edit_mode={props.edit_mode}
+                    />
                 </div>
 
                 {props.comments_enabled && (
@@ -587,14 +566,12 @@ const App = props => {
                                 sharedStyles.button,
                                 styles.actionButton,
                                 styles.comment,
-                                currentTab === Tabs.COMMENTS &&
-                                    sharedStyles.selected,
                             )}
-                            onClick={
-                                currentTab === Tabs.COMMENTS
-                                    ? goToSelector
-                                    : goToComments
-                            }
+                            onClick={() => {
+                                window.customEventDispatcher.dispatchEvent(
+                                    'CUSTOMIZER_COMMENTS_CLICKED',
+                                );
+                            }}
                         >
                             <i className="fa fa-comment" aria-hidden="true"></i>
                             <span className={styles.count}>
