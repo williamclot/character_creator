@@ -61,37 +61,33 @@
     grid-template-columns: 1fr max-content;
     grid-gap: 10px;
 
-    pointer-events: none;
-    & * {
-        pointer-events: initial;
+    @media (max-width: 950px) {
+        grid-template-areas: 
+            "     header"
+            "buttons-old"
+            "buttons-new"
+            " part-types"
+            "   selector";
+        grid-template-rows: max-content auto auto max-content max-content;
+        grid-template-columns: auto;
     }
 
     .header {
         grid-area: header;
         align-self: start;
         justify-self: start;
-        margin: 10px 0 0 10px;
-
-        padding: 20px;
     }
-
     .partTypes {
         grid-area: part-types;
         align-self: start;
         justify-self: end;
-
-        overflow: hidden auto;
+        @media (max-width: 950px) {
+            justify-self: start;
+        }
     }
-
     .selectorContainer {
         grid-area: selector;
-        background-color: rgba(0, 0, 0, 0.7);
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-        border-radius: 10px;
-        height: 100%;
-        overflow: hidden;
     }
-
     .buttonsContainer {
         grid-area: buttons-old;
         align-self: end;
@@ -101,107 +97,114 @@
             justify-self: end;
         }
     }
-
     .buttonsContainer2 {
         grid-area: buttons-new;
-
         align-self: end;
         justify-self: end;
-
-        display: grid;
-        grid-template-areas: 
-            "a1 a2 a3"
-            " b  b  b";
-        grid-gap: 10px;
-
         @media (max-width: 950px) {
             align-self: start;
-            display: flex;
-            flex-flow: column;
+        }
+    }
+
+    pointer-events: none;
+    & * {
+        pointer-events: initial;
+    }
+
+}
+
+.header {
+    margin: 10px 0 0 10px;
+    padding: 20px;
+}
+
+.partTypes {
+    overflow: hidden auto;
+}
+
+.selectorContainer {
+    background-color: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    height: 100%;
+    overflow: hidden;
+}
+
+
+.buttonsContainer2 {
+    display: grid;
+    grid-template-areas: 
+        "a1 a2 a3"
+        " b  b  b";
+    grid-gap: 10px;
+
+    @media (max-width: 950px) {
+        display: flex;
+        flex-flow: column;
+    }
+
+    .actionButton {
+        margin: 0;
+        padding: 5px 10px 5px 10px;
+
+        .count {
+            font-weight: initial;
+            font-size: initial;
+            margin: 0 0 0 10px;
         }
 
-        .actionButton {
-            margin: 0;
-            padding: 5px 10px 5px 10px;
+        &.like {
+            grid-area: a1;
+        }
 
-            .count {
-                font-weight: initial;
-                font-size: initial;
-                margin: 0 0 0 10px;
+        &.comment {
+            grid-area: a2;
+        }
+
+        &.share {
+            grid-area: a3;
+        }
+
+        &.downloadButton2 {
+            grid-area: b;
+            font-weight: bold;
+            padding: 15px 10px 15px 10px;
+
+            .word {
+
+            }
+            .icon {
+                display: none;
             }
 
-            &.like {
-                grid-area: a1;
-            }
-
-            &.comment {
-                grid-area: a2;
-            }
-
-            &.share {
-                grid-area: a3;
-            }
-
-            &.downloadButton2 {
-                grid-area: b;
-                font-weight: bold;
-                padding: 15px 10px 15px 10px;
-    
+            @media (max-width: 950px) {
                 .word {
-    
-                }
-                .icon {
                     display: none;
                 }
-    
-                @media (max-width: 950px) {
-                    .word {
-                        display: none;
-                    }
-                    .icon {
-                        display: initial;
-                    }
+                .icon {
+                    display: initial;
                 }
             }
         }
     }
-
-
-    .createYourOwn {
-        position: absolute;
-        left: 50%;
-        bottom: 40px;
-        transform: translateX(-50%);
-        color: #796FBC;
-
-        .emphasised {
-            font-weight: bold;
-        }
-    }
 }
 
-@media (max-width: 950px) {
-    .gridContainer {        
-        grid-template-areas: 
-            "     header"
-            "buttons-old"
-            "buttons-new"
-            " part-types"
-            "   selector";
 
-        grid-template-rows: max-content auto auto max-content max-content;
-        grid-template-columns: auto;
+.createYourOwn {
+    position: absolute;
+    left: 50%;
+    bottom: 40px;
+    transform: translateX(-50%);
+    color: #796FBC;
 
-        .partTypes {
-            justify-self: start;
-        }
+    .emphasised {
+        font-weight: bold;
+    }
 
-        .createYourOwn {
-            bottom: 150px;
-        }
+    @media (max-width: 950px) {
+        bottom: 150px;
     }
 }
-
 
 .commentsHeader {
     display: flex;
