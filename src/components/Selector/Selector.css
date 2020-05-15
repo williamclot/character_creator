@@ -4,10 +4,16 @@
     overflow-y: scroll;
 }
 
+.selector-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 .selector {
     position: relative;
-
-    /* height: 100%; */
+    height: 100%;
+    width: 100%;
 
     display: grid;
     grid-template-columns: 150px 150px;
@@ -104,6 +110,24 @@
 
     font-size: 18px;
     font-family: 'Lato', 'Open Sans', sans-serif;
+    
+}
+.import-button .word {
+
+}
+.import-button .icon {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .import-button .word {
+        display: none;
+    }
+    .import-button .icon {
+        display: inline-flex;
+        align-items: center;
+        height: 100%;
+    }
 }
 
 .import-button:hover {
@@ -146,6 +170,12 @@
 }
 
 @media (max-width: 950px) {
+    .selector-container {
+        flex-flow: row;
+        height: initial;
+        width: 100%;
+    }
+
     .selector {
         /* height: 100px; */
         grid-template-columns: repeat(auto-fill, 100px);

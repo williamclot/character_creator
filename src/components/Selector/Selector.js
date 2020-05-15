@@ -107,14 +107,17 @@ class Selector extends Component {
             );
         });
 
+        const text = `Add new ${currentPartType.name}`;
+
         return (
-            <>
+            <div className="selector-container">
                 {/* <div className = "anti-scrollbar-box"> */}
                 <div className="selector">{elementDiv}</div>
                 {/* </div> */}
 
                 {edit_mode && (
                     <ImportButton
+                        title={text}
                         className="import-button"
                         key="__add__button__"
                         onFileLoaded={this.handleUpload}
@@ -122,10 +125,13 @@ class Selector extends Component {
                             extension => `.${extension}`,
                         ).join(',')}
                     >
-                        Add new {currentPartType.name}
+                        <span className="word">{text}</span>
+                        <span className="icon">
+                            <i className="fa fa-plus" aria-hidden="true"></i>
+                        </span>
                     </ImportButton>
                 )}
-            </>
+            </div>
         );
     }
 }

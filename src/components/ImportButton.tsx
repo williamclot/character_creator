@@ -56,10 +56,10 @@ class ImportButton extends Component<ImportButtonPropTypes> {
     };
 
     render() {
-        const { children, className } = this.props;
+        const { children, className, title } = this.props;
 
         return (
-            <div className={className} onClick={this.onClick}>
+            <div className={className} title={title} onClick={this.onClick}>
                 {children}
             </div>
         );

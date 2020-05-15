@@ -4,7 +4,7 @@
     height: 100%;
 
     .canvasContainer {
-        position: absolute;
+        position: relative;
         width: 100%;
         height: 100%;
         
@@ -17,7 +17,9 @@
 
     .canvasOverlay {
         position: absolute;
-        background-color: rgba(0, 0, 0, .5);
+        top: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.3);
         width: 100%;
         height: 100%;
 
@@ -27,6 +29,10 @@
 
     .settingsBackdrop {
         position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
         width: 100%;
         height: 100%;
         background-color: rgba($color: #000000, $alpha: 0.9);
@@ -34,113 +40,185 @@
         display: flex;
         justify-content: center;
         align-items: center;
-    }
-
-    .buttonsContainer {
-        position: absolute;
-        left: 20px;
-        bottom: 20px;
-    }
-
-    .createYourOwn {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        color: #796FBC;
-
-        .emphasised {
-            font-weight: bold;
-        }
-    }
+    }   
 }
 
 
-.editorPanelContainer {
-    /* Used only to center child vertically */
-    right: 20px;
-    top: 20px;
-    bottom: 20px;
-    /* width: 350px; */
-    /* height: 100%; */
+.gridContainer {
     position: absolute;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
 
-    pointer-events: none;
+    display: grid;
+    grid-template-areas:
+        "     header .  part-types selector"
+        "          . .  part-types selector"
+        "buttons-old . buttons-new selector";
+    grid-template-rows: auto;
+    grid-template-columns: 1fr max-content;
+    grid-gap: 10px;
 
-    .editorPanel {
-        height: 100%;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    @media (max-width: 950px) {
+        grid-template-areas: 
+            "    header buttons-old"
+            "         . buttons-old"
+            "         . buttons-new"
+            "part-types  part-types"
+            "  selector    selector";
+        grid-template-rows: max-content auto max-content max-content max-content;
+    }
 
-        .partTypesContainer {
-            position: relative;
-            height: 100%;
-
-            .partTypes {
-                position: relative;
-                // margin-top: 10px;
-                margin-right: 10px;
-                height: 100%;
-            }
-        }
-
-
-        .selectorContainer {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            max-width: 500px;
-            background-color: rgba(0, 0, 0, 0.7);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            // filter:opacity(.7);
-            height: 100%;
-            justify-content: space-between;
-            // min-width: 250px;
-            pointer-events: initial;
+    .header {
+        grid-area: header;
+        align-self: start;
+        justify-self: start;
+    }
+    .partTypes {
+        grid-area: part-types;
+        align-self: start;
+        justify-self: end;
+        @media (max-width: 950px) {
+            justify-self: start;
         }
     }
+    .selectorContainer {
+        grid-area: selector;
+    }
+    .buttonsContainer {
+        grid-area: buttons-old;
+        align-self: end;
+        justify-self: start;
+
+        @media (max-width: 950px) {
+            justify-self: end;
+        }
+    }
+    .buttonsContainer2 {
+        grid-area: buttons-new;
+        align-self: end;
+        justify-self: end;
+        @media (max-width: 950px) {
+            align-self: start;
+        }
+    }
+
+    pointer-events: none;
+    & * {
+        pointer-events: initial;
+    }
+
+}
+
+.header {
+    margin: 10px 0 0 10px;
+    padding: 20px;
+}
+
+.partTypes {
+    height: 100%;
+    overflow: auto;
+    @media (max-width: 950px) {
+        width: 100%;
+    }
+}
+
+.selectorContainer {
+    background-color: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    height: 100%;
+    overflow: hidden;
+}
+
+.buttonsContainer {
+    position: relative;
 }
 
 .buttonsContainer2 {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 180px;
-    pointer-events: initial;
-    margin: 0 10px 0 0;
+    display: grid;
+    grid-template-areas: 
+        "a1 a2 a3"
+        " b  b  b";
+    grid-gap: 10px;
 
-    .downloadButton2 {
-        width: 100%;
-        margin: 0 0 0 0;
-        font-weight: bold;
+    @media (max-width: 950px) {
+        display: flex;
+        flex-flow: column;
     }
 
-    .mediaButtonsContainer {
-        width: 100%;
-        margin: 0 0 10px 0;
-        height: 35px;
-        display: flex;
-        justify-content: space-between;
-    
-        .action {
-            margin: 0 0 0 0;
-            padding: 5px 10px 5px 10px;
-        
-            .count {
-                font-weight: initial;
-                font-size: initial;
-                margin: 0 0 0 10px;
+    .actionButton {
+        margin: 0;
+        padding: 5px 10px 5px 10px;
+
+        .count {
+            font-weight: initial;
+            font-size: initial;
+            margin: 0 0 0 10px;
+        }
+
+        &.like {
+            grid-area: a1;
+        }
+
+        &.comment {
+            grid-area: a2;
+        }
+
+        &.share {
+            grid-area: a3;
+        }
+
+        &.downloadButton2 {
+            grid-area: b;
+            font-weight: bold;
+            padding: 15px 10px 15px 10px;
+
+            .word {
+
+            }
+            .icon {
+                display: none;
+            }
+
+            @media (max-width: 950px) {
+                .word {
+                    display: none;
+                }
+                .icon {
+                    display: initial;
+                }
             }
         }
     }
 }
 
+
+.createYourOwn {
+    position: absolute;
+    left: 50%;
+    bottom: 40px;
+    transform: translateX(-50%);
+    color: #796FBC;
+    text-align: center;
+
+    .emphasised {
+        font-weight: bold;
+    }
+
+    @media (max-width: 1100px) {
+        bottom: 80px;
+        left: 0;
+        transform: none;
+    }
+    @media (max-width: 950px) {
+        bottom: 180px;
+    }
+}
 
 .commentsHeader {
     display: flex;
@@ -182,50 +260,4 @@
     border-radius: 10px;
     -webkit-border-radius: 10px;
     background: #2e2e2e;
-}
-
-@media (max-width: 950px) {
-    .app {
-        .buttonsContainer {
-            left: unset;
-            right: 10px;
-            /* right: unset;
-            left: 10px; */
-            bottom: 255px;
-        }
-
-        .createYourOwn {
-            display: none;
-            // bottom: 140px;
-        }
-    }
-
-    .editorPanelContainer {
-        /* Used only to center child vertically */
-        right: 0px;
-        left: 0px;
-        top: unset;
-        bottom: 0px;
-        height: unset;
-
-        .editorPanel {
-            flex-direction: column;
-            align-items: flex-start;
-
-            .partTypesContainer {
-                margin-bottom: 5px;
-                // margin-right: 0px;
-                // margin-left: 10px;
-                padding: 0px 10px;
-                height: unset;
-                width: 100%;
-                // overflow-x: auto;
-            }
-
-            .selectorContainer {
-                height: unset;
-                width: 100%;
-            }
-        }
-    }
 }

@@ -5,10 +5,6 @@
     border-radius: 5px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 
-    &.selected {
-        background-color: $customizer-purple;
-    }
-
     &:hover {
         background-color: #121c1f59;
         box-shadow: 2px 2px 5px #353535;

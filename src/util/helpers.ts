@@ -76,10 +76,16 @@ export const getSelectionFromHash = () => {
     // check location hash for initial selected parts
     const hash = window.location.hash.slice(1);
     if (hash !== '') {
-        return JSON.parse(hash) as number[];
+        const decodedHash = decodeURIComponent(hash);
+        return JSON.parse(decodedHash) as number[];
     }
 
     return [];
+};
+
+export const getShareUrl = (baseUrl: string, selectedParts: number[]) => {
+    const encodedSelection = encodeURIComponent(JSON.stringify(selectedParts));
+    return `${baseUrl}#${encodedSelection}`;
 };
 
 export const arraysEqual = <T>(arr1: T[], arr2: T[]) => {

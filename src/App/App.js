@@ -16,6 +16,7 @@ import {
     getNameAndExtension,
     triggerDownloadFromUrl,
     getSelectionFromHash,
+    getShareUrl,
 } from '../util/helpers';
 
 import useBooleanState from '../hooks/useBooleanState';
@@ -24,7 +25,6 @@ import useCustomizerState from '../hooks/useCustomizerState';
 import useSceneManager from '../hooks/useSceneManager';
 import useLikeState from '../hooks/useLikeState';
 import useCommentsState from '../hooks/useCommentsState';
-import useSelectorState, { Tabs } from '../hooks/useSelectorState';
 
 import styles from './App.module.scss';
 import sharedStyles from '../shared-styles/basic-button.module.scss';
@@ -80,7 +80,6 @@ const App = props => {
 
     const api = useMmfApi(props.api);
 
-    const { currentTab, goToSelector, goToComments } = useSelectorState();
     const likesState = useLikeState(api);
     const commentsState = useCommentsState(api);
 
@@ -179,6 +178,12 @@ const App = props => {
 
         loadParts();
     }, []);
+
+    useEffect(() => {
+        if (props.comments_enabled) {
+            window.customEventDispatcher.dispatchEvent('CUSTOMIZER_LOADED');
+        }
+    }, [props.comments_enabled]);
 
     const showUploadWizard = Boolean(uploadedObjectData);
 
@@ -433,70 +438,51 @@ const App = props => {
               return objectsInThisPartType.length > 1;
           });
 
-    let selectorContent = null;
-    if (currentTab === Tabs.SELECTOR) {
-        selectorContent = (
-            <Selector
-                data={selectorData}
-                onObjectSelected={handleObjectSelected}
-                onDelete={handleDeleteObject}
-                onUpload={handleUpload}
-                edit_mode={props.edit_mode}
-            />
-        );
-    } else if (currentTab === Tabs.COMMENTS) {
-        selectorContent = (
-            <>
-                <div className={styles.commentsHeader}>
-                    <button
-                        title="Back"
-                        className={styles.commentsCloseButton}
-                        onClick={goToSelector}
-                    >
-                        <i className="fa fa-angle-left" aria-hidden="true"></i>
-                    </button>
-                    <h3 className={styles.commentsTitle}>Comments</h3>
-                </div>
-                <div className={styles.commentsContainer}>
-                    {props.commentsComponent}
-                </div>
-            </>
-        );
-    }
-
     let downloadButton;
     if (userMustBuySelection) {
         downloadButton = (
             <button
                 title={addToCartButtonMessage}
-                className={cn(sharedStyles.button, styles.downloadButton2)}
+                className={cn(
+                    sharedStyles.button,
+                    styles.actionButton,
+                    styles.downloadButton2,
+                )}
                 onClick={!isSelectionInCart ? handleAddToCart : null}
             >
-                {isSelectionInCart ? (
-                    'Added to cart'
-                ) : (
-                    <>
-                        Add To Cart
-                        <br />({currencySymbol} {price})
-                    </>
-                )}
+                <div className={styles.word}>
+                    {isSelectionInCart ? (
+                        'Added to cart'
+                    ) : (
+                        <>
+                            Add To Cart
+                            <br />({currencySymbol} {price})
+                        </>
+                    )}
+                </div>
+                <span className={styles.icon}>
+                    <i className="fa fa-arrow-down" aria-hidden="true"></i>
+                </span>
             </button>
         );
     } else {
         downloadButton = (
             <button
                 title="Download"
-                className={cn(sharedStyles.button, styles.downloadButton2)}
+                className={cn(
+                    sharedStyles.button,
+                    styles.downloadButton2,
+                    styles.actionButton,
+                )}
                 onClick={handleDownload}
             >
-                Download
+                <div className={styles.word}>Download</div>
+                <span className={styles.icon}>
+                    <i className="fa fa-arrow-down" aria-hidden="true"></i>
+                </span>
             </button>
         );
     }
-
-    const shareUrl = `${props.worldData.url}#${JSON.stringify(
-        selectedPartsIds,
-    )}`;
 
     return (
         <div className={styles.app}>
@@ -505,143 +491,144 @@ const App = props => {
                 ref={canvasContainerRef}
             ></div>
 
-            <Header title={customizerName} user={props.worldData.user} />
-
             {isLoading && (
                 <div className={styles.canvasOverlay}>
                     <LoadingIndicator />
                 </div>
             )}
 
-            <div className={styles.editorPanelContainer}>
-                <div className={styles.editorPanel}>
-                    <div className={styles.partTypesContainer}>
-                        <div className={styles.partTypes}>
-                            <PartTypesView
-                                partTypes={partTypesToShow.map(pt => {
-                                    const parent = pt.parent;
-                                    const isDisabled = !parent
-                                        ? false
-                                        : getObjectsByPartTypeId(parent.id)
-                                              .length === 0;
-
-                                    return {
-                                        id: pt.id,
-                                        name: pt.name,
-                                        selected: pt.id === selectedPartTypeId,
-                                        disabled: isDisabled,
-                                    };
-                                })}
-                                onPartTypeSelected={id =>
-                                    setSelectedPartTypeId(id)
-                                }
-                            />
-                        </div>
-
-                        {props.comments_enabled && (
-                            <div className={styles.buttonsContainer2}>
-                                <div className={styles.mediaButtonsContainer}>
-                                    <button
-                                        title="Like"
-                                        className={cn(
-                                            sharedStyles.button,
-                                            styles.action,
-                                        )}
-                                        onClick={likesState.handleLike}
-                                    >
-                                        <LikeIcon liked={likesState.isLiked} />
-                                        <span className={styles.count}>
-                                            {likesState.isLoading ? (
-                                                <i
-                                                    className="fa fa-spinner fa-spin"
-                                                    aria-hidden="true"
-                                                ></i>
-                                            ) : (
-                                                likesState.likeCount
-                                            )}
-                                        </span>
-                                    </button>
-                                    <button
-                                        title="Comment"
-                                        className={cn(
-                                            sharedStyles.button,
-                                            styles.action,
-                                            currentTab === Tabs.COMMENTS &&
-                                                sharedStyles.selected,
-                                        )}
-                                        onClick={
-                                            currentTab === Tabs.COMMENTS
-                                                ? goToSelector
-                                                : goToComments
-                                        }
-                                    >
-                                        <i
-                                            className="fa fa-comment"
-                                            aria-hidden="true"
-                                        ></i>
-                                        <span className={styles.count}>
-                                            {commentsState.isLoading ? (
-                                                <i
-                                                    className="fa fa-spinner fa-spin"
-                                                    aria-hidden="true"
-                                                ></i>
-                                            ) : (
-                                                commentsState.commentsCount
-                                            )}
-                                        </span>
-                                    </button>
-                                    <button
-                                        title="Share"
-                                        className={cn(
-                                            sharedStyles.button,
-                                            styles.action,
-                                        )}
-                                        onClick={openSharePopup}
-                                    >
-                                        <i
-                                            className="fa fa-share-alt"
-                                            aria-hidden="true"
-                                        ></i>
-                                    </button>
-                                </div>
-                                {downloadButton}
-                            </div>
-                        )}
-                    </div>
-
-                    <div className={styles.selectorContainer}>
-                        {selectorContent}
-                    </div>
-                </div>
-            </div>
-
-            <div className={styles.buttonsContainer}>
-                <ButtonsContainer
-                    addToCartButtonMessage={addToCartButtonMessage}
-                    downloadButtonMessage={downloadButtonMessage}
-                    userMustBuySelection={userMustBuySelection}
-                    isSelectionInCart={isSelectionInCart}
-                    onDownload={handleDownload}
-                    onAddToCart={handleAddToCart}
-                    partTypes={partTypesArray}
-                    onUpload={handleUpload}
-                    onShowSettings={() => setShowSettings(true)}
-                    edit_mode={props.edit_mode}
-                    comments_enabled={props.comments_enabled}
+            <div className={styles.gridContainer}>
+                <Header
+                    className={styles.header}
+                    title={customizerName}
+                    user={props.worldData.user}
                 />
-            </div>
 
-            {!props.edit_mode && (
-                <a
-                    className={styles.createYourOwn}
-                    href={props.api.routes.createCustomizer}
-                >
-                    <span className={styles.emphasised}>
-                        Are you a designer?&nbsp;
-                    </span>
-                    Make your own customizer here!
-                </a>
-            )}
+                <div className={styles.partTypes}>
+                    <PartTypesView
+                        partTypes={partTypesToShow.map(pt => {
+                            const parent = pt.parent;
+                            const isDisabled = !parent
+                                ? false
+                                : getObjectsByPartTypeId(parent.id).length ===
+                                  0;
+
+                            return {
+                                id: pt.id,
+                                name: pt.name,
+                                selected: pt.id === selectedPartTypeId,
+                                disabled: isDisabled,
+                            };
+                        })}
+                        onPartTypeSelected={id => setSelectedPartTypeId(id)}
+                    />
+                </div>
+
+                <div className={styles.selectorContainer}>
+                    <Selector
+                        data={selectorData}
+                        onObjectSelected={handleObjectSelected}
+                        onDelete={handleDeleteObject}
+                        onUpload={handleUpload}
+                        edit_mode={props.edit_mode}
+                    />
+                </div>
+
+                {props.comments_enabled && (
+                    <div className={styles.buttonsContainer2}>
+                        <button
+                            title="Like"
+                            className={cn(
+                                sharedStyles.button,
+                                styles.actionButton,
+                                styles.like,
+                            )}
+                            onClick={likesState.handleLike}
+                        >
+                            <LikeIcon liked={likesState.isLiked} />
+                            <span className={styles.count}>
+                                {likesState.isLoading ? (
+                                    <i
+                                        className="fa fa-spinner fa-spin"
+                                        aria-hidden="true"
+                                    ></i>
+                                ) : (
+                                    likesState.likeCount
+                                )}
+                            </span>
+                        </button>
+                        <button
+                            title="Comment"
+                            className={cn(
+                                sharedStyles.button,
+                                styles.actionButton,
+                                styles.comment,
+                            )}
+                            onClick={() => {
+                                window.customEventDispatcher.dispatchEvent(
+                                    'CUSTOMIZER_COMMENTS_CLICKED',
+                                );
+                            }}
+                        >
+                            <i className="fa fa-comment" aria-hidden="true"></i>
+                            <span className={styles.count}>
+                                {commentsState.isLoading ? (
+                                    <i
+                                        className="fa fa-spinner fa-spin"
+                                        aria-hidden="true"
+                                    ></i>
+                                ) : (
+                                    commentsState.commentsCount
+                                )}
+                            </span>
+                        </button>
+                        <button
+                            title="Share"
+                            className={cn(
+                                sharedStyles.button,
+                                styles.actionButton,
+                                styles.share,
+                            )}
+                            onClick={openSharePopup}
+                        >
+                            <i
+                                className="fa fa-share-alt"
+                                aria-hidden="true"
+                            ></i>
+                        </button>
+                        {downloadButton}
+                    </div>
+                )}
+
+                <div className={styles.buttonsContainer}>
+                    <ButtonsContainer
+                        addToCartButtonMessage={addToCartButtonMessage}
+                        downloadButtonMessage={downloadButtonMessage}
+                        userMustBuySelection={userMustBuySelection}
+                        isSelectionInCart={isSelectionInCart}
+                        onDownload={handleDownload}
+                        onAddToCart={handleAddToCart}
+                        partTypes={partTypesArray}
+                        onUpload={handleUpload}
+                        onShowSettings={() => setShowSettings(true)}
+                        edit_mode={props.edit_mode}
+                        comments_enabled={props.comments_enabled}
+                    />
+                </div>
+
+                {!props.edit_mode && (
+                    <a
+                        className={styles.createYourOwn}
+                        href={props.api.routes.createCustomizer}
+                    >
+                        <span className={styles.emphasised}>
+                            Are you a designer?&nbsp;
+                        </span>
+                        <br />
+                        Make your own customizer here!
+                    </a>
+                )}
+            </div>
 
             {showUploadWizard && (
                 <UploadWizard
@@ -677,7 +664,7 @@ const App = props => {
             )}
 
             <SharePopup
-                url={shareUrl}
+                url={getShareUrl(props.worldData.url, selectedPartsIds)}
                 title={props.worldData.name}
                 description={props.worldData.description}
                 open={isSharePopupOpen}
