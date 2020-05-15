@@ -76,7 +76,8 @@ export const getSelectionFromHash = () => {
     // check location hash for initial selected parts
     const hash = window.location.hash.slice(1);
     if (hash !== '') {
-        return JSON.parse(hash) as number[];
+        const decodedHash = decodeURIComponent(hash);
+        return JSON.parse(decodedHash) as number[];
     }
 
     return [];
