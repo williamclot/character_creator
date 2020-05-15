@@ -76,13 +76,6 @@
         padding: 20px;
     }
 
-
-    .buttonsContainer {
-        grid-area: c;
-        align-self: end;
-        justify-self: start;
-    }
-
     .partTypes {
         grid-area: a;
         align-self: start;
@@ -100,34 +93,75 @@
         overflow: hidden;
     }
 
+    .buttonsContainer {
+        grid-area: c;
+        align-self: end;
+        justify-self: start;
+
+        @media (max-width: 950px) {
+            justify-self: end;
+        }
+    }
+
     .buttonsContainer2 {
         grid-area: c;
 
         align-self: end;
         justify-self: end;
-        width: 180px;
-    
-        .downloadButton2 {
-            width: 100%;
-            margin: 0 0 0 0;
-            font-weight: bold;
-        }
-    
-        .mediaButtonsContainer {
-            width: 100%;
-            margin: 0 0 10px 0;
-            height: 35px;
+
+        display: grid;
+        grid-template-areas: 
+            "a1 a2 a3"
+            " b  b  b";
+        grid-gap: 10px;
+
+        @media (max-width: 950px) {
+            align-self: start;
             display: flex;
-            justify-content: space-between;
-        
-            .action {
-                margin: 0 0 0 0;
-                padding: 5px 10px 5px 10px;
-            
-                .count {
-                    font-weight: initial;
-                    font-size: initial;
-                    margin: 0 0 0 10px;
+            flex-flow: column;
+        }
+
+        .actionButton {
+            margin: 0;
+            padding: 5px 10px 5px 10px;
+
+            .count {
+                font-weight: initial;
+                font-size: initial;
+                margin: 0 0 0 10px;
+            }
+
+            &.like {
+                grid-area: a1;
+            }
+
+            &.comment {
+                grid-area: a2;
+            }
+
+            &.share {
+                grid-area: a3;
+            }
+
+            &.downloadButton2 {
+                grid-area: b;
+                font-weight: bold;
+                padding: 15px 10px 15px 10px;
+    
+                .word {
+    
+                }
+                .icon {
+                    display: none;
+                }
+    
+                @media (max-width: 950px) {
+                    .word {
+                        display: none;
+                    }
+                    .icon {
+                        display: initial;
+                    }
                 }
             }
         }
@@ -151,19 +185,20 @@
     .gridContainer {
         grid-template-areas:
             "a a a a a a"
-            ". . . b b b"
-            "c c c c c c"
-            "e e e e e e";
-
-        grid-template-rows: max-content auto max-content max-content;
+            ". . . . . x"
+            ". . . . . y"
+            "b b b b b b"
+            "d d d d d d";
+        grid-template-rows: max-content auto auto max-content max-content;
         grid-template-columns: auto;
 
         .partTypes {
-            grid-area: c;
+            grid-area: b;
+            justify-self: start;
         }
 
         .selectorContainer {
-            grid-area: e;
+            grid-area: d;
         }
 
         .header {
@@ -171,11 +206,11 @@
         }
 
         .buttonsContainer {
-            grid-area: b;
+            grid-area: x;
         }
         
         .buttonsContainer2 {
-            grid-area: b;
+            grid-area: y;
         }
 
         .createYourOwn {

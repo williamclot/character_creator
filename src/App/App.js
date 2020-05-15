@@ -469,27 +469,43 @@ const App = props => {
         downloadButton = (
             <button
                 title={addToCartButtonMessage}
-                className={cn(sharedStyles.button, styles.downloadButton2)}
+                className={cn(
+                    sharedStyles.button,
+                    styles.actionButton,
+                    styles.downloadButton2,
+                )}
                 onClick={!isSelectionInCart ? handleAddToCart : null}
             >
-                {isSelectionInCart ? (
-                    'Added to cart'
-                ) : (
-                    <>
-                        Add To Cart
-                        <br />({currencySymbol} {price})
-                    </>
-                )}
+                <div className={styles.word}>
+                    {isSelectionInCart ? (
+                        'Added to cart'
+                    ) : (
+                        <>
+                            Add To Cart
+                            <br />({currencySymbol} {price})
+                        </>
+                    )}
+                </div>
+                <span className={styles.icon}>
+                    <i className="fa fa-arrow-down" aria-hidden="true"></i>
+                </span>
             </button>
         );
     } else {
         downloadButton = (
             <button
                 title="Download"
-                className={cn(sharedStyles.button, styles.downloadButton2)}
+                className={cn(
+                    sharedStyles.button,
+                    styles.downloadButton2,
+                    styles.actionButton,
+                )}
                 onClick={handleDownload}
             >
-                Download
+                <div className={styles.word}>Download</div>
+                <span className={styles.icon}>
+                    <i className="fa fa-arrow-down" aria-hidden="true"></i>
+                </span>
             </button>
         );
     }
@@ -544,70 +560,68 @@ const App = props => {
 
                 {props.comments_enabled && (
                     <div className={styles.buttonsContainer2}>
-                        <div className={styles.mediaButtonsContainer}>
-                            <button
-                                title="Like"
-                                className={cn(
-                                    sharedStyles.button,
-                                    styles.action,
+                        <button
+                            title="Like"
+                            className={cn(
+                                sharedStyles.button,
+                                styles.actionButton,
+                                styles.like,
+                            )}
+                            onClick={likesState.handleLike}
+                        >
+                            <LikeIcon liked={likesState.isLiked} />
+                            <span className={styles.count}>
+                                {likesState.isLoading ? (
+                                    <i
+                                        className="fa fa-spinner fa-spin"
+                                        aria-hidden="true"
+                                    ></i>
+                                ) : (
+                                    likesState.likeCount
                                 )}
-                                onClick={likesState.handleLike}
-                            >
-                                <LikeIcon liked={likesState.isLiked} />
-                                <span className={styles.count}>
-                                    {likesState.isLoading ? (
-                                        <i
-                                            className="fa fa-spinner fa-spin"
-                                            aria-hidden="true"
-                                        ></i>
-                                    ) : (
-                                        likesState.likeCount
-                                    )}
-                                </span>
-                            </button>
-                            <button
-                                title="Comment"
-                                className={cn(
-                                    sharedStyles.button,
-                                    styles.action,
-                                    currentTab === Tabs.COMMENTS &&
-                                        sharedStyles.selected,
+                            </span>
+                        </button>
+                        <button
+                            title="Comment"
+                            className={cn(
+                                sharedStyles.button,
+                                styles.actionButton,
+                                styles.comment,
+                                currentTab === Tabs.COMMENTS &&
+                                    sharedStyles.selected,
+                            )}
+                            onClick={
+                                currentTab === Tabs.COMMENTS
+                                    ? goToSelector
+                                    : goToComments
+                            }
+                        >
+                            <i className="fa fa-comment" aria-hidden="true"></i>
+                            <span className={styles.count}>
+                                {commentsState.isLoading ? (
+                                    <i
+                                        className="fa fa-spinner fa-spin"
+                                        aria-hidden="true"
+                                    ></i>
+                                ) : (
+                                    commentsState.commentsCount
                                 )}
-                                onClick={
-                                    currentTab === Tabs.COMMENTS
-                                        ? goToSelector
-                                        : goToComments
-                                }
-                            >
-                                <i
-                                    className="fa fa-comment"
-                                    aria-hidden="true"
-                                ></i>
-                                <span className={styles.count}>
-                                    {commentsState.isLoading ? (
-                                        <i
-                                            className="fa fa-spinner fa-spin"
-                                            aria-hidden="true"
-                                        ></i>
-                                    ) : (
-                                        commentsState.commentsCount
-                                    )}
-                                </span>
-                            </button>
-                            <button
-                                title="Share"
-                                className={cn(
-                                    sharedStyles.button,
-                                    styles.action,
-                                )}
-                                onClick={openSharePopup}
-                            >
-                                <i
-                                    className="fa fa-share-alt"
-                                    aria-hidden="true"
-                                ></i>
-                            </button>
-                        </div>
+                            </span>
+                        </button>
+                        <button
+                            title="Share"
+                            className={cn(
+                                sharedStyles.button,
+                                styles.actionButton,
+                                styles.share,
+                            )}
+                            onClick={openSharePopup}
+                        >
+                            <i
+                                className="fa fa-share-alt"
+                                aria-hidden="true"
+                            ></i>
+                        </button>
                         {downloadButton}
                     </div>
                 )}
