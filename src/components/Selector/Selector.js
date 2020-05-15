@@ -108,7 +108,7 @@ class Selector extends Component {
         });
 
         return (
-            <>
+            <div className="selector-container">
                 {/* <div className = "anti-scrollbar-box"> */}
                 <div className="selector">{elementDiv}</div>
                 {/* </div> */}
@@ -125,7 +125,7 @@ class Selector extends Component {
                         Add new {currentPartType.name}
                     </ImportButton>
                 )}
-            </>
+            </div>
         );
     }
 }

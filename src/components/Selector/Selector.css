@@ -4,6 +4,13 @@
     overflow-y: scroll;
 }
 
+.selector-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .selector {
     position: relative;
 
