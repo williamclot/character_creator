@@ -4,7 +4,7 @@
     height: 100%;
 
     .canvasContainer {
-        position: absolute;
+        position: relative;
         width: 100%;
         height: 100%;
         
@@ -27,6 +27,10 @@
 
     .settingsBackdrop {
         position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
         width: 100%;
         height: 100%;
         background-color: rgba($color: #000000, $alpha: 0.9);
@@ -34,17 +38,56 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }   
+}
+
+
+.gridContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+
+    display: grid;
+    grid-template-areas:
+        "a a a a a b"
+        "a a a a a b"
+        "a a a a a b"
+        "c c c c c b";
+    grid-template-rows: auto;
+    grid-template-columns: 1fr auto;
+    grid-gap: 10px;
+
+    pointer-events: none;
+    & * {
+        pointer-events: initial;
     }
 
-    .buttonsContainer {
+    .header {
+        grid-area: a;
         position: absolute;
-        left: 20px;
-        bottom: 20px;
+        top: 10px;
+        left: 10px;
+
+        padding: 20px;
+    }
+
+
+    .buttonsContainer {
+        grid-area: c;
+        position: absolute;
+        left: 0;
+        bottom: 0;
     }
 
     .createYourOwn {
+        grid-area: c;
         position: absolute;
-        bottom: 20px;
+        bottom: 0;
         left: 50%;
         transform: translateX(-50%);
         color: #796FBC;
@@ -53,89 +96,59 @@
             font-weight: bold;
         }
     }
-}
 
+    .partTypes {
+        grid-area: a;
+        position: absolute;
+        right: 0;
+        top: 0;
 
-.editorPanelContainer {
-    /* Used only to center child vertically */
-    right: 20px;
-    top: 20px;
-    bottom: 20px;
-    /* width: 350px; */
-    /* height: 100%; */
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+        overflow: hidden auto;
+    }
 
-    pointer-events: none;
-
-    .editorPanel {
+    .selectorContainer {
+        grid-area: b;
+        position: relative;
+        background-color: rgba(0, 0, 0, 0.7);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
         height: 100%;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .partTypesContainer {
-            position: relative;
-            height: 100%;
-
-            .partTypes {
-                position: relative;
-                // margin-top: 10px;
-                margin-right: 10px;
-                height: 100%;
-            }
-        }
-
-
-        .selectorContainer {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            max-width: 500px;
-            background-color: rgba(0, 0, 0, 0.7);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            // filter:opacity(.7);
-            height: 100%;
-            justify-content: space-between;
-            // min-width: 250px;
-            pointer-events: initial;
-        }
-    }
-}
-
-.buttonsContainer2 {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 180px;
-    pointer-events: initial;
-    margin: 0 10px 0 0;
-
-    .downloadButton2 {
-        width: 100%;
-        margin: 0 0 0 0;
-        font-weight: bold;
-    }
-
-    .mediaButtonsContainer {
-        width: 100%;
-        margin: 0 0 10px 0;
-        height: 35px;
-        display: flex;
-        justify-content: space-between;
-    
-        .action {
-            margin: 0 0 0 0;
-            padding: 5px 10px 5px 10px;
+        overflow: hidden;
         
-            .count {
-                font-weight: initial;
-                font-size: initial;
-                margin: 0 0 0 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .buttonsContainer2 {
+        grid-area: c;
+        bottom: 0;
+        right: 0;
+        position: absolute;
+        width: 180px;
+    
+        .downloadButton2 {
+            width: 100%;
+            margin: 0 0 0 0;
+            font-weight: bold;
+        }
+    
+        .mediaButtonsContainer {
+            width: 100%;
+            margin: 0 0 10px 0;
+            height: 35px;
+            display: flex;
+            justify-content: space-between;
+        
+            .action {
+                margin: 0 0 0 0;
+                padding: 5px 10px 5px 10px;
+            
+                .count {
+                    font-weight: initial;
+                    font-size: initial;
+                    margin: 0 0 0 10px;
+                }
             }
         }
     }
@@ -182,50 +195,4 @@
     border-radius: 10px;
     -webkit-border-radius: 10px;
     background: #2e2e2e;
-}
-
-@media (max-width: 950px) {
-    .app {
-        .buttonsContainer {
-            left: unset;
-            right: 10px;
-            /* right: unset;
-            left: 10px; */
-            bottom: 255px;
-        }
-
-        .createYourOwn {
-            display: none;
-            // bottom: 140px;
-        }
-    }
-
-    .editorPanelContainer {
-        /* Used only to center child vertically */
-        right: 0px;
-        left: 0px;
-        top: unset;
-        bottom: 0px;
-        height: unset;
-
-        .editorPanel {
-            flex-direction: column;
-            align-items: flex-start;
-
-            .partTypesContainer {
-                margin-bottom: 5px;
-                // margin-right: 0px;
-                // margin-left: 10px;
-                padding: 0px 10px;
-                height: unset;
-                width: 100%;
-                // overflow-x: auto;
-            }
-
-            .selectorContainer {
-                height: unset;
-                width: 100%;
-            }
-        }
-    }
 }
