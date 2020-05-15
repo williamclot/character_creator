@@ -153,6 +153,12 @@
 }
 
 @media (max-width: 950px) {
+    .selector-container {
+        flex-flow: row;
+        height: initial;
+        width: 100%;
+    }
+
     .selector {
         /* height: 100px; */
         grid-template-columns: repeat(auto-fill, 100px);

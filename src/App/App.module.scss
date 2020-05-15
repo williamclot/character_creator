@@ -69,9 +69,9 @@
 
     .header {
         grid-area: a;
-        position: absolute;
-        top: 10px;
-        left: 10px;
+        align-self: start;
+        justify-self: start;
+        margin: 10px 0 0 10px;
 
         padding: 20px;
     }
@@ -79,36 +79,20 @@
 
     .buttonsContainer {
         grid-area: c;
-        position: absolute;
-        left: 0;
-        bottom: 0;
-    }
-
-    .createYourOwn {
-        grid-area: c;
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        color: #796FBC;
-
-        .emphasised {
-            font-weight: bold;
-        }
+        align-self: end;
+        justify-self: start;
     }
 
     .partTypes {
         grid-area: a;
-        position: absolute;
-        right: 0;
-        top: 0;
+        align-self: start;
+        justify-self: end;
 
         overflow: hidden auto;
     }
 
     .selectorContainer {
         grid-area: b;
-        position: relative;
         background-color: rgba(0, 0, 0, 0.7);
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
         border-radius: 10px;
@@ -118,9 +102,9 @@
 
     .buttonsContainer2 {
         grid-area: c;
-        bottom: 0;
-        right: 0;
-        position: absolute;
+
+        align-self: end;
+        justify-self: end;
         width: 180px;
     
         .downloadButton2 {
@@ -146,6 +130,56 @@
                     margin: 0 0 0 10px;
                 }
             }
+        }
+    }
+
+
+    .createYourOwn {
+        position: absolute;
+        left: 50%;
+        bottom: 40px;
+        transform: translateX(-50%);
+        color: #796FBC;
+
+        .emphasised {
+            font-weight: bold;
+        }
+    }
+}
+
+@media (max-width: 950px) {
+    .gridContainer {
+        grid-template-areas:
+            "a a a a a a"
+            ". . . b b b"
+            "c c c c c c"
+            "e e e e e e";
+
+        grid-template-rows: max-content auto max-content max-content;
+        grid-template-columns: auto;
+
+        .partTypes {
+            grid-area: c;
+        }
+
+        .selectorContainer {
+            grid-area: e;
+        }
+
+        .header {
+            grid-area: a;
+        }
+
+        .buttonsContainer {
+            grid-area: b;
+        }
+        
+        .buttonsContainer2 {
+            grid-area: b;
+        }
+
+        .createYourOwn {
+            bottom: 150px;
         }
     }
 }
