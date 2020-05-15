@@ -63,13 +63,12 @@
 
     @media (max-width: 950px) {
         grid-template-areas: 
-            "     header"
-            "buttons-old"
-            "buttons-new"
-            " part-types"
-            "   selector";
-        grid-template-rows: max-content auto auto max-content max-content;
-        grid-template-columns: auto;
+            "    header buttons-old"
+            "         . buttons-old"
+            "         . buttons-new"
+            "part-types  part-types"
+            "  selector    selector";
+        grid-template-rows: max-content auto max-content max-content max-content;
     }
 
     .header {
