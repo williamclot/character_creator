@@ -118,7 +118,11 @@
 }
 
 .partTypes {
-    overflow: hidden auto;
+    height: 100%;
+    overflow: auto;
+    @media (max-width: 950px) {
+        width: 100%;
+    }
 }
 
 .selectorContainer {
