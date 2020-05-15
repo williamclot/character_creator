@@ -16,6 +16,7 @@ import {
     getNameAndExtension,
     triggerDownloadFromUrl,
     getSelectionFromHash,
+    getShareUrl,
 } from '../util/helpers';
 
 import useBooleanState from '../hooks/useBooleanState';
@@ -483,10 +484,6 @@ const App = props => {
         );
     }
 
-    const shareUrl = `${props.worldData.url}#${JSON.stringify(
-        selectedPartsIds,
-    )}`;
-
     return (
         <div className={styles.app}>
             <div
@@ -667,7 +664,7 @@ const App = props => {
             )}
 
             <SharePopup
-                url={shareUrl}
+                url={getShareUrl(props.worldData.url, selectedPartsIds)}
                 title={props.worldData.name}
                 description={props.worldData.description}
                 open={isSharePopupOpen}

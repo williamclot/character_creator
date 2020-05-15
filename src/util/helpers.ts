@@ -83,6 +83,11 @@ export const getSelectionFromHash = () => {
     return [];
 };
 
+export const getShareUrl = (baseUrl: string, selectedParts: number[]) => {
+    const encodedSelection = encodeURIComponent(JSON.stringify(selectedParts));
+    return `${baseUrl}#${encodedSelection}`;
+};
+
 export const arraysEqual = <T>(arr1: T[], arr2: T[]) => {
     if (arr1.length !== arr2.length) return false;
 
