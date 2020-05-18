@@ -99,6 +99,9 @@ export type CustomizedMeshesMap = {
 };
 
 export type AppProps = {
+    currentUser?: {
+        username: string;
+    };
     api: ApiRoutes;
     customizedMeshes: CustomizedMeshesMap;
     customizedMeshesInCart: number[]; // ids

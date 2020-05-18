@@ -25,6 +25,7 @@ import useCustomizerState from '../hooks/useCustomizerState';
 import useSceneManager from '../hooks/useSceneManager';
 import useLikeState from '../hooks/useLikeState';
 import useCommentsState from '../hooks/useCommentsState';
+import useFollowState from '../hooks/useFollowState';
 
 import styles from './App.module.scss';
 import sharedStyles from '../shared-styles/basic-button.module.scss';
@@ -82,6 +83,7 @@ const App = props => {
 
     const likesState = useLikeState(api);
     const commentsState = useCommentsState(api);
+    const followState = useFollowState(api, props.currentUser);
 
     const { canvasContainerRef, sceneManager } = useSceneManager(
         partTypes.byId,
@@ -502,6 +504,10 @@ const App = props => {
                     className={styles.header}
                     title={customizerName}
                     user={props.worldData.user}
+                    currentUser={props.currentUser}
+                    isFollowing={followState.isFollowing}
+                    handleFollow={followState.handleFollow}
+                    comments_enabled={props.comments_enabled}
                 />
 
                 <div className={styles.partTypes}>

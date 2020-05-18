@@ -122,6 +122,19 @@ class MmfApi {
         });
         return res.data.number;
     }
+
+    async isFollowed() {
+        const res = await axios.get<boolean>(this.api.routes.isFollowed);
+        return res.data;
+    }
+
+    async follow() {
+        await axios.get(this.api.routes.follow);
+    }
+
+    async unfollow() {
+        await axios.get(this.api.routes.unfollow);
+    }
 }
 
 export default MmfApi;

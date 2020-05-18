@@ -1,16 +1,38 @@
 import { User } from '../../types';
 import React from 'react';
-import cn from "classnames";
+import cn from 'classnames';
 
 import styles from './Header.module.scss';
+import sharedStyles from '../../shared-styles/basic-button.module.scss';
 
 type PropTypes = {
     className: string;
     title: string;
     user: User;
+    currentUser?: {
+        username: string;
+    };
+    isFollowing: boolean;
+    handleFollow: () => void;
+    comments_enabled: boolean;
 };
 
 const Header: React.FunctionComponent<PropTypes> = props => {
+    const isOwner =
+        props.currentUser && props.currentUser.username === props.user.username;
+
+    let followButton = null;
+    if (props.comments_enabled && !isOwner) {
+        followButton = (
+            <button
+                className={cn(styles.followButton, sharedStyles.button)}
+                onClick={props.handleFollow}
+            >
+                {props.isFollowing ? 'Unfollow Designer' : 'Follow Designer'}
+            </button>
+        );
+    }
+
     return (
         <div className={cn(styles.header, props.className)}>
             <h1 className={styles.title}>{props.title}</h1>
@@ -25,6 +47,7 @@ const Header: React.FunctionComponent<PropTypes> = props => {
                     {props.user.name}, @{props.user.username}
                 </span>
             </a>
+            {followButton}
         </div>
     );
 };
