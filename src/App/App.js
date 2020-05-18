@@ -81,7 +81,7 @@ const App = props => {
 
     const api = useMmfApi(props.api);
 
-    const likesState = useLikeState(api);
+    const likesState = useLikeState(api, props.currentUser);
     const commentsState = useCommentsState(api);
     const followState = useFollowState(api, props.currentUser);
 

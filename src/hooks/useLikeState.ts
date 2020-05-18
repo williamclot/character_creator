@@ -1,19 +1,29 @@
 import { useState, useEffect } from 'react';
 import MmfApi from './useMmfApi/api';
 
-const useLikeState = (api: MmfApi) => {
+type CurrentUser = {
+    username: string;
+};
+
+const useLikeState = (api: MmfApi, currentUser?: CurrentUser) => {
     const [isLoading, setLoading] = useState(true);
     const [isLiked, setLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
 
     useEffect(() => {
         async function loadLikeData() {
-            const [isLiked, likeCount] = await Promise.all([
-                api.isLiked(),
-                api.getLikesCount(),
-            ]);
-            setLiked(isLiked);
-            setLikeCount(likeCount);
+            if (!currentUser) {
+                const likeCount = await api.getLikesCount();
+                setLikeCount(likeCount);
+            } else {
+                const [isLiked, likeCount] = await Promise.all([
+                    api.isLiked(),
+                    api.getLikesCount(),
+                ]);
+                setLiked(isLiked);
+                setLikeCount(likeCount);
+            }
+
             setLoading(false);
         }
         loadLikeData();
@@ -46,6 +56,13 @@ const useLikeState = (api: MmfApi) => {
         if (isLoading) {
             return;
         }
+        if (!currentUser) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
+            window.customEventDispatcher.dispatchEvent('SHOW_LOGIN');
+            return;
+        }
+
         if (isLiked) {
             unlike();
         } else {
