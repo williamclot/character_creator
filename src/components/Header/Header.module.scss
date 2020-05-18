@@ -3,6 +3,7 @@
 
     .title {
         font-size: 50px;
+        line-height: 50px;
         font-weight: 600;
         color: #796FBC;
         margin: 0 0 10px 0;
@@ -52,6 +53,7 @@
         
         .title {
             font-size: 37px;
+            line-height: 37px;
         }
 
         .userSection {
@@ -69,10 +71,9 @@
 
 @media (max-width: 950px) {
     .header {
-        padding: 10px;
-
         .title {
             font-size: 25px;
+            line-height: 25px;
         }
 
         .userSection {
