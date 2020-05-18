@@ -25,10 +25,13 @@ const Header: React.FunctionComponent<PropTypes> = props => {
     if (props.comments_enabled && !isOwner) {
         followButton = (
             <button
+                title={
+                    props.isFollowing ? 'Click to unfollow' : 'Click to follow'
+                }
                 className={cn(styles.followButton, sharedStyles.button)}
                 onClick={props.handleFollow}
             >
-                {props.isFollowing ? 'Unfollow Designer' : 'Follow Designer'}
+                {props.isFollowing ? 'Following' : 'Follow Designer'}
             </button>
         );
     }
